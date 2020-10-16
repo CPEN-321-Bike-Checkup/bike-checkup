@@ -1,0 +1,12 @@
+{
+  "name": "bike-checkup-app",
+  "displayName": "bike-checkup-app",
+  "expo": {
+    "name": "bike-checkup-app",
+    "slug": "bike-checkup-app",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
