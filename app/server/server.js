@@ -158,8 +158,7 @@ app.post("/list", function (req, res) {
         (err, request) => {
             if (err) {
                 return console.log(err);
-            }
-            else {
+            } else {
                 res.send("saved \n");
             }
         });
