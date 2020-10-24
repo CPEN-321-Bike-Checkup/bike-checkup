@@ -1,8 +1,9 @@
-const { ObjectID } = require('bson');
+//const { ObjectID } = require('bson');
 const express = require('express');
 const mongoose = require('mongoose');
 const MongoClient = require("mongodb").MongoClient;
-const url = "mongodb://localhost:27017/bikedb";
+const bodyParser = require('body-parser');
+const url = "mongodb://localhost:27017/bikeCheckupDb";
 
 
 const app = express();
@@ -10,6 +11,49 @@ const port = 5000;
 
 const router = express.Router();
 app.use(express.json());
+
+
+
+
+
+
+
+//const notificationService = require('./services/NotificationService');
+//
+//var message = {
+//    "name": 'Test Notification',
+//    "data": {
+//        maintenanceSchedules: [
+//            {
+//                component: 'Bike Chain',
+//                predictedDate: Date.now()
+//            },
+//        ],
+//    },
+//    "notification": {
+//        'data': {
+//            maintenanceSchedules: [
+//                {
+//                    component: 'Bike Chain',
+//                    predictedDate: Date.now()
+//                },
+//            ],
+//        }
+//    },
+//    "android": {
+//          'title': 'Test Notification',
+//          'body': 'This is a bike checkup test notification'
+//    },
+//    "token": notificationService.GetAccessToken(),
+//};
+
+//notificationService.SendNotification(message);
+
+
+
+
+
+
 
 /*
 MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology:true}, (err, client) => {
@@ -30,8 +74,8 @@ db.on('error', function(err) {
 });
 
 //bring in models
-let User = require('./schemas/User');
-let Bike = require('./schemas/Bike');
+let User = require('./schemas/User').UserModel;
+let Bike = require('./schemas/Bike').BikeModel;
 let Component = require('./schemas/Component');
 let Activity = require('./schemas/Activity');
 let ComponentActivity = require('./schemas/ComponentActivity');
@@ -41,6 +85,43 @@ let MaintenanceSchedule = require('./schemas/MaintenanceSchedule');
 app.listen(port, () => {
     console.log('Dir: ' + __dirname + ', Server is running on port: ' + port);
 });
+
+
+app.post('/bike', function(req, res, next){
+    Bike.create(req.body, function(err, bike){
+        if (err){
+            console.error(err);
+        } else{
+            console.log('Bike ', req.body);
+        }
+        
+    });
+
+
+});
+
+
+app.post('/user', function(req, res, next){
+    User.create(req.body, function(err, user){
+        if (err){
+            console.error(err);
+        } else{
+            console.log('Bike ', req.body);
+        }
+        
+    });
+
+
+});
+
+
+
+
+
+
+
+
+
 
 
 app.get('/time', function(req, res, next) {

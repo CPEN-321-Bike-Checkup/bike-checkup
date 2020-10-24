@@ -25,6 +25,7 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 
+import PushNotification from 'react-native-push-notification'
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -33,6 +34,23 @@ import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './components/HomeScreen';
 import TimeScreen from './components/TimeScreen';
 //import BurndownChart from './components/BurndownChart';
+//
+
+
+
+PushNotification.configure({
+    onRegister: (token) => {
+        console.log('Remote Notification Token: ', token);
+    },
+
+    onNotification: (notification) => {
+        console.log('Remote Notification Received: ', notification);
+    },
+    senderID: 517168871348,
+    popInitialNotification: false,
+    requestPermissions: true 
+});
+
 
 const Stack = createStackNavigator();
 

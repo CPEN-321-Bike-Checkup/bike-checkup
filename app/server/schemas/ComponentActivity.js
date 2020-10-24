@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 
 const componentActivitySchema = new mongoose.Schema({
   component_id: {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'Component'
   },
   activity_id: {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'Activity'
   }
 });

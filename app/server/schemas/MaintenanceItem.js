@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const maintenanceItemSchema = new mongoose.Schema({
   _id: Number,
   component_id: {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'Component'
   },
   maintenance_date: Date,

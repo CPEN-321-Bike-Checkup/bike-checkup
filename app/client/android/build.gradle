@@ -6,10 +6,6 @@ buildscript {
         minSdkVersion = 16
         compileSdkVersion = 29
         targetSdkVersion = 29
-
-        //for react native push notifications 
-        googlePlayServicesVersion = "16.1.0" // default: "+"
-        firebaseVersion = "17.3.4" // default: "+" 
     }
     repositories {
         google()
@@ -17,11 +13,10 @@ buildscript {
     }
     dependencies {
         classpath("com.android.tools.build:gradle:3.5.3")
-        classpath 'com.google.gms:google-services:4.3.4'//added for firebase
-        
-        //added for react native push notifications (may conflict with firebase version?)
-        classpath 'com.google.gms:google-services:4.3.2' 
-        
+        classpath 'com.google.gms:google-services:4.3.4'  // Google Services plugin
+        //push notifications version
+        classpath('com.google.gms:google-services:4.3.3') 
+
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
