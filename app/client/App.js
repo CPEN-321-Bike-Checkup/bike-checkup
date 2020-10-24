@@ -32,6 +32,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import HomeScreen from './components/HomeScreen';
 import TimeScreen from './components/TimeScreen';
+import MaintenancePrediction from './components/MaintenancePrediction';
 //import BurndownChart from './components/BurndownChart';
 
 const Stack = createStackNavigator();
@@ -50,6 +51,11 @@ const App: () => React$Node = () => {
               name="TimeScreen"
               options={{title:"Current Time on Server"}}
               component={TimeScreen}
+            />
+            <Stack.Screen
+              name="MaintenancePrediction"
+              options={{title:"Maintenance Prediction"}}
+              component={MaintenancePrediction}
             />
           </Stack.Navigator>
       </NavigationContainer>    
