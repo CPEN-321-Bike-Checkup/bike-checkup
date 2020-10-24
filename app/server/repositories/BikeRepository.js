@@ -1,4 +1,4 @@
-class BikeService{
+class BikeRepository{
 
     constructor(bikeModel, userModel){
         this.bikeModel = bikeModel;
