@@ -43,6 +43,7 @@ const activity4 = {
     date: new Date('2020-10-25')
 };
 
+let maintenanceList = [maintSchedule1, maintSchedule2];
 let activityList = [activity1, activity2, activity3, activity4];
 
 const millisecondsInADay = 86400000;
@@ -97,46 +98,48 @@ export default class MaintenancePrediction extends React.Component{
         };
     }
 
-
-
     maintenancePredict() {
         //get JSON data from Strava call
         //normalize units if necessary -> convert-units or just mile->km manual conversion
-        //linear regression: https://machinelearningmastery.com/implement-simple-linear-regression-scratch-python/
+        //linear regression taken from: https://machinelearningmastery.com/implement-simple-linear-regression-scratch-python/
+        var maint_index;
+        for (maint_index = 0; maint_index < maintenanceList.length; maint_index++) {
+            var last_maint_date = maintenanceList[maint_index].last_maintenance_val.getTime();
+            var activity_date_dataset = [0];
+            var date_print_list = [maintenanceList[maint_index].last_maintenance_val]
+            var activity_distance_dataset = [0];
+            var activity_index;
+            for (activity_index = 0; activity_index < activityList.length; activity_index++) {
+                activity_date_dataset.push((activityList[activity_index].date.getTime() - last_maint_date)/millisecondsInADay);
+                activity_distance_dataset.push(activityList[activity_index].distance + activity_distance_dataset[activity_index]);
 
-        var last_maint_val_1 = maintSchedule1.last_maintenance_val.getTime();
-        var date_dataset_1 = [0];
-        var date_print_list = [maintSchedule1.last_maintenance_val]
-        var distance_dataset_1 = [0];
-        var i;
-        for (i = 0; i < activityList.length; i++) {
-            date_dataset_1.push((activityList[i].date.getTime() - last_maint_val_1)/millisecondsInADay);
-            distance_dataset_1.push(activityList[i].distance + distance_dataset_1[i]);
+                date_print_list.push(activityList[activity_index].date);
+            }
+            console.log(activity_date_dataset);
+            console.log(activity_distance_dataset);
 
-            date_print_list.push(activityList[i].date);
+            var mean_x = mean(activity_date_dataset);
+            var mean_y = mean(activity_distance_dataset);
+            var variance_x = variance(activity_date_dataset, mean_x);
+            var covar = covariance(activity_date_dataset, mean_x, activity_distance_dataset, mean_y);
+            var slope = predictSlope(covar, variance_x);
+            var intercept = predictIntercept(mean_x, mean_y, slope);
+            console.log("Description of Maintenance:" + maintenanceList[maint_index].description);
+            console.log("Predicted slope:" + slope);
+            console.log("Predicted intercept:" + intercept);
+            var predict_date = ((maintenanceList[maint_index].threshold_val - intercept) / slope)
+            var final_date = addDays(maintenanceList[maint_index].last_maintenance_val, predict_date);
+            console.log("Your last maintenance: " + maintenanceList[maint_index].last_maintenance_val);
+            console.log("Your component threshold value: " + maintenanceList[maint_index].threshold_val);
+            console.log("Your Activity (in km): " + '\n'
+                        + date_print_list[0] + ":" + activity_distance_dataset[0] + '\n'
+                        + date_print_list[1] + ":" + activity_distance_dataset[1] + '\n'
+                        + date_print_list[2] + ":" + activity_distance_dataset[2] + '\n'
+                        + date_print_list[3] + ":" + activity_distance_dataset[3] + '\n'
+                        + date_print_list[4] + ":" + activity_distance_dataset[4]);
+            console.log("Your next estimated maintenance date:" + final_date);
         }
-        console.log(date_dataset_1);
-        console.log(distance_dataset_1);
 
-        var mean_x = mean(date_dataset_1);
-        var mean_y = mean(distance_dataset_1);
-        var variance_x = variance(date_dataset_1, mean_x);
-        var covar = covariance(date_dataset_1, mean_x, distance_dataset_1, mean_y);
-        var slope = predictSlope(covar, variance_x);
-        var intercept = predictIntercept(mean_x, mean_y, slope);
-        console.log("Predicted slope:" + slope);
-        console.log("Predicted intercept:" + intercept);
-        var predict_date = ((maintSchedule1.threshold_val - intercept) / slope)
-        var final_date = addDays(maintSchedule1.last_maintenance_val, predict_date);
-        console.log("Your last maintenance: " + maintSchedule1.last_maintenance_val);
-        console.log("Your component threshold value: " + maintSchedule1.threshold_val);
-        console.log("Your Activity (in km): " + '\n'
-                    + date_print_list[0] + ":" + distance_dataset_1[0] + '\n'
-                    + date_print_list[1] + ":" + distance_dataset_1[1] + '\n'
-                    + date_print_list[2] + ":" + distance_dataset_1[2] + '\n'
-                    + date_print_list[3] + ":" + distance_dataset_1[3] + '\n'
-                    + date_print_list[4] + ":" + distance_dataset_1[4]);
-        console.log("Your next estimated maintenance date:" + final_date);
     }
 
     render(){
