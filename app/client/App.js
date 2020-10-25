@@ -130,7 +130,7 @@ const App: () => React$Node = () => {
             options={{
               tabBarColor: "green",
               tabBarIcon: ({ color }) => (
-                <MaterialCommunityIcons name="maint-predict" color={color} size={24} />
+                <MaterialCommunityIcons name="wrench" color={color} size={24} />
               ),
             }}
           />

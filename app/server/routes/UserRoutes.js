@@ -9,8 +9,6 @@ const initUserRouting = (app) => {
 
 	app.use('/user', userRouter);
 
-
-
 	userRouter.get('/:userId', (req, res, next) => {
 		var user = UserService.getUserById(req.params[0]);
 		res.send(JSON.stringify(user));

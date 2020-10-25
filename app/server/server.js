@@ -29,8 +29,10 @@ db.on('error', function(err) {
 
 
 
+const initMaintenanceScheduleRoutes = require('./routes/MaintenanceScheduleRoutes');
 const initUserRoutes = require('./routes/UserRoutes');
 initUserRoutes(app);
+initMaintenanceScheduleRoutes(app);
 
 
 

@@ -16,7 +16,14 @@ class UserService{
 			return err;
 		});
 	}
+	
+
+
+
 }
 
 const userService = new UserService(userRepository, deviceTokenRepository);
 module.exports = userService;
+
+
+var exports = module.exports;

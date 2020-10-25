@@ -6,11 +6,6 @@ class UserRepository extends Repository{
 	constructor(userModel){
 		super(userModel);
 	}
-
-	
-
-
-	
 }
 const userRepository = new UserRepository(UserModel);
 module.exports = userRepository;

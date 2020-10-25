@@ -4,8 +4,12 @@ class Repository{
 		this.documentModel = documentModel;
 	}
 
+	GetAll(){
+		return this.documentModel.find({}).exec();
+	}
+
 	GetById(id){
-		return this.documentModel.findById(id);
+		return this.documentModel.findById(id).exec();
 	}
 	
 	Create(documents){
