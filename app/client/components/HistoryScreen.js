@@ -4,21 +4,9 @@ import { Pressable, SectionList, StyleSheet, Text, View } from 'react-native'
 // Note: add separators based on dates
 const DATA = [
   {
-    title: "Main dishes",
-    data: ["Pizza", "Burger", "Risotto"]
+    title: "TO BE ADDED",
+    data: []
   },
-  {
-    title: "Sides",
-    data: ["French Fries", "Onion Rings", "Fried Shrimps"]
-  },
-  {
-    title: "Drinks",
-    data: ["Water", "Coke", "Beer"]
-  },
-  {
-    title: "Desserts",
-    data: ["Cheese Cake", "Ice Cream"]
-  }
 ];
 
 // These don't need to be pressable for now

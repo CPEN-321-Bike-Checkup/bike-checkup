@@ -1,33 +1,123 @@
 import React from 'react';
 import { Pressable, SectionList, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 
+let getDate = function(offset) {
+  let currentDate = new Date();
+  currentDate.setDate(currentDate.getDate() + offset);
+  return currentDate.toLocaleDateString();
+}
+
 // Note: add separators based on dates
-const DATA = [
-  {
-    title: "Main dishes",
-    data: ["Pizza", "Burger", "Risotto"]
+const GIANT_DATA = [
+  { id: 1,
+    componentData: [
+      // {
+      //   title: "Next 10 days",
+      //   data: [
+      //   ]
+      // },
+      {
+        title: "Next 50 Days",
+        data: [
+          {task: "Bleed brakes", date: getDate(50)},
+        ]
+      }
+    ]
   },
-  {
-    title: "Sides",
-    data: ["French Fries", "Onion Rings", "Fried Shrimps"]
+  { id: 2,
+    componentData: [
+      {
+        title: "Next 10 days",
+        data: [
+          {task: "Oil chain", date: getDate(2)},
+        ]
+      },
+      {
+        title: "Next 50 Days",
+        data: [
+          {task: "Replace chain", date: getDate(13)},
+          {task: "Oil chain", date: getDate(30)},
+        ]
+      }
+    ]
   },
-  {
-    title: "Drinks",
-    data: ["Water", "Coke", "Beer"]
+  { id: 3,
+    componentData: [
+      // {
+      //   title: "Next 10 days",
+      //   data: [
+      //   ]
+      // },
+      {
+        title: "Next 50 Days",
+        data: [
+          {task: "Check brake pads", date: getDate(22)},
+        ]
+      }
+    ]
+  }
+];
+
+
+const NORCO_DATA = [
+  { id: 1,
+    componentData: [
+      // {
+      //   title: "Next 10 days",
+      //   data: [
+      //   ]
+      // },
+      {
+        title: "Next 50 Days",
+        data: [
+          {task: "Bleed brakes", date: getDate(50)},
+        ]
+      }
+    ]
   },
-  {
-    title: "Desserts",
-    data: ["Cheese Cake", "Ice Cream"]
+  { id: 2,
+    componentData: [
+      {
+        title: "Next 10 days",
+        data: [
+          {task: "Oil chain", date: getDate(0)},
+        ]
+      },
+      {
+        title: "Next 50 Days",
+        data: [
+          {task: "Oil chain", date: getDate(27)},
+        ]
+      }
+    ]
+  },
+  { id: 3,
+    componentData: [
+      {
+        title: "Next 10 days",
+        data: [
+          {task: "Check brake pads", date: getDate(7)},
+        ]
+      },
+      // {
+      //   title: "Next 50 Days",
+      //   data: [
+      //   ]
+      // }
+    ]
   }
 ];
 
 // These don't need to be pressable for now
-let Item = ({ title }) => {
+let Item = ({ item }) => {
   // console.log(title);
   return (
-  <Pressable style={styles.item}>
-    <Text style={styles.title}>{title}</Text>
-  </Pressable>
+    <View style={styles.item}>
+      <View style={{flexDirection:"row", justifyContent: "space-between"}}>
+        <Text style={styles.title}>{item.task}</Text>
+        <Text style={styles.date}>{item.date}</Text>
+      </View>
+    </View>
   );
 };
 
@@ -40,6 +130,8 @@ export default class ScheduleScreen extends React.Component {
         editMode: false
     };
     this.navigation = props.navigation;
+    this.bikeId = props.route.params.bikeId;
+    this.componentId = props.route.params.componentId;
   }
 
   updateMaintenanceData() {
@@ -82,12 +174,15 @@ export default class ScheduleScreen extends React.Component {
       ),
     });
 
+    console.log(this.componentId)
+    console.log(NORCO_DATA[this.componentId-1].componentData)
+
     return(
         <View style={styles.container}>
           <SectionList
-            sections={DATA}
+            sections={this.bikeId == 1 ? NORCO_DATA[this.componentId-1].componentData : GIANT_DATA[this.componentId-1].componentData}
             keyExtractor={(item, index) => item + index}
-            renderItem={({ item }) => <Item title={item} />} // Item = item in the list (i.e. string)
+            renderItem={({ item }) => <Item item={item} />} // Item = item in the list (i.e. string)
             renderSectionHeader={({ section: { title } }) => (
               <Text style={styles.header}>{title}</Text>
             )}
@@ -107,25 +202,29 @@ const styles = StyleSheet.create({
     padding: 18,
   },
   header: {
-    fontSize: 25,
+    fontSize: 22,
     fontWeight: "500",
+    color: "black",
     backgroundColor: "tomato",
     borderBottomColor: 'black',
     borderBottomWidth: 2,
     borderTopColor: 'black',
     borderTopWidth: 2,
+    paddingBottom: 4,
+    paddingTop: 6,
   },
   title: {
-    fontSize: 20
+    fontSize: 20,
+    fontWeight: "bold"
+  },
+  date: {
+    fontSize: 18,
+  },
+  bike: {
+    fontSize: 16,
   },
   separator: {
     borderBottomColor: 'grey',
     borderBottomWidth: 2,
   },
-  editButtonText: {
-    fontSize: 15,
-    color: "white",
-    padding: 10,
-    fontWeight: "bold"
-  }
 });

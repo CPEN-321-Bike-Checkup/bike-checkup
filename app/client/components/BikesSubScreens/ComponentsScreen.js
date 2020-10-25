@@ -2,19 +2,33 @@ import React from 'react';
 import { FlatList, StyleSheet, Text, View, TouchableHighlight, TouchableOpacity } from 'react-native'
 
 
-// Note: add separators based on dates
-const DATA = [
+const GIANT_DATA = [
   {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    title: "First Item",
+    id: 1,
+    title: "Brakes - Shimano 105 Hydraulic Disc, 160mm",
   },
   {
-    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-    title: "Second Item",
+    id: 2,
+    title: "Chain - KMC X11EL-1",
   },
   {
-    id: "58694a0f-3da1-471f-bd96-145571e29d72",
-    title: "Third Item",
+    id: 3,
+    title: "Brake pads - Shimano BR-M555 M02",
+  },
+];
+
+const NORCO_DATA = [
+  {
+    id: 1,
+    title: "Brakes - Shimano BR-RS305-R Hydraulic Disc, 150mm",
+  },
+  {
+    id: 2,
+    title: "Chain - CN-9000",
+  },
+  {
+    id: 3,
+    title: "Brake pads - Brake Authority Avids",
   },
 ];
 
@@ -75,7 +89,7 @@ export default class ScheduleScreen extends React.Component {
     return (
       <Item
         title={item.title}
-        onPress={() => this.navigation.navigate('ComponentSchedule',{componentID: item.id})}
+        onPress={() => this.navigation.navigate('ComponentSchedule',{bikId: this.bikeId, componentId: item.id})}
       />
     );
   }
@@ -93,7 +107,7 @@ export default class ScheduleScreen extends React.Component {
     return(
         <View style={styles.container}>
           <FlatList
-            data={DATA}
+            data={this.bikeId == 1 ? NORCO_DATA : GIANT_DATA}
             renderItem={this.renderItem}
             keyExtractor={(item, index) => item + index}
             ItemSeparatorComponent={() => <View style={styles.separator}/>}
