@@ -170,7 +170,6 @@ export default class App extends Component {
 
           axios.post(FINAL_AUTH_POST_REQ)
             .then((response) => {
-              console.log(response.data.athlete)
               this.setState({
                 accessToken: response.data.access_token,
                 expiresAt: response.data.expires_at,
