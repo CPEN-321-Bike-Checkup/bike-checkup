@@ -5,37 +5,42 @@ class Repository{
 	}
 
 	GetById(id){
-		this.documentModel.findById(id);
+		return this.documentModel.findById(id);
 	}
 	
 	Create(documents){
+		var promises = [];
 		if (Array.isArray(documents)){
 			documents.forEach(document => {
-				this.documentModel.create(document);	
+				promises.add(this.documentModel.create(document));	
 			});
+			return promises;
 		} else {
-			this.documentModel.create(documents);	
+			return this.documentModel.create(documents);	
 		}
 	}
 
 	Update(documentKeys, newDocumentsVals){
-
+		var promises = [];
 		if (Array.isArray(documents)){
 			documents.forEach(newDocumentVal, i => {
-				this.documentModel.findOneAndUpdate(documentKeys[i], newDocumentsVal);	
+				promises.add(this.documentModel.findOneAndUpdate(documentKeys[i], newDocumentsVal));	
 			});
+			return promises;
 		} else {
-			this.documentModel.findOneAndUpdate(documentKeys, newDocumentsVals);	
+			return this.documentModel.findOneAndUpdate(documentKeys, newDocumentsVals);	
 		}
 	}
 	
 	Delete(documents){
+		var promises = [];
 		if (Array.isArray(documents)){
 			documents.forEach(document => {
-				this.documentModel.deleteOne(document);
+				promises.add(this.documentModel.deleteOne(document));
 			});
+			return promises;
 		} else {
-			this.documentModel.deleteOne(documents);
+			return this.documentModel.deleteOne(documents);
 		}
 	}
 }

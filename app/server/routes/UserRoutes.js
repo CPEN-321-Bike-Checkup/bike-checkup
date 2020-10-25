@@ -15,7 +15,7 @@ const initUserRouting = (app) => {
 		res.send(JSON.stringify(user));
 	});
 
-	userRouter.post('/registerToken', (req, res, next) => {
+	userRouter.post('/registerDevice', (req, res, next) => {
 		console.log("registering device");
 		UserService.RegisterNewDevice(req.body.userId, req.body.token);
 		res.send('registered');

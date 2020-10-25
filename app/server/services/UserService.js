@@ -9,7 +9,8 @@ class UserService{
 	}
 
 	RegisterNewDevice(userId, deviceToken){
-		this.deviceTokenRepository.Create({_id: deviceToken, owner: userId});	
+		this.deviceTokenRepository.Delete({_id: deviceToken, owner: userId}).exec()
+		.then(this.deviceTokenRepository.Create({_id: deviceToken, owner: userId}));	
 	}
 }
 
