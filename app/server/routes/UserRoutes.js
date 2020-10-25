@@ -1,5 +1,5 @@
 const express = require('express');
-const UserService = require('../services/UserService').UserService;
+const UserService = require('../services/UserService');
 
 
 const initUserRouting = (app) => {
@@ -15,9 +15,10 @@ const initUserRouting = (app) => {
 		res.send(JSON.stringify(user));
 	});
 
-	userRouter.get('/registerToken', (req, res, next) => {
-		var user = UserService.mapDeviceToken(req.query.userId, req.query.deviceToken);
-		res.send();
+	userRouter.post('/registerToken', (req, res, next) => {
+		console.log("registering device");
+		UserService.RegisterNewDevice(req.body.userId, req.body.token);
+		res.send('registered');
 	});
 }
 
