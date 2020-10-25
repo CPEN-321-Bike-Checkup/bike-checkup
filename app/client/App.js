@@ -29,7 +29,7 @@ import HistoryScreen from './components/HistoryScreen';
 import BikesStack from './components/BikesStack';
 
 // Dev debug flags
-const SKIP_AUTHENTICATION = false;
+const SKIP_AUTHENTICATION = true;
 
 const Tab = createMaterialBottomTabNavigator();
 
