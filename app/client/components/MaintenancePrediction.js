@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Text, Button, View } from 'react-native'
+import { Text, Button, View } from 'react-native';
+import moment from 'moment';
+require('moment-timezone');
 
 const maintSchedule1 = {
     maintenance_id: 1,
@@ -93,8 +95,11 @@ export default class MaintenancePrediction extends React.Component{
 
     constructor(props){
         super(props);
+
         this.state = {
-            time: ''
+            time: '',
+            predict_dates: [],
+            maintenance_schedules: []
         };
     }
 
@@ -102,11 +107,12 @@ export default class MaintenancePrediction extends React.Component{
         //get JSON data from Strava call
         //normalize units if necessary -> convert-units or just mile->km manual conversion
         //linear regression taken from: https://machinelearningmastery.com/implement-simple-linear-regression-scratch-python/
+        //var predict_dates = [];
         var maint_index;
         for (maint_index = 0; maint_index < maintenanceList.length; maint_index++) {
             var last_maint_date = maintenanceList[maint_index].last_maintenance_val.getTime();
             var activity_date_dataset = [0];
-            var date_print_list = [maintenanceList[maint_index].last_maintenance_val]
+            var date_print_list = [maintenanceList[maint_index].last_maintenance_val];
             var activity_distance_dataset = [0];
             var activity_index;
             for (activity_index = 0; activity_index < activityList.length; activity_index++) {
@@ -138,19 +144,46 @@ export default class MaintenancePrediction extends React.Component{
                         + date_print_list[3] + ":" + activity_distance_dataset[3] + '\n'
                         + date_print_list[4] + ":" + activity_distance_dataset[4]);
             console.log("Your next estimated maintenance date:" + final_date);
-        }
 
+            final_date = moment(final_date, 'YYYY-MM-DD').tz("America/Los_Angeles").format('l');
+            this.state.predict_dates.push(final_date);
+            //console.log(this.state.predict_dates);
+        }
+        //return predict_dates;
+        //this.forceUpdate();
     }
 
     render(){
+        this.maintenancePredict();
+        this.state.maintenance_schedules = maintenanceList;
+        var maintenance_predictions = [];
+        for (let maint_index = 0; maint_index < maintenanceList.length; maint_index++) {
+
+            var predict_date_key = this.state.predict_dates[maint_index].toString();
+            var maint_description = this.state.maintenance_schedules[maint_index].description;
+            var maint_last_maint_date = moment(this.state.maintenance_schedules[maint_index].last_maintenance_val, 'YYYY-MM-DD').tz("America/Los_Angeles").format('l');
+            var component_threshold = this.state.maintenance_schedules[maint_index].threshold_val;
+            maintenance_predictions.push(
+            <View>
+                <Text style = {{textAlignVertical: "center", textAlign: "center", fontWeight:"bold"}}>{maint_description}{'\n'}</Text>
+                <Text>
+                      Previous Maintenance Date: {maint_last_maint_date}{'\n'}
+                      Threshold: {component_threshold}km{'\n'}{'\n'}
+
+                      Estimated Maintenance Date: {predict_date_key}</Text>
+            </View>
+            );
+            console.log(maintenance_predictions);
+        }
         return(
             <>
                 <View style={{flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'space-around', paddingVertical: 50}}>
+                    {maintenance_predictions}
                     <Button
                         title="Predict!"
                         onPress={() => this.maintenancePredict()}
                     />
-                    <Text>Please check console</Text>
+
                 </View>
             </>
         );
