@@ -34,7 +34,7 @@ const SKIP_AUTHENTICATION = false;
 const Tab = createMaterialBottomTabNavigator();
 
 // Strava authentication constants
-const INITIAL_URI = `https://www.strava.com/oauth/mobile/authorize?client_id=55294&redirect_uri=http://3.97.53.16&response_type=code&approval_prompt=force&scope=read,read_all,profile:read_all,activity:read_all`;
+const AUTH_URI = `https://www.strava.com/oauth/mobile/authorize?client_id=55294&redirect_uri=http://3.97.53.16&response_type=code&approval_prompt=force&scope=read,read_all,profile:read_all,activity:read_all`;
 const CODE_LABEL_LENGTH = 5;
 const PARAM_SEPARATOR_LENGTH = 1;
 
@@ -67,7 +67,12 @@ export default class App extends Component {
     super(props);
     this.state = {
       authCodeRetrieved: SKIP_AUTHENTICATION,
-      authCode: ''
+
+      // Strava post-authentication important values
+      accessToken: '',
+      expiresAt: '',
+      refreshToken: '',
+      athleteData: '' // In JSON form
     }
   }
 
@@ -145,7 +150,7 @@ export default class App extends Component {
         ref={ref => {
           this.webView = ref;
         }}
-        source={{ uri: INITIAL_URI }}
+        source={{ uri: AUTH_URI }}
         onNavigationStateChange={this._onNavigationStateChange.bind(this)}
       />
     );
@@ -159,14 +164,19 @@ export default class App extends Component {
           var authCode = webViewState.url.substring(startIndex, endIndex);
           this.setState({
               authCodeRetrieved: true,
-              authCode: authCode
           });
 
           const FINAL_AUTH_POST_REQ = "https://www.strava.com/oauth/token?client_id=55294&client_secret=d4199150472e3cd7520e12e203c69dd345b4da0a&code=" + authCode + "&grant_type=authorization_code";
 
           axios.post(FINAL_AUTH_POST_REQ)
             .then((response) => {
-              console.log(response);
+              console.log(response.data.athlete)
+              this.setState({
+                accessToken: response.data.access_token,
+                expiresAt: response.data.expires_at,
+                refreshToken: response.data.refresh_token,
+                athleteData: response.data.athlete
+              });
             }, (error) => {
               console.log(error);
             });
