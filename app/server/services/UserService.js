@@ -8,9 +8,13 @@ class UserService{
 		this. deviceTokenRepository = deviceTokenRepository;	
 	}
 
-	RegisterNewDevice(userId, deviceToken){
-		this.deviceTokenRepository.Delete({"_id": deviceToken, owner: userId}).exec()
-		.then(this.deviceTokenRepository.Create({"_id": deviceToken, owner: userId}));	
+	async RegisterNewDevice(userId, deviceToken){
+		await this.deviceTokenRepository.Delete({"_id": deviceToken, owner: userId}).catch(err => {
+			return err;
+		});
+		await this.deviceTokenRepository.Create({"_id": deviceToken, owner: userId}).catch(err => {
+			return err;
+		});
 	}
 }
 
