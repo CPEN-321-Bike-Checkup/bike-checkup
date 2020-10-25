@@ -9,26 +9,18 @@ class Repository{
 	}
 	
 	Create(documents){
-		var promises = [];
-		if (Array.isArray(documents)){
-			documents.forEach(document => {
-				promises.add(this.documentModel.create(document));	
-			});
-			return promises;
-		} else {
-			return this.documentModel.create(documents);	
-		}
+		return this.documentModel.create(documents);	
 	}
 
 	Update(documentKeys, newDocumentsVals){
 		var promises = [];
 		if (Array.isArray(documents)){
 			documents.forEach(newDocumentVal, i => {
-				promises.add(this.documentModel.findOneAndUpdate(documentKeys[i], newDocumentsVal));	
+				promises.add(this.documentModel.findOneAndUpdate(documentKeys[i], newDocumentsVal).exec());	
 			});
 			return promises;
 		} else {
-			return this.documentModel.findOneAndUpdate(documentKeys, newDocumentsVals);	
+			return this.documentModel.findOneAndUpdate(documentKeys, newDocumentsVals).exec();	
 		}
 	}
 	
@@ -36,11 +28,11 @@ class Repository{
 		var promises = [];
 		if (Array.isArray(documents)){
 			documents.forEach(document => {
-				promises.add(this.documentModel.deleteOne(document));
+				promises.add(this.documentModel.deleteOne(document).exec());
 			});
 			return promises;
 		} else {
-			return this.documentModel.deleteOne(documents);
+			return this.documentModel.deleteOne(documents).exec();
 		}
 	}
 }
