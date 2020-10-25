@@ -1,19 +1,14 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-
-
+import PushNotification from 'react-native-push-notification'
+import TimeScreen from './components/TimeScreen';
+import MaintenanceScreen from './components/MaintenancePrediction';
+import ScheduleScreen from './components/ScheduleScreen';
+import HistoryScreen from './components/HistoryScreen';
+import BikesStack from './components/BikesStack';
+import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-
-const Tab = createMaterialBottomTabNavigator();
-
-import React from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -22,7 +17,6 @@ import {
   Text,
   StatusBar,
 } from 'react-native';
-
 import {
   Header,
   LearnMoreLinks,
@@ -31,17 +25,7 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-
-import PushNotification from 'react-native-push-notification'
-
-import { NavigationContainer } from '@react-navigation/native';
-
-
-import HomeScreen from './components/HomeScreen';
-import TimeScreen from './components/TimeScreen';
-import MaintenanceScreen from './components/MaintenancePrediction';
-//import BurndownChart from './components/BurndownChart';
-//
+const Tab = createMaterialBottomTabNavigator();
 
 var serverIp = '3.97.53.16';
 PushNotification.configure({
@@ -65,11 +49,6 @@ PushNotification.configure({
     popInitialNotification: false,
     requestPermissions: true 
 });
-
-import ScheduleScreen from './components/ScheduleScreen';
-import HistoryScreen from './components/HistoryScreen';
-import BikesStack from './components/BikesStack';
-
 
 const App: () => React$Node = () => {
   return (
