@@ -8,13 +8,9 @@ class BikeRepository{
         this.userModel = userModel;
     }
 
-    getBikes(query){
-        //mongoose model is used like a repository
+    getBikesForUser(userId){
+		//placeholder
         return this.bikeModel.find(query).exec();
-    }
-
-    getOwner(bike){
-        return this.userModel.findById(bike.owner).exec();
     }
 }
 
