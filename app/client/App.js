@@ -41,12 +41,10 @@ const PARAM_SEPARATOR_LENGTH = 1;
 // Push notification configuration
 var serverIp = '3.97.53.16';
 PushNotification.configure({
-    onRegister: (token) => {
-        console.log('Remote Notification Token: ', token);
-		fetch("http://" + serverIp + ":5000/user/registerDevice", {
-			method: 'POST',
-			body: JSON.stringify({userId: 1, token: token})
-		}).then((res) => {
+    onRegister: (tokenData) => {
+        console.log('Remote Notification Token: ', tokenData);
+		axios.post("http://" + serverIp + ":5000/user/registerDevice", {userId: 1, token: tokenData.token})
+		.then((res) => {
                 console.log("Registered Device");
             })
             .catch((err) => {
