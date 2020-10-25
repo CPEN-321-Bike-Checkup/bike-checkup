@@ -11,12 +11,11 @@ const initMaintenanceSchedlueRouting = (app) => {
 
 	maintenanceScheduleRouter.get('/prediction', (req, res, next) => {
 		
-		var dates = {};
 		deviceTokenRepo.GetAll().then(function(devices){
-			dates = MaintenanceScheduleService.MaintenancePredict(devices);
+			var dates = MaintenanceScheduleService.MaintenancePredict(devices);
+			res.send(JSON.stringify({"dates": dates}));
 		});
 		
-		res.send(JSON.stringify({dates: dates}));
 	});
 
 }

@@ -8,7 +8,7 @@ class MaintenanceScheduleService{
 		this.notificationService = notificationService;
 	}
 
-	MaintenancePredict(token) {
+	MaintenancePredict(deviceTokens) {
 		
 		const maintSchedule1 = {
 		    maintenance_id: 1,
@@ -141,18 +141,19 @@ class MaintenanceScheduleService{
             console.log("Your next estimated maintenance date:" + final_date);
 
             final_date = moment(final_date, 'YYYY-MM-DD').tz("America/Los_Angeles").format('l');
-            predict_dates.push(final_date.toString());
+            predict_dates.push(final_date);
 			predictionText += maintenanceList[maint_index].description + ' estimated due on: ' + final_date + '\n';
+			console.log('dates: ' + predict_dates);
         }
 		
-		token.forEach(t => {
+		deviceTokens.forEach(t => {
 			setTimeout(function(){
 				notificationService.SendNotification(notificationService.CreateMessage(
 				'Maintenance Schedule Prediction',
 				'Upcoming Maintenance Predictions',
 				predictionText,
 				{},
-				t))
+				t._id))
 			}, 8000);		
 		});
 		
