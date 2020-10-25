@@ -28,6 +28,9 @@ import ScheduleScreen from './components/ScheduleScreen';
 import HistoryScreen from './components/HistoryScreen';
 import BikesStack from './components/BikesStack';
 
+// Dev debug flags
+const SKIP_AUTHENTICATION = false;
+
 const Tab = createMaterialBottomTabNavigator();
 
 // Strava authentication constants
@@ -63,7 +66,7 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      authCodeRetrieved: false,
+      authCodeRetrieved: SKIP_AUTHENTICATION,
       authCode: ''
     }
   }
