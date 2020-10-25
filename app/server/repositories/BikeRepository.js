@@ -1,8 +1,11 @@
+const BikeModel = require('../schemas/Bike').BikeModel;
+const UserModel = require('../schemas/User').UserModel;
+
 class BikeRepository{
 
     constructor(bikeModel, userModel){
         this.bikeModel = bikeModel;
-        this.userModel = this.userModel;
+        this.userModel = userModel;
     }
 
     getBikes(query){
@@ -14,3 +17,7 @@ class BikeRepository{
         return this.userModel.findById(bike.owner).exec();
     }
 }
+
+
+const bikeRepository = new BikeRepository(BikeModel, UserModel);
+module.exports.BikeRepository = bikeRepository;

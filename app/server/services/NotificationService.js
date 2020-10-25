@@ -1,52 +1,48 @@
+const {google} = require('googleapis');
 const admin = require('firebase-admin');
-const axios = require('axios');
 const fs = require('fs');
-
 const serviceAccount = require("../firebase.json");
+const databaseURL = "https://bike-checkup-c6e37.firebaseio.com";
 
-function NotificationService(){
+var token = 'ckiJogkPRKyHyelqr-LKJf:APA91bEwN1Kvl-lx5YtIvT2k18P5JcUCbT9U1u99mr4qdW9qA5l48K3-4AUpI898aKU5kZaCFPS941wWFEBjr0eVBAvr23JUzUlUzQle1slfLxF9zhe1gRjHB1E0pmePRcIhdfbURg9r';
 
-    this.admin = admin;
+class NotificationService{
 
-    this.admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
-      databaseURL: "https://bike-checkup-c6e37.firebaseio.com"
-    });
-        
+    constructor(admin, serviceAccount, databaseURL){
+    	this.admin = admin;
+		this.serviceAccount = serviceAccount;
 
+		this.firebaseApp = admin.initializeApp({
+        	credential: admin.credential.cert(serviceAccount),
+        	databaseURL: databaseURL
+      	});
 
-    this.SendNotification = (message) => {
-        axios.post('https://fcm.googleapis.com/v1/{parent=projects/' + serviceAccount.project_id + '}/messages:send', {
-            message: message       
-        }).then((res) => {
-            console.log('status: ' + res.statusCode);     
-        }).catch((error) => {
-            console.error(error);
-        });
+		this.messaging = this.firebaseApp.messaging();
+    }
+  
+    CreateMessage(name, title, body, data, deviceToken){
+      	var message = {
+    		"name": name,
+    		"data": data, 
+    		"notification": {
+    		    'title': title,
+    		    'body': body,
+    		},
+    		"android": {
+    		    notification: {
+
+    			},
+    			'data': data, 
+    		},
+    		"token": deviceToken
+		};
+		return message;
     }
 
-    
-    
-    this.GetAccessToken = () => {
-      return new Promise(function(resolve, reject) {
-        const key = require('../placeholders/service-account.json');
-        const jwtClient = new google.auth.JWT(
-          key.client_email,
-          null,
-          key.private_key,
-          SCOPES,
-          null
-        );
-        jwtClient.authorize(function(err, tokens) {
-          if (err) {
-            reject(err);
-            return;
-          }
-          resolve(tokens.access_token);
-        });
-      });
-    }
-    
-    return this;
+    SendNotification(message){
+    	this.messaging.send(message)
+   	}
 }
-exports.NotificationService = NotificationService();
+
+const notificationService = new NotificationService(admin, serviceAccount, databaseURL);
+module.exports.notificationService = notificationService;

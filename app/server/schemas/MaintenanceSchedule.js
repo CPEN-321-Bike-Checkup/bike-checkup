@@ -11,4 +11,7 @@ const maintenanceScheduleSchema = new mongoose.Schema({
   description: String,
   last_maintenance_val: Date
 });
-const MaintenanceSchedule = mongoose.model('MaintenanceSchedule', maintenanceScheduleSchema);
+const maintenanceScheduleModel = mongoose.model('MaintenanceSchedule', maintenanceScheduleSchema);
+
+module.exports.MaintenanceScheduleSchema = maintenanceScheduleSchema;
+module.exports.MaintenanceScheduleModel = maintenanceScheduleModel;
