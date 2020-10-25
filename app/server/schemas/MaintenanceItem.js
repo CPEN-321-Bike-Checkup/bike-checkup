@@ -3,10 +3,13 @@ const mongoose = require('mongoose');
 const maintenanceItemSchema = new mongoose.Schema({
   _id: Number,
   component_id: {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'Component'
   },
   maintenance_date: Date,
   replacement_comp_id: Number
 });
-const MaintenanceItem = mongoose.model('MaintenanceItem', maintenanceItemSchema);
+const maintenanceItemModel = mongoose.model('MaintenanceItem', maintenanceItemSchema);
+
+module.exports.MaintenanceItemModel = maintenanceItemModel;
+module.exports.MaintenanceItemSchema = maintenanceItemSchema;
