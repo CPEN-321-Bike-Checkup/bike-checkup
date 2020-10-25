@@ -5,6 +5,8 @@ class Repository{
 	}
 
 	GetById(id){
+		console.log("\n\n GetById \n\n")
+		console.log(this.documentModel.findById(69, 'bikes'));
 		return this.documentModel.findById(id);
 	}
 	

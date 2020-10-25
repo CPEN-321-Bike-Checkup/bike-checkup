@@ -1,19 +1,13 @@
+const Repository = require('./Repository');
+
 const BikeModel = require('../schemas/Bike').BikeModel;
-const UserModel = require('../schemas/User').UserModel;
 
-class BikeRepository{
+class BikeRepository extends Repository{
 
-    constructor(bikeModel, userModel){
-        this.bikeModel = bikeModel;
-        this.userModel = userModel;
-    }
-
-    getBikesForUser(userId){
-		//placeholder
-        return this.bikeModel.find(query).exec();
+    constructor(bikeModel){
+        super(bikeModel);
     }
 }
 
-
-const bikeRepository = new BikeRepository(BikeModel, UserModel);
-module.exports.BikeRepository = bikeRepository;
+const bikeRepository = new BikeRepository(BikeModel);
+module.exports = bikeRepository;

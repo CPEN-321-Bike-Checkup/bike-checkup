@@ -5,9 +5,12 @@ const MongoClient = require("mongodb").MongoClient;
 const bodyParser = require('body-parser');
 const url = "mongodb://localhost:27017/bikeCheckupDb";
 
+const BikeModel = require("./schemas/Bike.js").BikeModel
+const UserModel = require("./schemas/User.js").UserModel
+
 
 const app = express();
-const port = 5000;
+const port = 8080;
 
 app.use(express.json());
 app.listen(port, () => {
@@ -32,6 +35,9 @@ db.on('error', function(err) {
 const initUserRoutes = require('./routes/UserRoutes');
 initUserRoutes(app);
 
+const initBikeRouting = require('./routes/BikeRoutes');
+initBikeRouting(app);
+
 
 
 
@@ -45,3 +51,13 @@ app.post('/notification', function(req, res, next){
 	
 	res.send('notification sent');
 });
+
+let bike = new BikeModel({_id: 72, label: "Norco"})
+// bike.save(function (err) {
+//     if (err) return console.error(err);
+//   });
+
+let user = new UserModel({_id: 2, bikes: [bike]})
+// user.save(function (err) {
+//     if (err) return console.error(err);
+//   });
