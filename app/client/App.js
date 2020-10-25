@@ -158,28 +158,28 @@ export default class App extends Component {
 
   _onNavigationStateChange(webViewState) {
     if(!webViewState.loading) {
-        if (webViewState.url.includes("code=")) {
-          var startIndex = webViewState.url.indexOf("code=") + CODE_LABEL_LENGTH; // To get past "code=" to the actual code
-          var endIndex = webViewState.url.indexOf("scope=") - PARAM_SEPARATOR_LENGTH;
-          var authCode = webViewState.url.substring(startIndex, endIndex);
-          this.setState({
-              authCodeRetrieved: true,
-          });
+      if (webViewState.url.includes("code=")) {
+        var startIndex = webViewState.url.indexOf("code=") + CODE_LABEL_LENGTH; // To get past "code=" to the actual code
+        var endIndex = webViewState.url.indexOf("scope=") - PARAM_SEPARATOR_LENGTH;
+        var authCode = webViewState.url.substring(startIndex, endIndex);
+        this.setState({
+            authCodeRetrieved: true,
+        });
 
-          const FINAL_AUTH_POST_REQ = "https://www.strava.com/oauth/token?client_id=55294&client_secret=d4199150472e3cd7520e12e203c69dd345b4da0a&code=" + authCode + "&grant_type=authorization_code";
+        const FINAL_AUTH_POST_REQ = "https://www.strava.com/oauth/token?client_id=55294&client_secret=d4199150472e3cd7520e12e203c69dd345b4da0a&code=" + authCode + "&grant_type=authorization_code";
 
-          axios.post(FINAL_AUTH_POST_REQ)
-            .then((response) => {
-              this.setState({
-                accessToken: response.data.access_token,
-                expiresAt: response.data.expires_at,
-                refreshToken: response.data.refresh_token,
-                athleteData: response.data.athlete
-              });
-            }, (error) => {
-              console.log(error);
+        axios.post(FINAL_AUTH_POST_REQ)
+          .then((response) => {
+            this.setState({
+              accessToken: response.data.access_token,
+              expiresAt: response.data.expires_at,
+              refreshToken: response.data.refresh_token,
+              athleteData: response.data.athlete
             });
-        }
+          }, (error) => {
+            console.log(error);
+          });
+      }
     }
   }
 };
