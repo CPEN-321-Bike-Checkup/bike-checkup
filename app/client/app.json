@@ -1,4 +1,7 @@
 {
   "name": "BikeCheckup",
-  "displayName": "BikeCheckup"
+  "displayName": "BikeCheckup",
+  "expo": {
+    "sdkVersion": "39.0.0"
+   }
 }
