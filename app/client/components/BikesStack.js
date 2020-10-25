@@ -3,9 +3,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
 
-import BikesScreen from './BikesScreen';
-import ComponentsScreen from './BikesSubScreens/ComponentsScreen';
-import ComponentScheduleScreen from './BikesSubScreens/ComponentScheduleScreen';
+import BikesScreen from './Screens/BikesScreen';
+import ComponentsScreen from './SubScreens/ComponentsScreen';
+import ComponentScheduleScreen from './SubScreens/ComponentScheduleScreen';
 
 export default class ScheduleScreen extends React.Component {
 

@@ -22,10 +22,10 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import TimeScreen from './components/TimeScreen';
+import ActivitiesScreen from './components/Screens/ActivitiesScreen';
 import MaintenanceScreen from './components/MaintenancePrediction';
-import ScheduleScreen from './components/ScheduleScreen';
-import HistoryScreen from './components/HistoryScreen';
+import ScheduleScreen from './components/Screens/ScheduleScreen';
+import HistoryScreen from './components/Screens/HistoryScreen';
 import BikesStack from './components/BikesStack';
 
 // Dev debug flags
@@ -123,7 +123,7 @@ export default class App extends Component {
             />
             <Tab.Screen
               name="Activities"
-              component={TimeScreen}
+              component={ActivitiesScreen}
               options={{
                 tabBarColor: "green",
                 tabBarIcon: ({ color }) => (
