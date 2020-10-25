@@ -45,4 +45,4 @@ class NotificationService{
 }
 
 const notificationService = new NotificationService(admin, serviceAccount, databaseURL);
-module.exports.notificationService = notificationService;
+module.exports = notificationService;

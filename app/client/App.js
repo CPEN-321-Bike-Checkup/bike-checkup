@@ -42,15 +42,14 @@ import TimeScreen from './components/TimeScreen';
 //import BurndownChart from './components/BurndownChart';
 //
 
-var serverIp = 'localhost';
+var serverIp = '3.97.53.16';
 PushNotification.configure({
     onRegister: (token) => {
         console.log('Remote Notification Token: ', token);
 		fetch("http://" + serverIp + ":5000/user/registerDevice", {
 			method: 'POST',
 			body: JSON.stringify({userId: 1, token: token})	
-		}).then(res => res.json())
-            .then((res) => {
+		}).then((res) => {
                 console.log("Registered Device");
             })
             .catch((err) => {
