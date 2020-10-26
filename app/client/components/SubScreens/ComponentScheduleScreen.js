@@ -227,4 +227,10 @@ const styles = StyleSheet.create({
     borderBottomColor: 'grey',
     borderBottomWidth: 2,
   },
+  editButtonText: {
+    fontSize: 15,
+    color: "white",
+    padding: 10,
+    fontWeight: "bold"
+  }
 });
