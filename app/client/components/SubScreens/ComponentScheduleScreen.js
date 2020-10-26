@@ -1,5 +1,7 @@
 import React from 'react';
-import { Pressable, SectionList, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { SectionList, StyleSheet, Text, View, TouchableOpacity, Pressable } from 'react-native'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
 
 let getDate = function(offset) {
   let currentDate = new Date();
@@ -109,11 +111,13 @@ const NORCO_DATA = [
 ];
 
 // These don't need to be pressable for now
-let Item = ({ item }) => {
-  // console.log(title);
+let Item = ({ item , editMode}) => {
+  console.log("Item editMode:")
+  console.log(editMode);
   return (
     <View style={styles.item}>
       <View style={{flexDirection:"row", justifyContent: "space-between"}}>
+        {editMode ? <TouchableOpacity><MaterialIcons name="remove-circle" color={"red"} size={24} /></TouchableOpacity> : null}
         <Text style={styles.title}>{item.task}</Text>
         <Text style={styles.date}>{item.date}</Text>
       </View>
@@ -157,11 +161,7 @@ export default class ScheduleScreen extends React.Component {
 
   // Note: arrow function needed to bind correct context
   toggleEditMode = () => {
-    console.log("STATE UPDATING")
-    console.log(this)
-    this.setState({editMode: this.editMode ? false: true});
-    console.log("STATE UPDATED")
-    console.log(this.state)
+    this.setState({editMode: this.state.editMode ? false : true});
   }
 
   render() {
@@ -182,7 +182,7 @@ export default class ScheduleScreen extends React.Component {
           <SectionList
             sections={this.bikeId == 1 ? NORCO_DATA[this.componentId-1].componentData : GIANT_DATA[this.componentId-1].componentData}
             keyExtractor={(item, index) => item + index}
-            renderItem={({ item }) => <Item item={item} />} // Item = item in the list (i.e. string)
+            renderItem={({ item }) => <Item item={item} editMode={this.state.editMode} />} // Item = item in the list (i.e. string)
             renderSectionHeader={({ section: { title } }) => (
               <Text style={styles.header}>{title}</Text>
             )}
