@@ -174,6 +174,7 @@ export default class App extends Component {
               refreshToken: response.data.refresh_token,
               athleteData: response.data.athlete
             });
+            console.log("Athlete data: ", response.data.athlete);
           }, (error) => {
             console.log(error);
           });
