@@ -34,7 +34,10 @@ const initUserRoutes = require('./routes/UserRoutes');
 initUserRoutes(app);
 initMaintenanceScheduleRoutes(app);
 
-
+app.get('/stravaRedirect', function(req, res, next,){
+	console.log('Strava Auth Hit');
+	res.send('OK');
+});
 
 
 

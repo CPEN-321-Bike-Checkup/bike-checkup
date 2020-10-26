@@ -34,7 +34,7 @@ const SKIP_AUTHENTICATION = false; // Set to false before committing
 const Tab = createMaterialBottomTabNavigator();
 
 // Strava authentication constants
-const AUTH_URI = `https://www.strava.com/oauth/mobile/authorize?client_id=55294&redirect_uri=http://3.97.53.16&response_type=code&approval_prompt=force&scope=read,read_all,profile:read_all,activity:read_all`;
+const AUTH_URI = `https://www.strava.com/oauth/mobile/authorize?client_id=55294&redirect_uri=http://3.97.53.16:5000/stravaRedirect&response_type=code&approval_prompt=force&scope=read,read_all,profile:read_all,activity:read_all`;
 const CODE_LABEL_LENGTH = 5;
 const PARAM_SEPARATOR_LENGTH = 1;
 
