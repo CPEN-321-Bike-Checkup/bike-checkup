@@ -36,13 +36,36 @@
     "@babel/runtime": "^7.8.4",
     "@react-native-community/eslint-config": "^1.1.0",
     "babel-jest": "^25.1.0",
+    "detox": "^17.10.6",
     "eslint": "^6.5.1",
-    "jest": "^25.1.0",
+    "jest": "^25.5.4",
+    "jest-circus": "^26.6.1",
     "jetifier": "^1.6.6",
     "metro-react-native-babel-preset": "^0.59.0",
     "react-test-renderer": "16.13.1"
   },
   "jest": {
     "preset": "react-native"
+  },
+  "detox": {
+    "configurations": {
+      "android.emu.debug": {
+        "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
+        "build": "cd android && gradlew app:assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..",
+        "type": "android.attached",
+        "device": {
+          "avdName": "9B2AY1GVR7"
+        }
+      },
+      "android.emu.release": {
+        "binaryPath": "android/app/build/outputs/apk/debug/app-release.apk",
+        "build": "cd android && gradlew app:assembleRelease assembleAndroidTest -DtestBuildType=release && cd ..",
+        "type": "android.attached",
+        "device": {
+          "avdName": "9B2AY1GVR7"
+        }
+      }
+    },
+    "test-runner": "jest"
   }
 }

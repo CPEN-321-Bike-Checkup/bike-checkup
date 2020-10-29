@@ -137,6 +137,8 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
+        testBuildType System.getProperty('testBuildType', 'debug')  // This will later be used to control the test apk build type
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     splits {
         abi {
@@ -195,11 +197,11 @@ android {
 dependencies {
 
     //firebase and push notifications 
-        implementation platform('com.google.firebase:firebase-bom:25.12.0')
-        //specific version for react package
-        implementation 'com.google.firebase:firebase-analytics:17.3.0'         
+    implementation platform('com.google.firebase:firebase-bom:25.12.0')
+    //specific version for react package
+    implementation 'com.google.firebase:firebase-analytics:17.3.0'         
 
-        implementation project(':react-native-push-notification') 
+    implementation project(':react-native-push-notification') 
 
 
 
@@ -229,6 +231,8 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+    androidTestImplementation(project(path: ":detox"))
 }
 
 apply plugin: 'com.google.gms.google-services'  // Google Services plugin
