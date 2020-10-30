@@ -16,14 +16,26 @@ class UserService{
 			return err;
 		});
 	}
+
+	GetAllUsers(){
+		return userRepository.GetAll();
+	}
+
+	GetUserById(id){
+		return userRepository.GetById(id);
+	}
 	
-
-
-
+	CreateUsers(users){
+		return userRepository.Create(users);
+	}
+	
+	UpdateUsers(UserIds, newUserVals){
+		return userRepository.Update(userId, newUserVals);
+	}
+	
 }
 
 const userService = new UserService(userRepository, deviceTokenRepository);
 module.exports = userService;
-
 
 var exports = module.exports;
