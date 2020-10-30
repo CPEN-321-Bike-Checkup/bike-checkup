@@ -1,4 +1,4 @@
-const bikeRepository = require('../repositories/bikeRepository');
+const bikeRepository = require('../repositories/BikeRepository');
 
 class BikeService{
 
@@ -6,13 +6,13 @@ class BikeService{
 		this.bikeRepository = bikeRepository;
 	}
 
-	getBikesByUserId(userId){
-        let query = {_id: userId};
-        let res = bikeRepository.GetById(query).select('bikes')
-        console.log("\n\n getBikesByUserId \n\n")
-        console.log(res)
-        return res
+	GetUsersBikes(userId){
+        return this.bikeRepository.GetUsersBikes(userId);
 	}
+	
+	CreateBikes(bikes){
+		return this.bikeRepository.Create(user);
+	}	
 }
 
 const bikeService = new BikeService(bikeRepository);

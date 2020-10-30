@@ -7,9 +7,16 @@ const initBikeRouting = (app) => {
 	const bikeRouter = express.Router();
 
 	app.use('/bike', bikeRouter);
+	
+	bikeRouter.post('/', (req, res, next) => {
 
-	bikeRouter.get('', (req, res, next) => {
-        var bikes = bikeService.getBikesByUserId(69);
+        var resp = bikeService.CreateBikes(req.data);
+		res.send(resp);
+	});
+
+	bikeRouter.get('/:ownerId', (req, res, next) => {
+
+        var bikes = bikeService.GetUsersBikes(req.params[0]);
         console.log(JSON.stringify(bikes))
 		res.send(JSON.stringify(bikes));
 	});

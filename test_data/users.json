@@ -1,0 +1,45 @@
+[
+	{
+		"_id": 1,
+		"bikes": [
+			{"_id": 1, "owner": 1, "label": "Connor's Fav Bike"},
+			{"_id": 2, "owner": 1, "label": "Connor's Beater Bike"}
+		],
+		"strava_token": "",
+		"name": "Connor",
+		"deviceTokens": [
+			{"_id": "ckiJogkPRKyHyelqr-LKJf:APA91bEwN1Kvl-lx5YtIvT2k18P5JcUCbT9U1u99mr4qdW9qA5l48K3-4AUpI898aKU5kZaCFPS941wWFEBjr0eVBAvr23JUzUlUzQle1slfLxF9zhe1gRjHB1E0pmePRcIhdfbURg9r",
+				"owner": 1}
+		]
+	},
+	{
+		"_id": 2,
+		"bikes": [
+			{"_id": 3, "owner": 2, "label": "Amanda's Norco"},
+			{"_id": 4, "owner": 2, "label": "Amanda's Trek"}
+		],
+		"strava_token": "",
+		"name": "Amanda",
+		"deviceTokens": []
+	},
+	{
+		"_id": 3,
+		"bikes": [
+			{"_id": 5, "owner": 3, "label": "Brennan's Norco"},
+			{"_id": 6, "owner": 3, "label": "Brennan's Trek"}
+		],
+		"strava_token": "",
+		"name": "Brennan",
+		"deviceTokens": []
+	},
+	{
+		"_id": 4,
+		"bikes": [
+			{"_id": 7, "owner": 4, "label": "Cindy's Norco"},
+			{"_id": 8, "owner": 4, "label": "Cindy's Trek"}
+		],
+		"strava_token": "",
+		"name": "Cindy",
+		"deviceTokens": []
+	}
+]

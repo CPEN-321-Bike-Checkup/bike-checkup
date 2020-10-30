@@ -10,7 +10,7 @@ const UserModel = require("./schemas/User.js").UserModel
 
 
 const app = express();
-const port = 8080;
+const port = 5000;
 
 app.use(express.json());
 app.listen(port, () => {
