@@ -29,7 +29,7 @@ import HistoryScreen from './components/Screens/HistoryScreen';
 import BikesStack from './components/BikesStack';
 
 // Dev debug flags
-const SKIP_AUTHENTICATION = false; // Set to false before committing
+const SKIP_AUTHENTICATION = true; // Set to false before committing
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -87,6 +87,9 @@ export default class App extends Component {
               barStyle={{ backgroundColor: 'tomato' }}
               labeled={true}
               shifting={false}
+              options={{
+                tabBarTestID: "BottomTabNavigator"
+              }}
             >
             <Tab.Screen
               name="Schedule"
@@ -96,6 +99,7 @@ export default class App extends Component {
                 tabBarIcon: ({ color }) => (
                   <MaterialIcons name="schedule" color={color} size={26} />
                 ),
+                tabBarTestID: "ScheduleTab"
               }}
             />
             <Tab.Screen
@@ -106,6 +110,7 @@ export default class App extends Component {
                 tabBarIcon: ({ color }) => (
                   <MaterialCommunityIcons name="history" color={color} size={26} />
                 ),
+                tabBarTestID: "HistoryTab"
               }}
             />
             <Tab.Screen
@@ -117,6 +122,7 @@ export default class App extends Component {
                 tabBarIcon: ({ color }) => (
                   <MaterialCommunityIcons name="bike" color={color} size={24} />
                 ),
+                tabBarTestID: "BikesTab"
               }}
             />
             <Tab.Screen
@@ -127,6 +133,7 @@ export default class App extends Component {
                 tabBarIcon: ({ color }) => (
                   <MaterialCommunityIcons name="bike-fast" color={color} size={24} />
                 ),
+                tabBarTestID: "ActivitiesTab"
               }}
             />
             <Tab.Screen
@@ -137,6 +144,7 @@ export default class App extends Component {
                 tabBarIcon: ({ color }) => (
                   <MaterialCommunityIcons name="wrench" color={color} size={24} />
                 ),
+                tabBarTestID: "MaintenanceTab"
               }}
             />
           </Tab.Navigator>
