@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, SectionList, StyleSheet, Text, View } from 'react-native'
+import { TouchableOpacity, SectionList, StyleSheet, Text, View } from 'react-native'
 
 let getDate = function(offset) {
   let currentDate = new Date();
@@ -78,7 +78,10 @@ export default class ScheduleScreen extends React.Component {
   
   render() {
     return(
-        <View style={styles.container}>
+        <View
+          style={styles.container}
+          testID="ScheduleView"
+        >
           <SectionList
             sections={DATA}
             keyExtractor={(item, index) => item + index}

@@ -8,9 +8,16 @@ describe('Example', () => {
   });
 
 
-  // it('should have welcome screen', async () => {
-  //   await expect(element(by.id('welcome'))).toBeVisible();
+  // it('Should open to Strava login screen', async () => {
+  //   await expect(element(by.id('BottomTabNavigator')));
   // });
+
+  // it('Should open to Strava login screen 2', async () => {
+  //   let scheduleScreen = element(by.id('ScheduleScreen'))
+  //   await expect(scheduleScreen).toBeVisible();
+  //   await scheduleScreen.tap()
+  // });
+
 
   // it('should show hello screen after tap', async () => {
   //   await element(by.id('hello_button')).tap();

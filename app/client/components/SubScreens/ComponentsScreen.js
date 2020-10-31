@@ -32,10 +32,14 @@ const NORCO_DATA = [
   },
 ];
 
-// These don't need to be pressable for now
-let Item = ({ title, onPress }) => {
+let Item = ({ title, onPress, testID }) => {
   return (
-  <TouchableHighlight style={styles.item} onPress={onPress} underlayColor = 'gainsboro'>
+  <TouchableHighlight
+    style={styles.item}
+    onPress={onPress}
+    underlayColor = 'gainsboro'
+    testID = {testID}
+  >
     <Text style={styles.title}>{title}</Text>
   </TouchableHighlight>
   );
@@ -86,10 +90,13 @@ export default class ScheduleScreen extends React.Component {
   }
 
   renderItem = ({ item }) => {
+    const testId = "ComponentListItem" + this.itemCount;
+    this.itemCount++;
     return (
       <Item
         title={item.title}
         onPress={() => this.navigation.navigate('ComponentSchedule',{bikId: this.bikeId, componentId: item.id})}
+        testID={testId}
       />
     );
   }
@@ -105,15 +112,19 @@ export default class ScheduleScreen extends React.Component {
     });
 
     return(
-        <View style={styles.container}>
-          <FlatList
-            data={this.bikeId == 1 ? NORCO_DATA : GIANT_DATA}
-            renderItem={this.renderItem}
-            keyExtractor={(item, index) => item + index}
-            ItemSeparatorComponent={() => <View style={styles.separator}/>}
-          />
-        </View>
-    );
+      <View
+        style={styles.container}
+        testID="ComponentsView"
+      >
+        <FlatList
+          data={this.bikeId == 1 ? NORCO_DATA : GIANT_DATA}
+          renderItem={this.renderItem}
+          keyExtractor={(item, index) => item + index}
+          ItemSeparatorComponent={() => <View style={styles.separator}/>}
+          testID="ComponentsList"
+        />
+      </View>
+  );
   }
 }
 

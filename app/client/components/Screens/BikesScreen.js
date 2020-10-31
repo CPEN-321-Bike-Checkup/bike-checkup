@@ -12,9 +12,14 @@ const DATA = [
   }
 ];
 
-let Item = ({ title, onPress }) => {
+let Item = ({ title, onPress, testID }) => {
   return (
-  <TouchableHighlight style={styles.item} onPress={onPress} underlayColor = 'gainsboro'>
+  <TouchableHighlight
+    style={styles.item}
+    onPress={onPress}
+    underlayColor = 'gainsboro'
+    testID = {testID}
+  >
     <Text style={styles.title}>{title}</Text>
   </TouchableHighlight>
   );
@@ -25,9 +30,10 @@ export default class ScheduleScreen extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-        maintenanceData: []
+        maintenanceData: [],
     };
     this.navigation = props.navigation;
+    this.itemCount = 0;
   }
 
   updateMaintenanceData() {
@@ -52,24 +58,30 @@ export default class ScheduleScreen extends React.Component {
   }
 
   renderItem = ({ item }) => {
+    const testId = "BikeListItem" + this.itemCount;
+    this.itemCount++;
+
     return (
-      <TouchableHighlight>
-        <Item
-          title={item.title}
-          onPress={() => this.navigation.navigate('Components', {bikeId: item.id})}
-        />
-      </TouchableHighlight>
+      <Item
+        title={item.title}
+        onPress={() => this.navigation.navigate('Components', {bikeId: item.id})}
+        testID={testId}
+      />
     );
   }
   
   render() {
     return(
-        <View style={styles.container}>
+        <View
+          style={styles.container}
+          testID="BikesView"
+        >
           <FlatList
             data={DATA}
             renderItem={this.renderItem}
             keyExtractor={(item, index) => item + index}
             ItemSeparatorComponent={() => <View style={styles.separator}/>}
+            testID="BikesList"
           />
         </View>
     );
