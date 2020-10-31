@@ -1,0 +1,15 @@
+{
+  "name": "bosphorus-cli",
+  "version": "1.0.0",
+  "main": "src/cli.js",
+  "jsnext:main": "src",
+  "license": "MIT",
+  "bin": "src/cli.js",
+  "dependencies": {
+    "bosphorus-cli-utils": "^1.0.0",
+    "bosphorus-defaults": "^1.0.0",
+    "bosphorus-test-utils": "^1.0.0",
+    "commander": "^2.15.1",
+    "mz": "^2.7.0"
+  }
+}

@@ -28,6 +28,11 @@ import ScheduleScreen from './components/Screens/ScheduleScreen';
 import HistoryScreen from './components/Screens/HistoryScreen';
 import BikesStack from './components/BikesStack';
 
+/* Bosphorus Coverage */
+import startCoverageClient from "bosphorus-client";
+startCoverageClient();
+
+
 // Dev debug flags
 const SKIP_AUTHENTICATION = false; // Set to false before committing
 
