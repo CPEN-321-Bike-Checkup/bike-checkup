@@ -9,5 +9,5 @@ before_install:
 install:
 - npm install
 script:
-- cd "app\server"
+- cd app/server
 - npm test
