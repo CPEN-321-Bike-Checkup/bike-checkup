@@ -3,11 +3,11 @@ node_js:
   - node
 cache:
   directories:
-  - node_modules
+  - app/server/node_modules
 before_install:
+- cd app/server
 - npm update
 install:
 - npm install
 script:
-- cd app/server
 - npm test
