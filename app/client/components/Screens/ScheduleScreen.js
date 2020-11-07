@@ -1,7 +1,6 @@
 import React from 'react';
-import { } from 'react-native'
-import { ListItem } from '../ListItems';
-import { selectionListWrapper } from '../SectionListWrapper';
+import ListItem from '../ListItems';
+import selectionListWrapper from '../SectionListWrapper';
 
 let getDate = function (offset) {
   let currentDate = new Date();
