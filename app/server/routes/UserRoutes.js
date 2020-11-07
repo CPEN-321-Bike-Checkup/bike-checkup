@@ -16,24 +16,9 @@ const initUserRouting = (app) => {
     console.log('registering device');
     UserService.RegisterNewDevice(req.body.userId, req.body.token);
 
-<<<<<<< HEAD
-		console.log('registered')
-		res.send('registered');
-	});
-}
-=======
-    var message = NotificationService.CreateMessage(
-      'Test Notification Name',
-      'Test Notification',
-      'This is a notification',
-      {},
-      req.body.token,
-    );
-    NotificationService.SendNotification(message);
-
+    console.log('registered');
     res.send('registered');
   });
 };
->>>>>>> development
 
 module.exports = initUserRouting;
