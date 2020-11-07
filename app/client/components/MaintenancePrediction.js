@@ -71,7 +71,7 @@ export default class MaintenancePrediction extends React.Component {
 
 				var maintthresholdValue
 					= maintenanceList[maintIndex].thresholdValue;
-				
+
 				maintenancePredictions.push(
 					<View key={maintIndex}>
 						<Text style={styles.maintDescription}>
@@ -99,7 +99,7 @@ export default class MaintenancePrediction extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
+	container: {
 		flex: 1,
 		flexDirection: 'column',
 		alignItems: 'center',
@@ -111,4 +111,4 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		fontWeight: "bold"
 	}
-  })
+})

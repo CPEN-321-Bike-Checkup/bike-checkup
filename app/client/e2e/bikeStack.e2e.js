@@ -41,7 +41,7 @@ describe('Bike Stack', () => {
     await expect(element(by.id("BikesView"))).toBeVisible
     await expect(element(by.id("BikesList"))).toBeVisible
     await veryifyBottomNavigator();
-    
+
     await sleep(5000) // Only needed for M7 demonstration
   });
 

@@ -35,13 +35,13 @@ const NORCO_DATA = [
 ];
 
 export default class ScheduleScreen extends React.Component {
-  constructor(props){
+  constructor(props) {
     console.log("ComponentScreen Props:")
     console.log(props)
     super(props);
     this.state = {
-        maintenanceData: [],
-        editMode: false
+      maintenanceData: [],
+      editMode: false
     };
     this.navigation = props.navigation;
     this.bikeId = props.route.params.bikeId;
@@ -70,7 +70,7 @@ export default class ScheduleScreen extends React.Component {
 
   // Note: arrow function needed to bind correct context
   toggleEditMode = () => {
-    this.setState({editMode: this.editMode ? false: true});
+    this.setState({ editMode: this.editMode ? false : true });
   }
 
   renderItem = ({ item }) => {
@@ -80,26 +80,26 @@ export default class ScheduleScreen extends React.Component {
     return (
       <PressableListItem
         title={item.title}
-        onPress={() => this.navigation.navigate('ComponentSchedule', {bikId: this.bikeId, componentId: item.id})}
+        onPress={() => this.navigation.navigate('ComponentSchedule', { bikId: this.bikeId, componentId: item.id })}
         testID={testId}
       />
     );
   }
-  
+
   render() {
     // Add edit button to navigation bar
     this.navigation.setOptions({
       headerRight: () => (
-      <TouchableOpacity onPress={() => alert("hi")} >
-        <Text style={CommonStyles.editButtonText}>Edit</Text>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={() => alert("hi")} >
+          <Text style={CommonStyles.editButtonText}>Edit</Text>
+        </TouchableOpacity>
       ),
     });
 
     return flatListWrapper(
-        this.bikeId == 1 ? NORCO_DATA : GIANT_DATA,
-        this.renderItem,
-        "BikesList"
-      );
+      this.bikeId == 1 ? NORCO_DATA : GIANT_DATA,
+      this.renderItem,
+      "BikesList"
+    );
   }
 }

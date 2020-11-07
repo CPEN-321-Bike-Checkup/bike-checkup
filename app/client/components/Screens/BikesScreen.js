@@ -15,10 +15,10 @@ const DATA = [
 ];
 
 export default class ScheduleScreen extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-        maintenanceData: [],
+      maintenanceData: [],
     };
     this.navigation = props.navigation;
     this.itemCount = 0;
@@ -52,12 +52,12 @@ export default class ScheduleScreen extends React.Component {
     return (
       <PressableListItem
         title={item.title}
-        onPress={() => this.navigation.navigate('Components', {bikeId: item.id})}
+        onPress={() => this.navigation.navigate('Components', { bikeId: item.id })}
         testID={testId}
       />
     );
   }
-  
+
   render() {
     return flatListWrapper(DATA, this.renderItem);
   }

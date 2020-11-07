@@ -6,23 +6,23 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 export let ListItem = ({ item }) => {
   return (
     <View style={styles.item}>
-      <View style={{flexDirection:"row", justifyContent: "space-between"}}>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Text style={styles.title}>{item.task}</Text>
         <Text style={styles.date}>{item.date}</Text>
       </View>
       <View>
-          <Text style={styles.bike}>{item.bike}</Text>
+        <Text style={styles.bike}>{item.bike}</Text>
       </View>
     </View>
   );
 };
 
-export let EditableListItem = ({ item , editMode, onRemovePress}) => {
+export let EditableListItem = ({ item, editMode, onRemovePress }) => {
   console.log("Item editMode:")
   console.log(editMode);
   return (
     <View style={styles.item}>
-      <View style={{flexDirection:"row", justifyContent: "space-between"}}>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         {editMode ?
           <TouchableOpacity onPress={onRemovePress}>
             <MaterialIcons name="remove-circle" color={"red"} size={24} />
@@ -41,8 +41,8 @@ export let PressableListItem = ({ title, onPress, testID }) => {
     <TouchableHighlight
       style={styles.touchableItem}
       onPress={onPress}
-      underlayColor = 'gainsboro'
-      testID = {testID}
+      underlayColor='gainsboro'
+      testID={testID}
     >
       <View style={styles.itemViewWrapper}>
         <Text style={styles.itemText}>{title}</Text>
@@ -71,13 +71,13 @@ const styles = StyleSheet.create({
     borderBottomColor: 'grey',
     borderBottomWidth: 2,
   },
- 
+
   touchableItem: {
     backgroundColor: "white",
     padding: 18
   },
   itemViewWrapper: {
-    flexDirection:"row",
+    flexDirection: "row",
     justifyContent: "space-between"
   },
   itemText: {

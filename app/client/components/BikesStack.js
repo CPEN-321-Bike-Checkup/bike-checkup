@@ -10,7 +10,7 @@ import ComponentScheduleScreen from './SubScreens/ComponentScheduleScreen';
 export default class ScheduleScreen extends React.Component {
 
   render() {
-    return(
+    return (
       <Stack.Navigator
         initialRouteName="Bikes"
         screenOptions={{

@@ -1,9 +1,9 @@
 const Repository = require('./Repository');
 const UserModel = require('../schemas/User').UserModel;
 
-class UserRepository extends Repository{
+class UserRepository extends Repository {
 
-	constructor(userModel){
+	constructor(userModel) {
 		super(userModel);
 	}
 }
