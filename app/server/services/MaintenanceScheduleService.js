@@ -101,7 +101,7 @@ class MaintenanceScheduleService {
     }
 
     /*
-     * Calculates the covariance between two array of values, given each array's mean
+     * Calculates the covariance sum (numerator) between two array of values, given each array's mean
      * input:
      * 	x_vals - first array of values (int, double, float)
      * 	x_mean - mean value of first array
@@ -111,7 +111,7 @@ class MaintenanceScheduleService {
      * 	covariance between x_vals and y_vals
      * 	null if arrays are invalid
      */
-    function covariance(x_vals, x_mean, y_vals, y_mean) {
+    function covarianceSum(x_vals, x_mean, y_vals, y_mean) {
       //error check for differing data set lengths
       if (x_vals.length != y_vals.length) {
         return null;
@@ -120,12 +120,12 @@ class MaintenanceScheduleService {
       else if (x_vals.length <= 0 || y_vals.length <= 0) {
         return null;
       }
-      var covariance = 0.0;
+      var covariance_sum = 0.0;
       var i;
       for (i = 0; i < x_vals.length; i++) {
-        covariance += (x_vals[i] - x_mean) * (y_vals[i] - y_mean);
+        covariance_sum += (x_vals[i] - x_mean) * (y_vals[i] - y_mean);
       }
-      return covariance;
+      return covariance_sum;
     }
 
     /*
@@ -204,14 +204,28 @@ class MaintenanceScheduleService {
       //Intermediate calculations for linear regression
       var x_mean = mean(activity_date_dataset);
       var y_mean = mean(activity_distance_dataset);
+      if (x_mean == null || y_mean == null) {
+        //handle null error
+        predict_dates.push(null);
+        prectionText += 'error calculating' + '\n';
+        break;
+      }
+      
       var x_variance = variance(activity_date_dataset, x_mean);
-      var covar = covariance(
+      var covar_sum = covarianceSum(
         activity_date_dataset,
         x_mean,
         activity_distance_dataset,
         y_mean,
       );
-      var slope = predictSlope(covar, x_variance);
+      if (x_variance == null || covar_sum == null) {
+        //handle null error
+        predict_dates.push(null);
+        prectionText += 'error calculating' + '\n';
+        break;
+      }
+
+      var slope = predictSlope(covar_sum, x_variance);
       var intercept = predictIntercept(x_mean, y_mean, slope);
 
       var predict_days_in_advance =
