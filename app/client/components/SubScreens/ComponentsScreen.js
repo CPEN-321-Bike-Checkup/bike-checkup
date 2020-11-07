@@ -90,7 +90,7 @@ export default class ScheduleScreen extends React.Component {
     // Add edit button to navigation bar
     this.navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity onPress={() => alert('hi')} >
+        <TouchableOpacity>
           <Text style={CommonStyles.editButtonText}>Edit</Text>
         </TouchableOpacity>
       ),
