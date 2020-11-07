@@ -1,13 +1,13 @@
-import {React, Component} from 'react';
+import React, {Component} from 'react';
 import axios from 'axios';
 import PushNotification from 'react-native-push-notification';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import WebView from 'react-native-webview';
-import NavigationContainer from '@react-navigation/native';
-import createMaterialBottomTabNavigator from '@react-navigation/material-bottom-tabs';
-import StyleSheet from 'react-native';
-import Colors from 'react-native/Libraries/NewAppScreen';
+import {WebView} from 'react-native-webview';
+import {NavigationContainer} from '@react-navigation/native';
+import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import {StyleSheet} from 'react-native';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 import ActivitiesScreen from './components/Screens/ActivitiesScreen';
 import MaintenanceScreen from './components/MaintenancePrediction';

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, TouchableOpacity} from 'react-native';
-import EditableListItem from '../ListItems';
-import selectionListWrapper from '../SectionListWrapper';
+import {EditableListItem} from '../ListItems';
+import {selectionListWrapper} from '../SectionListWrapper';
 import CommonStyles from '../CommonStyles';
 
 let getDate = function (offset) {
