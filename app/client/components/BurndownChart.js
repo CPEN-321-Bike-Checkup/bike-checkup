@@ -51,8 +51,8 @@ export default class BurndownChart extends React.Component {
             }}
             width={Dimensions.get('window').width} // from react-native
             height={220}
-            yAxisLabel='Km '
-            yAxisSuffix=''
+            yAxisLabel="Km "
+            yAxisSuffix=""
             withDots={false}
             yAxisInterval={1} // optional, defaults to 1
             chartConfig={{

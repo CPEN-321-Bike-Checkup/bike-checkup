@@ -12,15 +12,15 @@ export default class ScheduleScreen extends React.Component {
   render() {
     return (
       <Stack.Navigator
-        initialRouteName='Bikes'
+        initialRouteName="Bikes"
         screenOptions={{
           headerTintColor: 'white',
           headerStyle: { backgroundColor: 'tomato' },
         }}
       >
-        <Stack.Screen name='Bikes' component={BikesScreen} />
-        <Stack.Screen name='Components' component={ComponentsScreen} />
-        <Stack.Screen name='ComponentSchedule' component={ComponentScheduleScreen} />
+        <Stack.Screen name="Bikes" component={BikesScreen} />
+        <Stack.Screen name="Components" component={ComponentsScreen} />
+        <Stack.Screen name="ComponentSchedule" component={ComponentScheduleScreen} />
       </Stack.Navigator>
     );
   }

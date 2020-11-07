@@ -25,7 +25,7 @@ export let EditableListItem = ({ item, editMode, onRemovePress }) => {
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         {editMode ?
           <TouchableOpacity onPress={onRemovePress}>
-            <MaterialIcons name='remove-circle' color={'red'} size={24} />
+            <MaterialIcons name="remove-circle" color={'red'} size={24} />
           </TouchableOpacity>
           : null}
         <Text style={styles.title}>{item.task}</Text>
@@ -41,12 +41,12 @@ export let PressableListItem = ({ title, onPress, testID }) => {
     <TouchableHighlight
       style={styles.touchableItem}
       onPress={onPress}
-      underlayColor='gainsboro'
+      underlayColor="gainsboro"
       testID={testID}
     >
       <View style={styles.itemViewWrapper}>
         <Text style={styles.itemText}>{title}</Text>
-        <MaterialIcons name='arrow-forward-ios' color={'grey'} size={24} style={styles.itemIcon} />
+        <MaterialIcons name="arrow-forward-ios" color={'grey'} size={24} style={styles.itemIcon} />
       </View>
     </TouchableHighlight>
   );

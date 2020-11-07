@@ -80,9 +80,9 @@ export default class App extends Component {
       this.state.authCodeRetrieved &&
       <NavigationContainer>
           <Tab.Navigator
-              initialRouteName='Schedule'
-              activeColor='#f0edf6'
-              inactiveColor='#3e2465'
+              initialRouteName="Schedule"
+              activeColor="#f0edf6"
+              inactiveColor="#3e2465"
               labelStyle={{ fontSize: 12 }}
               barStyle={{ backgroundColor: 'tomato' }}
               labeled={true}
@@ -92,35 +92,35 @@ export default class App extends Component {
               }}
             >
             <Tab.Screen
-              name='Schedule'
+              name="Schedule"
               component={ScheduleScreen}
               options={{
                 tabBarColor: '#694fad',
                 tabBarIcon: ({ color }) => (
-                  <MaterialIcons name='schedule' color={color} size={26} />
+                  <MaterialIcons name="schedule" color={color} size={26} />
                 ),
                 tabBarTestID: 'ScheduleTab'
               }}
             />
             <Tab.Screen
-              name='History'
+              name="History"
               component={HistoryScreen}
               options={{
                 tabBarColor: 'blue',
                 tabBarIcon: ({ color }) => (
-                  <MaterialCommunityIcons name='history' color={color} size={26} />
+                  <MaterialCommunityIcons name="history" color={color} size={26} />
                 ),
                 tabBarTestID: 'HistoryTab'
               }}
             />
             <Tab.Screen
-              name='BikeStack'
+              name="BikeStack"
               component={BikesStack}
               options={{
                 title: 'Bikes',
                 tabBarColor: 'red',
                 tabBarIcon: ({ color }) => (
-                  <MaterialCommunityIcons name='bike' color={color} size={24} />
+                  <MaterialCommunityIcons name="bike" color={color} size={24} />
                 ),
                 tabBarTestID: 'BikesTab'
               }}
