@@ -5,7 +5,7 @@ const componentSchema = new mongoose.Schema({
     bike: { type: mongoose.Schema.Types.Number, ref: 'Bike' }, //reference to Bike
     label: String,
     is_retired: Boolean,
-    attatchement_date: Date
+    attatchement_date: Date,
 });
 const componentModel = mongoose.model('Component', componentSchema);
 

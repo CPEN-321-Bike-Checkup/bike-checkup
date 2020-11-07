@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const activitySchema = new mongoose.Schema({
   _id: Number,
   distance: Number,
-  date: Date
+  date: Date,
 });
 
 const activityModel = mongoose.model('Activity', activitySchema);

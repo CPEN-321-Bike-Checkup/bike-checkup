@@ -75,7 +75,7 @@ export default class App extends Component {
               labeled={true}
               shifting={false}
               options={{
-                tabBarTestID: 'BottomTabNavigator'
+                tabBarTestID: 'BottomTabNavigator',
               }}
             >
             <Tab.Screen
@@ -86,7 +86,7 @@ export default class App extends Component {
                 tabBarIcon: ({ color }) => (
                   <MaterialIcons name="schedule" color={color} size={26} />
                 ),
-                tabBarTestID: 'ScheduleTab'
+                tabBarTestID: 'ScheduleTab',
               }}
             />
             <Tab.Screen
@@ -97,7 +97,7 @@ export default class App extends Component {
                 tabBarIcon: ({ color }) => (
                   <MaterialCommunityIcons name="history" color={color} size={26} />
                 ),
-                tabBarTestID: 'HistoryTab'
+                tabBarTestID: 'HistoryTab',
               }}
             />
             <Tab.Screen
@@ -109,7 +109,7 @@ export default class App extends Component {
                 tabBarIcon: ({ color }) => (
                   <MaterialCommunityIcons name="bike" color={color} size={24} />
                 ),
-                tabBarTestID: 'BikesTab'
+                tabBarTestID: 'BikesTab',
               }}
             />
             <Tab.Screen
@@ -120,7 +120,7 @@ export default class App extends Component {
                 tabBarIcon: ({ color }) => (
                   <MaterialCommunityIcons name='bike-fast' color={color} size={24} />
                 ),
-                tabBarTestID: 'ActivitiesTab'
+                tabBarTestID: 'ActivitiesTab',
               }}
             />
             <Tab.Screen
@@ -131,7 +131,7 @@ export default class App extends Component {
                 tabBarIcon: ({ color }) => (
                   <MaterialCommunityIcons name='wrench' color={color} size={24} />
                 ),
-                tabBarTestID: 'MaintenanceTab'
+                tabBarTestID: 'MaintenanceTab',
               }}
             />
           </Tab.Navigator>

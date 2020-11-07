@@ -8,7 +8,7 @@ export default class BurndownChart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [1, 2, 4, 5]
+      data: [1, 2, 4, 5],
     };
     // const screenWidth = Dimensions.get('window').width;
     // const screenHeight = Dimensions.get('window').height;
@@ -33,7 +33,7 @@ export default class BurndownChart extends React.Component {
                     70,
                     62,
                     55,
-                    48
+                    48,
                   ],
                   color: () => 'rgba(233, 45, 128)'
                 },
@@ -47,7 +47,7 @@ export default class BurndownChart extends React.Component {
                     62]
                 }
 
-              ]
+              ],
             }}
             width={Dimensions.get('window').width} // from react-native
             height={220}

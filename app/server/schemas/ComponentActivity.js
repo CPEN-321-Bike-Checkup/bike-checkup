@@ -3,12 +3,12 @@ const mongoose = require('mongoose');
 const componentActivitySchema = new mongoose.Schema({
   component_id: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Component'
+    ref: 'Component',
   },
   activity_id: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Activity'
-  }
+    ref: 'Activity',
+  },
 });
 const componentActivityModel = mongoose.model('ComponentActivity', componentActivitySchema);
 

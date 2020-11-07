@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   date: {
     fontSize: 18,
@@ -71,20 +71,19 @@ const styles = StyleSheet.create({
     borderBottomColor: 'grey',
     borderBottomWidth: 2,
   },
-
   touchableItem: {
     backgroundColor: 'white',
-    padding: 18
+    padding: 18,
   },
   itemViewWrapper: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   itemText: {
     fontSize: 20,
-    flex: 15
+    flex: 15,
   },
   itemIcon: {
-    flex: 1
-  }
+    flex: 1,
+  },
 });

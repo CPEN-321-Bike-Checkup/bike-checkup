@@ -41,7 +41,7 @@ export default class ScheduleScreen extends React.Component {
     super(props);
     this.state = {
       maintenanceData: [],
-      editMode: false
+      editMode: false,
     };
     this.navigation = props.navigation;
     this.bikeId = props.route.params.bikeId;

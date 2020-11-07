@@ -30,7 +30,7 @@ export default class MaintenancePrediction extends React.Component {
 
 		this.state = {
 			time: '',
-			predictedDates: []
+			predictedDates: [],
 		};
 	}
 

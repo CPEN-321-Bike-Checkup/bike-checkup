@@ -11,7 +11,7 @@ class NotificationService {
 
 		this.firebaseApp = admin.initializeApp({
 			credential: admin.credential.cert(serviceAccount),
-			databaseURL: databaseURL
+			databaseURL: databaseURL,
 		});
 
 		this.messaging = this.firebaseApp.messaging();

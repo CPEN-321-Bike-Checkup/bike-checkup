@@ -5,8 +5,8 @@ let CommonStyles = StyleSheet.create({
     fontSize: 15,
     color: 'white',
     padding: 10,
-    fontWeight: 'bold'
-  }
+    fontWeight: 'bold',
+  },
 });
 
 export default CommonStyles;

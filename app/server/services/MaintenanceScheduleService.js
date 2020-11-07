@@ -30,25 +30,25 @@ class MaintenanceScheduleService {
 		const activity1 = {
 			activity_id: 1,
 			distance: 50,
-			date: new Date('2020-10-21')
+			date: new Date('2020-10-21'),
 		};
 
 		const activity2 = {
 			activity_id: 2,
 			distance: 30,
-			date: new Date('2020-10-22')
+			date: new Date('2020-10-22'),
 		};
 
 		const activity3 = {
 			activity_id: 3,
 			distance: 50,
-			date: new Date('2020-10-22')
+			date: new Date('2020-10-22'),
 		};
 
 		const activity4 = {
 			activity_id: 4,
 			distance: 60,
-			date: new Date('2020-10-25')
+			date: new Date('2020-10-25'),
 		};
 
 		let maintenanceList = [maintSchedule1, maintSchedule2];

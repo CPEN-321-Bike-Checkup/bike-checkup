@@ -16,7 +16,7 @@ const DATA = [
       { bike: 'Norco Sasquatch', task: 'Oil chain', date: getDate(0) },
       { bike: 'Giant Contend AR 1', task: 'Oil chain', date: getDate(2) },
       { bike: 'Norco Sasquatch', task: 'Check brake pads', date: getDate(7) },
-    ]
+    ],
   },
   {
     title: 'Next 50 Days',
@@ -28,7 +28,7 @@ const DATA = [
       { bike: 'Norco Sasquatch', task: 'Bleed brakes', date: getDate(46) },
       { bike: 'Giant Contend AR 1', task: 'Bleed brakes', date: getDate(50) },
     ]
-  }
+  },
 ];
 
 
@@ -36,7 +36,7 @@ export default class ScheduleScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      maintenanceData: []
+      maintenanceData: [],
     };
   }
 

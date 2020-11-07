@@ -10,7 +10,7 @@ const DATA = [
   {
     id: 2,
     title: 'Giant Contend Ar 1',
-  }
+  },
 ];
 
 export default class ScheduleScreen extends React.Component {
