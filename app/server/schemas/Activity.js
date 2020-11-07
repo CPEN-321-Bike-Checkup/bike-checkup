@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
 
 const activitySchema = new mongoose.Schema({
-  _id: Number,
+  description: String,
   distance: Number,
+  time_s: Number,
   date: Date,
+  components: [{type: mongoose.Schema.Types.ObjectId, ref: 'Component'}],
 });
 
 const activityModel = mongoose.model('Activity', activitySchema);

@@ -1,9 +1,9 @@
-//const { ObjectID } = require('bson');
 const express = require('express');
 const mongoose = require('mongoose');
-// const MongoClient = require('mongodb').MongoClient;
-// const bodyParser = require('body-parser');
+const MongoClient = require('mongodb').MongoClient;
+const bodyParser = require('body-parser');
 const url = 'mongodb://localhost:27017/bikeCheckupDb';
+const axios = require('axios');
 
 const app = express();
 const port = 5000;
@@ -24,29 +24,27 @@ db.on('error', function (err) {
   console.log(err);
 });
 
-const initMaintenanceScheduleRoutes = require('./routes/MaintenanceScheduleRoutes');
+app.get('/stravaActivities', async function (req, res, next) {
+  var token = '07dad63ccaf2f16c846ca5a30c6128e27cd82338';
+  axios
+    .get('https://www.strava.com/api/v3/athlete/activities', {
+      headers: {Authorization: 'Bearer '.concat(token)},
+    })
+    .then((resp) => {
+      console.log(resp.data);
+      res.send(resp.data);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+});
+
+const initMaintenanceTaskRoutes = require('./routes/MaintenanceTaskRoutes');
 const initUserRoutes = require('./routes/UserRoutes');
 initUserRoutes(app);
-initMaintenanceScheduleRoutes(app);
+initMaintenanceTaskRoutes(app);
 
 app.get('/stravaRedirect', function (req, res, next) {
   console.log('Strava Auth Hit');
   res.send('OK');
-});
-
-var token =
-  'ckiJogkPRKyHyelqr-LKJf:APA91bEwN1Kvl-lx5YtIvT2k18P5JcUCbT9U1u99mr4qdW9qA5l48K3-4AUpI898aKU5kZaCFPS941wWFEBjr0eVBAvr23JUzUlUzQle1slfLxF9zhe1gRjHB1E0pmePRcIhdfbURg9r';
-let notificationService = require('./services/NotificationService');
-
-app.post('/notification', function (req, res, next) {
-  var message = notificationService.CreateMessage(
-    'Test Notification Name',
-    'Test Notification',
-    'This is a notification',
-    {},
-    token,
-  );
-  notificationService.SendNotification(message);
-
-  res.send('notification sent');
 });
