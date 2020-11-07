@@ -1,5 +1,5 @@
-const notificationService = require('./NotificationService');
-const moment = require('moment');
+const NotificationService = require('./NotificationService');
+const Moment = require('moment');
 require('moment-timezone');
 
 class MaintenanceScheduleService {
@@ -56,14 +56,14 @@ class MaintenanceScheduleService {
 		const MILLISECONDS_PER_SECOND = 1000;
 		const SECONDS_PER_DAY = 86400;
 
-		function mean(vals) {
+		function computeMean(vals) {
 			var sum_vals = vals.reduce(function (accumulator, currVal) {
 				return accumulator + currVal;
 			}, 0);
 			return sum_vals / vals.length;
 		}
 
-		function variance(vals, mean) {
+		function computeVariance(vals, mean) {
 			var sum_variance = vals.reduce(function (accumulator, currVal) {
 				return accumulator + Math.pow(currVal - mean, 2);
 			}, 0);
@@ -118,9 +118,9 @@ class MaintenanceScheduleService {
 			console.log(activity_date_dataset);
 			console.log(activity_distance_dataset);
 
-			var mean_x = mean(activity_date_dataset);
-			var mean_y = mean(activity_distance_dataset);
-			var variance_x = variance(activity_date_dataset, mean_x);
+			var mean_x = computeMean(activity_date_dataset);
+			var mean_y = computeMean(activity_distance_dataset);
+			var variance_x = computeVariance(activity_date_dataset, mean_x);
 			var covar = covariance(activity_date_dataset, mean_x, activity_distance_dataset, mean_y);
 			var slope = predictSlope(covar, variance_x);
 			var intercept = predictIntercept(mean_x, mean_y, slope);
@@ -139,7 +139,7 @@ class MaintenanceScheduleService {
 				+ date_print_list[4] + ':' + activity_distance_dataset[4]);
 			console.log('Your next estimated maintenance date:' + final_date);
 
-			final_date = moment(final_date, 'YYYY-MM-DD').tz('America/Los_Angeles').format('l');
+			final_date = Moment(final_date, 'YYYY-MM-DD').tz('America/Los_Angeles').format('l');
 			predict_dates.push(final_date);
 			predictionText += maintenanceList[maint_index].description + ' estimated due on: ' + final_date + '\n';
 			console.log('dates: ' + predict_dates);
@@ -161,5 +161,5 @@ class MaintenanceScheduleService {
 	}
 }
 
-const maintenanceScheduleService = new MaintenanceScheduleService(notificationService);
+const maintenanceScheduleService = new MaintenanceScheduleService(NotificationService);
 module.exports = maintenanceScheduleService;
