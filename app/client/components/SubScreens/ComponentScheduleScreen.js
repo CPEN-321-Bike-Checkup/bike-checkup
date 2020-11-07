@@ -186,7 +186,7 @@ export default class ScheduleScreen extends React.Component {
     return (
       <View style={styles.container}>
         <SectionList
-          sections={this.bikeId == 1 ? NORCO_DATA[this.componentId - 1].componentData : GIANT_DATA[this.componentId - 1].componentData}
+          sections={this.bikeId === 1 ? NORCO_DATA[this.componentId - 1].componentData : GIANT_DATA[this.componentId - 1].componentData}
           keyExtractor={(item, index) => item + index}
           renderItem={({ item }) => <Item item={item} editMode={this.state.editMode} />} // Item = item in the list (i.e. string)
           renderSectionHeader={({ section: { title } }) => (

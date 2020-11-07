@@ -107,7 +107,7 @@ export default class ScheduleScreen extends React.Component {
     return (
       <View style={styles.container}>
         <FlatList
-          data={this.bikeId == 1 ? NORCO_DATA : GIANT_DATA}
+          data={this.bikeId === 1 ? NORCO_DATA : GIANT_DATA}
           renderItem={this.renderItem}
           keyExtractor={(item, index) => item + index}
           ItemSeparatorComponent={() => <View style={styles.separator} />}
