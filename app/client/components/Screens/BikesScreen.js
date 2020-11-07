@@ -1,33 +1,26 @@
 import React from 'react';
-import { FlatList, StyleSheet, Text, View, TouchableHighlight } from 'react-native'
+import {PressableListItem} from '../ListItems';
+import {flatListWrapper} from '../FlatListWrapper';
 
 const DATA = [
   {
     id: 1,
-    title: "Norco Sasquatch",
+    title: 'Norco Sasquatch',
   },
   {
     id: 2,
-    title: "Giant Contend Ar 1",
-  }
+    title: 'Giant Contend Ar 1',
+  },
 ];
 
-let Item = ({ title, onPress }) => {
-  return (
-  <TouchableHighlight style={styles.item} onPress={onPress} underlayColor = 'gainsboro'>
-    <Text style={styles.title}>{title}</Text>
-  </TouchableHighlight>
-  );
-};
-
-
 export default class ScheduleScreen extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-        maintenanceData: []
+      maintenanceData: [],
     };
     this.navigation = props.navigation;
+    this.itemCount = 0;
   }
 
   updateMaintenanceData() {
@@ -43,7 +36,7 @@ export default class ScheduleScreen extends React.Component {
     //     this.updateMaintenanceData({dateJSON: data})
     //   })
     //   .catch((error) => {
-    //     // this.setState({dateJSON: "Error fetching data"})
+    //     // this.setState({dateJSON: 'Error fetching data'})
     //     console.error(error);
     //   })
     //   .finally(() => {
@@ -51,44 +44,22 @@ export default class ScheduleScreen extends React.Component {
     //   });;
   }
 
-  renderItem = ({ item }) => {
+  renderItem = ({item}) => {
+    const testId = 'BikeListItem' + this.itemCount;
+    this.itemCount++;
+
     return (
-      <TouchableHighlight>
-        <Item
-          title={item.title}
-          onPress={() => this.navigation.navigate('Components', {bikeId: item.id})}
-        />
-      </TouchableHighlight>
+      <PressableListItem
+        title={item.title}
+        onPress={() =>
+          this.navigation.navigate('Components', {bikeId: item.id})
+        }
+        testID={testId}
+      />
     );
-  }
-  
+  };
+
   render() {
-    return(
-        <View style={styles.container}>
-          <FlatList
-            data={DATA}
-            renderItem={this.renderItem}
-            keyExtractor={(item, index) => item + index}
-            ItemSeparatorComponent={() => <View style={styles.separator}/>}
-          />
-        </View>
-    );
+    return flatListWrapper(DATA, this.renderItem);
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  item: {
-    backgroundColor: "white",
-    padding: 18,
-  },
-  title: {
-    fontSize: 20
-  },
-  separator: {
-    borderBottomColor: 'grey',
-    borderBottomWidth: 2,
-  },
-});

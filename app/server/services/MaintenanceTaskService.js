@@ -161,7 +161,145 @@ class MaintenanceScheduleService{
 
         return predict_dates;
     }
+
+    /*
+     * Uses linear regression formula to predict slope https://machinelearningmastery.com/implement-simple-linear-regression-scratch-python/
+     * input:
+     * 	covariance - covariance of x and y values
+     * 	x_variance - variance of x values
+     * output:
+     * 	slope predicted with linear regression formula
+     * 	null if x_variance is 0
+     */
+    function predictSlope(covariance, x_variance) {
+      //denominator check
+      if (x_variance === 0) {
+        return null;
+      }
+      return covariance / x_variance;
+    }
+
+    /*
+     * Uses linear regression formula to predict intercept https://machinelearningmastery.com/implement-simple-linear-regression-scratch-python/
+     * input:
+     * 	x_mean - mean of x values
+     * 	y_mean - mean of y values
+     * 	slope - predicted or actual slope of x, y values
+     * output:
+     * 	intercept predicted with linear regression formula
+     */
+    function predictIntercept(x_mean, y_mean, slope) {
+      return y_mean - slope * x_mean;
+    }
+
+    /*
+     * Adds a given number of days to current date time
+     * input:
+     * 	curr_date - date time of the original date
+     * 	days_to_add - (int, double, float) number of days to add
+     * output:
+     * 	date time of curr_date advanced by days_to_add
+     */
+    function addDays(curr_date, days_to_add) {
+      var final_date = new Date(curr_date);
+      final_date.setDate(final_date.getDate() + days_to_add);
+      return final_date;
+    }
+
+    //Retrieve maintenance item and activity from database. Estimates next maintenance date
+    //Linear regression performed on x -> activity date and y -> activity distance
+    var predict_dates = [];
+    var predictionText = '';
+
+    var maint_index;
+    for (maint_index = 0; maint_index < maintenanceList.length; maint_index++) {
+      var last_maint_date = maintenanceList[
+        maint_index
+      ].last_maintenance_val.getTime();
+      var activity_date_dataset = [0];
+      var activity_distance_dataset = [0];
+
+      var activity_index;
+      for (
+        activity_index = 0;
+        activity_index < activityList.length;
+        activity_index++
+      ) {
+        activity_date_dataset.push(
+          (activityList[activity_index].date.getTime() - last_maint_date) /
+            (MILLISECONDS_PER_SECOND * SECONDS_PER_DAY),
+        );
+        activity_distance_dataset.push(
+          activityList[activity_index].distance +
+            activity_distance_dataset[activity_index],
+        );
+      }
+
+      //Intermediate calculations for linear regression
+      var x_mean = mean(activity_date_dataset);
+      var y_mean = mean(activity_distance_dataset);
+      if (x_mean == null || y_mean == null) {
+        //handle null error
+        predict_dates.push(null);
+        prectionText += 'error calculating' + '\n';
+        break;
+      }
+      
+      var x_variance = variance(activity_date_dataset, x_mean);
+      var covar_sum = covarianceSum(
+        activity_date_dataset,
+        x_mean,
+        activity_distance_dataset,
+        y_mean,
+      );
+      if (x_variance == null || covar_sum == null) {
+        //handle null error
+        predict_dates.push(null);
+        prectionText += 'error calculating' + '\n';
+        break;
+      }
+
+      var slope = predictSlope(covar_sum, x_variance);
+      var intercept = predictIntercept(x_mean, y_mean, slope);
+
+      var predict_days_in_advance =
+        (maintenanceList[maint_index].threshold_val - intercept) / slope;
+      var final_date = addDays(
+        maintenanceList[maint_index].last_maintenance_val,
+        predict_days_in_advance,
+      );
+
+      //round predicted datetime to closests date
+      final_date = moment(final_date, 'YYYY-MM-DD')
+        .tz('America/Los_Angeles')
+        .format('l');
+      predict_dates.push(final_date);
+      predictionText +=
+        maintenanceList[maint_index].description +
+        ' estimated due on: ' +
+        final_date +
+        '\n';
+    }
+
+    deviceTokens.forEach((t) => {
+      setTimeout(function () {
+        notificationService.SendNotification(
+          notificationService.CreateMessage(
+            'Maintenance Schedule Prediction',
+            'Upcoming Maintenance Predictions',
+            predictionText,
+            {},
+            t._id,
+          ),
+        );
+      }, 8000);
+    });
+
+    return predict_dates;
+  }
 }
 
-const maintenanceScheduleService = new MaintenanceScheduleService(notificationService);
+const maintenanceScheduleService = new MaintenanceScheduleService(
+  notificationService,
+);
 module.exports = maintenanceScheduleService;
