@@ -5,9 +5,12 @@ const { DeviceTokenSchema } = require('./DeviceToken');
 const userSchema =  new mongoose.Schema({
 	_id: Number,
     bikes: [BikeSchema], //actually stores bike objects
-    strava_token: String,
 	name: String,
 	deviceTokens: [DeviceTokenSchema],
+    strava_token: String,
+	expires_in: Number,
+	refresh_token: String,
+	activity_cache_date: Date
 });
 const userModel = mongoose.model('User', userSchema);
 

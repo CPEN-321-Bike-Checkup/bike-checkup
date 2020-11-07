@@ -4,7 +4,7 @@ const { MaintenanceRecordSchema } = require('./MaintenanceRecord');
 const { ActivitySchema } = require('./Activity');
 
 const componentSchema = new mongoose.Schema({
-    bike: {type: mongoose.Schema.Types.ObjectId, ref: 'Bike'}, //reference to Bike
+    bike: {type: mongoose.Schema.Types.Number, ref: 'Bike'}, //reference to Bike
     label: String,
 	attatchement_date: Date,
 	removal_date: Date,

@@ -175,6 +175,7 @@ export default class App extends Component {
               athleteData: response.data.athlete
             });
             console.log("Athlete data: ", response.data.athlete);
+            console.log("strava access token", response.data.access_token);
           }, (error) => {
             console.log(error);
           });

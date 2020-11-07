@@ -1,9 +1,9 @@
-//const { ObjectID } = require('bson');
 const express = require('express');
 const mongoose = require('mongoose');
 const MongoClient = require("mongodb").MongoClient;
 const bodyParser = require('body-parser');
 const url = "mongodb://localhost:27017/bikeCheckupDb";
+const axios = require('axios');
 
 
 const app = express();
@@ -27,6 +27,20 @@ db.on('error', function(err) {
 });
 
 
+app.get('/stravaActivities', async function(req, res, next){
+	var token = '07dad63ccaf2f16c846ca5a30c6128e27cd82338';
+	axios.get('https://www.strava.com/api/v3/athlete/activities', {headers: {Authorization: 'Bearer '.concat(token)}})
+		.then(resp => {
+
+			
+			console.log(resp.data);
+			res.send(resp.data);
+		}).catch(err => {
+			console.error(err);
+
+		});
+	
+});
 
 
 const initMaintenanceTaskRoutes = require('./routes/MaintenanceTaskRoutes');
