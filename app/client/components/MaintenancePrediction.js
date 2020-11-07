@@ -85,7 +85,7 @@ export default class MaintenancePrediction extends React.Component{
 
 	maintenancePredict(){
 		var serverIp = '3.97.53.16';
-		axios.get("http://" + serverIp + ":5000/maintenanceSchedule/prediction")
+		axios.get("http://" + serverIp + ":5000/maintenanceTask/prediction")
 		.then((res) => {
                 console.log("Got Predictions");
 				var dates = res.data.dates;
