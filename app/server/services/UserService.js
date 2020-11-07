@@ -1,5 +1,5 @@
-const UserRepository = require('../repositories/UserRepository');
-const DeviceTokenRepository = require('../repositories/DeviceTokenRepository');
+const userRepository = require('../repositories/UserRepository');
+const deviceTokenRepository = require('../repositories/DeviceTokenRepository');
 
 class UserService {
 	constructor(userRepository, deviceTokenRepository) {
@@ -33,5 +33,5 @@ class UserService {
 	}
 }
 
-const userService = new UserService(UserRepository, DeviceTokenRepository);
+const userService = new UserService(userRepository, deviceTokenRepository);
 module.exports = userService;
