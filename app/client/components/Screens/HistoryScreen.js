@@ -10,7 +10,7 @@ export default class TimeScreen extends React.Component {
         super(props);
     }
 
-    render(){
+    render() {
         return(
             <View style={styles.container}>
                 <Text>To be implemented post-MVP</Text>

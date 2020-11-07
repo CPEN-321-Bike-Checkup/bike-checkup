@@ -1,6 +1,8 @@
 import React from 'react';
-import { FlatList, StyleSheet, Text, View, TouchableHighlight, TouchableOpacity } from 'react-native'
-
+import { Text, TouchableOpacity } from 'react-native'
+import { PressableListItem } from "../ListItems";
+import { flatListWrapper } from "../FlatListWrapper";
+import CommonStyles from "../CommonStyles";
 
 const GIANT_DATA = [
   {
@@ -31,20 +33,6 @@ const NORCO_DATA = [
     title: "Brake pads - Brake Authority Avids",
   },
 ];
-
-let Item = ({ title, onPress, testID }) => {
-  return (
-  <TouchableHighlight
-    style={styles.item}
-    onPress={onPress}
-    underlayColor = 'gainsboro'
-    testID = {testID}
-  >
-    <Text style={styles.title}>{title}</Text>
-  </TouchableHighlight>
-  );
-};
-
 
 export default class ScheduleScreen extends React.Component {
   constructor(props){
@@ -82,20 +70,17 @@ export default class ScheduleScreen extends React.Component {
 
   // Note: arrow function needed to bind correct context
   toggleEditMode = () => {
-    console.log("STATE UPDATING")
-    console.log(this)
     this.setState({editMode: this.editMode ? false: true});
-    console.log("STATE UPDATED")
-    console.log(this.state)
   }
 
   renderItem = ({ item }) => {
     const testId = "ComponentListItem" + this.itemCount;
     this.itemCount++;
+
     return (
-      <Item
+      <PressableListItem
         title={item.title}
-        onPress={() => this.navigation.navigate('ComponentSchedule',{bikId: this.bikeId, componentId: item.id})}
+        onPress={() => this.navigation.navigate('ComponentSchedule', {bikId: this.bikeId, componentId: item.id})}
         testID={testId}
       />
     );
@@ -106,47 +91,15 @@ export default class ScheduleScreen extends React.Component {
     this.navigation.setOptions({
       headerRight: () => (
       <TouchableOpacity onPress={() => alert("hi")} >
-        <Text style={styles.editButtonText}>Edit</Text>
+        <Text style={CommonStyles.editButtonText}>Edit</Text>
       </TouchableOpacity>
       ),
     });
 
-    return(
-      <View
-        style={styles.container}
-        testID="ComponentsView"
-      >
-        <FlatList
-          data={this.bikeId == 1 ? NORCO_DATA : GIANT_DATA}
-          renderItem={this.renderItem}
-          keyExtractor={(item, index) => item + index}
-          ItemSeparatorComponent={() => <View style={styles.separator}/>}
-          testID="ComponentsList"
-        />
-      </View>
-  );
+    return flatListWrapper(
+        this.bikeId == 1 ? NORCO_DATA : GIANT_DATA,
+        this.renderItem,
+        "BikesList"
+      );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  item: {
-    backgroundColor: "white",
-    padding: 18,
-  },
-  separator: {
-    borderBottomColor: 'grey',
-    borderBottomWidth: 2,
-  },
-  title: {
-    fontSize: 20
-  },
-  editButtonText: {
-    fontSize: 15,
-    color: "white",
-    padding: 10,
-    fontWeight: "bold"
-  }
-});

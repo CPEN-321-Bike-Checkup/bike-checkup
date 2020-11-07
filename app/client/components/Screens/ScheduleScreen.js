@@ -1,5 +1,7 @@
 import React from 'react';
-import { TouchableOpacity, SectionList, StyleSheet, Text, View } from 'react-native'
+import { } from 'react-native'
+import { ListItem } from "../ListItems";
+import { selectionListWrapper } from "../SectionListWrapper";
 
 let getDate = function(offset) {
   let currentDate = new Date();
@@ -30,22 +32,6 @@ const DATA = [
   }
 ];
 
-// These don't need to be pressable for now
-let Item = ({ item }) => {
-  // console.log(title);
-  return (
-    <View style={styles.item}>
-      <View style={{flexDirection:"row", justifyContent: "space-between"}}>
-        <Text style={styles.title}>{item.task}</Text>
-        <Text style={styles.date}>{item.date}</Text>
-      </View>
-      <View>
-          <Text style={styles.bike}>{item.bike}</Text>
-      </View>
-    </View>
-  );
-};
-
 
 export default class ScheduleScreen extends React.Component {
   constructor(props){
@@ -75,59 +61,7 @@ export default class ScheduleScreen extends React.Component {
     //     // this.setState({ isLoading: false });
     //   });;
   }
-  
   render() {
-    return(
-        <View
-          style={styles.container}
-          testID="ScheduleView"
-        >
-          <SectionList
-            sections={DATA}
-            keyExtractor={(item, index) => item + index}
-            renderItem={({ item }) => <Item item={item} />} // Item = item in the list (i.e. string)
-            renderSectionHeader={({ section: { title } }) => (
-              <Text style={styles.header}>{title}</Text>
-            )}
-            ItemSeparatorComponent={() => <View style={styles.separator}/>}
-          />
-        </View>
-    );
+    return selectionListWrapper(DATA, ({ item }) => <ListItem item={item}/>);
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  item: {
-    backgroundColor: "white",
-    padding: 18,
-  },
-  header: {
-    fontSize: 22,
-    fontWeight: "500",
-    color: "black",
-    backgroundColor: "tomato",
-    borderBottomColor: 'black',
-    borderBottomWidth: 2,
-    borderTopColor: 'black',
-    borderTopWidth: 2,
-    paddingBottom: 4,
-    paddingTop: 6,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold"
-  },
-  date: {
-    fontSize: 18,
-  },
-  bike: {
-    fontSize: 16,
-  },
-  separator: {
-    borderBottomColor: 'grey',
-    borderBottomWidth: 2,
-  },
-});

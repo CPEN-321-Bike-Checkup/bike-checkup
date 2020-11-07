@@ -1,5 +1,7 @@
 import React from 'react';
-import { FlatList, StyleSheet, Text, View, TouchableHighlight } from 'react-native'
+import { } from 'react-native'
+import { PressableListItem } from "../ListItems";
+import { flatListWrapper } from "../FlatListWrapper";
 
 const DATA = [
   {
@@ -11,20 +13,6 @@ const DATA = [
     title: "Giant Contend Ar 1",
   }
 ];
-
-let Item = ({ title, onPress, testID }) => {
-  return (
-  <TouchableHighlight
-    style={styles.item}
-    onPress={onPress}
-    underlayColor = 'gainsboro'
-    testID = {testID}
-  >
-    <Text style={styles.title}>{title}</Text>
-  </TouchableHighlight>
-  );
-};
-
 
 export default class ScheduleScreen extends React.Component {
   constructor(props){
@@ -62,7 +50,7 @@ export default class ScheduleScreen extends React.Component {
     this.itemCount++;
 
     return (
-      <Item
+      <PressableListItem
         title={item.title}
         onPress={() => this.navigation.navigate('Components', {bikeId: item.id})}
         testID={testId}
@@ -71,36 +59,6 @@ export default class ScheduleScreen extends React.Component {
   }
   
   render() {
-    return(
-        <View
-          style={styles.container}
-          testID="BikesView"
-        >
-          <FlatList
-            data={DATA}
-            renderItem={this.renderItem}
-            keyExtractor={(item, index) => item + index}
-            ItemSeparatorComponent={() => <View style={styles.separator}/>}
-            testID="BikesList"
-          />
-        </View>
-    );
+    return flatListWrapper(DATA, this.renderItem);
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  item: {
-    backgroundColor: "white",
-    padding: 18,
-  },
-  title: {
-    fontSize: 20
-  },
-  separator: {
-    borderBottomColor: 'grey',
-    borderBottomWidth: 2,
-  },
-});
