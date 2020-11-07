@@ -10,7 +10,10 @@ const componentActivitySchema = new mongoose.Schema({
     ref: 'Activity',
   },
 });
-const componentActivityModel = mongoose.model('ComponentActivity', componentActivitySchema);
+const componentActivityModel = mongoose.model(
+  'ComponentActivity',
+  componentActivitySchema,
+);
 
 module.exports.ComponentActivityModel = componentActivityModel;
 module.exports.ComponentActivitySchema = componentActivitySchema;
