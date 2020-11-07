@@ -10,7 +10,7 @@ const port = 5000;
 
 app.use(express.json());
 app.listen(port, () => {
-	console.log('Dir: ' + __dirname + ', Server is running on port: ' + port);
+	console.log('Server is running on port: ' + port);
 });
 
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
