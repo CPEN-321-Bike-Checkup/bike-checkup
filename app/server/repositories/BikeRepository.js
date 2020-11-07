@@ -1,15 +1,15 @@
 const BikeModel = require('../schemas/Bike').BikeModel;
 const UserModel = require('../schemas/User').UserModel;
 
-class BikeRepository{
+class BikeRepository {
 
-    constructor(bikeModel, userModel){
+    constructor(bikeModel, userModel) {
         this.bikeModel = bikeModel;
         this.userModel = userModel;
     }
 
-    getBikesForUser(userId){
-		//placeholder
+    getBikesForUser(userId) {
+        //placeholder
         return this.bikeModel.find(query).exec();
     }
 }

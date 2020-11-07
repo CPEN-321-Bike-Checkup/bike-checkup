@@ -1,22 +1,22 @@
 const userRepository = require('../repositories/UserRepository');
 const deviceTokenRepository = require('../repositories/DeviceTokenRepository');
 
-class UserService{
+class UserService {
 
-	constructor(userRepository, deviceTokenRepository){
+	constructor(userRepository, deviceTokenRepository) {
 		this.userRepository = userRepository;
-		this. deviceTokenRepository = deviceTokenRepository;	
+		this.deviceTokenRepository = deviceTokenRepository;
 	}
 
-	async RegisterNewDevice(userId, deviceToken){
-		await this.deviceTokenRepository.Delete({"_id": deviceToken, owner: userId}).catch(err => {
+	async RegisterNewDevice(userId, deviceToken) {
+		await this.deviceTokenRepository.Delete({ "_id": deviceToken, owner: userId }).catch(err => {
 			return err;
 		});
-		await this.deviceTokenRepository.Create({"_id": deviceToken, owner: userId}).catch(err => {
+		await this.deviceTokenRepository.Create({ "_id": deviceToken, owner: userId }).catch(err => {
 			return err;
 		});
 	}
-	
+
 
 
 

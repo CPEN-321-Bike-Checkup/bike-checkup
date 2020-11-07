@@ -3,7 +3,7 @@ import { SectionList, StyleSheet, Text, View, TouchableOpacity, Pressable } from
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 
-let getDate = function(offset) {
+let getDate = function (offset) {
   let currentDate = new Date();
   currentDate.setDate(currentDate.getDate() + offset);
   return currentDate.toLocaleDateString();
@@ -11,7 +11,8 @@ let getDate = function(offset) {
 
 // Note: add separators based on dates
 const GIANT_DATA = [
-  { id: 1,
+  {
+    id: 1,
     componentData: [
       // {
       //   title: "Next 10 days",
@@ -21,29 +22,31 @@ const GIANT_DATA = [
       {
         title: "Next 50 Days",
         data: [
-          {task: "Bleed brakes", date: getDate(50)},
+          { task: "Bleed brakes", date: getDate(50) },
         ]
       }
     ]
   },
-  { id: 2,
+  {
+    id: 2,
     componentData: [
       {
         title: "Next 10 days",
         data: [
-          {task: "Oil chain", date: getDate(2)},
+          { task: "Oil chain", date: getDate(2) },
         ]
       },
       {
         title: "Next 50 Days",
         data: [
-          {task: "Replace chain", date: getDate(13)},
-          {task: "Oil chain", date: getDate(30)},
+          { task: "Replace chain", date: getDate(13) },
+          { task: "Oil chain", date: getDate(30) },
         ]
       }
     ]
   },
-  { id: 3,
+  {
+    id: 3,
     componentData: [
       // {
       //   title: "Next 10 days",
@@ -53,7 +56,7 @@ const GIANT_DATA = [
       {
         title: "Next 50 Days",
         data: [
-          {task: "Check brake pads", date: getDate(22)},
+          { task: "Check brake pads", date: getDate(22) },
         ]
       }
     ]
@@ -62,7 +65,8 @@ const GIANT_DATA = [
 
 
 const NORCO_DATA = [
-  { id: 1,
+  {
+    id: 1,
     componentData: [
       // {
       //   title: "Next 10 days",
@@ -72,33 +76,35 @@ const NORCO_DATA = [
       {
         title: "Next 50 Days",
         data: [
-          {task: "Bleed brakes", date: getDate(50)},
+          { task: "Bleed brakes", date: getDate(50) },
         ]
       }
     ]
   },
-  { id: 2,
+  {
+    id: 2,
     componentData: [
       {
         title: "Next 10 days",
         data: [
-          {task: "Oil chain", date: getDate(0)},
+          { task: "Oil chain", date: getDate(0) },
         ]
       },
       {
         title: "Next 50 Days",
         data: [
-          {task: "Oil chain", date: getDate(27)},
+          { task: "Oil chain", date: getDate(27) },
         ]
       }
     ]
   },
-  { id: 3,
+  {
+    id: 3,
     componentData: [
       {
         title: "Next 10 days",
         data: [
-          {task: "Check brake pads", date: getDate(7)},
+          { task: "Check brake pads", date: getDate(7) },
         ]
       },
       // {
@@ -111,12 +117,12 @@ const NORCO_DATA = [
 ];
 
 // These don't need to be pressable for now
-let Item = ({ item , editMode}) => {
+let Item = ({ item, editMode }) => {
   console.log("Item editMode:")
   console.log(editMode);
   return (
     <View style={styles.item}>
-      <View style={{flexDirection:"row", justifyContent: "space-between"}}>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         {editMode ? <TouchableOpacity><MaterialIcons name="remove-circle" color={"red"} size={24} /></TouchableOpacity> : null}
         <Text style={styles.title}>{item.task}</Text>
         <Text style={styles.date}>{item.date}</Text>
@@ -127,11 +133,11 @@ let Item = ({ item , editMode}) => {
 
 
 export default class ScheduleScreen extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-        maintenanceData: [],
-        editMode: false
+      maintenanceData: [],
+      editMode: false
     };
     this.navigation = props.navigation;
     this.bikeId = props.route.params.bikeId;
@@ -161,34 +167,34 @@ export default class ScheduleScreen extends React.Component {
 
   // Note: arrow function needed to bind correct context
   toggleEditMode = () => {
-    this.setState({editMode: this.state.editMode ? false : true});
+    this.setState({ editMode: this.state.editMode ? false : true });
   }
 
   render() {
     // Add edit button to navigation bar
     this.navigation.setOptions({
       headerRight: () => (
-      <TouchableOpacity onPress={this.toggleEditMode} >
-        <Text style={styles.editButtonText}>Edit</Text>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={this.toggleEditMode} >
+          <Text style={styles.editButtonText}>Edit</Text>
+        </TouchableOpacity>
       ),
     });
 
     console.log(this.componentId)
-    console.log(NORCO_DATA[this.componentId-1].componentData)
+    console.log(NORCO_DATA[this.componentId - 1].componentData)
 
-    return(
-        <View style={styles.container}>
-          <SectionList
-            sections={this.bikeId == 1 ? NORCO_DATA[this.componentId-1].componentData : GIANT_DATA[this.componentId-1].componentData}
-            keyExtractor={(item, index) => item + index}
-            renderItem={({ item }) => <Item item={item} editMode={this.state.editMode} />} // Item = item in the list (i.e. string)
-            renderSectionHeader={({ section: { title } }) => (
-              <Text style={styles.header}>{title}</Text>
-            )}
-            ItemSeparatorComponent={() => <View style={styles.separator}/>}
-          />
-        </View>
+    return (
+      <View style={styles.container}>
+        <SectionList
+          sections={this.bikeId == 1 ? NORCO_DATA[this.componentId - 1].componentData : GIANT_DATA[this.componentId - 1].componentData}
+          keyExtractor={(item, index) => item + index}
+          renderItem={({ item }) => <Item item={item} editMode={this.state.editMode} />} // Item = item in the list (i.e. string)
+          renderSectionHeader={({ section: { title } }) => (
+            <Text style={styles.header}>{title}</Text>
+          )}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
+        />
+      </View>
     );
   }
 }

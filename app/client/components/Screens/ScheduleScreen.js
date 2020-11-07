@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pressable, SectionList, StyleSheet, Text, View } from 'react-native'
 
-let getDate = function(offset) {
+let getDate = function (offset) {
   let currentDate = new Date();
   currentDate.setDate(currentDate.getDate() + offset);
   return currentDate.toLocaleDateString();
@@ -12,20 +12,20 @@ const DATA = [
   {
     title: "Next 10 days",
     data: [
-      {bike: "Norco Sasquatch", task: "Oil chain", date: getDate(0)},
-      {bike: "Giant Contend AR 1", task: "Oil chain", date: getDate(2)},
-      {bike: "Norco Sasquatch", task: "Check brake pads", date: getDate(7)},
+      { bike: "Norco Sasquatch", task: "Oil chain", date: getDate(0) },
+      { bike: "Giant Contend AR 1", task: "Oil chain", date: getDate(2) },
+      { bike: "Norco Sasquatch", task: "Check brake pads", date: getDate(7) },
     ]
   },
   {
     title: "Next 50 Days",
     data: [
-      {bike: "Giant Contend AR 1", task: "Replace chain", date: getDate(13)},
-      {bike: "Giant Contend AR 1", task: "Check brake pads", date: getDate(22)},
-      {bike: "Norco Sasquatch", task: "Oil chain", date: getDate(27)},
-      {bike: "Giant Contend AR 1", task: "Oil chain", date: getDate(30)},
-      {bike: "Norco Sasquatch", task: "Bleed brakes", date: getDate(46)},
-      {bike: "Giant Contend AR 1", task: "Bleed brakes", date: getDate(50)},
+      { bike: "Giant Contend AR 1", task: "Replace chain", date: getDate(13) },
+      { bike: "Giant Contend AR 1", task: "Check brake pads", date: getDate(22) },
+      { bike: "Norco Sasquatch", task: "Oil chain", date: getDate(27) },
+      { bike: "Giant Contend AR 1", task: "Oil chain", date: getDate(30) },
+      { bike: "Norco Sasquatch", task: "Bleed brakes", date: getDate(46) },
+      { bike: "Giant Contend AR 1", task: "Bleed brakes", date: getDate(50) },
     ]
   }
 ];
@@ -35,12 +35,12 @@ let Item = ({ item }) => {
   // console.log(title);
   return (
     <View style={styles.item}>
-      <View style={{flexDirection:"row", justifyContent: "space-between"}}>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Text style={styles.title}>{item.task}</Text>
         <Text style={styles.date}>{item.date}</Text>
       </View>
       <View>
-          <Text style={styles.bike}>{item.bike}</Text>
+        <Text style={styles.bike}>{item.bike}</Text>
       </View>
     </View>
   );
@@ -48,10 +48,10 @@ let Item = ({ item }) => {
 
 
 export default class ScheduleScreen extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-        maintenanceData: []
+      maintenanceData: []
     };
   }
 
@@ -75,20 +75,20 @@ export default class ScheduleScreen extends React.Component {
     //     // this.setState({ isLoading: false });
     //   });;
   }
-  
+
   render() {
-    return(
-        <View style={styles.container}>
-          <SectionList
-            sections={DATA}
-            keyExtractor={(item, index) => item + index}
-            renderItem={({ item }) => <Item item={item} />} // Item = item in the list (i.e. string)
-            renderSectionHeader={({ section: { title } }) => (
-              <Text style={styles.header}>{title}</Text>
-            )}
-            ItemSeparatorComponent={() => <View style={styles.separator}/>}
-          />
-        </View>
+    return (
+      <View style={styles.container}>
+        <SectionList
+          sections={DATA}
+          keyExtractor={(item, index) => item + index}
+          renderItem={({ item }) => <Item item={item} />} // Item = item in the list (i.e. string)
+          renderSectionHeader={({ section: { title } }) => (
+            <Text style={styles.header}>{title}</Text>
+          )}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
+        />
+      </View>
     );
   }
 }

@@ -1,8 +1,8 @@
 const Repository = require('./Repository');
 const DeviceTokenModel = require('../schemas/DeviceToken').DeviceTokenModel;
 
-class DeviceTokenRepository extends Repository{
-	constructor(deviceTokenModel){
+class DeviceTokenRepository extends Repository {
+	constructor(deviceTokenModel) {
 		super(deviceTokenModel);
 	}
 }

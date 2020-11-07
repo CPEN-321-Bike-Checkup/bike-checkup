@@ -1,36 +1,36 @@
-class Repository{
+class Repository {
 
-	constructor(documentModel){
+	constructor(documentModel) {
 		this.documentModel = documentModel;
 	}
 
-	GetAll(){
+	GetAll() {
 		return this.documentModel.find({}).exec();
 	}
 
-	GetById(id){
+	GetById(id) {
 		return this.documentModel.findById(id).exec();
 	}
-	
-	Create(documents){
-		return this.documentModel.create(documents);	
+
+	Create(documents) {
+		return this.documentModel.create(documents);
 	}
 
-	Update(documentKeys, newDocumentsVals){
+	Update(documentKeys, newDocumentsVals) {
 		var promises = [];
-		if (Array.isArray(documents)){
+		if (Array.isArray(documents)) {
 			documents.forEach(newDocumentVal, i => {
-				promises.add(this.documentModel.findOneAndUpdate(documentKeys[i], newDocumentsVal).exec());	
+				promises.add(this.documentModel.findOneAndUpdate(documentKeys[i], newDocumentsVal).exec());
 			});
 			return promises;
 		} else {
-			return this.documentModel.findOneAndUpdate(documentKeys, newDocumentsVals).exec();	
+			return this.documentModel.findOneAndUpdate(documentKeys, newDocumentsVals).exec();
 		}
 	}
-	
-	Delete(documents){
+
+	Delete(documents) {
 		var promises = [];
-		if (Array.isArray(documents)){
+		if (Array.isArray(documents)) {
 			documents.forEach(document => {
 				promises.add(this.documentModel.deleteOne(document).exec());
 			});

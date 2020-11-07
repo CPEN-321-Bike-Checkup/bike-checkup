@@ -14,18 +14,18 @@ const DATA = [
 
 let Item = ({ title, onPress }) => {
   return (
-  <TouchableHighlight style={styles.item} onPress={onPress} underlayColor = 'gainsboro'>
-    <Text style={styles.title}>{title}</Text>
-  </TouchableHighlight>
+    <TouchableHighlight style={styles.item} onPress={onPress} underlayColor='gainsboro'>
+      <Text style={styles.title}>{title}</Text>
+    </TouchableHighlight>
   );
 };
 
 
 export default class ScheduleScreen extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-        maintenanceData: []
+      maintenanceData: []
     };
     this.navigation = props.navigation;
   }
@@ -56,22 +56,22 @@ export default class ScheduleScreen extends React.Component {
       <TouchableHighlight>
         <Item
           title={item.title}
-          onPress={() => this.navigation.navigate('Components', {bikeId: item.id})}
+          onPress={() => this.navigation.navigate('Components', { bikeId: item.id })}
         />
       </TouchableHighlight>
     );
   }
-  
+
   render() {
-    return(
-        <View style={styles.container}>
-          <FlatList
-            data={DATA}
-            renderItem={this.renderItem}
-            keyExtractor={(item, index) => item + index}
-            ItemSeparatorComponent={() => <View style={styles.separator}/>}
-          />
-        </View>
+    return (
+      <View style={styles.container}>
+        <FlatList
+          data={DATA}
+          renderItem={this.renderItem}
+          keyExtractor={(item, index) => item + index}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
+        />
+      </View>
     );
   }
 }

@@ -35,21 +35,21 @@ const NORCO_DATA = [
 // These don't need to be pressable for now
 let Item = ({ title, onPress }) => {
   return (
-  <TouchableHighlight style={styles.item} onPress={onPress} underlayColor = 'gainsboro'>
-    <Text style={styles.title}>{title}</Text>
-  </TouchableHighlight>
+    <TouchableHighlight style={styles.item} onPress={onPress} underlayColor='gainsboro'>
+      <Text style={styles.title}>{title}</Text>
+    </TouchableHighlight>
   );
 };
 
 
 export default class ScheduleScreen extends React.Component {
-  constructor(props){
+  constructor(props) {
     console.log("ComponentScreen Props:")
     console.log(props)
     super(props);
     this.state = {
-        maintenanceData: [],
-        editMode: false
+      maintenanceData: [],
+      editMode: false
     };
     this.navigation = props.navigation;
     this.bikeId = props.route.params.bikeId;
@@ -80,7 +80,7 @@ export default class ScheduleScreen extends React.Component {
   toggleEditMode = () => {
     console.log("STATE UPDATING")
     console.log(this)
-    this.setState({editMode: this.editMode ? false: true});
+    this.setState({ editMode: this.editMode ? false : true });
     console.log("STATE UPDATED")
     console.log(this.state)
   }
@@ -89,30 +89,30 @@ export default class ScheduleScreen extends React.Component {
     return (
       <Item
         title={item.title}
-        onPress={() => this.navigation.navigate('ComponentSchedule',{bikId: this.bikeId, componentId: item.id})}
+        onPress={() => this.navigation.navigate('ComponentSchedule', { bikId: this.bikeId, componentId: item.id })}
       />
     );
   }
-  
+
   render() {
     // Add edit button to navigation bar
     this.navigation.setOptions({
       headerRight: () => (
-      <TouchableOpacity onPress={() => alert("hi")} >
-        <Text style={styles.editButtonText}>Edit</Text>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={() => alert("hi")} >
+          <Text style={styles.editButtonText}>Edit</Text>
+        </TouchableOpacity>
       ),
     });
 
-    return(
-        <View style={styles.container}>
-          <FlatList
-            data={this.bikeId == 1 ? NORCO_DATA : GIANT_DATA}
-            renderItem={this.renderItem}
-            keyExtractor={(item, index) => item + index}
-            ItemSeparatorComponent={() => <View style={styles.separator}/>}
-          />
-        </View>
+    return (
+      <View style={styles.container}>
+        <FlatList
+          data={this.bikeId == 1 ? NORCO_DATA : GIANT_DATA}
+          renderItem={this.renderItem}
+          keyExtractor={(item, index) => item + index}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
+        />
+      </View>
     );
   }
 }

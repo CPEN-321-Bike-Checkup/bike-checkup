@@ -8,10 +8,10 @@ export default class HomeScreen extends React.Component {
             time: ''
         };
     }
-    
+
     render() {
-        return(
-            <View style={{flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'space-around', paddingVertical: 50}}>
+        return (
+            <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'space-around', paddingVertical: 50 }}>
                 <Button
                     title="Predict Maintenance"
                     onPress={() => this.props.navigation.navigate('MaintenancePrediction')}
