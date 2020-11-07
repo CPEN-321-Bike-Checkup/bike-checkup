@@ -1,8 +1,8 @@
 //const { ObjectID } = require('bson');
 const express = require('express');
 const mongoose = require('mongoose');
-const MongoClient = require('mongodb').MongoClient;
-const bodyParser = require('body-parser');
+// const MongoClient = require('mongodb').MongoClient;
+// const bodyParser = require('body-parser');
 const url = 'mongodb://localhost:27017/bikeCheckupDb';
 
 const app = express();

@@ -10,9 +10,9 @@ export default class BurndownChart extends React.Component {
     this.state = {
       data: [1, 2, 4, 5]
     };
-    const screenWidth = Dimensions.get('window').width;
-    const screenHeight = Dimensions.get('window').height;
-    const edgeMargin = 15;
+    // const screenWidth = Dimensions.get('window').width;
+    // const screenHeight = Dimensions.get('window').height;
+    // const edgeMargin = 15;
   }
 
   render() {

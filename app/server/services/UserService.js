@@ -35,5 +35,3 @@ class UserService {
 
 const userService = new UserService(UserRepository, DeviceTokenRepository);
 module.exports = userService;
-
-var exports = module.exports;
