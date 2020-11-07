@@ -1,10 +1,8 @@
 import React from 'react';
-import { View, Dimensions } from 'react-native';
+import {View, Dimensions} from 'react-native';
 import LineChart from 'react-native-chart-kit';
 
 export default class BurndownChart extends React.Component {
-
-
   constructor(props) {
     super(props);
     this.state = {
@@ -18,35 +16,34 @@ export default class BurndownChart extends React.Component {
   render() {
     return (
       <>
-        <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'space-around', paddingVertical: 50 }}>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'space-around',
+            paddingVertical: 50,
+          }}>
           <LineChart
             data={{
-              labels: ['Oct 1', 'Oct 5', 'Oct 10', 'Oct 15', 'Oct 20', 'Oct 25', 'Oct 30', 'Nov 5'],
+              labels: [
+                'Oct 1',
+                'Oct 5',
+                'Oct 10',
+                'Oct 15',
+                'Oct 20',
+                'Oct 25',
+                'Oct 30',
+                'Nov 5',
+              ],
               datasets: [
-
                 {
-                  data: [
-                    100,
-                    95,
-                    90,
-                    82,
-                    70,
-                    62,
-                    55,
-                    48,
-                  ],
-                  color: () => 'rgba(233, 45, 128)'
+                  data: [100, 95, 90, 82, 70, 62, 55, 48],
+                  color: () => 'rgba(233, 45, 128)',
                 },
                 {
-                  data: [
-                    100,
-                    95,
-                    90,
-                    82,
-                    70,
-                    62]
-                }
-
+                  data: [100, 95, 90, 82, 70, 62],
+                },
               ],
             }}
             width={Dimensions.get('window').width} // from react-native
@@ -63,24 +60,22 @@ export default class BurndownChart extends React.Component {
               color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
               labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
               style: {
-                borderRadius: 16
+                borderRadius: 16,
               },
               propsForDots: {
                 r: '6',
                 strokeWidth: '2',
-                stroke: '#ffa726'
-              }
+                stroke: '#ffa726',
+              },
             }}
             bezier
             style={{
               marginVertical: 8,
-              borderRadius: 16
+              borderRadius: 16,
             }}
           />
-
         </View>
       </>
     );
   }
 }
-

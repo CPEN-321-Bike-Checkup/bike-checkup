@@ -1,12 +1,17 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TouchableHighlight } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  TouchableHighlight,
+} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-
-export let ListItem = ({ item }) => {
+export const ListItem = ({item}) => {
   return (
     <View style={styles.item}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
         <Text style={styles.title}>{item.task}</Text>
         <Text style={styles.date}>{item.date}</Text>
       </View>
@@ -17,17 +22,17 @@ export let ListItem = ({ item }) => {
   );
 };
 
-export let EditableListItem = ({ item, editMode, onRemovePress }) => {
+export const EditableListItem = ({item, editMode, onRemovePress}) => {
   console.log('Item editMode:');
   console.log(editMode);
   return (
     <View style={styles.item}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        {editMode ?
+      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        {editMode ? (
           <TouchableOpacity onPress={onRemovePress}>
             <MaterialIcons name="remove-circle" color={'red'} size={24} />
           </TouchableOpacity>
-          : null}
+        ) : null}
         <Text style={styles.title}>{item.task}</Text>
         <Text style={styles.date}>{item.date}</Text>
       </View>
@@ -35,18 +40,21 @@ export let EditableListItem = ({ item, editMode, onRemovePress }) => {
   );
 };
 
-
-export let PressableListItem = ({ title, onPress, testID }) => {
+export const PressableListItem = ({title, onPress, testID}) => {
   return (
     <TouchableHighlight
       style={styles.touchableItem}
       onPress={onPress}
       underlayColor="gainsboro"
-      testID={testID}
-    >
+      testID={testID}>
       <View style={styles.itemViewWrapper}>
         <Text style={styles.itemText}>{title}</Text>
-        <MaterialIcons name="arrow-forward-ios" color={'grey'} size={24} style={styles.itemIcon} />
+        <MaterialIcons
+          name="arrow-forward-ios"
+          color={'grey'}
+          size={24}
+          style={styles.itemIcon}
+        />
       </View>
     </TouchableHighlight>
   );

@@ -13,24 +13,23 @@ const DATA = [
   {
     title: 'Next 10 days',
     data: [
-      { bike: 'Norco Sasquatch', task: 'Oil chain', date: getDate(0) },
-      { bike: 'Giant Contend AR 1', task: 'Oil chain', date: getDate(2) },
-      { bike: 'Norco Sasquatch', task: 'Check brake pads', date: getDate(7) },
+      {bike: 'Norco Sasquatch', task: 'Oil chain', date: getDate(0)},
+      {bike: 'Giant Contend AR 1', task: 'Oil chain', date: getDate(2)},
+      {bike: 'Norco Sasquatch', task: 'Check brake pads', date: getDate(7)},
     ],
   },
   {
     title: 'Next 50 Days',
     data: [
-      { bike: 'Giant Contend AR 1', task: 'Replace chain', date: getDate(13) },
-      { bike: 'Giant Contend AR 1', task: 'Check brake pads', date: getDate(22) },
-      { bike: 'Norco Sasquatch', task: 'Oil chain', date: getDate(27) },
-      { bike: 'Giant Contend AR 1', task: 'Oil chain', date: getDate(30) },
-      { bike: 'Norco Sasquatch', task: 'Bleed brakes', date: getDate(46) },
-      { bike: 'Giant Contend AR 1', task: 'Bleed brakes', date: getDate(50) },
-    ]
+      {bike: 'Giant Contend AR 1', task: 'Replace chain', date: getDate(13)},
+      {bike: 'Giant Contend AR 1', task: 'Check brake pads', date: getDate(22)},
+      {bike: 'Norco Sasquatch', task: 'Oil chain', date: getDate(27)},
+      {bike: 'Giant Contend AR 1', task: 'Oil chain', date: getDate(30)},
+      {bike: 'Norco Sasquatch', task: 'Bleed brakes', date: getDate(46)},
+      {bike: 'Giant Contend AR 1', task: 'Bleed brakes', date: getDate(50)},
+    ],
   },
 ];
-
 
 export default class ScheduleScreen extends React.Component {
   constructor(props) {
@@ -61,6 +60,6 @@ export default class ScheduleScreen extends React.Component {
     //   });;
   }
   render() {
-    return selectionListWrapper(DATA, ({ item }) => <ListItem item={item} />);
+    return selectionListWrapper(DATA, ({item}) => <ListItem item={item} />);
   }
 }

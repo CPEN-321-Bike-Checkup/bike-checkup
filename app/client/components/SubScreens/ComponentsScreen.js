@@ -1,7 +1,7 @@
 import React from 'react';
-import { Text, TouchableOpacity } from 'react-native';
-import { PressableListItem } from '../ListItems';
-import { flatListWrapper } from '../FlatListWrapper';
+import {Text, TouchableOpacity} from 'react-native';
+import {PressableListItem} from '../ListItems';
+import {flatListWrapper} from '../FlatListWrapper';
 import CommonStyles from '../CommonStyles';
 
 const GIANT_DATA = [
@@ -70,21 +70,26 @@ export default class ScheduleScreen extends React.Component {
 
   // Note: arrow function needed to bind correct context
   toggleEditMode = () => {
-    this.setState({ editMode: this.editMode ? false : true });
-  }
+    this.setState({editMode: this.editMode ? false : true});
+  };
 
-  renderItem = ({ item }) => {
+  renderItem = ({item}) => {
     const testId = 'ComponentListItem' + this.itemCount;
     this.itemCount++;
 
     return (
       <PressableListItem
         title={item.title}
-        onPress={() => this.navigation.navigate('ComponentSchedule', { bikId: this.bikeId, componentId: item.id })}
+        onPress={() =>
+          this.navigation.navigate('ComponentSchedule', {
+            bikId: this.bikeId,
+            componentId: item.id,
+          })
+        }
         testID={testId}
       />
     );
-  }
+  };
 
   render() {
     // Add edit button to navigation bar
@@ -99,7 +104,7 @@ export default class ScheduleScreen extends React.Component {
     return flatListWrapper(
       this.bikeId === 1 ? NORCO_DATA : GIANT_DATA,
       this.renderItem,
-      'BikesList'
+      'BikesList',
     );
   }
 }

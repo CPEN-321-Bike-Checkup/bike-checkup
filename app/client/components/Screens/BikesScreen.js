@@ -1,6 +1,6 @@
 import React from 'react';
-import { PressableListItem } from '../ListItems';
-import { flatListWrapper } from '../FlatListWrapper';
+import {PressableListItem} from '../ListItems';
+import {flatListWrapper} from '../FlatListWrapper';
 
 const DATA = [
   {
@@ -44,18 +44,20 @@ export default class ScheduleScreen extends React.Component {
     //   });;
   }
 
-  renderItem = ({ item }) => {
+  renderItem = ({item}) => {
     const testId = 'BikeListItem' + this.itemCount;
     this.itemCount++;
 
     return (
       <PressableListItem
         title={item.title}
-        onPress={() => this.navigation.navigate('Components', { bikeId: item.id })}
+        onPress={() =>
+          this.navigation.navigate('Components', {bikeId: item.id})
+        }
         testID={testId}
       />
     );
-  }
+  };
 
   render() {
     return flatListWrapper(DATA, this.renderItem);

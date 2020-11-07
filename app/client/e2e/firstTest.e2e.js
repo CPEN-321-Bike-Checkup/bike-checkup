@@ -7,7 +7,6 @@ describe('Example', () => {
     return true;
   });
 
-
   // it('Should open to Strava login screen', async () => {
   //   await expect(element(by.id('BottomTabNavigator')));
   // });
@@ -17,7 +16,6 @@ describe('Example', () => {
   //   await expect(scheduleScreen).toBeVisible();
   //   await scheduleScreen.tap()
   // });
-
 
   // it('should show hello screen after tap', async () => {
   //   await element(by.id('hello_button')).tap();

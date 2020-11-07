@@ -4,7 +4,7 @@ describe('Bike Stack', () => {
   });
 
   const sleep = (duration) =>
-    new Promise(resolve => setTimeout(() => resolve(), duration));
+    new Promise((resolve) => setTimeout(() => resolve(), duration));
 
   const veryifyBottomNavigator = async () => {
     await expect(element(by.id('BottomTabNavigator')));
@@ -28,7 +28,7 @@ describe('Bike Stack', () => {
   };
 
   it('Main screen should show schedule screen and bottom navigation bar', async () => {
-    await expect(element(by.id('ScheduleView'))).toBeVisible
+    await expect(element(by.id('ScheduleView'))).toBeVisible;
     await veryifyBottomNavigator();
   });
 
@@ -45,7 +45,7 @@ describe('Bike Stack', () => {
     await sleep(5000); // Only needed for M7 demonstration
   });
 
-  it('Should show bike\'s component screen after tap', async () => {
+  it("Should show bike's component screen after tap", async () => {
     const bikeListItem = await getBikeListItem(0);
     await expect(bikeListItem).toBeVisible();
     await bikeListItem.tap();

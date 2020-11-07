@@ -1,9 +1,8 @@
 import React from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import {Text, TouchableOpacity} from 'react-native';
 import EditableListItem from '../ListItems';
 import selectionListWrapper from '../SectionListWrapper';
 import CommonStyles from '../CommonStyles';
-
 
 let getDate = function (offset) {
   let currentDate = new Date();
@@ -23,29 +22,25 @@ const GIANT_DATA = [
       // },
       {
         title: 'Next 50 Days',
-        data: [
-          { task: 'Bleed brakes', date: getDate(50) },
-        ],
+        data: [{task: 'Bleed brakes', date: getDate(50)}],
       },
-    ]
+    ],
   },
   {
     id: 2,
     componentData: [
       {
         title: 'Next 10 days',
-        data: [
-          { task: 'Oil chain', date: getDate(2) },
-        ]
+        data: [{task: 'Oil chain', date: getDate(2)}],
       },
       {
         title: 'Next 50 Days',
         data: [
-          { task: 'Replace chain', date: getDate(13) },
-          { task: 'Oil chain', date: getDate(30) },
-        ]
-      }
-    ]
+          {task: 'Replace chain', date: getDate(13)},
+          {task: 'Oil chain', date: getDate(30)},
+        ],
+      },
+    ],
   },
   {
     id: 3,
@@ -57,14 +52,11 @@ const GIANT_DATA = [
       // },
       {
         title: 'Next 50 Days',
-        data: [
-          { task: 'Check brake pads', date: getDate(22) },
-        ]
-      }
-    ]
-  }
+        data: [{task: 'Check brake pads', date: getDate(22)}],
+      },
+    ],
+  },
 ];
-
 
 const NORCO_DATA = [
   {
@@ -77,47 +69,38 @@ const NORCO_DATA = [
       // },
       {
         title: 'Next 50 Days',
-        data: [
-          { task: 'Bleed brakes', date: getDate(50) },
-        ]
-      }
-    ]
+        data: [{task: 'Bleed brakes', date: getDate(50)}],
+      },
+    ],
   },
   {
     id: 2,
     componentData: [
       {
         title: 'Next 10 days',
-        data: [
-          { task: 'Oil chain', date: getDate(0) },
-        ]
+        data: [{task: 'Oil chain', date: getDate(0)}],
       },
       {
         title: 'Next 50 Days',
-        data: [
-          { task: 'Oil chain', date: getDate(27) },
-        ]
-      }
-    ]
+        data: [{task: 'Oil chain', date: getDate(27)}],
+      },
+    ],
   },
   {
     id: 3,
     componentData: [
       {
         title: 'Next 10 days',
-        data: [
-          { task: 'Check brake pads', date: getDate(7) },
-        ]
+        data: [{task: 'Check brake pads', date: getDate(7)}],
       },
       // {
       //   title: 'Next 50 Days',
       //   data: [
       //   ]
       // }
-    ]
-  }
+    ],
+  },
 ];
-
 
 export default class ScheduleScreen extends React.Component {
   constructor(props) {
@@ -154,20 +137,25 @@ export default class ScheduleScreen extends React.Component {
 
   // Note: arrow function needed to bind correct context
   toggleEditMode = () => {
-    this.setState({ editMode: this.state.editMode ? false : true });
-  }
+    this.setState({editMode: this.state.editMode ? false : true});
+  };
 
   render() {
     // Add edit button to navigation bar
     this.navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity onPress={this.toggleEditMode} >
+        <TouchableOpacity onPress={this.toggleEditMode}>
           <Text style={CommonStyles.editButtonText}>Edit</Text>
         </TouchableOpacity>
       ),
     });
 
-    let data = this.bikeId === 1 ? NORCO_DATA[this.componentId - 1].componentData : GIANT_DATA[this.componentId - 1].componentData;
-    return selectionListWrapper(data, ({ item }) => <EditableListItem item={item} editMode={this.state.editMode} />);
+    let data =
+      this.bikeId === 1
+        ? NORCO_DATA[this.componentId - 1].componentData
+        : GIANT_DATA[this.componentId - 1].componentData;
+    return selectionListWrapper(data, ({item}) => (
+      <EditableListItem item={item} editMode={this.state.editMode} />
+    ));
   }
 }
