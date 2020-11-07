@@ -27,7 +27,8 @@ const CODE_LABEL_LENGTH = 5;
 const PARAM_SEPARATOR_LENGTH = 1;
 
 // Push notification configuration
-var serverIp = '3.97.53.16';
+const serverIp = '3.97.53.16';
+const senderID = 517168871348;
 PushNotification.configure({
   onRegister: (tokenData) => {
     console.log('Remote Notification Token: ', tokenData);
@@ -47,7 +48,7 @@ PushNotification.configure({
   onNotification: (notification) => {
     console.log('Remote Notification Received: ', notification);
   },
-  senderID: 517168871348,
+  senderID: senderID,
   popInitialNotification: false,
   requestPermissions: true,
 });
