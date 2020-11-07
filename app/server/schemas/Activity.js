@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const activitySchema = new mongoose.Schema({
+  athlete_id: {type: mongoose.Schema.Types.Number, ref: 'User'},
   description: String,
   distance: Number,
   time_s: Number,

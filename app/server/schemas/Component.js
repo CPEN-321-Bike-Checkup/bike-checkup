@@ -11,6 +11,7 @@ const componentSchema = new mongoose.Schema({
   maintenance_tasks: [MaintenanceTaskSchema],
   maintenance_records: [MaintenanceRecordSchema],
   activities: [ActivitySchema],
+  predicted_maintenance_date: Date,
 });
 const componentModel = mongoose.model('Component', componentSchema);
 
