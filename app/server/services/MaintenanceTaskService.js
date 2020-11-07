@@ -2,7 +2,7 @@ const notificationService = require('./NotificationService');
 const moment = require('moment');
 require('moment-timezone');
 
-class MaintenanceScheduleService {
+class MaintenanceTaskService {
   constructor(notificationService) {
     this.notificationService = notificationService;
   }
@@ -217,7 +217,5 @@ class MaintenanceScheduleService {
   }
 }
 
-const maintenanceScheduleService = new MaintenanceScheduleService(
-  notificationService,
-);
-module.exports = maintenanceScheduleService;
+const maintenanceTaskService = new MaintenanceTaskService(notificationService);
+module.exports = maintenanceTaskService;

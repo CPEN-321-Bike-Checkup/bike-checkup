@@ -41,7 +41,7 @@ export default class MaintenancePrediction extends React.Component {
     /* Fetch predictions from server */
     var serverIp = '3.97.53.16';
     axios
-      .get('http://' + serverIp + ':5000/maintenanceSchedule/prediction')
+      .get('http://' + serverIp + ':5000/maintenanceTask/prediction')
       .then((res) => {
         var dates = res.data.dates;
         console.log('INFO: Successfully fetched predictions: ' + dates);
