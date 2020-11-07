@@ -36,7 +36,7 @@ export default class BurndownChart extends React.Component {
                     55,
                     48
                   ],
-                  color: () => `rgba(233, 45, 128)`
+                  color: () => 'rgba(233, 45, 128)'
                 },
                 {
                   data: [
