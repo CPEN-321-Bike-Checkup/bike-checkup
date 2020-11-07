@@ -31,7 +31,7 @@ class UserRepository {
 
 	GetById(id) {
 		return new Promise((resolve, reject) => {
-			var user = this.data.find((cur) => cur._id == id);
+			var user = this.data.find((cur) => cur._id === id);
 			resolve(typeof user === 'undefined' ? null : user);
 		});
 

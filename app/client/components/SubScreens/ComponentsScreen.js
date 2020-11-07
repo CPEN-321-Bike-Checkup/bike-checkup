@@ -97,7 +97,7 @@ export default class ScheduleScreen extends React.Component {
     });
 
     return flatListWrapper(
-      this.bikeId == 1 ? NORCO_DATA : GIANT_DATA,
+      this.bikeId === 1 ? NORCO_DATA : GIANT_DATA,
       this.renderItem,
       'BikesList'
     );
