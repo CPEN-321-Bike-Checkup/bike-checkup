@@ -1,16 +1,16 @@
 import React from 'react';
 import { } from 'react-native'
-import { PressableListItem } from "../ListItems";
-import { flatListWrapper } from "../FlatListWrapper";
+import { PressableListItem } from '../ListItems';
+import { flatListWrapper } from '../FlatListWrapper';
 
 const DATA = [
   {
     id: 1,
-    title: "Norco Sasquatch",
+    title: 'Norco Sasquatch',
   },
   {
     id: 2,
-    title: "Giant Contend Ar 1",
+    title: 'Giant Contend Ar 1',
   }
 ];
 
@@ -37,7 +37,7 @@ export default class ScheduleScreen extends React.Component {
     //     this.updateMaintenanceData({dateJSON: data})
     //   })
     //   .catch((error) => {
-    //     // this.setState({dateJSON: "Error fetching data"})
+    //     // this.setState({dateJSON: 'Error fetching data'})
     //     console.error(error);
     //   })
     //   .finally(() => {
@@ -46,7 +46,7 @@ export default class ScheduleScreen extends React.Component {
   }
 
   renderItem = ({ item }) => {
-    const testId = "BikeListItem" + this.itemCount;
+    const testId = 'BikeListItem' + this.itemCount;
     this.itemCount++;
 
     return (

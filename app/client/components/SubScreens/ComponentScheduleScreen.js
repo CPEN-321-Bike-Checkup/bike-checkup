@@ -1,8 +1,8 @@
 import React from 'react';
 import { Text, TouchableOpacity } from 'react-native'
-import { EditableListItem } from "../ListItems";
-import { selectionListWrapper } from "../SectionListWrapper";
-import CommonStyles from "../CommonStyles";
+import { EditableListItem } from '../ListItems';
+import { selectionListWrapper } from '../SectionListWrapper';
+import CommonStyles from '../CommonStyles';
 
 
 let getDate = function (offset) {
@@ -17,14 +17,14 @@ const GIANT_DATA = [
     id: 1,
     componentData: [
       // {
-      //   title: "Next 10 days",
+      //   title: 'Next 10 days',
       //   data: [
       //   ]
       // },
       {
-        title: "Next 50 Days",
+        title: 'Next 50 Days',
         data: [
-          { task: "Bleed brakes", date: getDate(50) },
+          { task: 'Bleed brakes', date: getDate(50) },
         ]
       }
     ]
@@ -33,16 +33,16 @@ const GIANT_DATA = [
     id: 2,
     componentData: [
       {
-        title: "Next 10 days",
+        title: 'Next 10 days',
         data: [
-          { task: "Oil chain", date: getDate(2) },
+          { task: 'Oil chain', date: getDate(2) },
         ]
       },
       {
-        title: "Next 50 Days",
+        title: 'Next 50 Days',
         data: [
-          { task: "Replace chain", date: getDate(13) },
-          { task: "Oil chain", date: getDate(30) },
+          { task: 'Replace chain', date: getDate(13) },
+          { task: 'Oil chain', date: getDate(30) },
         ]
       }
     ]
@@ -51,14 +51,14 @@ const GIANT_DATA = [
     id: 3,
     componentData: [
       // {
-      //   title: "Next 10 days",
+      //   title: 'Next 10 days',
       //   data: [
       //   ]
       // },
       {
-        title: "Next 50 Days",
+        title: 'Next 50 Days',
         data: [
-          { task: "Check brake pads", date: getDate(22) },
+          { task: 'Check brake pads', date: getDate(22) },
         ]
       }
     ]
@@ -71,14 +71,14 @@ const NORCO_DATA = [
     id: 1,
     componentData: [
       // {
-      //   title: "Next 10 days",
+      //   title: 'Next 10 days',
       //   data: [
       //   ]
       // },
       {
-        title: "Next 50 Days",
+        title: 'Next 50 Days',
         data: [
-          { task: "Bleed brakes", date: getDate(50) },
+          { task: 'Bleed brakes', date: getDate(50) },
         ]
       }
     ]
@@ -87,15 +87,15 @@ const NORCO_DATA = [
     id: 2,
     componentData: [
       {
-        title: "Next 10 days",
+        title: 'Next 10 days',
         data: [
-          { task: "Oil chain", date: getDate(0) },
+          { task: 'Oil chain', date: getDate(0) },
         ]
       },
       {
-        title: "Next 50 Days",
+        title: 'Next 50 Days',
         data: [
-          { task: "Oil chain", date: getDate(27) },
+          { task: 'Oil chain', date: getDate(27) },
         ]
       }
     ]
@@ -104,13 +104,13 @@ const NORCO_DATA = [
     id: 3,
     componentData: [
       {
-        title: "Next 10 days",
+        title: 'Next 10 days',
         data: [
-          { task: "Check brake pads", date: getDate(7) },
+          { task: 'Check brake pads', date: getDate(7) },
         ]
       },
       // {
-      //   title: "Next 50 Days",
+      //   title: 'Next 50 Days',
       //   data: [
       //   ]
       // }
@@ -144,7 +144,7 @@ export default class ScheduleScreen extends React.Component {
     //     this.updateMaintenanceData({dateJSON: data})
     //   })
     //   .catch((error) => {
-    //     // this.setState({dateJSON: "Error fetching data"})
+    //     // this.setState({dateJSON: 'Error fetching data'})
     //     console.error(error);
     //   })
     //   .finally(() => {

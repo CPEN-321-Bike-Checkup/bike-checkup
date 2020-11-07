@@ -43,12 +43,12 @@ var serverIp = '3.97.53.16';
 PushNotification.configure({
     onRegister: (tokenData) => {
         console.log('Remote Notification Token: ', tokenData);
-		axios.post("http://" + serverIp + ":5000/user/registerDevice", {userId: 1, token: tokenData.token})
+		axios.post('http://' + serverIp + ':5000/user/registerDevice', {userId: 1, token: tokenData.token})
 		.then((res) => {
-                console.log("Registered Device");
+                console.log('Registered Device');
             })
             .catch((err) => {
-                console.log("Failed to register device: ", err);
+                console.log('Failed to register device: ', err);
             });
     },
 
@@ -80,71 +80,71 @@ export default class App extends Component {
       this.state.authCodeRetrieved &&
       <NavigationContainer>
           <Tab.Navigator
-              initialRouteName="Schedule"
-              activeColor="#f0edf6"
-              inactiveColor="#3e2465"
+              initialRouteName='Schedule'
+              activeColor='#f0edf6'
+              inactiveColor='#3e2465'
               labelStyle={{ fontSize: 12 }}
               barStyle={{ backgroundColor: 'tomato' }}
               labeled={true}
               shifting={false}
               options={{
-                tabBarTestID: "BottomTabNavigator"
+                tabBarTestID: 'BottomTabNavigator'
               }}
             >
             <Tab.Screen
-              name="Schedule"
+              name='Schedule'
               component={ScheduleScreen}
               options={{
-                tabBarColor: "#694fad",
+                tabBarColor: '#694fad',
                 tabBarIcon: ({ color }) => (
-                  <MaterialIcons name="schedule" color={color} size={26} />
+                  <MaterialIcons name='schedule' color={color} size={26} />
                 ),
-                tabBarTestID: "ScheduleTab"
+                tabBarTestID: 'ScheduleTab'
               }}
             />
             <Tab.Screen
-              name="History"
+              name='History'
               component={HistoryScreen}
               options={{
-                tabBarColor: "blue",
+                tabBarColor: 'blue',
                 tabBarIcon: ({ color }) => (
-                  <MaterialCommunityIcons name="history" color={color} size={26} />
+                  <MaterialCommunityIcons name='history' color={color} size={26} />
                 ),
-                tabBarTestID: "HistoryTab"
+                tabBarTestID: 'HistoryTab'
               }}
             />
             <Tab.Screen
-              name="BikeStack"
+              name='BikeStack'
               component={BikesStack}
               options={{
-                title: "Bikes",
-                tabBarColor: "red",
+                title: 'Bikes',
+                tabBarColor: 'red',
                 tabBarIcon: ({ color }) => (
-                  <MaterialCommunityIcons name="bike" color={color} size={24} />
+                  <MaterialCommunityIcons name='bike' color={color} size={24} />
                 ),
-                tabBarTestID: "BikesTab"
+                tabBarTestID: 'BikesTab'
               }}
             />
             <Tab.Screen
-              name="Activities"
+              name='Activities'
               component={ActivitiesScreen}
               options={{
-                tabBarColor: "green",
+                tabBarColor: 'green',
                 tabBarIcon: ({ color }) => (
-                  <MaterialCommunityIcons name="bike-fast" color={color} size={24} />
+                  <MaterialCommunityIcons name='bike-fast' color={color} size={24} />
                 ),
-                tabBarTestID: "ActivitiesTab"
+                tabBarTestID: 'ActivitiesTab'
               }}
             />
             <Tab.Screen
-              name="Maintenance"
+              name='Maintenance'
               component={MaintenanceScreen}
               options={{
-                tabBarColor: "green",
+                tabBarColor: 'green',
                 tabBarIcon: ({ color }) => (
-                  <MaterialCommunityIcons name="wrench" color={color} size={24} />
+                  <MaterialCommunityIcons name='wrench' color={color} size={24} />
                 ),
-                tabBarTestID: "MaintenanceTab"
+                tabBarTestID: 'MaintenanceTab'
               }}
             />
           </Tab.Navigator>
@@ -164,15 +164,15 @@ export default class App extends Component {
 
   _onNavigationStateChange(webViewState) {
     if(!webViewState.loading) {
-      if (webViewState.url.includes("code=")) {
-        var startIndex = webViewState.url.indexOf("code=") + CODE_LABEL_LENGTH; // To get past "code=" to the actual code
-        var endIndex = webViewState.url.indexOf("scope=") - PARAM_SEPARATOR_LENGTH;
+      if (webViewState.url.includes('code=')) {
+        var startIndex = webViewState.url.indexOf('code=') + CODE_LABEL_LENGTH; // To get past 'code=' to the actual code
+        var endIndex = webViewState.url.indexOf('scope=') - PARAM_SEPARATOR_LENGTH;
         var authCode = webViewState.url.substring(startIndex, endIndex);
         this.setState({
             authCodeRetrieved: true,
         });
 
-        const FINAL_AUTH_POST_REQ = "https://www.strava.com/oauth/token?client_id=55294&client_secret=d4199150472e3cd7520e12e203c69dd345b4da0a&code=" + authCode + "&grant_type=authorization_code";
+        const FINAL_AUTH_POST_REQ = 'https://www.strava.com/oauth/token?client_id=55294&client_secret=d4199150472e3cd7520e12e203c69dd345b4da0a&code=' + authCode + '&grant_type=authorization_code';
 
         axios.post(FINAL_AUTH_POST_REQ)
           .then((response) => {
@@ -182,7 +182,7 @@ export default class App extends Component {
               refreshToken: response.data.refresh_token,
               athleteData: response.data.athlete
             });
-            console.log("Athlete data: ", response.data.athlete);
+            console.log('Athlete data: ', response.data.athlete);
           }, (error) => {
             console.log(error);
           });

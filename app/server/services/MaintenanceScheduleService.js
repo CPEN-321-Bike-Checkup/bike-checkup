@@ -12,18 +12,18 @@ class MaintenanceScheduleService {
 		const maintSchedule1 = {
 			maintenance_id: 1,
 			component_id: 1,
-			schedule_type: "maintenance",
+			schedule_type: 'maintenance',
 			threshold_val: 450,
-			description: "oil chain",
+			description: 'oil chain',
 			last_maintenance_val: new Date('2020-10-20'),
 		};
 
 		const maintSchedule2 = {
 			maintenance_id: 2,
 			component_id: 3,
-			schedule_type: "maintenance",
+			schedule_type: 'maintenance',
 			threshold_val: 180,
-			description: "tire check",
+			description: 'tire check',
 			last_maintenance_val: new Date('2020-10-23'),
 		};
 
@@ -200,7 +200,7 @@ class MaintenanceScheduleService {
 			var final_date = addDays(maintenanceList[maint_index].last_maintenance_val, predict_days_in_advance);
 
 			//round predicted datetime to closests date
-			final_date = moment(final_date, 'YYYY-MM-DD').tz("America/Los_Angeles").format('l');
+			final_date = moment(final_date, 'YYYY-MM-DD').tz('America/Los_Angeles').format('l');
 			predict_dates.push(final_date);
 			predictionText += maintenanceList[maint_index].description + ' estimated due on: ' + final_date + '\n';
 		}

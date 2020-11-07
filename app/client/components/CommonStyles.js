@@ -3,9 +3,9 @@ import { StyleSheet } from 'react-native'
 let CommonStyles = StyleSheet.create({
   editButtonText: {
     fontSize: 15,
-    color: "white",
+    color: 'white',
     padding: 10,
-    fontWeight: "bold"
+    fontWeight: 'bold'
   }
 });
 

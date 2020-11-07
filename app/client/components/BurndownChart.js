@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Text, Button, View } from 'react-native'
-import { LineChart } from "react-native-chart-kit";
+import { LineChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
 
 export default class BurndownChart extends React.Component {
@@ -22,7 +22,7 @@ export default class BurndownChart extends React.Component {
         <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'space-around', paddingVertical: 50 }}>
           <LineChart
             data={{
-              labels: ["Oct 1", "Oct 5", "Oct 10", "Oct 15", "Oct 20", "Oct 25", "Oct 30", "Nov 5"],
+              labels: ['Oct 1', 'Oct 5', 'Oct 10', 'Oct 15', 'Oct 20', 'Oct 25', 'Oct 30', 'Nov 5'],
               datasets: [
 
                 {
@@ -50,16 +50,16 @@ export default class BurndownChart extends React.Component {
 
               ]
             }}
-            width={Dimensions.get("window").width} // from react-native
+            width={Dimensions.get('window').width} // from react-native
             height={220}
-            yAxisLabel="Km "
-            yAxisSuffix=""
+            yAxisLabel='Km '
+            yAxisSuffix=''
             withDots={false}
             yAxisInterval={1} // optional, defaults to 1
             chartConfig={{
-              backgroundColor: "#e26a00",
-              backgroundGradientFrom: "#fb8c00",
-              backgroundGradientTo: "#ffa726",
+              backgroundColor: '#e26a00',
+              backgroundGradientFrom: '#fb8c00',
+              backgroundGradientTo: '#ffa726',
               decimalPlaces: 0, // optional, defaults to 2dp
               color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
               labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
@@ -67,9 +67,9 @@ export default class BurndownChart extends React.Component {
                 borderRadius: 16
               },
               propsForDots: {
-                r: "6",
-                strokeWidth: "2",
-                stroke: "#ffa726"
+                r: '6',
+                strokeWidth: '2',
+                stroke: '#ffa726'
               }
             }}
             bezier

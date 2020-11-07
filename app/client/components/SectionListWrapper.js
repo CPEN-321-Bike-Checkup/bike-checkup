@@ -21,9 +21,9 @@ export let selectionListWrapper = (data, renderItem) => {
 const styles = StyleSheet.create({
   headerText: {
     fontSize: 22,
-    fontWeight: "500",
-    color: "black",
-    backgroundColor: "tomato",
+    fontWeight: '500',
+    color: 'black',
+    backgroundColor: 'tomato',
     borderBottomColor: 'black',
     borderBottomWidth: 2,
     borderTopColor: 'black',

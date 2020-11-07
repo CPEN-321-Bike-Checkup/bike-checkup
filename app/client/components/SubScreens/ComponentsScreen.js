@@ -1,42 +1,42 @@
 import React from 'react';
 import { Text, TouchableOpacity } from 'react-native'
-import { PressableListItem } from "../ListItems";
-import { flatListWrapper } from "../FlatListWrapper";
-import CommonStyles from "../CommonStyles";
+import { PressableListItem } from '../ListItems';
+import { flatListWrapper } from '../FlatListWrapper';
+import CommonStyles from '../CommonStyles';
 
 const GIANT_DATA = [
   {
     id: 1,
-    title: "Brakes - Shimano 105 Hydraulic Disc, 160mm",
+    title: 'Brakes - Shimano 105 Hydraulic Disc, 160mm',
   },
   {
     id: 2,
-    title: "Chain - KMC X11EL-1",
+    title: 'Chain - KMC X11EL-1',
   },
   {
     id: 3,
-    title: "Brake pads - Shimano BR-M555 M02",
+    title: 'Brake pads - Shimano BR-M555 M02',
   },
 ];
 
 const NORCO_DATA = [
   {
     id: 1,
-    title: "Brakes - Shimano BR-RS305-R Hydraulic Disc, 150mm",
+    title: 'Brakes - Shimano BR-RS305-R Hydraulic Disc, 150mm',
   },
   {
     id: 2,
-    title: "Chain - CN-9000",
+    title: 'Chain - CN-9000',
   },
   {
     id: 3,
-    title: "Brake pads - Brake Authority Avids",
+    title: 'Brake pads - Brake Authority Avids',
   },
 ];
 
 export default class ScheduleScreen extends React.Component {
   constructor(props) {
-    console.log("ComponentScreen Props:")
+    console.log('ComponentScreen Props:')
     console.log(props)
     super(props);
     this.state = {
@@ -60,7 +60,7 @@ export default class ScheduleScreen extends React.Component {
     //     this.updateMaintenanceData({dateJSON: data})
     //   })
     //   .catch((error) => {
-    //     // this.setState({dateJSON: "Error fetching data"})
+    //     // this.setState({dateJSON: 'Error fetching data'})
     //     console.error(error);
     //   })
     //   .finally(() => {
@@ -74,7 +74,7 @@ export default class ScheduleScreen extends React.Component {
   }
 
   renderItem = ({ item }) => {
-    const testId = "ComponentListItem" + this.itemCount;
+    const testId = 'ComponentListItem' + this.itemCount;
     this.itemCount++;
 
     return (
@@ -90,7 +90,7 @@ export default class ScheduleScreen extends React.Component {
     // Add edit button to navigation bar
     this.navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity onPress={() => alert("hi")} >
+        <TouchableOpacity onPress={() => alert('hi')} >
           <Text style={CommonStyles.editButtonText}>Edit</Text>
         </TouchableOpacity>
       ),
@@ -99,7 +99,7 @@ export default class ScheduleScreen extends React.Component {
     return flatListWrapper(
       this.bikeId == 1 ? NORCO_DATA : GIANT_DATA,
       this.renderItem,
-      "BikesList"
+      'BikesList'
     );
   }
 }

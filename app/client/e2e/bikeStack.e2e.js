@@ -28,7 +28,7 @@ describe('Bike Stack', () => {
   }
 
   it('Main screen should show schedule screen and bottom navigation bar', async () => {
-    await expect(element(by.id("ScheduleView"))).toBeVisible
+    await expect(element(by.id('ScheduleView'))).toBeVisible
     await veryifyBottomNavigator();
   });
 
@@ -38,8 +38,8 @@ describe('Bike Stack', () => {
     await bikesTab.tap()
 
     // Check bike screen has appeared
-    await expect(element(by.id("BikesView"))).toBeVisible
-    await expect(element(by.id("BikesList"))).toBeVisible
+    await expect(element(by.id('BikesView'))).toBeVisible
+    await expect(element(by.id('BikesList'))).toBeVisible
     await veryifyBottomNavigator();
 
     await sleep(5000) // Only needed for M7 demonstration
@@ -51,8 +51,8 @@ describe('Bike Stack', () => {
     await bikeListItem.tap()
 
     // Check the component screen has appeared
-    await expect(element(by.id("ComponentsView"))).toBeVisible
-    await expect(element(by.id("ComponentsList"))).toBeVisible
+    await expect(element(by.id('ComponentsView'))).toBeVisible
+    await expect(element(by.id('ComponentsList'))).toBeVisible
     await veryifyBottomNavigator();
 
     await sleep(5000) // Only needed for M7 demonstration

@@ -13,10 +13,10 @@ const initUserRouting = (app) => {
 	});
 
 	userRouter.post('/registerDevice', (req, res, next) => {
-		console.log("registering device");
+		console.log('registering device');
 		UserService.RegisterNewDevice(req.body.userId, req.body.token);
 
-		var message = NotificationService.CreateMessage("Test Notification Name", 'Test Notification', 'This is a notification', {}, req.body.token);
+		var message = NotificationService.CreateMessage('Test Notification Name', 'Test Notification', 'This is a notification', {}, req.body.token);
 		NotificationService.SendNotification(message);
 
 		res.send('registered');

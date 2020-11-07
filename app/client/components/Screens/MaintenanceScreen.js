@@ -13,7 +13,7 @@ export default class HomeScreen extends React.Component {
         return (
             <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'space-around', paddingVertical: 50 }}>
                 <Button
-                    title="Predict Maintenance"
+                    title='Predict Maintenance'
                     onPress={() => this.props.navigation.navigate('MaintenancePrediction')}
                 />
             </View>
