@@ -7,18 +7,18 @@ require('moment-timezone');
 const maintSchedule1 = {
 	maintenance_id: 1,
 	component_id: 1,
-	schedule_type: "maintenance",
+	schedule_type: 'maintenance',
 	threshold_val: 450,
-	description: "oil chain",
+	description: 'oil chain',
 	last_maintenance_val: new Date('2020-10-20'),
 };
 
 const maintSchedule2 = {
 	maintenance_id: 2,
 	component_id: 3,
-	schedule_type: "maintenance",
+	schedule_type: 'maintenance',
 	threshold_val: 180,
-	description: "tire check",
+	description: 'tire check',
 	last_maintenance_val: new Date('2020-10-23'),
 };
 
@@ -68,15 +68,15 @@ export default class MaintenancePrediction extends React.Component {
 
 	maintenancePredict() {
 		var serverIp = '3.97.53.16';
-		axios.get("http://" + serverIp + ":5000/maintenanceSchedule/prediction")
+		axios.get('http://' + serverIp + ':5000/maintenanceSchedule/prediction')
 			.then((res) => {
-				console.log("Got Predictions");
+				console.log('Got Predictions');
 				var dates = res.data.dates;
 				console.log('dates; ', dates);
 				this.setState({ predict_dates: dates });
 			})
 			.catch((err) => {
-				console.log("Failed to get predictions: ", err);
+				console.log('Failed to get predictions: ', err);
 			});
 
 	}
@@ -91,11 +91,11 @@ export default class MaintenancePrediction extends React.Component {
 
 				var predict_date_key = this.state.predict_dates[maint_index].toString();
 				var maint_description = this.state.maintenance_schedules[maint_index].description;
-				var maint_last_maint_date = moment(this.state.maintenance_schedules[maint_index].last_maintenance_val, 'YYYY-MM-DD').tz("America/Los_Angeles").format('l');
+				var maint_last_maint_date = moment(this.state.maintenance_schedules[maint_index].last_maintenance_val, 'YYYY-MM-DD').tz('America/Los_Angeles').format('l');
 				var component_threshold = this.state.maintenance_schedules[maint_index].threshold_val;
 				maintenance_predictions.push(
 					<View key={maint_index}>
-						<Text style={{ textAlignVertical: "center", textAlign: "center", fontWeight: "bold" }}>{maint_description}{'\n'}</Text>
+						<Text style={{ textAlignVertical: 'center', textAlign: 'center', fontWeight: 'bold' }}>{maint_description}{'\n'}</Text>
 						<Text>
 							Previous Maintenance Date: {maint_last_maint_date}{'\n'}
         	              Threshold: {component_threshold}km{'\n'}{'\n'}
@@ -111,7 +111,7 @@ export default class MaintenancePrediction extends React.Component {
 				<View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'space-around', paddingVertical: 50 }}>
 					{maintenance_predictions}
 					<Button
-						title="Predict!"
+						title='Predict!'
 						onPress={() => this.maintenancePredict()}
 					/>
 

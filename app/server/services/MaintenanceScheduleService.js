@@ -11,18 +11,18 @@ class MaintenanceScheduleService {
 		const maintSchedule1 = {
 			maintenance_id: 1,
 			component_id: 1,
-			schedule_type: "maintenance",
+			schedule_type: 'maintenance',
 			threshold_val: 450,
-			description: "oil chain",
+			description: 'oil chain',
 			last_maintenance_val: new Date('2020-10-20'),
 		};
 
 		const maintSchedule2 = {
 			maintenance_id: 2,
 			component_id: 3,
-			schedule_type: "maintenance",
+			schedule_type: 'maintenance',
 			threshold_val: 180,
-			description: "tire check",
+			description: 'tire check',
 			last_maintenance_val: new Date('2020-10-23'),
 		};
 
@@ -124,22 +124,22 @@ class MaintenanceScheduleService {
 			var covar = covariance(activity_date_dataset, mean_x, activity_distance_dataset, mean_y);
 			var slope = predictSlope(covar, variance_x);
 			var intercept = predictIntercept(mean_x, mean_y, slope);
-			console.log("Description of Maintenance:" + maintenanceList[maint_index].description);
-			console.log("Predicted slope:" + slope);
-			console.log("Predicted intercept:" + intercept);
+			console.log('Description of Maintenance:' + maintenanceList[maint_index].description);
+			console.log('Predicted slope:' + slope);
+			console.log('Predicted intercept:' + intercept);
 			var predict_date = ((maintenanceList[maint_index].threshold_val - intercept) / slope)
 			var final_date = addDays(maintenanceList[maint_index].last_maintenance_val, predict_date);
-			console.log("Your last maintenance: " + maintenanceList[maint_index].last_maintenance_val);
-			console.log("Your component threshold value: " + maintenanceList[maint_index].threshold_val);
-			console.log("Your Activity (in km): " + '\n'
-				+ date_print_list[0] + ":" + activity_distance_dataset[0] + '\n'
-				+ date_print_list[1] + ":" + activity_distance_dataset[1] + '\n'
-				+ date_print_list[2] + ":" + activity_distance_dataset[2] + '\n'
-				+ date_print_list[3] + ":" + activity_distance_dataset[3] + '\n'
-				+ date_print_list[4] + ":" + activity_distance_dataset[4]);
-			console.log("Your next estimated maintenance date:" + final_date);
+			console.log('Your last maintenance: ' + maintenanceList[maint_index].last_maintenance_val);
+			console.log('Your component threshold value: ' + maintenanceList[maint_index].threshold_val);
+			console.log('Your Activity (in km): ' + '\n'
+				+ date_print_list[0] + ':' + activity_distance_dataset[0] + '\n'
+				+ date_print_list[1] + ':' + activity_distance_dataset[1] + '\n'
+				+ date_print_list[2] + ':' + activity_distance_dataset[2] + '\n'
+				+ date_print_list[3] + ':' + activity_distance_dataset[3] + '\n'
+				+ date_print_list[4] + ':' + activity_distance_dataset[4]);
+			console.log('Your next estimated maintenance date:' + final_date);
 
-			final_date = moment(final_date, 'YYYY-MM-DD').tz("America/Los_Angeles").format('l');
+			final_date = moment(final_date, 'YYYY-MM-DD').tz('America/Los_Angeles').format('l');
 			predict_dates.push(final_date);
 			predictionText += maintenanceList[maint_index].description + ' estimated due on: ' + final_date + '\n';
 			console.log('dates: ' + predict_dates);

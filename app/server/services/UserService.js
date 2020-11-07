@@ -9,10 +9,10 @@ class UserService {
 	}
 
 	async RegisterNewDevice(userId, deviceToken) {
-		await this.deviceTokenRepository.Delete({ "_id": deviceToken, owner: userId }).catch(err => {
+		await this.deviceTokenRepository.Delete({ '_id': deviceToken, owner: userId }).catch(err => {
 			return err;
 		});
-		await this.deviceTokenRepository.Create({ "_id": deviceToken, owner: userId }).catch(err => {
+		await this.deviceTokenRepository.Create({ '_id': deviceToken, owner: userId }).catch(err => {
 			return err;
 		});
 	}

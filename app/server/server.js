@@ -1,9 +1,9 @@
 //const { ObjectID } = require('bson');
 const express = require('express');
 const mongoose = require('mongoose');
-const MongoClient = require("mongodb").MongoClient;
+const MongoClient = require('mongodb').MongoClient;
 const bodyParser = require('body-parser');
-const url = "mongodb://localhost:27017/bikeCheckupDb";
+const url = 'mongodb://localhost:27017/bikeCheckupDb';
 
 
 const app = express();
@@ -45,7 +45,7 @@ var token = 'ckiJogkPRKyHyelqr-LKJf:APA91bEwN1Kvl-lx5YtIvT2k18P5JcUCbT9U1u99mr4q
 let notificationService = require('./services/NotificationService');
 
 app.post('/notification', function (req, res, next) {
-	var message = notificationService.CreateMessage("Test Notification Name", 'Test Notification', 'This is a notification', {}, token);
+	var message = notificationService.CreateMessage('Test Notification Name', 'Test Notification', 'This is a notification', {}, token);
 	notificationService.SendNotification(message);
 
 	res.send('notification sent');

@@ -4,11 +4,11 @@ import { FlatList, StyleSheet, Text, View, TouchableHighlight } from 'react-nati
 const DATA = [
   {
     id: 1,
-    title: "Norco Sasquatch",
+    title: 'Norco Sasquatch',
   },
   {
     id: 2,
-    title: "Giant Contend Ar 1",
+    title: 'Giant Contend Ar 1',
   }
 ];
 
@@ -43,7 +43,7 @@ export default class ScheduleScreen extends React.Component {
     //     this.updateMaintenanceData({dateJSON: data})
     //   })
     //   .catch((error) => {
-    //     // this.setState({dateJSON: "Error fetching data"})
+    //     // this.setState({dateJSON: 'Error fetching data'})
     //     console.error(error);
     //   })
     //   .finally(() => {
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   item: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     padding: 18,
   },
   title: {

@@ -13,7 +13,7 @@ const initMaintenanceSchedlueRouting = (app) => {
 
 		deviceTokenRepo.GetAll().then(function (devices) {
 			var dates = MaintenanceScheduleService.MaintenancePredict(devices);
-			res.send(JSON.stringify({ "dates": dates }));
+			res.send(JSON.stringify({ 'dates': dates }));
 		});
 
 	});

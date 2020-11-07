@@ -5,30 +5,30 @@ import { FlatList, StyleSheet, Text, View, TouchableHighlight, TouchableOpacity 
 const GIANT_DATA = [
   {
     id: 1,
-    title: "Brakes - Shimano 105 Hydraulic Disc, 160mm",
+    title: 'Brakes - Shimano 105 Hydraulic Disc, 160mm',
   },
   {
     id: 2,
-    title: "Chain - KMC X11EL-1",
+    title: 'Chain - KMC X11EL-1',
   },
   {
     id: 3,
-    title: "Brake pads - Shimano BR-M555 M02",
+    title: 'Brake pads - Shimano BR-M555 M02',
   },
 ];
 
 const NORCO_DATA = [
   {
     id: 1,
-    title: "Brakes - Shimano BR-RS305-R Hydraulic Disc, 150mm",
+    title: 'Brakes - Shimano BR-RS305-R Hydraulic Disc, 150mm',
   },
   {
     id: 2,
-    title: "Chain - CN-9000",
+    title: 'Chain - CN-9000',
   },
   {
     id: 3,
-    title: "Brake pads - Brake Authority Avids",
+    title: 'Brake pads - Brake Authority Avids',
   },
 ];
 
@@ -44,7 +44,7 @@ let Item = ({ title, onPress }) => {
 
 export default class ScheduleScreen extends React.Component {
   constructor(props) {
-    console.log("ComponentScreen Props:")
+    console.log('ComponentScreen Props:')
     console.log(props)
     super(props);
     this.state = {
@@ -68,7 +68,7 @@ export default class ScheduleScreen extends React.Component {
     //     this.updateMaintenanceData({dateJSON: data})
     //   })
     //   .catch((error) => {
-    //     // this.setState({dateJSON: "Error fetching data"})
+    //     // this.setState({dateJSON: 'Error fetching data'})
     //     console.error(error);
     //   })
     //   .finally(() => {
@@ -78,10 +78,10 @@ export default class ScheduleScreen extends React.Component {
 
   // Note: arrow function needed to bind correct context
   toggleEditMode = () => {
-    console.log("STATE UPDATING")
+    console.log('STATE UPDATING')
     console.log(this)
     this.setState({ editMode: this.editMode ? false : true });
-    console.log("STATE UPDATED")
+    console.log('STATE UPDATED')
     console.log(this.state)
   }
 
@@ -98,7 +98,7 @@ export default class ScheduleScreen extends React.Component {
     // Add edit button to navigation bar
     this.navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity onPress={() => alert("hi")} >
+        <TouchableOpacity onPress={() => alert('hi')} >
           <Text style={styles.editButtonText}>Edit</Text>
         </TouchableOpacity>
       ),
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   item: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     padding: 18,
   },
   separator: {
@@ -134,8 +134,8 @@ const styles = StyleSheet.create({
   },
   editButtonText: {
     fontSize: 15,
-    color: "white",
+    color: 'white',
     padding: 10,
-    fontWeight: "bold"
+    fontWeight: 'bold'
   }
 });

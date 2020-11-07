@@ -10,22 +10,22 @@ let getDate = function (offset) {
 // Note: add separators based on dates
 const DATA = [
   {
-    title: "Next 10 days",
+    title: 'Next 10 days',
     data: [
-      { bike: "Norco Sasquatch", task: "Oil chain", date: getDate(0) },
-      { bike: "Giant Contend AR 1", task: "Oil chain", date: getDate(2) },
-      { bike: "Norco Sasquatch", task: "Check brake pads", date: getDate(7) },
+      { bike: 'Norco Sasquatch', task: 'Oil chain', date: getDate(0) },
+      { bike: 'Giant Contend AR 1', task: 'Oil chain', date: getDate(2) },
+      { bike: 'Norco Sasquatch', task: 'Check brake pads', date: getDate(7) },
     ]
   },
   {
-    title: "Next 50 Days",
+    title: 'Next 50 Days',
     data: [
-      { bike: "Giant Contend AR 1", task: "Replace chain", date: getDate(13) },
-      { bike: "Giant Contend AR 1", task: "Check brake pads", date: getDate(22) },
-      { bike: "Norco Sasquatch", task: "Oil chain", date: getDate(27) },
-      { bike: "Giant Contend AR 1", task: "Oil chain", date: getDate(30) },
-      { bike: "Norco Sasquatch", task: "Bleed brakes", date: getDate(46) },
-      { bike: "Giant Contend AR 1", task: "Bleed brakes", date: getDate(50) },
+      { bike: 'Giant Contend AR 1', task: 'Replace chain', date: getDate(13) },
+      { bike: 'Giant Contend AR 1', task: 'Check brake pads', date: getDate(22) },
+      { bike: 'Norco Sasquatch', task: 'Oil chain', date: getDate(27) },
+      { bike: 'Giant Contend AR 1', task: 'Oil chain', date: getDate(30) },
+      { bike: 'Norco Sasquatch', task: 'Bleed brakes', date: getDate(46) },
+      { bike: 'Giant Contend AR 1', task: 'Bleed brakes', date: getDate(50) },
     ]
   }
 ];
@@ -35,7 +35,7 @@ let Item = ({ item }) => {
   // console.log(title);
   return (
     <View style={styles.item}>
-      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <Text style={styles.title}>{item.task}</Text>
         <Text style={styles.date}>{item.date}</Text>
       </View>
@@ -68,7 +68,7 @@ export default class ScheduleScreen extends React.Component {
     //     this.updateMaintenanceData({dateJSON: data})
     //   })
     //   .catch((error) => {
-    //     // this.setState({dateJSON: "Error fetching data"})
+    //     // this.setState({dateJSON: 'Error fetching data'})
     //     console.error(error);
     //   })
     //   .finally(() => {
@@ -98,14 +98,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   item: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     padding: 18,
   },
   header: {
     fontSize: 22,
-    fontWeight: "500",
-    color: "black",
-    backgroundColor: "tomato",
+    fontWeight: '500',
+    color: 'black',
+    backgroundColor: 'tomato',
     borderBottomColor: 'black',
     borderBottomWidth: 2,
     borderTopColor: 'black',
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: "bold"
+    fontWeight: 'bold'
   },
   date: {
     fontSize: 18,
