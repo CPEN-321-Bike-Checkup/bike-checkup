@@ -21,6 +21,6 @@ const initUserRouting = (app) => {
 
 		res.send('registered');
 	});
-}
+};
 
 module.exports = initUserRouting;

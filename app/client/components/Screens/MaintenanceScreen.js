@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, View } from 'react-native'
+import { Button, View } from 'react-native';
 
 export default class HomeScreen extends React.Component {
     constructor(props) {

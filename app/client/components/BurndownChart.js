@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Dimensions } from 'react-native'
+import { View, Dimensions } from 'react-native';
 import LineChart from 'react-native-chart-kit';
 
 export default class BurndownChart extends React.Component {

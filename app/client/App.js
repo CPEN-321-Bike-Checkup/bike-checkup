@@ -1,6 +1,6 @@
 import { React, Component } from 'react';
 import axios from 'axios';
-import PushNotification from 'react-native-push-notification'
+import PushNotification from 'react-native-push-notification';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import WebView from 'react-native-webview';
@@ -16,7 +16,7 @@ import HistoryScreen from './components/Screens/HistoryScreen';
 import BikesStack from './components/BikesStack';
 
 // Dev debug flags
-const SKIP_AUTHENTICATION = true; // Set to false before committing
+const SKIP_AUTHENTICATION = true; // Set to false before committing to prod!
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -58,7 +58,7 @@ export default class App extends Component {
       expiresAt: '',
       refreshToken: '',
       athleteData: '' // In JSON form
-    }
+    };
   }
 
   render() {

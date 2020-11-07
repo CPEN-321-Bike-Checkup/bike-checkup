@@ -2,7 +2,7 @@
 // Will likely be better to move duplicate screens code into common or utils file
 
 import React from 'react';
-import { FlatList, StyleSheet, View } from 'react-native'
+import { FlatList, StyleSheet, View } from 'react-native';
 
 export let flatListWrapper = function (data, renderItem, testID) {
   return (
@@ -14,7 +14,7 @@ export let flatListWrapper = function (data, renderItem, testID) {
       testID={testID}
     />
   );
-}
+};
 
 const styles = StyleSheet.create({
   separator: {

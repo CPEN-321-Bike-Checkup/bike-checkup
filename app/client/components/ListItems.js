@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TouchableHighlight } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, TouchableHighlight } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 
@@ -18,7 +18,7 @@ export let ListItem = ({ item }) => {
 };
 
 export let EditableListItem = ({ item, editMode, onRemovePress }) => {
-  console.log('Item editMode:')
+  console.log('Item editMode:');
   console.log(editMode);
   return (
     <View style={styles.item}>

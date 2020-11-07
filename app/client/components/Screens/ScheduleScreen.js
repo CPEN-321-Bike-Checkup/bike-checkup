@@ -6,7 +6,7 @@ let getDate = function (offset) {
   let currentDate = new Date();
   currentDate.setDate(currentDate.getDate() + offset);
   return currentDate.toLocaleDateString();
-}
+};
 
 // Note: add separators based on dates
 const DATA = [

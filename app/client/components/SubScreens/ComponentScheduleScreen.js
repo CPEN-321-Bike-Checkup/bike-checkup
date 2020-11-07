@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TouchableOpacity } from 'react-native'
+import { Text, TouchableOpacity } from 'react-native';
 import EditableListItem from '../ListItems';
 import selectionListWrapper from '../SectionListWrapper';
 import CommonStyles from '../CommonStyles';
@@ -9,7 +9,7 @@ let getDate = function (offset) {
   let currentDate = new Date();
   currentDate.setDate(currentDate.getDate() + offset);
   return currentDate.toLocaleDateString();
-}
+};
 
 // Note: add separators based on dates
 const GIANT_DATA = [

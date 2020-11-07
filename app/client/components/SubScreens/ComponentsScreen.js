@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TouchableOpacity } from 'react-native'
+import { Text, TouchableOpacity } from 'react-native';
 import { PressableListItem } from '../ListItems';
 import { flatListWrapper } from '../FlatListWrapper';
 import CommonStyles from '../CommonStyles';
@@ -36,8 +36,8 @@ const NORCO_DATA = [
 
 export default class ScheduleScreen extends React.Component {
   constructor(props) {
-    console.log('ComponentScreen Props:')
-    console.log(props)
+    console.log('ComponentScreen Props:');
+    console.log(props);
     super(props);
     this.state = {
       maintenanceData: [],

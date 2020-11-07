@@ -13,6 +13,6 @@ const initMaintenanceSchedlueRouting = (app) => {
 			res.send(JSON.stringify({ 'dates': dates }));
 		});
 	});
-}
+};
 
 module.exports = initMaintenanceSchedlueRouting;

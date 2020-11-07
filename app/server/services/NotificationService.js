@@ -37,7 +37,7 @@ class NotificationService {
 	}
 
 	SendNotification(message) {
-		this.messaging.send(message)
+		this.messaging.send(message);
 	}
 }
 

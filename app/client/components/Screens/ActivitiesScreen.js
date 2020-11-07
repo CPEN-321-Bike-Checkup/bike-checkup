@@ -3,7 +3,7 @@ import {
     StyleSheet,
     Text,
     View,
-} from 'react-native'
+} from 'react-native';
 
 export default class TimeScreen extends React.Component {
     constructor(props) {
@@ -26,4 +26,4 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-})
+});

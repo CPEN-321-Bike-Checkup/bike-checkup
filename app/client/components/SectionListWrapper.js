@@ -2,7 +2,7 @@
 // Will likely be better to move duplicate screens code into common or utils file
 
 import React from 'react';
-import { SectionList, StyleSheet, Text, View } from 'react-native'
+import { SectionList, StyleSheet, Text, View } from 'react-native';
 
 export let selectionListWrapper = (data, renderItem) => {
   return (
@@ -16,7 +16,7 @@ export let selectionListWrapper = (data, renderItem) => {
       ItemSeparatorComponent={() => <View style={styles.separator} />}
     />
   );
-}
+};
 
 const styles = StyleSheet.create({
   headerText: {
