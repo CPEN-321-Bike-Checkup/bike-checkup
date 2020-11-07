@@ -167,7 +167,7 @@ export default class ScheduleScreen extends React.Component {
       ),
     });
 
-    let data = this.bikeId == 1 ? NORCO_DATA[this.componentId - 1].componentData : GIANT_DATA[this.componentId - 1].componentData;
+    let data = this.bikeId === 1 ? NORCO_DATA[this.componentId - 1].componentData : GIANT_DATA[this.componentId - 1].componentData;
     return selectionListWrapper(data, ({ item }) => <EditableListItem item={item} editMode={this.state.editMode} />);
   }
 }

@@ -54,7 +54,8 @@ class MaintenanceScheduleService {
 		let maintenanceList = [maintSchedule1, maintSchedule2];
 		let activityList = [activity1, activity2, activity3, activity4];
 
-		const millisecondsInADay = 86400000;
+		const MILLISECONDS_PER_SECOND = 1000;
+		const SECONDS_PER_DAY = 86400;
 
 		/*
 		* Calculates the mean of an array of values
@@ -138,7 +139,7 @@ class MaintenanceScheduleService {
 		*/
 		function predictSlope(covariance, x_variance) {
 			//denominator check
-			if (x_variance == 0) {
+			if (x_variance === 0) {
 				return null;
 			}
 			return covariance / x_variance;
@@ -184,7 +185,7 @@ class MaintenanceScheduleService {
 
 			var activity_index;
 			for (activity_index = 0; activity_index < activityList.length; activity_index++) {
-				activity_date_dataset.push((activityList[activity_index].date.getTime() - last_maint_date) / millisecondsInADay);
+				activity_date_dataset.push((activityList[activity_index].date.getTime() - last_maint_date) / (MILLISECONDS_PER_SECOND * SECONDS_PER_DAY));
 				activity_distance_dataset.push(activityList[activity_index].distance + activity_distance_dataset[activity_index]);
 			}
 
