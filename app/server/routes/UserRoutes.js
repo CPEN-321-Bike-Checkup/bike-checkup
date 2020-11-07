@@ -22,7 +22,7 @@ const initUserRouting = (app) => {
 		NotificationService.SendNotification(message);
 	
 
-
+		console.log('registered')
 		res.send('registered');
 	});
 }

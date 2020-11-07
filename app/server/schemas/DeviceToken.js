@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const deviceTokenSchema = new mongoose.Schema({
-	_id: String,
+	token: String,//add unique
 	owner: {type: mongoose.Schema.Types.Number, ref: 'User'},// reference
 })
 

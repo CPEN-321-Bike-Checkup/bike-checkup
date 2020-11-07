@@ -147,13 +147,14 @@ class MaintenanceScheduleService{
         }
 		
 		deviceTokens.forEach(t => {
+			console.log('', t);
 			setTimeout(function(){
 				notificationService.SendNotification(notificationService.CreateMessage(
 				'Maintenance Schedule Prediction',
 				'Upcoming Maintenance Predictions',
 				predictionText,
 				{},
-				t._id))
+				t.token))
 			}, 8000);		
 		});
 		

@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
-const bikeSchema = require('./Bike').BikeSchema;
-const deviceTokenSchema = require('./DeviceToken').DeviceTokenSchema;
+const { BikeSchema } = require('./Bike');
+const { DeviceTokenSchema } = require('./DeviceToken');
 
 const userSchema =  new mongoose.Schema({
-    _id: Number,
-    bikes: [bikeSchema], //actually stores bike objects
+	_id: Number,
+    bikes: [BikeSchema], //actually stores bike objects
     strava_token: String,
 	name: String,
-	deviceTokens: [deviceTokenSchema],
+	deviceTokens: [DeviceTokenSchema],
 });
 const userModel = mongoose.model('User', userSchema);
 

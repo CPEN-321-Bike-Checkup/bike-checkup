@@ -9,11 +9,11 @@ class UserService{
 	}
 
 	async RegisterNewDevice(userId, deviceToken){
-		await this.deviceTokenRepository.Delete({"_id": deviceToken, owner: userId}).catch(err => {
-			return err;
+		await this.deviceTokenRepository.Delete({token: deviceToken, owner: userId}).catch(err => {
+			console.error(err);
 		});
-		await this.deviceTokenRepository.Create({"_id": deviceToken, owner: userId}).catch(err => {
-			return err;
+		await this.deviceTokenRepository.Create({token: deviceToken, owner: userId}).catch(err => {
+			console.error(err);
 		});
 	}
 
@@ -21,8 +21,8 @@ class UserService{
 		return userRepository.GetAll();
 	}
 
-	GetUserById(id){
-		return userRepository.GetById(id);
+	GetUserByStravaToken(token){
+		return userRepository.GetUserByStravaToken(token);
 	}
 	
 	CreateUsers(users){

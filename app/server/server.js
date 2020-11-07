@@ -29,24 +29,12 @@ db.on('error', function(err) {
 
 
 
-const initMaintenanceScheduleRoutes = require('./routes/MaintenanceScheduleRoutes');
+const initMaintenanceTaskRoutes = require('./routes/MaintenanceTaskRoutes');
 const initUserRoutes = require('./routes/UserRoutes');
 initUserRoutes(app);
-initMaintenanceScheduleRoutes(app);
+initMaintenanceTaskRoutes(app);
 
 app.get('/stravaRedirect', function(req, res, next,){
 	console.log('Strava Auth Hit');
 	res.send('OK');
-});
-
-
-
-var token = 'ckiJogkPRKyHyelqr-LKJf:APA91bEwN1Kvl-lx5YtIvT2k18P5JcUCbT9U1u99mr4qdW9qA5l48K3-4AUpI898aKU5kZaCFPS941wWFEBjr0eVBAvr23JUzUlUzQle1slfLxF9zhe1gRjHB1E0pmePRcIhdfbURg9r';
-let notificationService = require('./services/NotificationService');
-
-app.post('/notification', function(req, res, next){
-	var message = notificationService.CreateMessage("Test Notification Name", 'Test Notification', 'This is a notification', {}, token);
-	notificationService.SendNotification(message);
-	
-	res.send('notification sent');
 });
