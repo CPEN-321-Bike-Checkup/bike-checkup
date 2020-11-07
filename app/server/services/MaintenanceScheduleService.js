@@ -1,4 +1,4 @@
-const notificationService = require('./NotificationService');
+const NotificationService = require('./NotificationService');
 const moment = require('moment');
 require('moment-timezone');
 
@@ -61,11 +61,11 @@ class MaintenanceScheduleService {
 		* Calculates the mean of an array of values
 		* input:
 		* 	vals - array of values (int, double, float)
-		* output: 
+		* output:
 		* 	mean value of the array
 		*	null if vals array is invalid
 		*/
-		function mean(vals) {
+		function computeMean(vals) {
 			//error check for array length
 			if (vals.length <= 0) {
 				return null;
@@ -87,7 +87,7 @@ class MaintenanceScheduleService {
 		* 	variance value of the array
 		* 	null if vals array is invalid
 		*/
-		function variance(vals, mean) {
+		function computeVariance(vals, mean) {
 			//error check for array length
 			if (vals.length <= 0) {
 				return null;
@@ -111,7 +111,7 @@ class MaintenanceScheduleService {
 		* 	covariance between x_vals and y_vals
 		* 	null if arrays are invalid
 		*/
-		function covariance(x_vals, x_mean, y_vals, y_mean) {
+		function computeCovariance(x_vals, x_mean, y_vals, y_mean) {
 			//error check for differing data set lengths
 			if (x_vals.length != y_vals.length) {
 				return null;
@@ -130,7 +130,7 @@ class MaintenanceScheduleService {
 
 		/*
 		* Uses linear regression formula to predict slope https://machinelearningmastery.com/implement-simple-linear-regression-scratch-python/
-		* input: 
+		* input:
 		* 	covariance - covariance of x and y values
 		* 	x_variance - variance of x values
 		* output:
@@ -190,10 +190,10 @@ class MaintenanceScheduleService {
 			}
 
 			//Intermediate calculations for linear regression
-			var x_mean = mean(activity_date_dataset);
-			var y_mean = mean(activity_distance_dataset);
-			var x_variance = variance(activity_date_dataset, x_mean);
-			var covar = covariance(activity_date_dataset, x_mean, activity_distance_dataset, y_mean);
+			var x_mean = computeMean(activity_date_dataset);
+			var y_mean = computeMean(activity_distance_dataset);
+			var x_variance = computeVariance(activity_date_dataset, x_mean);
+			var covar = computeCovariance(activity_date_dataset, x_mean, activity_distance_dataset, y_mean);
 			var slope = predictSlope(covar, x_variance);
 			var intercept = predictIntercept(x_mean, y_mean, slope);
 
@@ -221,5 +221,5 @@ class MaintenanceScheduleService {
 	}
 }
 
-const maintenanceScheduleService = new MaintenanceScheduleService(notificationService);
+const maintenanceScheduleService = new MaintenanceScheduleService(NotificationService);
 module.exports = maintenanceScheduleService;
