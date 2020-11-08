@@ -25,5 +25,5 @@ class ActivityRepository extends Repository {
       });
   }
 }
-const activityRepository = new ActivityRepository(activityModel);
+const activityRepository = new ActivityRepository(ActivityModel);
 module.exports = activityRepository;

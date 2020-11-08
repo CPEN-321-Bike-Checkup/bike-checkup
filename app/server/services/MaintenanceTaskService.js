@@ -1,13 +1,17 @@
 const notificationService = require('./NotificationService');
+const activityRepository = require('../repositories/ActivityRepository');
+const maintenanceTaskRepository = require('../repositories/MaintenanceTaskRepository');
 const moment = require('moment');
 require('moment-timezone');
 
 class MaintenanceTaskService {
-  constructor(notificationService) {
+  constructor(notificationService, activityRepository, maintenanceTaskRepository) {
     this.notificationService = notificationService;
+    this.activityRepository = activityRepository;
+    this.maintenanceTaskRepository = maintenanceTaskRepository;
   }
 
-  MaintenancePredict(deviceTokens) {
+  MaintenancePredict(userId, deviceTokens) {
     const maintSchedule1 = {
       maintenance_id: 1,
       component_id: 1,
@@ -23,35 +27,47 @@ class MaintenanceTaskService {
       schedule_type: 'maintenance',
       threshold_val: 180,
       description: 'tire check',
-      last_maintenance_val: new Date('2020-10-23'),
+      last_maintenance_val: new Date('2020-10-20'),
     };
 
     const activity1 = {
-      activity_id: 1,
+      //activity_id: 1,
+      description: 'test',
       distance: 50,
+      time_s: 360,
       date: new Date('2020-10-21'),
+      components: [1]
     };
 
     const activity2 = {
-      activity_id: 2,
+      //activity_id: 2,
+      description: 'test2',
       distance: 30,
+      time_s: 300,
       date: new Date('2020-10-22'),
+      components: [2]
     };
 
     const activity3 = {
-      activity_id: 3,
+      //activity_id: 3,
+      description: 'test3',
       distance: 50,
+      time_s: 320,
       date: new Date('2020-10-22'),
+      components: [3]
     };
 
     const activity4 = {
-      activity_id: 4,
+      //activity_id: 4,
+      description: 'test4',
       distance: 60,
+      time_s: 400,
       date: new Date('2020-10-25'),
+      components: [3]
     };
 
-    let maintenanceList = [maintSchedule1, maintSchedule2];
-    let activityList = [activity1, activity2, activity3, activity4];
+    let maintenanceList = maintenanceTaskRepository.GetMaintenanceTasksForUser(userId); //[maintSchedule1, maintSchedule2];
+    //let activityList = [activity1, activity2, activity3, activity4];
 
     const MILLISECONDS_PER_SECOND = 1000;
     const SECONDS_PER_DAY = 86400;
@@ -70,17 +86,17 @@ class MaintenanceTaskService {
       return sum_variance;
     }
 
-    function covariance(x_vals, x_mean, y_vals, y_mean) {
+    function covarianceSum(x_vals, x_mean, y_vals, y_mean) {
       if (x_vals.length != y_vals.length) {
         //differing data set lengths
         return null;
       }
-      var covariance = 0.0;
+      var covariance_sum = 0.0;
       var i;
       for (i = 0; i < x_vals.length; i++) {
-        covariance += (x_vals[i] - x_mean) * (y_vals[i] - y_mean);
+        covariance_sum += (x_vals[i] - x_mean) * (y_vals[i] - y_mean);
       }
-      return covariance;
+      return covariance_sum;
     }
 
     function predictSlope(covariance, variance_x) {
@@ -107,8 +123,17 @@ class MaintenanceTaskService {
       var last_maint_date = maintenanceList[
         maint_index
       ].last_maintenance_val.getTime();
+      
+      var activityList = activityRepository.GetActivitiesAfterDateForUser(userId, last_maint_date);
+      if (activityList.length == 0) {
+        //no activities found, skip
+        predict_dates.push(null);
+        break;
+      }
+
+      var component_id = maintenanceList[maint_index].component_id;
+      var distance_sum = 0;
       var activity_date_dataset = [0];
-      var date_print_list = [maintenanceList[maint_index].last_maintenance_val];
       var activity_distance_dataset = [0];
       var activity_index;
       for (
@@ -116,75 +141,46 @@ class MaintenanceTaskService {
         activity_index < activityList.length;
         activity_index++
       ) {
-        activity_date_dataset.push(
-          (activityList[activity_index].date.getTime() - last_maint_date) /
-            (MILLISECONDS_PER_SECOND * SECONDS_PER_DAY),
-        );
-        activity_distance_dataset.push(
-          activityList[activity_index].distance +
-            activity_distance_dataset[activity_index],
-        );
-
-        date_print_list.push(activityList[activity_index].date);
+        if (activityList[activity_index].components.includes(component_id)) {
+          activity_date_dataset.push(
+            (activityList[activity_index].date.getTime() - last_maint_date) /
+              (MILLISECONDS_PER_SECOND * SECONDS_PER_DAY),
+          );
+          distance_sum += activityList[activity_index].distance;
+          activity_distance_dataset.push(distance_sum);
+        }
       }
-      console.log(activity_date_dataset);
-      console.log(activity_distance_dataset);
 
-      var mean_x = mean(activity_date_dataset);
-      var mean_y = mean(activity_distance_dataset);
-      var variance_x = variance(activity_date_dataset, mean_x);
-      var covar = covariance(
+      var x_mean = mean(activity_date_dataset);
+      var y_mean = mean(activity_distance_dataset);
+      if (x_mean == null || y_mean == null) {
+        //handle null error
+        predict_dates.push(null);
+        predictionText += 'error calculating' + '\n';
+        break;
+      }
+      var x_variance = variance(activity_date_dataset, x_mean);
+      var covar_sum = covarianceSum(
         activity_date_dataset,
-        mean_x,
+        x_mean,
         activity_distance_dataset,
-        mean_y,
+        y_mean,
       );
-      var slope = predictSlope(covar, variance_x);
-      var intercept = predictIntercept(mean_x, mean_y, slope);
-      console.log(
-        'Description of Maintenance:' +
-          maintenanceList[maint_index].description,
-      );
-      console.log('Predicted slope:' + slope);
-      console.log('Predicted intercept:' + intercept);
+      if (x_variance == null || covar_sum == null) {
+        //handle null error
+        predict_dates.push(null);
+        predictionText += 'error calculating' + '\n';
+        break;
+      }
+      var slope = predictSlope(covar_sum, x_variance);
+      var intercept = predictIntercept(x_mean, y_mean, slope);
       var predict_date =
         (maintenanceList[maint_index].threshold_val - intercept) / slope;
       var final_date = addDays(
         maintenanceList[maint_index].last_maintenance_val,
         predict_date,
       );
-      console.log(
-        'Your last maintenance: ' +
-          maintenanceList[maint_index].last_maintenance_val,
-      );
-      console.log(
-        'Your component threshold value: ' +
-          maintenanceList[maint_index].threshold_val,
-      );
-      console.log(
-        'Your Activity (in km): ' +
-          '\n' +
-          date_print_list[0] +
-          ':' +
-          activity_distance_dataset[0] +
-          '\n' +
-          date_print_list[1] +
-          ':' +
-          activity_distance_dataset[1] +
-          '\n' +
-          date_print_list[2] +
-          ':' +
-          activity_distance_dataset[2] +
-          '\n' +
-          date_print_list[3] +
-          ':' +
-          activity_distance_dataset[3] +
-          '\n' +
-          date_print_list[4] +
-          ':' +
-          activity_distance_dataset[4],
-      );
-      console.log('Your next estimated maintenance date:' + final_date);
+
 
       final_date = moment(final_date, 'YYYY-MM-DD')
         .tz('America/Los_Angeles')
@@ -195,7 +191,6 @@ class MaintenanceTaskService {
         ' estimated due on: ' +
         final_date +
         '\n';
-      console.log('dates: ' + predict_dates);
     }
 
     deviceTokens.forEach((t) => {
