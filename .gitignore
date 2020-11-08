@@ -1,0 +1,6 @@
+.gitsecret/keys/random_seed
+!*.secret
+public-key.gpg
+app/server/keys.json
+app/server/firebase.json
+app/client/android/app/google-services.json

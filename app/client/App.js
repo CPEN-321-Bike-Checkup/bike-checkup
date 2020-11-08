@@ -14,6 +14,7 @@ import MaintenanceScreen from './components/MaintenancePrediction';
 import ScheduleScreen from './components/Screens/ScheduleScreen';
 import HistoryScreen from './components/Screens/HistoryScreen';
 import BikesStack from './components/BikesStack';
+import Keys from '../server/keys.json';
 
 // Dev debug flags
 const SKIP_AUTHENTICATION = true; // Set to false before committing to prod!
@@ -179,9 +180,8 @@ export default class App extends Component {
         });
 
         const FINAL_AUTH_POST_REQ =
-          'https://www.strava.com/oauth/token?client_id=55294&client_secret=d4199150472e3cd7520e12e203c69dd345b4da0a&code=' +
-          authCode +
-          '&grant_type=authorization_code';
+          'https://www.strava.com/oauth/token?client_id=55294&client_secret=' + Keys["strava-client-secret"]
+          + '&code=' + authCode + '&grant_type=authorization_code';
 
         axios.post(FINAL_AUTH_POST_REQ).then(
           (response) => {

@@ -3,6 +3,7 @@ const activityRepository = require('../repositories/ActivityRepository');
 const bikeRepository = require('../repositories/BikeRepository');
 const componentRepository = require('../repositories/ComponentRepository');
 const userRepository = require('../repositories/UserRepository');
+const Keys = require('../keys.json');
 
 class StravaService {
   constructor(
@@ -48,7 +49,7 @@ class StravaService {
     if (user.expires_in < 120) {
       var res = await axios.post('https://www.strava.com/api/v3/oauth/token', {
         client_id: 55294,
-        client_secret: 'd4199150472e3cd7520e12e203c69dd345b4da0a',
+        client_secret: Keys['strava-client-secret'],
         grant_type: 'refresh_token',
         refresh_token: user.refresh_token,
       });
