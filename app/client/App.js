@@ -23,7 +23,7 @@ const Tab = createMaterialBottomTabNavigator();
 
 // Strava authentication constants
 const AUTH_URI =
-  'https://www.strava.com/oauth/mobile/authorize?client_id=55294&redirect_uri=http://3.97.53.16:5000/stravaRedirect&response_type=code&approval_prompt=force&scope=read,read_all,profile:read_all,activity:read_all';
+  'https://www.strava.com/oauth/mobile/authorize?client_id=55933&redirect_uri=http://3.97.53.16:5000/stravaRedirect&response_type=code&approval_prompt=force&scope=read,read_all,profile:read_all,activity:read_all';
 const CODE_LABEL_LENGTH = 5;
 const PARAM_SEPARATOR_LENGTH = 1;
 
@@ -180,7 +180,7 @@ export default class App extends Component {
         });
 
         const FINAL_AUTH_POST_REQ =
-          'https://www.strava.com/oauth/token?client_id=55294&client_secret=' + Keys["strava-client-secret"]
+          'https://www.strava.com/oauth/token?client_id=55933&client_secret=' + Keys["strava-client-secret"]
           + '&code=' + authCode + '&grant_type=authorization_code';
 
         axios.post(FINAL_AUTH_POST_REQ).then(

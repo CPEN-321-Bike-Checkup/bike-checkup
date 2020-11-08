@@ -48,7 +48,7 @@ class StravaService {
     var user = this.userRepository.GetById(userId);
     if (user.expires_in < 120) {
       var res = await axios.post('https://www.strava.com/api/v3/oauth/token', {
-        client_id: 55294,
+        client_id: 55933,
         client_secret: Keys['strava-client-secret'],
         grant_type: 'refresh_token',
         refresh_token: user.refresh_token,
