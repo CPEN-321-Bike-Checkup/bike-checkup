@@ -16,6 +16,7 @@ class MaintenanceTaskService {
   }
 
   MaintenancePredict(userId, deviceTokens) {
+    //remove mock data later
     const maintSchedule1 = {
       maintenance_id: 1,
       component_id: 1,

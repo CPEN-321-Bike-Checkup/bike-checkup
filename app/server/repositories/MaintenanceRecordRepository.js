@@ -23,6 +23,7 @@ class MaintenanceRecordRepository extends Repository {
     return records;
   }
 
+  //Supporting function for front end
   async GetMaintenanceRecordsHistory(userId, daysOfHistory) {
     var today = new Date();
     var historyDate = new Date(
