@@ -5,7 +5,11 @@ const moment = require('moment');
 require('moment-timezone');
 
 class MaintenanceTaskService {
-  constructor(notificationService, activityRepository, maintenanceTaskRepository) {
+  constructor(
+    notificationService,
+    activityRepository,
+    maintenanceTaskRepository,
+  ) {
     this.notificationService = notificationService;
     this.activityRepository = activityRepository;
     this.maintenanceTaskRepository = maintenanceTaskRepository;
@@ -36,7 +40,7 @@ class MaintenanceTaskService {
       distance: 50,
       time_s: 360,
       date: new Date('2020-10-21'),
-      components: [1]
+      components: [1],
     };
 
     const activity2 = {
@@ -45,7 +49,7 @@ class MaintenanceTaskService {
       distance: 30,
       time_s: 300,
       date: new Date('2020-10-22'),
-      components: [2]
+      components: [2],
     };
 
     const activity3 = {
@@ -54,7 +58,7 @@ class MaintenanceTaskService {
       distance: 50,
       time_s: 320,
       date: new Date('2020-10-22'),
-      components: [3]
+      components: [3],
     };
 
     const activity4 = {
@@ -63,10 +67,12 @@ class MaintenanceTaskService {
       distance: 60,
       time_s: 400,
       date: new Date('2020-10-25'),
-      components: [3]
+      components: [3],
     };
 
-    let maintenanceList = maintenanceTaskRepository.GetMaintenanceTasksForUser(userId); //[maintSchedule1, maintSchedule2];
+    let maintenanceList = maintenanceTaskRepository.GetMaintenanceTasksForUser(
+      userId,
+    ); //[maintSchedule1, maintSchedule2];
     //let activityList = [activity1, activity2, activity3, activity4];
 
     const MILLISECONDS_PER_SECOND = 1000;
@@ -123,8 +129,11 @@ class MaintenanceTaskService {
       var last_maint_date = maintenanceList[
         maint_index
       ].last_maintenance_val.getTime();
-      
-      var activityList = activityRepository.GetActivitiesAfterDateForUser(userId, last_maint_date);
+
+      var activityList = activityRepository.GetActivitiesAfterDateForUser(
+        userId,
+        last_maint_date,
+      );
       if (activityList.length == 0) {
         //no activities found, skip
         predict_dates.push(null);
@@ -181,6 +190,7 @@ class MaintenanceTaskService {
         predict_date,
       );
 
+      maintenanceList[maint_index].predicted_due_date = final_date;
 
       final_date = moment(final_date, 'YYYY-MM-DD')
         .tz('America/Los_Angeles')
@@ -192,6 +202,11 @@ class MaintenanceTaskService {
         final_date +
         '\n';
     }
+
+    maintenanceTaskRepository.Update(
+      maintenanceList.map((task) => task._id),
+      maintenanceList,
+    );
 
     deviceTokens.forEach((t) => {
       console.log('', t);

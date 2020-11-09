@@ -10,6 +10,7 @@ const maintenanceTaskSchema = new mongoose.Schema({
   threshold_val: Number,
   last_maintenance_val: Date,
   repeats: Boolean,
+  predicted_due_date: Date,
 });
 const maintenanceTaskModel = mongoose.model(
   'MaintenanceTask',
