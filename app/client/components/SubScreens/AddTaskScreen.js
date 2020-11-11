@@ -9,8 +9,8 @@ export default class AddTaskScreen extends React.Component {
       editMode: false,
     };
     this.navigation = props.navigation;
-    this.newTask = props.route.params.newTask;  // boolean for update or new
-    this.taskId = props.route.params.taskId;  // TODO: get all availabe task data if not new
+    this.newTask = props.route.params.newTask; // boolean for update or new
+    this.taskData = props.route.params.taskData; // TODO: get all availabe task data if not new
   }
 
   updateMaintenanceData() {
@@ -35,17 +35,13 @@ export default class AddTaskScreen extends React.Component {
   }
 
   render() {
-    return(
-      <View>
-        {/* <ScrollView>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.textInput}
-              placeholder="Your name"
-              maxLength={20}
-            />
-          </View>
-        </ScrollView> */}
+    return (
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.textInput}
+          placeholder="Your name"
+          maxLength={20}
+        />
       </View>
     );
   }
@@ -54,16 +50,16 @@ export default class AddTaskScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    paddingHorizontal: 10
+    justifyContent: 'center',
+    paddingHorizontal: 10,
   },
   button: {
-    alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10
+    alignItems: 'center',
+    backgroundColor: '#DDDDDD',
+    padding: 10,
   },
   countContainer: {
-    alignItems: "center",
-    padding: 10
-  }
+    alignItems: 'center',
+    padding: 10,
+  },
 });
