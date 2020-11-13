@@ -14,7 +14,7 @@ import MaintenanceScreen from './components/MaintenancePrediction';
 import ScheduleScreen from './components/Screens/ScheduleScreen';
 import HistoryScreen from './components/Screens/HistoryScreen';
 import BikesStack from './components/BikesStack';
-import Keys from '../server/keys.json';
+import Keys from './keys.json';
 
 // Dev debug flags
 const SKIP_AUTHENTICATION = true; // Set to false before committing to prod!
