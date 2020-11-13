@@ -1,8 +1,4 @@
 .gitsecret/keys/random_seed
-!*.secret
-public-key.gpg
-
-# List of files that existed unencrypted, prior to encrypting using git-secret
-app/server/keys.json
-app/server/firebase.json
+app/client/keys.json
 app/client/android/app/google-services.json
+app/server/firebase.json
