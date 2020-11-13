@@ -6,14 +6,26 @@ class ComponentRepository extends Repository {
     super(componentModel);
   }
 
-  GetByBikeId(bikeId) {
+  GetComponents(bikeId) {
     this.documentModel.find({bike: bikeId}).exec();
+    // TODO: Return components corresponding to the bikeId bike
   }
 
-  //Supporting function for front end
-  GetTasksByComponentId(componentId) {
+  GetBike(componentId) {
+
+  }
+
+  GetComponentTasks(componentId) {
     var components = this.documentModel.find({_id: componentId}).exec();
     return components.maintenance_tasks;
+  }
+
+  AddComponent() {
+    // TODO: Return new componentId after MongoDB exchange
+  }
+
+  RemoveComponent(componentId) {
+
   }
 }
 const componentRepository = new ComponentRepository(ComponentModel);
