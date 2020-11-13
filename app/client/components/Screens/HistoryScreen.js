@@ -15,9 +15,9 @@ export default class TimeScreen extends React.Component {
 
   componentDidMount() {
     // TODO: pass id as a prop from App.js
-    let userId = 71747974;
+    let userId = 123;
 
-    fetch(`http://192.168.1.83:5000/maintenanceRecord/${userId}/days/100`, {
+    fetch(`http://3.97.53.16:5000/maintenanceRecord/${userId}/days/100`, {
       method: 'GET',
     })
       .then((response) => response.json())
