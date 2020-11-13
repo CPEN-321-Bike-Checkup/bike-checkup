@@ -4,6 +4,46 @@ import {RemovablePressableListItem} from '../ListItems';
 import {flatListWrapper} from '../FlatListWrapper';
 import CommonStyles from '../CommonStyles';
 
+const BIKE_COMPONENTS_LIST = [
+  "Front Wheel",
+  "Rear Wheel",
+  "Fork",
+  "Handlebar",
+  "Pedals",
+  "Front Tire",
+  "Rear Tire",
+  "Bottom Bracket",
+  "Front Brake",
+  "Rear Brake",
+  "Front Brake Pads",
+  "Rear Brake Pads",
+  "Front Brake Lever",
+  "Rear Brake Lever",
+  "Cassette",
+  "Chainrings",
+  "Crankset",
+  "Front Derailleur",
+  "Rear Derailleur",
+  "Headset",
+  "Saddle",
+  "Seatpost",
+  "Stem",
+  "Front Brake Cable",
+  "Rear Brake Cable",
+  "Front Shifter Cable",
+  "Rear Shifter Cable",
+  "Shift Levers",
+  "Front Shock",
+  "Rear Shock",
+  "Front Brake Rotor",
+  "Rear Brake Rotor",
+]
+
+const OTHER_COMPONENTS_LIST = [
+  "Helmet",
+  "Cleats"
+]
+
 const GIANT_DATA = [
   {
     id: 1,
