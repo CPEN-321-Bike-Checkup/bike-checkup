@@ -15,12 +15,90 @@ class MaintenanceTaskService {
     this.maintenanceTaskRepository = maintenanceTaskRepository;
   }
 
+  /*
+   * Gets all tasks in the future within certain range of days
+   * @param     userId - id of user whose tasks are to be retrieved
+   * @param     num_of_days - cut off number of days in the future for
+   *            tasks to display
+   * @returns   array of tasks within given predicted date range sorted
+   *            by predicted date ascending
+   * @modifies  nothing
+   */
+
+  GetScheduledTasksSorted(userId, numDays) {
+    const num_of_days = 50;
+    const maintSchedule1 = {
+      maintenance_id: 1,
+      component_id: 1,
+      schedule_type: 'date',
+      threshold_val: 450,
+      description: 'oil chain',
+      last_maintenance_val: new Date('2020-10-11'),
+      repeats: false,
+      predicted_due_date: new Date('2020-11-22'),
+    };
+
+    const maintSchedule2 = {
+      maintenance_id: 2,
+      component_id: 3,
+      schedule_type: 'distance',
+      threshold_val: 180,
+      description: 'tire check',
+      last_maintenance_val: new Date('2020-11-10'),
+      repeats: true,
+      predicted_due_date: new Date('2020-11-25'),
+    };
+
+    const maintSchedule3 = {
+      maintenance_id: 3,
+      component_id: 1,
+      schedule_type: 'distance',
+      threshold_val: 180,
+      description: 'brake check',
+      last_maintenance_val: new Date('2020-11-08'),
+      repeats: true,
+      predicted_due_date: new Date('2020-11-15'),
+    };
+
+    let all_tasks = [maintSchedule1, maintSchedule2, maintSchedule3];
+    /*let all_tasks = maintenanceTaskRepository.GetMaintenanceTasksForUser(
+      userId,
+    );*/
+
+    let cutoff_date = this.addDays(new Date(), num_of_days);
+    let filtered_tasks = all_tasks.filter(function (value, index, arr) {
+      return arr[index].predicted_due_date <= cutoff_date;
+    });
+
+    let sorted_tasks = filtered_tasks.sort(function (x, y) {
+      return x.predicted_due_date - y.predicted_due_date;
+    });
+
+    console.log(sorted_tasks);
+    return sorted_tasks;
+  }
+
+  addDays(currentDate, daysToAdd) {
+    var final_date = new Date(currentDate);
+    final_date.setDate(final_date.getDate() + daysToAdd);
+    return final_date;
+  }
+
+  /*
+   * Gets all tasks for user and predicts new due dates according
+   * to user's activities
+   * @param     userId - id of user whose tasks are to be retrieved
+   * @param     deviceTokens - device token used to send notifications
+   * @returns   array of maintenance tasks with updated predicted_due_dates
+   * @modifies  database entries of MaintenanceTask items
+   */
+
   MaintenancePredict(userId, deviceTokens) {
     //remove mock data later
     const maintSchedule1 = {
       maintenance_id: 1,
       component_id: 1,
-      schedule_type: 'maintenance',
+      schedule_type: 'date',
       threshold_val: 450,
       description: 'oil chain',
       last_maintenance_val: new Date('2020-10-20'),
@@ -29,7 +107,7 @@ class MaintenanceTaskService {
     const maintSchedule2 = {
       maintenance_id: 2,
       component_id: 3,
-      schedule_type: 'maintenance',
+      schedule_type: 'distance',
       threshold_val: 180,
       description: 'tire check',
       last_maintenance_val: new Date('2020-10-20'),
@@ -71,10 +149,17 @@ class MaintenanceTaskService {
       components: [3],
     };
 
-    let maintenanceList = maintenanceTaskRepository.GetMaintenanceTasksForUser(
+    /*let maintenanceList = maintenanceTaskRepository.GetMaintenanceTasksForUser(
       userId,
-    ); //[maintSchedule1, maintSchedule2];
-    //let activityList = [activity1, activity2, activity3, activity4];
+    );*/
+
+    let allMaintenance = [maintSchedule1, maintSchedule2];
+    let maintenanceList = allMaintenance.filter(function (value, index, arr) {
+      return arr[index].schedule_type == 'distance';
+    });
+
+    //[maintSchedule1, maintSchedule2];
+    let activityList = [activity1, activity2, activity3, activity4];
 
     const MILLISECONDS_PER_SECOND = 1000;
     const SECONDS_PER_DAY = 86400;
@@ -114,12 +199,6 @@ class MaintenanceTaskService {
       return mean_y - slope * mean_x;
     }
 
-    function addDays(currentDate, daysToAdd) {
-      var final_date = new Date(currentDate);
-      final_date.setDate(final_date.getDate() + daysToAdd);
-      return final_date;
-    }
-
     //get JSON data from Strava call
     //normalize units if necessary -> convert-units or just mile->km manual conversion
     //linear regression taken from: https://machinelearningmastery.com/implement-simple-linear-regression-scratch-python/
@@ -127,18 +206,25 @@ class MaintenanceTaskService {
     var predictionText = '';
     var maint_index;
     for (maint_index = 0; maint_index < maintenanceList.length; maint_index++) {
+      //no predictions to be made if schedule is not distance based
+      console.log(maintenanceList[maint_index].schedule_type);
+      if (maintenanceList[maint_index].schedule_type != 'distance') {
+        console.log('not the right schedule type!!!');
+        predict_dates.push(null);
+        continue;
+      }
       var last_maint_date = maintenanceList[
         maint_index
       ].last_maintenance_val.getTime();
 
-      var activityList = activityRepository.GetActivitiesAfterDateForUser(
+      /*var activityList = activityRepository.GetActivitiesAfterDateForUser(
         userId,
         last_maint_date,
-      );
+      );*/
       if (activityList.length == 0) {
-        //no activities found, skip
-        predict_dates.push(null);
-        break;
+        //no activities found, make no changes to predicted_due_date, skip
+        predict_dates.push(null); //predict dates used to debug on maintenance screen
+        continue;
       }
 
       var component_id = maintenanceList[maint_index].component_id;
@@ -164,10 +250,9 @@ class MaintenanceTaskService {
       var x_mean = mean(activity_date_dataset);
       var y_mean = mean(activity_distance_dataset);
       if (x_mean == null || y_mean == null) {
-        //handle null error
-        predict_dates.push(null);
-        predictionText += 'error calculating' + '\n';
-        break;
+        //handle null error, make no changes to predicted_due_date, skip
+        predict_dates.push(null); //predict dates used to debug on maintenance screen
+        continue;
       }
       var x_variance = variance(activity_date_dataset, x_mean);
       var covar_sum = covarianceSum(
@@ -177,22 +262,23 @@ class MaintenanceTaskService {
         y_mean,
       );
       if (x_variance == null || covar_sum == null) {
-        //handle null error
-        predict_dates.push(null);
-        predictionText += 'error calculating' + '\n';
-        break;
+        //handle null error, make no changes to predicted_due_date, skip
+        predict_dates.push(null); //predict dates used to debug on maintenance screen
+        continue;
       }
       var slope = predictSlope(covar_sum, x_variance);
       var intercept = predictIntercept(x_mean, y_mean, slope);
       var predict_date =
         (maintenanceList[maint_index].threshold_val - intercept) / slope;
-      var final_date = addDays(
+      var final_date = this.addDays(
         maintenanceList[maint_index].last_maintenance_val,
         predict_date,
       );
 
+      //update with new predicted date
       maintenanceList[maint_index].predicted_due_date = final_date;
 
+      //formatting for debug maintenance screen
       final_date = moment(final_date, 'YYYY-MM-DD')
         .tz('America/Los_Angeles')
         .format('l');
@@ -204,12 +290,12 @@ class MaintenanceTaskService {
         '\n';
     }
 
-    maintenanceTaskRepository.Update(
+    /*maintenanceTaskRepository.Update(
       maintenanceList.map((task) => task._id),
       maintenanceList,
-    );
+    );*/
 
-    deviceTokens.forEach((t) => {
+    /*deviceTokens.forEach((t) => {
       console.log('', t);
       setTimeout(function () {
         notificationService.SendNotification(
@@ -222,8 +308,11 @@ class MaintenanceTaskService {
           ),
         );
       }, 8000);
-    });
+    });*/
 
+    //for maintenance screen (debug)
+    //console.log(maintenanceList);
+    //console.log(maintenanceList[0].predicted_due_date.toString());
     return predict_dates;
   }
 }

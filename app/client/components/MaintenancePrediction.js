@@ -53,6 +53,22 @@ export default class MaintenancePrediction extends React.Component {
       });
   }
 
+  getAllMaintenanceTasks() {
+    /* Fetch predictions from server */
+    var serverIp = '3.97.53.16';
+    axios
+      .get('http://' + serverIp + ':5000/maintenanceTask/tasks')
+      .then((res) => {
+        var dates = res.data.dates;
+        console.log('INFO: Successfully fetched tasks: ' + dates);
+
+        //this.setState({predictedDates: dates});
+      })
+      .catch((err) => {
+        console.log('ERRROR: Failed to fetch tasks: ', err);
+      });
+  }
+
   render() {
     if (this.state.predictedDates.length > 0) {
       var maintenancePredictions = [];
@@ -62,9 +78,13 @@ export default class MaintenancePrediction extends React.Component {
         maintIndex < maintenanceList.length;
         maintIndex++
       ) {
-        var predictedMaintDate = this.state.predictedDates[
-          maintIndex
-        ].toString();
+        if (this.state.predictedDates[maintIndex] == null) {
+          var predictedMaintDate = 'No predictions available';
+        } else {
+          var predictedMaintDate = this.state.predictedDates[
+            maintIndex
+          ].toString();
+        }
 
         var maintDescription = maintenanceList[maintIndex].description;
 
@@ -101,6 +121,7 @@ export default class MaintenancePrediction extends React.Component {
           title="Predict!"
           onPress={() => this.getMaintenancePredictions()}
         />
+        <Button title="Show!" onPress={() => this.getAllMaintenanceTasks()} />
       </View>
     );
   }

@@ -16,6 +16,16 @@ const initMaintenanceTaskRouting = (app) => {
       res.send(JSON.stringify({dates: dates}));
     });
   });
+
+  maintenanceTaskRouter.get('/tasks', (req, res, next) => {
+    deviceTokenRepo.GetAll().then(function (userId, numDays) {
+      var dates = MaintenanceTaskService.GetScheduledTasksSorted(
+        userId,
+        numDays,
+      );
+      res.send(JSON.stringify({dates: dates}));
+    });
+  });
 };
 
 module.exports = initMaintenanceTaskRouting;
