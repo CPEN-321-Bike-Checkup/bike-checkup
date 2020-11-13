@@ -12,13 +12,23 @@ class MaintenanceRecordRepository extends Repository {
   }
 
   async GetMaintenanceRecordsForUser(userId) {
-    var user = await this.userModel.find({_id: userId}).exec();
+    var users = await this.userModel.find({_id: userId}).lean().exec();
+    if (users.length == 0) return null;
+
     var records = [];
-    user.bikes.forEach((bike) => {
+    users[0].bikes.forEach((bike) => {
       bike.components.forEach((component) => {
-        records.concat(component.maintenance_records);
+        // Add bike and component fields
+        component.maintenance_records.forEach((record) => {
+          record.bike = bike.label;
+          record.component = component.label;
+        });
+
+        records = records.concat(component.maintenance_records);
       });
     });
+
+    console.log(records);
     return records;
   }
 
@@ -31,9 +41,9 @@ class MaintenanceRecordRepository extends Repository {
     );
 
     //get all records within history
-    var allRecords = this.GetMaintenanceRecordsForUser(userId);
+    var allRecords = await this.GetMaintenanceRecordsForUser(userId);
     var historyRecords = [];
-    allRecords.foreach(function (record) {
+    allRecords.forEach(function (record) {
       if (record.maintenance_date >= historyDate) {
         historyRecords.push(record);
       }
@@ -43,10 +53,12 @@ class MaintenanceRecordRepository extends Repository {
     historyRecords.sort(function (x, y) {
       return y.maintenance_date - x.maintenance_date;
     });
+
     return historyRecords;
   }
 }
 const maintenanceRecordRepository = new MaintenanceRecordRepository(
   MaintenanceRecordModel,
+  UserModel,
 );
 module.exports = maintenanceRecordRepository;
