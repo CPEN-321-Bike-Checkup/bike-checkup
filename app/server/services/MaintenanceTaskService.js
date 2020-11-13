@@ -93,7 +93,22 @@ class MaintenanceTaskService {
    * @modifies  database entries of MaintenanceTask items
    */
 
-  MaintenancePredict(userId, deviceTokens) {
+  GetTasksForComponent(componentId) {
+    var tasks = this.maintenanceTaskRepository.GetTasksForComponent(
+      componentId,
+    );
+    return tasks.map((task) => {
+      return {
+        'task id': task._id,
+        description: task.description,
+        threshold: task.threshold_val,
+        repeats: task.repeats,
+        last_maintenance_val: task.last_maintenance_val,
+      };
+    });
+  }
+
+  MaintenancePredict(userId) {
     //remove mock data later
     const maintSchedule1 = {
       maintenance_id: 1,
@@ -290,29 +305,11 @@ class MaintenanceTaskService {
         '\n';
     }
 
-    /*maintenanceTaskRepository.Update(
+    this.maintenanceTaskRepository.Update(
       maintenanceList.map((task) => task._id),
       maintenanceList,
-    );*/
-
-    /*deviceTokens.forEach((t) => {
-      console.log('', t);
-      setTimeout(function () {
-        notificationService.SendNotification(
-          notificationService.CreateMessage(
-            'Maintenance Schedule Prediction',
-            'Upcoming Maintenance Predictions',
-            predictionText,
-            {},
-            t.token,
-          ),
-        );
-      }, 8000);
-    });*/
-
-    //for maintenance screen (debug)
-    //console.log(maintenanceList);
-    //console.log(maintenanceList[0].predicted_due_date.toString());
+    );
+    GetActivitiesAfterDateForUser;
     return predict_dates;
   }
 }

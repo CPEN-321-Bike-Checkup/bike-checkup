@@ -20,17 +20,19 @@ class StravaService {
 
   async UpdateBikesForUser(userId) {
     var athlete = await this.GetAthlete(userId);
+    var user = await this.userRepository.GetById(userId);
 
     console.log('BIKES ARE HERERERERERERERERR: ', athlete);
-    this.bikeRepository.CreateOrUpdate(
-      athlete.bikes.map((bike) => {
-        return {
-          _id: bike.id,
-          owner: userId,
-          label: bike.name,
-        };
-      }),
-    );
+    var bikes = athlete.bikes.map((bike) => {
+      return {
+        _id: bike.id,
+        owner: userId,
+        label: bike.name,
+      };
+    });
+    user.bikes = bikes;
+    this.bikeRepository.CreateOrUpdate(bikes);
+    this.userRepository.Update(user);
   }
 
   async GetAthlete(userId) {
