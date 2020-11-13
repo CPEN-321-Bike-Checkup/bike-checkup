@@ -37,12 +37,12 @@ const BIKE_COMPONENTS_LIST = [
   "Rear Shock",
   "Front Brake Rotor",
   "Rear Brake Rotor",
-]
+];
 
 const OTHER_COMPONENTS_LIST = [
   "Helmet",
   "Cleats"
-]
+];
 
 const GIANT_DATA = [
   {
