@@ -1,6 +1,8 @@
 const express = require('express');
 const MaintenanceTaskService = require('../services/MaintenanceTaskService');
 const deviceTokenRepo = require('../repositories/DeviceTokenRepository');
+const maintenanceTaskService = require('../services/MaintenanceTaskService');
+const {reseller} = require('googleapis/build/src/apis/reseller');
 
 const initMaintenanceTaskRouting = (app) => {
   const maintenanceTaskRouter = express.Router();
@@ -17,15 +19,23 @@ const initMaintenanceTaskRouting = (app) => {
     });
   });
 
-  maintenanceTaskRouter.get('/tasks', (req, res, next) => {
-    deviceTokenRepo.GetAll().then(function (userId, numDays) {
-      var dates = MaintenanceTaskService.GetScheduledTasksSorted(
-        userId,
-        numDays,
-      );
-      res.send(JSON.stringify({dates: dates}));
-    });
+  maintenanceTaskRouter.get('/', (req, res, next) => {
+    var dates = MaintenanceTaskService.GetScheduledTasksSorted(
+      req.query.userId,
+      req.query.numDays,
+    );
+    res.send(JSON.stringify({dates: dates}));
   });
+
+  maintenanceTaskRouter.get(
+    '/component/:componentId',
+    async (req, res, next) => {
+      var tasks = await maintenanceTaskService.GetTasksForComponent(
+        req.params[0],
+      );
+      res.send(JSON.stringify(tasks));
+    },
+  );
 };
 
 module.exports = initMaintenanceTaskRouting;

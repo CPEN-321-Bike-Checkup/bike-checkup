@@ -1,6 +1,7 @@
 const express = require('express');
-const StravaService = require('../services/StravaService');
-const UserService = require('../services/UserService');
+const maintenanceTaskService = require('../services/MaintenanceTaskService');
+const stravaService = require('../services/StravaService');
+const userService = require('../services/UserService');
 
 const initStravaRouting = (app) => {
   const stravaRouter = express.Router();
@@ -9,9 +10,11 @@ const initStravaRouting = (app) => {
 
   stravaRouter.post('/:userId/connectedStrava', async (req, res, next) => {
     var user = req.body;
-    UserService.CreateOrUpdateUsers(user).then(async (resp) => {
-      await StravaService.UpdateBikesForUser(user._id);
-      await StravaService.SaveNewActivitiesForUser(user._id);
+    userService.CreateOrUpdateUsers(user).then(async (resp) => {
+      await stravaService.UpdateBikesForUser(user._id);
+      stravaService.SaveNewActivitiesForUser(user._id).then((activitiesRes) => {
+        //maintenanceTaskService.MaintenancePredict(user._id);
+      });
       res.sendStatus(200);
     });
   });
