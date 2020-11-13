@@ -16,5 +16,5 @@ class ComponentRepository extends Repository {
     return components.maintenance_tasks;
   }
 }
-const componentRepository = new ComponentRepository(componentModel);
+const componentRepository = new ComponentRepository(ComponentModel);
 module.exports = componentRepository;

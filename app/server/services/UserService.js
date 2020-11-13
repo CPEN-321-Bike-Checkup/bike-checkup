@@ -7,6 +7,10 @@ class UserService {
     this.deviceTokenRepository = deviceTokenRepository;
   }
 
+  CreateOrUpdateUsers(users) {
+    return this.userRepository.CreateOrUpdate(users);
+  }
+
   async RegisterNewDevice(userId, deviceToken) {
     await this.deviceTokenRepository
       .Delete({token: deviceToken, owner: userId})
@@ -33,10 +37,6 @@ class UserService {
 
   CreateUsers(users) {
     return userRepository.Create(users);
-  }
-
-  UpdateUsers(UserIds, newUserVals) {
-    return userRepository.Update(userId, newUserVals);
   }
 }
 

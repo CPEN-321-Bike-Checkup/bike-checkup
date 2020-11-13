@@ -16,6 +16,7 @@
     "express": "^4.17.1",
     "firebase-admin": "^9.3.0",
     "googleapis": "^61.0.0",
+    "lodash": "^4.17.20",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.31",
     "mongodb": "^3.6.2",

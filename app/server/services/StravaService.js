@@ -3,7 +3,7 @@ const activityRepository = require('../repositories/ActivityRepository');
 const bikeRepository = require('../repositories/BikeRepository');
 const componentRepository = require('../repositories/ComponentRepository');
 const userRepository = require('../repositories/UserRepository');
-const Keys = require('../keys.json');
+const Keys = require('../../client/keys.json');
 
 class StravaService {
   constructor(
@@ -18,16 +18,46 @@ class StravaService {
     this.userRepository = userRepository;
   }
 
-  async GetNewActivitiesForUser(userId) {
-    var activities = [];
-    var token = this.GetTokenForUser(userId);
-    var user = userRepository.GetById(userId);
+  async UpdateBikesForUser(userId) {
+    var athlete = await this.GetAthlete(userId);
 
-    axios.setToken(token, 'Bearer');
-    var activitiesResp = await axios.get(
-      'https://www.strava.com/api/v3/athlete/activities?after=' +
-        user.activity_cache_date,
+    console.log('BIKES ARE HERERERERERERERERR: ', athlete);
+    this.bikeRepository.CreateOrUpdate(
+      athlete.bikes.map((bike) => {
+        return {
+          _id: bike.id,
+          owner: userId,
+          label: bike.name,
+        };
+      }),
     );
+  }
+
+  async GetAthlete(userId) {
+    var token = await this.GetTokenForUser(userId);
+    var resp = await axios.get('https://www.strava.com/api/v3/athlete', {
+      headers: {Authorization: 'Bearer '.concat(token)},
+    });
+    if (resp.status === 200) {
+      return resp.data;
+    } else {
+      console.error('Failed to get strava athlete data: resp', resp);
+    }
+  }
+
+  async SaveNewActivitiesForUser(userId) {
+    var activities = [];
+    var token = await this.GetTokenForUser(userId);
+    var user = await this.userRepository.GetById(userId);
+
+    var activitiesUrl = 'https://www.strava.com/api/v3/athlete/activities';
+    if (user.activity_cache_date instanceof Date) {
+      activitiesUrl.concat('?after=').concat(activity_cache_date);
+    }
+
+    var activitiesResp = await axios.get(activitiesUrl, {
+      headers: {Authorization: 'Bearer '.concat(token)},
+    });
 
     activitiesResp.data.forEach((a) => {
       var components = this.componentRepository.GetByBikeId(a.gear_id);
@@ -45,8 +75,8 @@ class StravaService {
   }
 
   async GetTokenForUser(userId) {
-    var user = this.userRepository.GetById(userId);
-    if (user.expires_in < 120) {
+    var user = await this.userRepository.GetById(userId);
+    if (user.expires_in instanceof Number && user.expires_in < 120) {
       var res = await axios.post('https://www.strava.com/api/v3/oauth/token', {
         client_id: 55933,
         client_secret: Keys['strava-client-secret'],
@@ -58,7 +88,7 @@ class StravaService {
       user.expires_in = res.expires_in;
       userRepository.Update(user._id, user);
     }
-    return strava_token;
+    return user.strava_token;
   }
 }
 const stravaService = new StravaService(

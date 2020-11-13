@@ -7,9 +7,12 @@ const initMaintenanceTaskRouting = (app) => {
 
   app.use('/maintenanceTask', maintenanceTaskRouter);
 
-  maintenanceTaskRouter.get('/prediction', (req, res, next) => {
-    deviceTokenRepo.GetAll().then(function (userId, devices) {
-      var dates = MaintenanceTaskService.MaintenancePredict(userId, devices);
+  maintenanceTaskRouter.get('/:userId/prediction', (req, res) => {
+    deviceTokenRepo.GetAll().then(function (deviceTokens) {
+      var dates = MaintenanceTaskService.MaintenancePredict(
+        req.params[0],
+        deviceTokens,
+      );
       res.send(JSON.stringify({dates: dates}));
     });
   });

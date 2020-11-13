@@ -2,7 +2,6 @@ const Repository = require('./Repository');
 const MaintenanceRecordModel = require('../schemas/MaintenanceRecord')
   .MaintenanceRecordModel;
 const UserModel = require('../schemas/User').UserModel;
-
 const MILLISECONDS_PER_SECOND = 1000;
 const SECONDS_PER_DAY = 86400;
 

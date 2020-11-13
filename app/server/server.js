@@ -41,7 +41,9 @@ app.get('/stravaActivities', async function (req, res, next) {
 
 const initMaintenanceTaskRoutes = require('./routes/MaintenanceTaskRoutes');
 const initUserRoutes = require('./routes/UserRoutes');
+const initStravaRoutes = require('./routes/StravaRoutes');
 initUserRoutes(app);
+initStravaRoutes(app);
 initMaintenanceTaskRoutes(app);
 
 app.get('/stravaRedirect', function (req, res, next) {

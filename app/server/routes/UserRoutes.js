@@ -17,7 +17,13 @@ const initUserRouting = (app) => {
     UserService.RegisterNewDevice(req.body.userId, req.body.token);
 
     console.log('registered');
-    res.send('registered');
+    res.sendStatus(200);
+  });
+
+  userRouter.post('/:userId/connectedStrava', (req, res, next) => {
+    var user = req.body;
+    UserService.CreateOrUpdateUser(user);
+    res.sendStatus(200);
   });
 };
 

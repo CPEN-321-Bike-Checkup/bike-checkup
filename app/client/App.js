@@ -17,7 +17,7 @@ import BikesStack from './components/BikesStack';
 import Keys from './keys.json';
 
 // Dev debug flags
-const SKIP_AUTHENTICATION = true; // Set to false before committing to prod!
+const SKIP_AUTHENTICATION = false; // Set to false before committing to prod!
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -28,31 +28,8 @@ const CODE_LABEL_LENGTH = 5;
 const PARAM_SEPARATOR_LENGTH = 1;
 
 // Push notification configuration
-const serverIp = '3.97.53.16';
+const serverIp = '192.168.0.34'; //'3.97.53.16';
 const senderID = 517168871348;
-PushNotification.configure({
-  onRegister: (tokenData) => {
-    console.log('Remote Notification Token: ', tokenData);
-    axios
-      .post('http://' + serverIp + ':5000/user/registerDevice', {
-        userId: 1,
-        token: tokenData.token,
-      })
-      .then((res) => {
-        console.log('Registered Device');
-      })
-      .catch((err) => {
-        console.log('Failed to register device: ', err);
-      });
-  },
-
-  onNotification: (notification) => {
-    console.log('Remote Notification Received: ', notification);
-  },
-  senderID: senderID,
-  popInitialNotification: false,
-  requestPermissions: true,
-});
 
 export default class App extends Component {
   constructor(props) {
@@ -180,8 +157,11 @@ export default class App extends Component {
         });
 
         const FINAL_AUTH_POST_REQ =
-          'https://www.strava.com/oauth/token?client_id=55933&client_secret=' + Keys["strava-client-secret"]
-          + '&code=' + authCode + '&grant_type=authorization_code';
+          'https://www.strava.com/oauth/token?client_id=55933&client_secret=' +
+          Keys['strava-client-secret'] +
+          '&code=' +
+          authCode +
+          '&grant_type=authorization_code';
 
         axios.post(FINAL_AUTH_POST_REQ).then(
           (response) => {
@@ -191,8 +171,53 @@ export default class App extends Component {
               refreshToken: response.data.refresh_token,
               athleteData: response.data.athlete,
             });
+            var athlete = response.data.athlete;
             console.log('Athlete data: ', response.data.athlete);
             console.log('strava access token', response.data.access_token);
+            axios
+              .post(
+                'http://' +
+                  serverIp +
+                  ':5000/strava/' +
+                  athlete.id +
+                  '/connectedStrava',
+                {
+                  _id: athlete.id,
+                  name: athlete.firstname + ' ' + athlete.lastname,
+                  strava_token: response.data.access_token,
+                  refresh_token: response.data.refresh_token,
+                  expires_in: response.data.expires_in,
+                },
+              )
+              .then((resp) => {
+                console.log('Successfully sent user tokens');
+                PushNotification.configure({
+                  onRegister: (tokenData) => {
+                    console.log('Remote Notification Token: ', tokenData);
+                    axios
+                      .post(
+                        'http://' + serverIp + ':5000/user/registerDevice',
+                        {
+                          userId: 1,
+                          token: tokenData.token,
+                        },
+                      )
+                      .then((res) => {
+                        console.log('Registered Device');
+                      })
+                      .catch((err) => {
+                        console.log('Failed to register device: ', err);
+                      });
+                  },
+
+                  onNotification: (notification) => {
+                    console.log('Remote Notification Received: ', notification);
+                  },
+                  senderID: senderID,
+                  popInitialNotification: false,
+                  requestPermissions: true,
+                });
+              });
           },
           (error) => {
             console.log(error);

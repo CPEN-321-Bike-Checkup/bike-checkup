@@ -22,5 +22,6 @@ class MaintenanceTaskRepository extends Repository {
 }
 const maintenanceTaskRepository = new MaintenanceTaskRepository(
   MaintenanceTaskModel,
+  UserModel,
 );
 module.exports = maintenanceTaskRepository;
