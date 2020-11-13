@@ -28,7 +28,7 @@ const CODE_LABEL_LENGTH = 5;
 const PARAM_SEPARATOR_LENGTH = 1;
 
 // Push notification configuration
-const serverIp = '192.168.0.34'; //'3.97.53.16';
+const serverIp = '3.97.53.16';
 const senderID = 517168871348;
 
 export default class App extends Component {
