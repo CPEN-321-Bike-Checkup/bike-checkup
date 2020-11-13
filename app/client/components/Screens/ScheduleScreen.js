@@ -60,6 +60,12 @@ export default class ScheduleScreen extends React.Component {
     //   });;
   }
   render() {
-    return selectionListWrapper(DATA, ({item}) => <ListItem item={item} />);
+    return selectionListWrapper(DATA, ({item}) => (
+      <ListItem
+        title={item.task}
+        subText={item.bike}
+        rightText={item.date}
+      />
+    ));
   }
 }

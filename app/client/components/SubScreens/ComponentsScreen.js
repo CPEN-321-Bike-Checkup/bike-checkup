@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text, TouchableOpacity} from 'react-native';
-import {PressableListItem} from '../ListItems';
+import {EditablePressableListItem} from '../ListItems';
 import {flatListWrapper} from '../FlatListWrapper';
 import CommonStyles from '../CommonStyles';
 
@@ -40,15 +40,16 @@ export default class ScheduleScreen extends React.Component {
     console.log(props);
     super(props);
     this.state = {
-      maintenanceData: [],
+      componentData: [], // TODO: make into associative array
       editMode: false,
     };
     this.navigation = props.navigation;
     this.bikeId = props.route.params.bikeId;
+    this.removedComponents = [];
   }
 
-  updateMaintenanceData() {
-    // this.setState({maintenanceData: })
+  updatecomponentData() {
+    // this.setState({componentData: })
   }
 
   componentDidMount() {
@@ -57,7 +58,7 @@ export default class ScheduleScreen extends React.Component {
     //   })
     //   .then((response) => response.json())
     //   .then((data) => {
-    //     this.updateMaintenanceData({dateJSON: data})
+    //     this.updatecomponentData({dateJSON: data})
     //   })
     //   .catch((error) => {
     //     // this.setState({dateJSON: 'Error fetching data'})
@@ -66,11 +67,43 @@ export default class ScheduleScreen extends React.Component {
     //   .finally(() => {
     //     // this.setState({ isLoading: false });
     //   });;
+
+    // Add edit button to navigation bar (side effect)
+    this.navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity onPress={this.toggleEditMode}>
+          <Text style={CommonStyles.editButtonText}>Edit</Text>
+        </TouchableOpacity>
+      ),
+    });
+
+    this.setState({componentData: this.bikeId === 1 ? NORCO_DATA : GIANT_DATA});
+  }
+
+  addBikeComponent() {}
+
+  removeBikeComponent(id) {
+    return () => {
+      // Remove component
+      let newComponentData = [...this.state.componentData];
+      for (var i = 0; i < newComponentData.length; i++) {
+        if (newComponentData[i].id == id) {
+          let component = newComponentData.splice(i, 1);
+          this.removedComponents.push(component.id);  // Remember removed component IDs
+          this.setState({componentData: newComponentData});
+        }
+      }
+    };
   }
 
   // Note: arrow function needed to bind correct context
   toggleEditMode = () => {
-    this.setState({editMode: this.editMode ? false : true});
+    // TODO: Notify server of removed components
+    if (this.state.editMode) {
+      this.removedComponents = [];
+    }
+
+    this.setState({editMode: this.state.editMode ? false : true});
   };
 
   renderItem = ({item}) => {
@@ -78,31 +111,24 @@ export default class ScheduleScreen extends React.Component {
     this.itemCount++;
 
     return (
-      <PressableListItem
+      <EditablePressableListItem
         title={item.title}
-        onPress={() =>
-          this.navigation.navigate('ComponentSchedule', {
+        editMode={this.state.editMode}
+        onPress={() => {
+          this.navigation.navigate('ComponentTaskScreen', {
             bikId: this.bikeId,
             componentId: item.id,
-          })
-        }
+          });
+        }}
+        onRemovePress={this.removeBikeComponent(item.id)}
         testID={testId}
       />
     );
   };
 
   render() {
-    // Add edit button to navigation bar
-    this.navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity>
-          <Text style={CommonStyles.editButtonText}>Edit</Text>
-        </TouchableOpacity>
-      ),
-    });
-
     return flatListWrapper(
-      this.bikeId === 1 ? NORCO_DATA : GIANT_DATA,
+      this.state.componentData,
       this.renderItem,
       'BikesList',
     );
