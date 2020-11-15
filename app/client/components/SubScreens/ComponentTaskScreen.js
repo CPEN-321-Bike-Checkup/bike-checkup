@@ -142,12 +142,12 @@ export default class ComponentTaskScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-        {flatListWrapper(this.state.taskData, this.renderItem)}
+        {flatListWrapper(this.state.taskData, this.renderItem, 'TasksList')}
 
         <TouchableOpacity
           onPress={this.addTask}
           style={styles.addTaskButton}
-          testID="AddTask">
+          testID="AddTaskBtn">
           <Text style={styles.addTaskText}>ADD TASK</Text>
         </TouchableOpacity>
       </View>

@@ -37,13 +37,17 @@ export default class TimeScreen extends React.Component {
 
   render() {
     if (!this.state.fetchError) {
-      return flatListWrapper(this.state.maintenanceRecords, ({item}) => (
-        <ListItem
-          title={item.description}
-          subText={item.bike + ' - ' + item.component}
-          rightText={new Date(item.maintenance_date).toLocaleDateString()}
-        />
-      ));
+      return flatListWrapper(
+        this.state.maintenanceRecords,
+        ({item}) => (
+          <ListItem
+            title={item.description}
+            subText={item.bike + ' - ' + item.component}
+            rightText={new Date(item.maintenance_date).toLocaleDateString()}
+          />
+        ),
+        'HistoryList',
+      );
     } else {
       return (
         <View style={styles.container}>

@@ -36,7 +36,7 @@ const DATA = [
       {
         taskId: 3,
         bike: 'Giant Contend AR 1',
-        task: 'Replace chain',
+        task: 'Replace casette',
         date: getDate(13),
       },
       {
@@ -67,6 +67,12 @@ const DATA = [
         taskId: 8,
         bike: 'Giant Contend AR 1',
         task: 'Bleed brakes',
+        date: getDate(50),
+      },
+      {
+        taskId: 8,
+        bike: 'Giant Contend AR 1',
+        task: 'Replace chain',
         date: getDate(50),
       },
     ],
@@ -109,7 +115,7 @@ export default class ScheduleScreen extends React.Component {
     // Add edit button to navigation bar (side effect)
     this.navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity onPress={this.toggleEditMode}>
+        <TouchableOpacity onPress={this.toggleEditMode} testID="EditBtn">
           <Text style={CommonStyles.editButtonText}>Edit</Text>
         </TouchableOpacity>
       ),
@@ -127,17 +133,17 @@ export default class ScheduleScreen extends React.Component {
   };
 
   scheduledTaskCompleted = (id) => {
-    return () => {
-      // Remove component
-      let newScheduleData = [...this.state.ScheduleData];
-      for (var i = 0; i < newScheduleData.length; i++) {
-        if (newScheduleData[i].id == id) {
-          let component = newScheduleData.splice(i, 1);
-          this.removedComponents.push(component.id); // Remember removed component IDs
-          this.setState({ScheduleData: newScheduleData});
-        }
-      }
-    };
+    // return () => {
+    //   // Remove component
+    //   let newScheduleData = [...this.state.ScheduleData];
+    //   for (var i = 0; i < newScheduleData.length; i++) {
+    //     if (newScheduleData[i].id == id) {
+    //       let component = newScheduleData.splice(i, 1);
+    //       this.removedComponents.push(component.id); // Remember removed component IDs
+    //       this.setState({ScheduleData: newScheduleData});
+    //     }
+    //   }
+    // };
   };
 
   renderItem = ({item}) => {

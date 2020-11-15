@@ -45,6 +45,7 @@ export const CompletableListItem = ({
   onCompletePress,
   testID,
 }) => {
+  console.log(testID);
   return (
     <View style={styles.item}>
       {/* //   <View
@@ -60,7 +61,7 @@ export const CompletableListItem = ({
             <TouchableOpacity
               style={styles.removeIcon}
               onPress={onCompletePress}
-              title={testID + 'CompleteBtn'}>
+              testID={testID + 'CompleteBtn'}>
               <MaterialIcons name="check-circle" color={'green'} size={24} />
             </TouchableOpacity>
           ) : null}
@@ -75,6 +76,7 @@ export const CompletableListItem = ({
 };
 
 export const PressableListItem = ({title, onPress, testID}) => {
+  console.log(testID);
   return (
     <TouchableHighlight
       style={styles.touchableItem}

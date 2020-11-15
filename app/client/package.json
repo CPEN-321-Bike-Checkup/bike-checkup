@@ -18,6 +18,7 @@
     "@react-navigation/stack": "^5.9.3",
     "axios": "^0.21.0",
     "date-fns": "^2.16.1",
+    "detox-getprops": "^0.1.2",
     "expo": "^39.0.3",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.31",

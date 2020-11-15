@@ -17,7 +17,7 @@ describe('Bike Stack', () => {
   const goToBikesTab = async () => {
     let bikesTab = await element(by.id('BikesTab'));
     await expect(bikesTab).toBeVisible();
-    bikesTab.tap();
+    await bikesTab.tap();
 
     // Verify bikes screen
     await expect(element(by.id('BikesList'))).toBeVisible();
@@ -26,10 +26,10 @@ describe('Bike Stack', () => {
   const goToHistoryTab = async () => {
     let historyTab = await element(by.id('HistoryTab'));
     await expect(historyTab).toBeVisible();
-    historyTab.tap();
+    await historyTab.tap();
 
     // Verify bikes screen
-    await expect(element(by.id('BikesList'))).toBeVisible();
+    await expect(element(by.id('HistoryList'))).toBeVisible();
   };
 
   const goToBikeAtIndex = async (index) => {
@@ -42,12 +42,8 @@ describe('Bike Stack', () => {
   };
 
   const goToComponentAtIndex = async (index) => {
-    console.log('ComponentListItem' + index)
-    await sleep(5000);
-    let component = await element(by.id('123' + index));
-    console.log(component)
-    await sleep(5000);
-    await expect(component).toBeVisible();
+    let component = await element(by.id('ComponentListItem' + index));
+    await expect(component).toExist();
     await component.tap();
 
     // Verify tasks screen
@@ -59,15 +55,15 @@ describe('Bike Stack', () => {
       by.id('ComponentListItem' + index + 'RemoveBtn'),
     );
     await expect(rmvBtn).toBeVisible();
-    rmvBtn.tap();
+    await rmvBtn.tap();
   };
 
   const completeListItemAtIndex = async (index) => {
     let completeBtn = await element(
-      by.id('ComponentListItem' + index + 'CompleteBtn'),
+      by.id('ScheduleListItem' + index + 'CompleteBtn'),
     );
     await expect(completeBtn).toBeVisible();
-    completeBtn.tap();
+    await completeBtn.tap();
   };
 
   const fillOutTaskForm = async (description, scheduleType, threshold) => {
@@ -89,6 +85,7 @@ describe('Bike Stack', () => {
     // Add component
     const componentName = 'Chain';
     const modelName = 'CN-9000';
+    await sleep(10000); // FAIL HERE
     // Note: Can remove the following 4 lines to pass the test for M9
     await element(by.id('AddComponentBtn')).tap();
     await element(by.id('ComponentName')).typeText(componentName);
@@ -116,20 +113,20 @@ describe('Bike Stack', () => {
           .withAncestor(by.id('ComponentsList')),
       ),
     ).not.toExist();
-
   });
 
   it('New task should be added', async () => {
     await veryifyBottomNavigator();
     await goToBikesTab();
     await goToBikeAtIndex(0);
-    await goToComponentAtIndex(0);
+    await goToComponentAtIndex(3); // TODO: Figure out why the items are rendered twice
 
     // Click add task
-    await element(by.id('AddTask')).tap();
+    await element(by.id('AddTaskBtn')).tap();
 
     // Verify add task screen appeared with the expected components
     await expect(element(by.id('AddTaskScreen'))).toBeVisible();
+    await sleep(10000); // FAIL HERE
     await expect(element(by.id('TaskDescription'))).toBeVisible();
     await expect(element(by.id('DistanceBtn'))).toBeVisible();
     await expect(element(by.id('TimeBtn'))).toBeVisible();
@@ -143,7 +140,7 @@ describe('Bike Stack', () => {
     let description = 'Oil chain';
     let scheduleType = null;
     let threshold = 64;
-    fillOutTaskForm(description, scheduleType, threshold);
+    await fillOutTaskForm(description, scheduleType, threshold);
 
     // Verify error message
     await expect(
@@ -155,7 +152,7 @@ describe('Bike Stack', () => {
     description = 'Oil chain';
     scheduleType = 'Distance';
     threshold = -23;
-    fillOutTaskForm(description, scheduleType, threshold);
+    await fillOutTaskForm(description, scheduleType, threshold);
 
     // Verify error message
     await expect(
@@ -167,7 +164,7 @@ describe('Bike Stack', () => {
     description = 'Oil chain';
     scheduleType = 'Distance';
     threshold = 100;
-    fillOutTaskForm(description, scheduleType, threshold);
+    await fillOutTaskForm(description, scheduleType, threshold);
 
     // Verify the task appears in the list
     await expect(
@@ -176,67 +173,29 @@ describe('Bike Stack', () => {
   });
 
   it('Task should be marked as completed and reflected in maintenance record screen', async () => {
+    const taskDescription = 'Replace casette';
     // Verify we start off on the schedule screen
     await expect(element(by.id('ScheduleList'))).toBeVisible();
     // Verify the expected a hard-coded maintenance task is present
-    await expect(element(by.text('Oil chain'))).toBeVisible();
+    await expect(element(by.text(taskDescription))).toExist();
 
     // Complete the task
     await element(by.id('EditBtn')).tap();
     await completeListItemAtIndex(0);
 
+    // Verify the task is deleted from the schedule
+    await expect(
+      element(by.text(taskDescription).withAncestor(by.id('ScheduleList'))),
+    ).not.toExist();
+
     // Navigate to maintenance history
-    goToHistoryTab();
+    await goToHistoryTab();
+
+    await sleep(10000); // FAIL HERE
 
     // Verify an item exists with same description and date
+    await expect(
+      element(by.text(taskDescription).withAncestor(by.id('HistoryList'))),
+    ).toExist();
   });
-
-  // const getBikeListItem = async (index) => {
-  //   const bikesTab = await getBikesTab();
-  //   await expect(bikesTab).toBeVisible();
-  //   await bikesTab.tap();
-
-  //   return await element(by.id('BikeListItem' + index));
-  // };
-
-  // it('Main screen should show schedule screen and bottom navigation bar', async () => {
-  //   await expect(element(by.id('ScheduleView'))).toBeVisible();
-  //   await veryifyBottomNavigator();
-  // });
-
-  // it('Should navigate to bike screen after tap', async () => {
-  //   const bikesTab = await getBikesTab();
-  //   await expect(bikesTab).toBeVisible();
-  //   await bikesTab.tap();
-
-  //   // Check bike screen has appeared
-  //   await expect(element(by.id('BikesList'))).toBeVisible();
-  //   await veryifyBottomNavigator();
-
-  //   await sleep(5000); // Only needed for demonstration purposes
-  // });
-
-  // it("Should show bike's component screen after tap", async () => {
-  //   const bikeListItem = await getBikeListItem(0);
-  //   await expect(bikeListItem).toBeVisible();
-  //   await bikeListItem.tap();
-
-  //   // Check the component screen has appeared
-  //   await expect(element(by.id('ComponentsList'))).toBeVisible();
-  //   await veryifyBottomNavigator();
-
-  //   await sleep(5000); // Only needed for demonstration purposes
-  // });
-
-  // it("Should show bike's component screen after tap", async () => {
-  //   const bikeListItem = await getBikeListItem(0);
-  //   await expect(bikeListItem).toBeVisible();
-  //   await bikeListItem.tap();
-
-  //   // Check the component screen has appeared
-  //   await expect(element(by.id('ComponentsList'))).toBeVisible();
-  //   await veryifyBottomNavigator();
-
-  //   await sleep(5000); // Only needed for M7 demonstration purposes
-  // });
 });

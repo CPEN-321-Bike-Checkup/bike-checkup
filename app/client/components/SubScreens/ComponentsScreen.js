@@ -108,7 +108,7 @@ export default class ScheduleScreen extends React.Component {
   };
 
   renderItem = ({item}) => {
-    const testId = '123' + this.itemCount;
+    const testId = 'ComponentListItem' + this.itemCount;
     this.itemCount++;
 
     return (
