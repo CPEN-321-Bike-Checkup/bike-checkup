@@ -3,7 +3,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import {ListItem} from '../ListItems';
 import {flatListWrapper} from '../FlatListWrapper';
 
-export default class TimeScreen extends React.Component {
+export default class HistoryScreen extends React.Component {
   constructor(props) {
     super(props);
 

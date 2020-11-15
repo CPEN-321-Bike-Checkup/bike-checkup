@@ -74,7 +74,7 @@ const NORCO_DATA = [
   },
 ];
 
-export default class ScheduleScreen extends React.Component {
+export default class ComponentsScreen extends React.Component {
   constructor(props) {
     console.log('ComponentScreen Props:');
     console.log(props);
@@ -156,7 +156,7 @@ export default class ScheduleScreen extends React.Component {
         editMode={this.state.editMode}
         onPress={() => {
           this.navigation.navigate('ComponentTaskScreen', {
-            bikId: this.bikeId,
+            bikeId: this.bikeId,
             componentId: item.id,
           });
         }}
