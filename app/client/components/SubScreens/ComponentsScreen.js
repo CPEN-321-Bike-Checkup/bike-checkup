@@ -42,42 +42,6 @@ const BIKE_COMPONENTS_LIST = [
   "Cleats"
 ];
 
-const NORCO_DATA = [
-  {
-    bikeId: 1,
-    id: 1,
-    title: 'Brakes - Shimano BR-RS305-R Hydraulic Disc, 150mm',
-  },
-  {
-    bikeId: 1,
-    id: 2,
-    title: 'Chain - CN-9000',
-  },
-  {
-    bikeId: 1,
-    id: 3,
-    title: 'Brake pads - Brake Authority Avids',
-  },
-];
-
-const GIANT_DATA = [
-  {
-    bikeId: 2,
-    id: 1,
-    title: 'Brakes - Shimano 105 Hydraulic Disc, 160mm',
-  },
-  {
-    bikeId: 2,
-    id: 2,
-    title: 'Chain - KMC X11EL-1',
-  },
-  {
-    bikeId: 2,
-    id: 3,
-    title: 'Brake pads - Shimano BR-M555 M02',
-  },
-];
-
 export default class ComponentsScreen extends React.Component {
   constructor(props) {
     console.log('ComponentScreen Props:');
@@ -96,10 +60,6 @@ export default class ComponentsScreen extends React.Component {
     this.removedComponents = [];
   }
 
-  updatecomponentData() {
-    this.setState({componentData: this.bikeId === 1 ? NORCO_DATA : GIANT_DATA});
-  }
-
   componentDidMount() {
     // Add edit button to navigation bar (side effect)
     this.navigation.setOptions({
@@ -109,8 +69,6 @@ export default class ComponentsScreen extends React.Component {
         </TouchableOpacity>
       ),
     });
-
-    this.updatecomponentData();
   }
 
   removeBikeComponent(id) {
