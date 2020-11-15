@@ -14,7 +14,7 @@ export default class ScheduleStack extends React.Component {
           headerTintColor: 'white',
           headerStyle: {backgroundColor: 'tomato'},
         }}>
-        <Stack.Screen name="Maintenance Schedule" component={ScheduleScreen} />
+        <Stack.Screen name="ScheduleScreen" component={ScheduleScreen} />
       </Stack.Navigator>
     );
   }

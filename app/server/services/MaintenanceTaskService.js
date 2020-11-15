@@ -1,18 +1,46 @@
-const notificationService = require('./NotificationService');
 const activityRepository = require('../repositories/ActivityRepository');
 const maintenanceTaskRepository = require('../repositories/MaintenanceTaskRepository');
 const moment = require('moment');
+const maintenanceRecordRepository = require('../repositories/MaintenanceRecordRepository');
 require('moment-timezone');
 
 class MaintenanceTaskService {
   constructor(
-    notificationService,
     activityRepository,
     maintenanceTaskRepository,
+    maintenanceRecordRepository,
   ) {
-    this.notificationService = notificationService;
     this.activityRepository = activityRepository;
     this.maintenanceTaskRepository = maintenanceTaskRepository;
+    this.maintenanceRecordRepository = maintenanceRecordRepository;
+  }
+
+  GetById(id) {
+    return this.maintenanceTaskRepository.GetById(id);
+  }
+
+  Create(maintenanceTask) {
+    return this.maintenanceTaskRepository.Create(maintenanceTask);
+  }
+
+  MarkCompleted(maintenanceTask) {
+    var updateResult = this.maintenanceTaskRepository.Update(maintenanceTask);
+    var createRecordResult = this.maintenanceRecordRepository.Create(
+      MaintenanceRecordFromTask(maintenanceTask),
+    );
+  }
+
+  Update(maintenanceTask) {
+    return this.maintenanceTaskRepository.Update(maintenanceTask);
+  }
+
+  Delete(maintenanceTask) {
+    return this.maintenanceTaskRepository.Delete(maintenanceTask);
+  }
+
+  MaintenanceRecordFromTask(maintenanceTask) {
+    var record = {};
+    return record;
   }
 
   /*
@@ -27,43 +55,9 @@ class MaintenanceTaskService {
 
   GetScheduledTasksSorted(userId, numDays) {
     const num_of_days = 50;
-    const maintSchedule1 = {
-      maintenance_id: 1,
-      component_id: 1,
-      schedule_type: 'date',
-      threshold_val: 450,
-      description: 'oil chain',
-      last_maintenance_val: new Date('2020-10-11'),
-      repeats: false,
-      predicted_due_date: new Date('2020-11-22'),
-    };
-
-    const maintSchedule2 = {
-      maintenance_id: 2,
-      component_id: 3,
-      schedule_type: 'distance',
-      threshold_val: 180,
-      description: 'tire check',
-      last_maintenance_val: new Date('2020-11-10'),
-      repeats: true,
-      predicted_due_date: new Date('2020-11-25'),
-    };
-
-    const maintSchedule3 = {
-      maintenance_id: 3,
-      component_id: 1,
-      schedule_type: 'distance',
-      threshold_val: 180,
-      description: 'brake check',
-      last_maintenance_val: new Date('2020-11-08'),
-      repeats: true,
-      predicted_due_date: new Date('2020-11-15'),
-    };
-
-    let all_tasks = [maintSchedule1, maintSchedule2, maintSchedule3];
-    /*let all_tasks = maintenanceTaskRepository.GetMaintenanceTasksForUser(
+    let all_tasks = maintenanceTaskRepository.GetMaintenanceTasksForUser(
       userId,
-    );*/
+    );
 
     let cutoff_date = this.addDays(new Date(), num_of_days);
     let filtered_tasks = all_tasks.filter(function (value, index, arr) {
@@ -74,7 +68,7 @@ class MaintenanceTaskService {
       return x.predicted_due_date - y.predicted_due_date;
     });
 
-    console.log(sorted_tasks);
+    //console.log(sorted_tasks);
     return sorted_tasks;
   }
 
@@ -108,73 +102,16 @@ class MaintenanceTaskService {
     });
   }
 
-  MaintenancePredict(userId) {
+  async MaintenancePredict(userId) {
     //remove mock data later
-    const maintSchedule1 = {
-      maintenance_id: 1,
-      component_id: 1,
-      schedule_type: 'date',
-      threshold_val: 450,
-      description: 'oil chain',
-      last_maintenance_val: new Date('2020-10-20'),
-    };
 
-    const maintSchedule2 = {
-      maintenance_id: 2,
-      component_id: 3,
-      schedule_type: 'distance',
-      threshold_val: 180,
-      description: 'tire check',
-      last_maintenance_val: new Date('2020-10-20'),
-    };
-
-    const activity1 = {
-      //activity_id: 1,
-      description: 'test',
-      distance: 50,
-      time_s: 360,
-      date: new Date('2020-10-21'),
-      components: [1],
-    };
-
-    const activity2 = {
-      //activity_id: 2,
-      description: 'test2',
-      distance: 30,
-      time_s: 300,
-      date: new Date('2020-10-22'),
-      components: [2],
-    };
-
-    const activity3 = {
-      //activity_id: 3,
-      description: 'test3',
-      distance: 50,
-      time_s: 320,
-      date: new Date('2020-10-22'),
-      components: [3],
-    };
-
-    const activity4 = {
-      //activity_id: 4,
-      description: 'test4',
-      distance: 60,
-      time_s: 400,
-      date: new Date('2020-10-25'),
-      components: [3],
-    };
-
-    /*let maintenanceList = maintenanceTaskRepository.GetMaintenanceTasksForUser(
+    let maintenanceList = await maintenanceTaskRepository.GetMaintenanceTasksForUser(
       userId,
-    );*/
+    );
 
-    let allMaintenance = [maintSchedule1, maintSchedule2];
-    let maintenanceList = allMaintenance.filter(function (value, index, arr) {
+    maintenanceList = maintenanceList.filter(function (value, index, arr) {
       return arr[index].schedule_type == 'distance';
     });
-
-    //[maintSchedule1, maintSchedule2];
-    let activityList = [activity1, activity2, activity3, activity4];
 
     const MILLISECONDS_PER_SECOND = 1000;
     const SECONDS_PER_DAY = 86400;
@@ -222,9 +159,9 @@ class MaintenanceTaskService {
     var maint_index;
     for (maint_index = 0; maint_index < maintenanceList.length; maint_index++) {
       //no predictions to be made if schedule is not distance based
-      console.log(maintenanceList[maint_index].schedule_type);
+      //console.log(maintenanceList[maint_index].schedule_type);
       if (maintenanceList[maint_index].schedule_type != 'distance') {
-        console.log('not the right schedule type!!!');
+        //console.log('not the right schedule type!!!');
         predict_dates.push(null);
         continue;
       }
@@ -232,10 +169,10 @@ class MaintenanceTaskService {
         maint_index
       ].last_maintenance_val.getTime();
 
-      /*var activityList = activityRepository.GetActivitiesAfterDateForUser(
+      var activityList = await activityRepository.GetActivitiesAfterDateForUser(
         userId,
         last_maint_date,
-      );*/
+      );
       if (activityList.length == 0) {
         //no activities found, make no changes to predicted_due_date, skip
         predict_dates.push(null); //predict dates used to debug on maintenance screen
@@ -305,14 +242,14 @@ class MaintenanceTaskService {
         '\n';
     }
 
-    this.maintenanceTaskRepository.Update(
-      maintenanceList.map((task) => task._id),
-      maintenanceList,
-    );
-    GetActivitiesAfterDateForUser;
+    this.maintenanceTaskRepository.Update(maintenanceList);
     return predict_dates;
   }
 }
 
-const maintenanceTaskService = new MaintenanceTaskService(notificationService);
+const maintenanceTaskService = new MaintenanceTaskService(
+  activityRepository,
+  maintenanceTaskRepository,
+  maintenanceRecordRepository,
+);
 module.exports = maintenanceTaskService;

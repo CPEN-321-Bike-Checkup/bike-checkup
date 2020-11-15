@@ -9,21 +9,49 @@ const initMaintenanceTaskRouting = (app) => {
 
   app.use('/maintenanceTask', maintenanceTaskRouter);
 
-  maintenanceTaskRouter.get('/:userId/prediction', (req, res) => {
-    deviceTokenRepo.GetAll().then(function (deviceTokens) {
+  maintenanceTaskRouter.get('/prediction', (req, res) => {
+    try {
       var dates = MaintenanceTaskService.MaintenancePredict(
-        req.params[0],
-        deviceTokens,
-      );
-      res.send(JSON.stringify({dates: dates}));
+        req.query.userId,
+      ).then((result) => {
+        var tasks = MaintenanceTaskService.GetScheduledTasksSorted(
+          req.query.userId,
+        );
+        res.send(JSON.stringify(tasks));
+      });
+    } catch (err) {
+      if (err instanceof Mongoose.Error.ValidationError) {
+        res.statusCode(400);
+        res.send('Error: Invalid Request syntax');
+      } else {
+        res.statusCode(500);
+        res.send('Error: Internal Server Error');
+      }
+    }
+  });
+
+  maintenanceTaskRouter.get('/', (req, res) => {
+    MaintenanceTaskService.GetById(req.query.userId).then((task) => {
+      res.send(JSON.stringify(task));
     });
   });
 
   maintenanceTaskRouter.get('/', (req, res, next) => {
     var dates = MaintenanceTaskService.GetScheduledTasksSorted(
       req.query.userId,
-      req.query.numDays,
-    );
+      50,
+    ).catch((err) => {
+      if (err instanceof Mongoose.Error.ValidationError) {
+        res.statusCode(400);
+        res.send('Error: Invalid Request syntax');
+      } else if (err instanceof Mongoose.Error.DocumentNotFoundError) {
+        res.statusCode(404);
+        res.send('Error: Task not Found');
+      } else {
+        res.statusCode(500);
+        res.send('Error: Internal Server Error');
+      }
+    });
     res.send(JSON.stringify({dates: dates}));
   });
 

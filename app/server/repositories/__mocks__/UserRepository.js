@@ -1,120 +1,46 @@
-const UserModel = require('../../schemas/User').UserModel;
+const Repository = require('./Repository');
 
-//const userSchema =  new mongoose.Schema({
-//    _id: Number,
-//    bikes: [bikeSchema], //actually stores bike objects
-//    strava_token: String,
-//	name: String,
-//	deviceTokens: [deviceTokenSchema],
-//});
-
-var mockUserData = [
+class UserRepository extends Repository {
+  constructor(data) {
+    super(data);
+  }
+}
+var data = [
   {
     _id: 1,
     bikes: [],
-    strava_token: 'asdflkhgbusidhga',
-    name: 'John Doe',
-    deviceTokens: [],
+    name: 'Bob Bobberson',
+    deviceTokens: [
+      {
+        token: 'sdhflguhiuerhnbgsdlfughnaiujhrnf',
+        ownerId: '1',
+      },
+      {
+        token: 'dfljghdsfnalsiujdfhnsdufniasjdhfn',
+        ownerId: '1',
+      },
+    ],
+    strava_token: 'asldofujihoinuashdfb',
+    expires_in: '239482',
+    refresh_token: 'asdjfhodsifujhasfh',
+    activity_cache_date: new Date(),
   },
   {
     _id: 2,
     bikes: [],
-    strava_token: 'bnghnupolujshdfgd',
-    name: 'Jane Doe',
-    deviceTokens: [],
-  },
-  {
-    _id: 3,
-    bikes: [],
-    strava_token: 'aduohjigndfujhn',
-    name: 'Bob Bobingson',
-    deviceTokens: [],
-  },
-  {
-    _id: 4,
-    bikes: [],
-    strava_token: 'hpgaeoruhing9jusdf',
-    name: 'Jen Jeningson',
-    deviceTokens: [],
-  },
-  {
-    _id: 5,
-    bikes: [],
-    strava_token: 'gedohujnsdfgjiuhnsdf',
-    name: 'Bike God',
-    deviceTokens: [],
+    name: 'Jane Janenson',
+    deviceTokens: [
+      {
+        token: 'sdfjhspdofigfhnufhvnsdoufoipdsufv',
+        ownerId: '2',
+      },
+    ],
+    strava_token: 'jhvjsdksjdhblkdjfhs',
+    expires_in: '23492378',
+    refresh_token: 'lkgjdfshnmgoslijrhncaa',
+    activity_cache_date: new Date(),
   },
 ];
+var userRepo = new UserRepository(data);
 
-class UserRepository {
-  constructor(mockData) {
-    this.data = mockData;
-    console.warn('WARNING: USING MOCKED REPOSITORY');
-  }
-
-  GetAll() {
-    return new Promise((resolve, reject) => {
-      resolve(this.data);
-    });
-  }
-
-  GetById(id) {
-    return new Promise((resolve, reject) => {
-      var user = this.data.find((cur) => cur._id === id);
-      resolve(typeof user === 'undefined' ? null : user);
-    });
-  }
-
-  Create(users) {
-    return new Promise((resolve, reject) => {
-      if (!Array.isArray(users)) {
-        users = [users];
-      }
-
-      users.forEach((user) => {
-        var valError = validateUser(user);
-        if (typeof valError !== 'undefined') {
-          reject(valError);
-        }
-      });
-      this.data = this.data.concat(users);
-      resolve(users);
-    });
-  }
-
-  Update(userIds, newUserVals) {
-    return new Promise((resolve, reject) => {
-      var newDataList = this.data.filter((user) => !(user._id in userIds));
-      var updatedUsers = [];
-      newUserVals.forEach(newUserVal, (i) => {
-        var user = this.GetById(userIds[i]);
-        var updatedUser = {...user, ...newUserVal};
-        var valError = validateUser(updatedUser);
-        if (typeof valError !== 'undefined') {
-          reject(valError);
-        }
-        newDataList.push(updatedUser);
-        updatedUsers.push(updatedUser);
-      });
-      this.data = newDataList;
-      resolve(updatedUsers);
-    });
-  }
-
-  Delete(users) {
-    return new Promise((resolve, reject) => {
-      var userIds = users.map((user) => user._id);
-      this.data = this.data.filter((user) => !(user._id in userIds));
-      resolve(true);
-    });
-  }
-}
-
-function validateUser(user) {
-  var valUser = new UserModel(user);
-  return valUser.validateSync();
-}
-
-const mockRepository = new UserRepository(mockUserData);
-
-module.exports = mockRepository;
+module.exports = userRepo;

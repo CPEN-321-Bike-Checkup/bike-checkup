@@ -11,17 +11,36 @@ class MaintenanceTaskRepository extends Repository {
     this.count['getForUser']++;
     return new Promise((resolve, reject) => {
       if (userId === 0) {
-        reject(Mongoose.Error.ValidationError);
+        throw new Mongoose.Error.ValidationError('Validation error');
       } else if (this.count['getForUser'] === 0) {
-        reject(new Error('internal server error'));
+        throw new Error('internal server error');
       } else {
         resolve(this.data);
       }
     });
   }
 }
+
+//const maintSchedule1 = {
+//      _id: 4,
+//      component_id: 1,
+//      schedule_type: 'date',
+//      threshold_val: 450,
+//      description: 'oil chain',
+//      last_maintenance_val: new Date('2020-10-20'),
+//    };
+//
+//    const maintSchedule2 = {
+//      _id: 5,
+//      component_id: 3,
+//      schedule_type: 'distance',
+//      threshold_val: 180,
+//      description: 'tire check',
+//      last_maintenance_val: new Date('2020-10-20'),
+//    };
+
 const maintSchedule1 = {
-  maintenance_id: 1,
+  _id: 1,
   component_id: 1,
   schedule_type: 'date',
   threshold_val: 450,
@@ -32,7 +51,7 @@ const maintSchedule1 = {
 };
 
 const maintSchedule2 = {
-  maintenance_id: 2,
+  _id: 2,
   component_id: 3,
   schedule_type: 'distance',
   threshold_val: 180,
@@ -43,7 +62,7 @@ const maintSchedule2 = {
 };
 
 const maintSchedule3 = {
-  maintenance_id: 3,
+  _id: 3,
   component_id: 1,
   schedule_type: 'distance',
   threshold_val: 180,
@@ -55,6 +74,6 @@ const maintSchedule3 = {
 
 var data = [maintSchedule1, maintSchedule2, maintSchedule3];
 
-var maintTaskRepo = MaintenanceTaskRepository(data);
+var maintTaskRepo = new MaintenanceTaskRepository(data);
 
 module.exports = maintTaskRepo;

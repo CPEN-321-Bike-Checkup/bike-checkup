@@ -60,15 +60,12 @@ module.exports = {
   // globalTeardown: undefined,
 
   // A set of global variables that need to be available in all test environments
-  // globals: {},
+  globals: {
+    ip: '192.168.0.34',
+    port: 5000,
+  },
 
-  // The maximum amount of workers used to run your tests. Can be specified as % or a number. E.g. maxWorkers: 10% will use 10% of your CPU amount + 1 as the maximum worker number. maxWorkers: 2 will use a maximum of 2 workers.
-  // maxWorkers: '50%',
-
-  // An array of directory names to be searched recursively up from the requiring module's location
-  // moduleDirectories: [
-  //   'node_modules'
-  // ],
+  // The maximum amount of workers usedlocalPath
 
   // An array of file extensions your modules use
   // moduleFileExtensions: [
