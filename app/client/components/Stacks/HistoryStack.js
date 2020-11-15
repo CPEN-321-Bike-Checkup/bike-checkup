@@ -14,7 +14,7 @@ export default class HistoryStack extends React.Component {
           headerTintColor: 'white',
           headerStyle: {backgroundColor: 'tomato'},
         }}>
-        <Stack.Screen name="HistoryScreen" component={HistoryScreen} />
+        <Stack.Screen name="Maintenance Log" component={HistoryScreen} />
       </Stack.Navigator>
     );
   }

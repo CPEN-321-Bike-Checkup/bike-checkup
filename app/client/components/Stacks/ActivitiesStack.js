@@ -14,7 +14,7 @@ export default class ActivitiesStack extends React.Component {
           headerTintColor: 'white',
           headerStyle: {backgroundColor: 'tomato'},
         }}>
-        <Stack.Screen name="ActivitiesScreen" component={ActivitiesScreen} />
+        <Stack.Screen name="Activities" component={ActivitiesScreen} />
       </Stack.Navigator>
     );
   }
