@@ -46,7 +46,7 @@ describe('500 Resp Tests', async () => {
     });
   });
 
-  test('Get task 500 Error', async () => {
+  test('Get task 500 Error', () => {
     expect.assertions(1);
     return axios.get(url + '20').catch((error) => {
       var code = error.response.status;
