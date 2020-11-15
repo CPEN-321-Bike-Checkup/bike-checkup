@@ -81,6 +81,7 @@ export default class ScheduleScreen extends React.Component {
       editMode: false,
     };
     this.navigation = props.navigation;
+    this.itemCount = 0;
   }
 
   updateMaintenanceData() {
@@ -156,6 +157,8 @@ export default class ScheduleScreen extends React.Component {
   };
 
   render() {
+    this.itemCount = 0;
+
     return selectionListWrapper(
       this.state.scheduleData,
       this.renderItem,

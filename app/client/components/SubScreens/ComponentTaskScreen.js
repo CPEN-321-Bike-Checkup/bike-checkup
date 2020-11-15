@@ -36,6 +36,7 @@ export default class ComponentTaskScreen extends React.Component {
     // this.bikeId = props.route.params.bikeId;
     this.componentId = props.route.params.componentId;
     this.removedTasks = [];
+    this.itemCount = 0;
   }
 
   updateMaintenanceData() {
@@ -105,6 +106,9 @@ export default class ComponentTaskScreen extends React.Component {
   };
 
   renderItem = ({item}) => {
+    const testId = 'TasksListItem' + this.itemCount;
+    this.itemCount++;
+
     if (this.state.editMode) {
       var renderableItem = (
         <RemovablePressableListItem
@@ -117,6 +121,7 @@ export default class ComponentTaskScreen extends React.Component {
             });
           }}
           onRemovePress={this.removeTask(item.id)}
+          testId={testId}
         />
       );
     } else {
@@ -124,6 +129,7 @@ export default class ComponentTaskScreen extends React.Component {
         <RemovableListItem
           title={item.description}
           editMode={this.state.editMode}
+          testId={testId}
         />
       );
     }
@@ -132,11 +138,16 @@ export default class ComponentTaskScreen extends React.Component {
   };
 
   render() {
+    this.itemCount = 0;
+
     return (
       <View style={styles.container}>
         {flatListWrapper(this.state.taskData, this.renderItem)}
 
-        <TouchableOpacity onPress={this.addTask} style={styles.addTaskButton}>
+        <TouchableOpacity
+          onPress={this.addTask}
+          style={styles.addTaskButton}
+          testID="AddTask">
           <Text style={styles.addTaskText}>ADD TASK</Text>
         </TouchableOpacity>
       </View>

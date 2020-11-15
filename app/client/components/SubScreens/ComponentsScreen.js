@@ -22,11 +22,11 @@ const GIANT_DATA = [
 const NORCO_DATA = [
   {
     id: 1,
-    title: 'Brakes - Shimano BR-RS305-R Hydraulic Disc, 150mm',
+    title: 'Chain - CN-9000',
   },
   {
     id: 2,
-    title: 'Chain - CN-9000',
+    title: 'Brakes - Shimano BR-RS305-R Hydraulic Disc, 150mm',
   },
   {
     id: 3,
@@ -46,6 +46,7 @@ export default class ScheduleScreen extends React.Component {
     this.navigation = props.navigation;
     this.bikeId = props.route.params.bikeId;
     this.removedComponents = [];
+    this.itemCount = 0;
   }
 
   updatecomponentData() {
@@ -107,7 +108,7 @@ export default class ScheduleScreen extends React.Component {
   };
 
   renderItem = ({item}) => {
-    const testId = 'ComponentListItem' + this.itemCount;
+    const testId = '123' + this.itemCount;
     this.itemCount++;
 
     return (
@@ -127,6 +128,8 @@ export default class ScheduleScreen extends React.Component {
   };
 
   render() {
+    this.itemCount = 0;
+
     return flatListWrapper(
       this.state.componentData,
       this.renderItem,

@@ -101,6 +101,7 @@ export const RemovablePressableListItem = ({
   onPress,
   testID,
 }) => {
+  console.log(testID);
   return (
     <TouchableHighlight
       style={styles.touchableItem}
