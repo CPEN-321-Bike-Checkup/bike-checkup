@@ -145,7 +145,7 @@ describe('Bike Stack', () => {
     // Verify error message
     await expect(
       element(by.text('Please select a schedule type')),
-    ).not.toExist();
+    ).toExist();
     await element(by.id('OkBtn')).tap();
 
     // Negative threshold
@@ -157,7 +157,7 @@ describe('Bike Stack', () => {
     // Verify error message
     await expect(
       element(by.text('Threshold cannot be negative')),
-    ).not.toExist();
+    ).toExist();
     await element(by.id('OkBtn')).tap();
 
     /* Valid task form input */
@@ -183,6 +183,7 @@ describe('Bike Stack', () => {
     await element(by.id('EditBtn')).tap();
     await completeListItemAtIndex(0);
 
+    await sleep(10000); // FAIL HERE
     // Verify the task is deleted from the schedule
     await expect(
       element(by.text(taskDescription).withAncestor(by.id('ScheduleList'))),
@@ -190,8 +191,6 @@ describe('Bike Stack', () => {
 
     // Navigate to maintenance history
     await goToHistoryTab();
-
-    await sleep(10000); // FAIL HERE
 
     // Verify an item exists with same description and date
     await expect(
