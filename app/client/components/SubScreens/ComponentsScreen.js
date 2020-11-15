@@ -53,7 +53,7 @@ export default class ComponentsScreen extends React.Component {
       modalVisible: false,
       componentTypeInputText: '',
       componentNameInputText: '',
-      nextId: 3,
+      nextId: 0,
     };
     this.navigation = props.navigation;
     this.bikeId = props.route.params.bikeId;
