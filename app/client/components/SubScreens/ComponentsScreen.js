@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, TouchableOpacity, View, Modal,TouchableHighlight, StyleSheet} from 'react-native';
+import {Text, TouchableOpacity, View, Modal,TouchableHighlight, TextInput, StyleSheet} from 'react-native';
 import Autocomplete from 'react-native-autocomplete-input';
 import {RemovablePressableListItem} from '../ListItems';
 import {flatListWrapper} from '../FlatListWrapper';
@@ -87,7 +87,8 @@ export default class ComponentsScreen extends React.Component {
       componentData: [], // TODO: make into associative array
       editMode: false,
       modalVisible: false,
-      modalInputText: '',
+      componentTypeInputText: '',
+      componentNameInputText: '',
     };
     this.navigation = props.navigation;
     this.bikeId = props.route.params.bikeId;
@@ -163,8 +164,8 @@ export default class ComponentsScreen extends React.Component {
   };
 
   render() {
-    const { modalInputText } = this.state;
-    const components = this.findBikeComponent(modalInputText);
+    const { componentTypeInputText } = this.state;
+    const components = this.findBikeComponent(componentTypeInputText);
     const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
 
     return (
@@ -191,23 +192,30 @@ export default class ComponentsScreen extends React.Component {
             <Text style={styles.modalTitle}>Add New Component</Text>
 
             <View style={styles.modalInputContainer}>
-              <Text style={styles.modalText}>Component Type:</Text>
+              <Text>Type:</Text>
               <Autocomplete
                 autoCapitalize="words"
                 autoCorrect={true}
-                containerStyle={styles.modalInput}
-                data={components.length === 1 && comp(modalInputText, components[0]) ? [] : components}
-                defaultValue={modalInputText}
-                onChangeText={text => this.setState({ modalInputText: text })}
+                containerStyle={styles.typeInput}
+                data={components.length === 1 && comp(componentTypeInputText, components[0]) ? [] : components}
+                defaultValue={componentTypeInputText}
+                onChangeText={text => this.setState({ componentTypeInputText: text })}
                 placeholder="Enter a component type"
                 renderItem={({ item, i }) => (
-                  <TouchableOpacity onPress={() => this.setState({ modalInputText: item })}>
+                  <TouchableOpacity onPress={() => this.setState({ componentTypeInputText: item })}>
                     <Text>{item}</Text>
                   </TouchableOpacity>
                 )}
                 keyExtractor={(item, i) => i.toString()}
               />
             </View>
+
+            <Text style={styles.modalName}>Name:</Text>
+            <TextInput
+              style={styles.nameInput}
+              placeholder="Enter a component name"
+              onChangeText={text => this.setState({ componentNameInputText: text })}
+            />
 
             <TouchableHighlight
               style={styles.addComponentButton}
@@ -247,7 +255,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 25
   },
-  modalInput: {
+  typeInput: {
     flex: 1,
     left: 0,
     position: 'absolute',
@@ -255,13 +263,24 @@ const styles = StyleSheet.create({
     top: 55,
     zIndex: 1,
   },
+  nameInput: {
+    height: 40,
+    width: '100%',
+    borderColor: '#b9b9b9',
+    borderWidth: 1,
+    borderRadius: 1,
+    position: 'absolute',
+    top: 200,
+  },
   modalTitle: {
     textAlign: 'center',
     padding: 15,
     fontWeight: 'bold',
   },
-  modalText: {
+  modalName: {
     paddingBottom: 10,
+    position: 'absolute',
+    top: 170,
   },
   addComponentButton: {
     backgroundColor: "#47ffb8",
@@ -272,5 +291,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
   }
 });
