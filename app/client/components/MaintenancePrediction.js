@@ -39,8 +39,7 @@ export default class MaintenancePrediction extends React.Component {
 
   getMaintenancePredictions() {
     /* Fetch predictions from server */
-    //var serverIp = '3.97.53.16';
-    var serverIp = '192.168.1.73';
+    var serverIp = '3.97.53.16';
     axios
       .get('http://' + serverIp + ':5000/maintenanceTask/prediction')
       .then((res) => {
@@ -56,8 +55,7 @@ export default class MaintenancePrediction extends React.Component {
 
   getAllMaintenanceTasks() {
     /* Fetch predictions from server */
-    //var serverIp = '3.97.53.16';
-    var serverIp = '192.168.1.73';
+    var serverIp = '3.97.53.16';
     axios
       .get('http://' + serverIp + ':5000/maintenanceTask/tasks')
       .then((res) => {
