@@ -145,7 +145,7 @@ export default class ComponentsScreen extends React.Component {
         title={item.title}
         editMode={this.state.editMode}
         onPress={() => {
-          this.navigation.navigate('ComponentTaskScreen', {
+          this.navigation.navigate('Tasks', {
             bikeId: this.bikeId,
             componentId: item.id,
           });
