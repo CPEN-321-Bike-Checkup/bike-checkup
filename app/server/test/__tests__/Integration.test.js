@@ -239,7 +239,7 @@ describe('User adds/updates a new maintenance item for a component Tests', () =>
     });
   });
 
-  test('1. Update maint task that already exists 200 Ok', async () => {
+  test('2. Update maint task that already exists 200 Ok', async () => {
     expect.assertions(2);
     await axios
       .put(url + '/maintenanceTask' + '/', maintSchedule1_update)
@@ -256,7 +256,7 @@ describe('User adds/updates a new maintenance item for a component Tests', () =>
     });
   });
 
-  test('2. Create maint task that does not exists 200 Ok', async () => {
+  test('3. Create maint task that does not exists 200 Ok', async () => {
     expect.assertions(2);
     await axios
       .post(url + '/maintenanceTask' + '/', maintSchedule3)
@@ -277,7 +277,7 @@ describe('User adds/updates a new maintenance item for a component Tests', () =>
     });
   });
 
-  test('3. Create maint task with invalid threshold 400 Error', async () => {
+  test('4. Create maint task with invalid threshold 400 Error', async () => {
     expect.assertions(2);
     await axios
       .post(url + '/maintenanceTask' + '/', maintSchedule_error1)
@@ -298,7 +298,7 @@ describe('User adds/updates a new maintenance item for a component Tests', () =>
     });
   });
 
-  test('3. Update maint task with invalid threshold 400 Error', async () => {
+  test('5. Update maint task with invalid threshold 400 Error', async () => {
     expect.assertions(2);
     await axios
       .put(url + '/maintenanceTask' + '/', maintSchedule_error1)
