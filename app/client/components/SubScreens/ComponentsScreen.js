@@ -165,6 +165,7 @@ export default class ComponentsScreen extends React.Component {
   render() {
     const { modalInputText } = this.state;
     const components = this.findBikeComponent(modalInputText);
+    const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
 
     return (
       <View style={{flex: 1}}>
@@ -173,24 +174,29 @@ export default class ComponentsScreen extends React.Component {
           this.renderItem,
           'ComponentsList',
         )}
-        <View style={styles.addComponentButtonContainer}>
-          <TouchableOpacity 
+        <View style={styles.openModalButtonContainer}>
+          <TouchableOpacity
             onPress={() => {
               this.setState({modalVisible: true})
-            }} 
-            style={styles.addComponentButton}>
-            <Text style={styles.addComponentButtonIcon}>+</Text>
+            }}
+            style={styles.openModalButton}>
+            <Text style={styles.openModalButtonIcon}>+</Text>
           </TouchableOpacity>
         </View>
+
         <Modal
           animationType="slide"
           visible={this.state.modalVisible}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>Add New Component</Text>
+            <Text style={styles.modalTitle}>Add New Component</Text>
+
             <View style={styles.modalInputContainer}>
+              <Text style={styles.modalText}>Component Type:</Text>
               <Autocomplete
+                autoCapitalize="words"
+                autoCorrect={true}
                 containerStyle={styles.modalInput}
-                data={components}
+                data={components.length === 1 && comp(modalInputText, components[0]) ? [] : components}
                 defaultValue={modalInputText}
                 onChangeText={text => this.setState({ modalInputText: text })}
                 placeholder="Enter a component type"
@@ -202,8 +208,9 @@ export default class ComponentsScreen extends React.Component {
                 keyExtractor={(item, i) => i.toString()}
               />
             </View>
+
             <TouchableHighlight
-              style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+              style={styles.addComponentButton}
               onPress={() => {
                 // TODO: Add new component item using form data
                 this.setState({modalVisible: false});
@@ -212,19 +219,20 @@ export default class ComponentsScreen extends React.Component {
             </TouchableHighlight>
           </View>
         </Modal>
+
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  addComponentButtonContainer: {
+  openModalButtonContainer: {
     position: 'absolute',
     bottom: 20,
     width:'94%',
     alignItems:'flex-end'
   },
-  addComponentButton: {
+  openModalButton: {
     backgroundColor: "#47ffb8",
     width: 65,
     height: 65,
@@ -232,11 +240,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  addComponentButtonIcon: {
+  openModalButtonIcon: {
     fontSize: 20,
   },
   modalInputContainer: {
-    backgroundColor: '#F5FCFF',
     flex: 1,
     paddingTop: 25
   },
@@ -245,7 +252,25 @@ const styles = StyleSheet.create({
     left: 0,
     position: 'absolute',
     right: 0,
-    top: 0,
-    zIndex: 1
+    top: 55,
+    zIndex: 1,
   },
+  modalTitle: {
+    textAlign: 'center',
+    padding: 15,
+    fontWeight: 'bold',
+  },
+  modalText: {
+    paddingBottom: 10,
+  },
+  addComponentButton: {
+    backgroundColor: "#47ffb8",
+    alignSelf: 'center',
+    padding: 10,
+    position: 'absolute',
+    bottom: 30,
+  },
+  modalView: {
+    flex: 1,
+  }
 });
