@@ -179,15 +179,17 @@ export default class ComponentsScreen extends React.Component {
             <TouchableHighlight
               style={styles.addComponentButton}
               onPress={() => {
-                // Add new component
-                let componentData = [...this.state.componentData];
-                componentData.push({
-                  bikeId: this.bikeId,
-                  id: this.state.nextId,
-                  title: this.state.componentTypeInputText.concat(' - ', this.state.componentNameInputText),
-                });
-                this.setState({componentData});
-                this.setState({ nextId: this.state.nextId + 1 });
+                // Add new component if all information was entered (TODO: Don't let modal close/show error message if only partly filled out)
+                if (this.state.componentTypeInputText && this.state.componentNameInputText) {
+                  let componentData = [...this.state.componentData];
+                  componentData.push({
+                    bikeId: this.bikeId,
+                    id: this.state.nextId,
+                    title: this.state.componentTypeInputText.concat(' - ', this.state.componentNameInputText),
+                  });
+                  this.setState({componentData});
+                  this.setState({ nextId: this.state.nextId + 1 });
+              }
 
                 // Close modal
                 this.setState({modalVisible: false});
