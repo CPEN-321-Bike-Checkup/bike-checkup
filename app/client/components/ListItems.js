@@ -43,7 +43,7 @@ export const CompletableListItem = ({
   rightText,
   editMode,
   onCompletePress,
-  testId,
+  testID,
 }) => {
   return (
     <View style={styles.item}>
@@ -59,7 +59,8 @@ export const CompletableListItem = ({
           {editMode ? (
             <TouchableOpacity
               style={styles.removeIcon}
-              onPress={onCompletePress}>
+              onPress={onCompletePress}
+              title={testID + 'CompleteBtn'}>
               <MaterialIcons name="check-circle" color={'green'} size={24} />
             </TouchableOpacity>
           ) : null}
@@ -108,7 +109,10 @@ export const RemovablePressableListItem = ({
       testID={testID}>
       <View style={styles.itemViewWrapper}>
         {editMode ? (
-          <TouchableOpacity style={styles.removeIcon} onPress={onRemovePress}>
+          <TouchableOpacity
+            style={styles.removeIcon}
+            onPress={onRemovePress}
+            testID={testID + 'RemoveBtn'}>
             <MaterialIcons name="remove-circle" color={'red'} size={24} />
           </TouchableOpacity>
         ) : null}

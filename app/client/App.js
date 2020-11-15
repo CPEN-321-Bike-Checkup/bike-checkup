@@ -9,15 +9,15 @@ import {createMaterialBottomTabNavigator} from '@react-navigation/material-botto
 import {StyleSheet} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
-import ActivitiesScreen from './components/Screens/ActivitiesScreen';
 import MaintenanceScreen from './components/MaintenancePrediction';
-import ScheduleScreen from './components/Screens/ScheduleScreen';
-import HistoryScreen from './components/Screens/HistoryScreen';
-import BikesStack from './components/BikesStack';
+import BikesStack from './components/Stacks/BikesStack';
+import ScheduleStack from './components/Stacks/ScheduleStack';
+import HistoryStack from './components/Stacks/HistoryStack';
+import ActivitiesStack from './components/Stacks/ActivitiesStack';
 import Keys from './keys.json';
 
 // Dev debug flags
-const SKIP_AUTHENTICATION = false; // Set to false before committing to prod!
+const SKIP_AUTHENTICATION = true; // Set to false before committing to prod!
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -63,7 +63,7 @@ export default class App extends Component {
             }}>
             <Tab.Screen
               name="Schedule"
-              component={ScheduleScreen}
+              component={ScheduleStack}
               options={{
                 tabBarColor: '#694fad',
                 tabBarIcon: ({color}) => (
@@ -74,7 +74,7 @@ export default class App extends Component {
             />
             <Tab.Screen
               name="History"
-              component={HistoryScreen}
+              component={HistoryStack}
               options={{
                 tabBarColor: 'blue',
                 tabBarIcon: ({color}) => (
@@ -101,7 +101,7 @@ export default class App extends Component {
             />
             <Tab.Screen
               name="Activities"
-              component={ActivitiesScreen}
+              component={ActivitiesStack}
               options={{
                 tabBarColor: 'green',
                 tabBarIcon: ({color}) => (

@@ -152,18 +152,6 @@ export default class ScheduleScreen extends React.Component {
         editMode={this.state.editMode}
         testID={testId}
       />
-      // <RemovablePressableListItem
-      //   title={item.title}
-      //   editMode={this.state.editMode}
-      //   onPress={() => {
-      //     this.navigation.navigate('ComponentTaskScreen', {
-      //       bikId: this.bikeId,
-      //       componentId: item.id,
-      //     });
-      //   }}
-      //   onRemovePress={this.removeBikeComponent(item.id)}
-      //   testID={testId}
-      // />
     );
   };
 
