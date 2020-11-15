@@ -1,5 +1,6 @@
 import React from 'react';
 import {Text, TouchableOpacity, View, Modal,TouchableHighlight, StyleSheet} from 'react-native';
+import Autocomplete from 'react-native-autocomplete-input';
 import {RemovablePressableListItem} from '../ListItems';
 import {flatListWrapper} from '../FlatListWrapper';
 import CommonStyles from '../CommonStyles';
@@ -37,9 +38,6 @@ const BIKE_COMPONENTS_LIST = [
   "Rear Shock",
   "Front Brake Rotor",
   "Rear Brake Rotor",
-];
-
-const OTHER_COMPONENTS_LIST = [
   "Helmet",
   "Cleats"
 ];
@@ -89,6 +87,7 @@ export default class ComponentsScreen extends React.Component {
       componentData: [], // TODO: make into associative array
       editMode: false,
       modalVisible: false,
+      modalInputText: '',
     };
     this.navigation = props.navigation;
     this.bikeId = props.route.params.bikeId;
@@ -126,6 +125,13 @@ export default class ComponentsScreen extends React.Component {
     };
   }
 
+  findBikeComponent(inputText) {
+    if (inputText === '') return [];
+
+    const regex = new RegExp(`${inputText.trim()}`, 'i');
+    return BIKE_COMPONENTS_LIST.sort().filter(component => component.search(regex) >= 0);
+  }
+
   // Note: arrow function needed to bind correct context
   toggleEditMode = () => {
     // TODO: Notify server of removed components
@@ -157,6 +163,9 @@ export default class ComponentsScreen extends React.Component {
   };
 
   render() {
+    const { modalInputText } = this.state;
+    const components = this.findBikeComponent(modalInputText);
+
     return (
       <View style={{flex: 1}}>
         {flatListWrapper(
@@ -175,16 +184,31 @@ export default class ComponentsScreen extends React.Component {
         </View>
         <Modal
           animationType="slide"
-          transparent={true}
           visible={this.state.modalVisible}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>Hello World!</Text>
+            <Text style={styles.modalText}>Add New Component</Text>
+            <View style={styles.modalInputContainer}>
+              <Autocomplete
+                containerStyle={styles.modalInput}
+                data={components}
+                defaultValue={modalInputText}
+                onChangeText={text => this.setState({ modalInputText: text })}
+                placeholder="Enter a component type"
+                renderItem={({ item, i }) => (
+                  <TouchableOpacity onPress={() => this.setState({ modalInputText: item })}>
+                    <Text>{item}</Text>
+                  </TouchableOpacity>
+                )}
+                keyExtractor={(item, i) => i.toString()}
+              />
+            </View>
             <TouchableHighlight
               style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
               onPress={() => {
+                // TODO: Add new component item using form data
                 this.setState({modalVisible: false});
               }}>
-              <Text style={styles.textStyle}>Hide Modal</Text>
+              <Text style={styles.textStyle}>Add Component</Text>
             </TouchableHighlight>
           </View>
         </Modal>
@@ -210,5 +234,18 @@ const styles = StyleSheet.create({
   },
   addComponentButtonIcon: {
     fontSize: 20,
-  }
+  },
+  modalInputContainer: {
+    backgroundColor: '#F5FCFF',
+    flex: 1,
+    paddingTop: 25
+  },
+  modalInput: {
+    flex: 1,
+    left: 0,
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    zIndex: 1
+  },
 });
