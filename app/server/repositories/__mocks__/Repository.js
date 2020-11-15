@@ -11,11 +11,11 @@ class Repository {
     this.count['getById']++;
     return new Promise((resolve, reject) => {
       if (doc._id === undefined) {
-        throw new Mongoose.Error.ValidationError('Validation error');
+        throw new Error('ValidationError');
       } else if (doc._id === 0) {
-        throw new Mongoose.Error.DocumentNotFoundError('Doc not found error');
+        throw new Error('DocumentNotFoundError');
       } else if (this.count['getById'] === 0) {
-        throw new Error('internal server error');
+        throw new Error('InternalError');
       } else {
         resolve(this.data.find((doc) => doc._id === id));
       }
@@ -26,11 +26,11 @@ class Repository {
     this.count['create']++;
     return new Promise((resolve, reject) => {
       if (doc._id === undefined) {
-        throw new Mongoose.Error.ValidationError('Validation error');
+        throw new Error('ValidationError');
       } else if (doc._id === 0) {
-        throw new Mongoose.Error.DocumentNotFoundError('Doc not found error');
+        throw new Error('DocumentNotFoundError');
       } else if (this.count['create'] === 0) {
-        throw new Error('internal server error');
+        throw new Error('InternalError');
       } else {
         resolve(doc);
       }
@@ -41,11 +41,11 @@ class Repository {
     this.count['update']++;
     return new Promise((resolve, reject) => {
       if (doc._id === undefined) {
-        throw new Mongoose.Error.ValidationError('Validation error');
+        throw new Error('ValidationError');
       } else if (doc._id === 0) {
-        throw new Mongoose.Error.DocumentNotFoundError('Doc not found error');
+        throw new Error('DocumentNotFoundError');
       } else if (this.count['update'] === 0) {
-        throw new Error('internal server error');
+        throw new Error('InternalError');
       } else {
         resolve(doc);
       }
@@ -56,11 +56,11 @@ class Repository {
     this.count['delete']++;
     return new Promise((resolve, reject) => {
       if (doc._id === undefined) {
-        throw new Mongoose.Error.ValidationError('Validation error');
+        throw new Error('ValidationError');
       } else if (doc._id === 0) {
-        throw new Mongoose.Error.DocumentNotFoundError('Doc not found error');
+        throw new Error('DocumentNotFoundError');
       } else if (this.count['delete'] === 0) {
-        throw new Error('internal server error');
+        throw new Error('InternalError');
       } else {
         resolve(true);
       }

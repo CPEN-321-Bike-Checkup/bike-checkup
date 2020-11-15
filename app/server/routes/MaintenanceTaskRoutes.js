@@ -1,6 +1,5 @@
 const express = require('express');
 const MaintenanceTaskService = require('../services/MaintenanceTaskService');
-const deviceTokenRepo = require('../repositories/DeviceTokenRepository');
 const maintenanceTaskService = require('../services/MaintenanceTaskService');
 const {Mongoose} = require('mongoose');
 

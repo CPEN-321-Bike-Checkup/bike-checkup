@@ -37,21 +37,27 @@ delete schedModifiedNoId._id;
 var schedModifiedId0 = JSON.parse(JSON.stringify(maintSchedule1));
 schedModifiedId0._id = 0;
 
-describe('500 Resp Tests', () => {
-  test('Get tasks for user 500 Error', () => {
-    expect.assertions(1);
-    axios.get(url + 'prediction?userId=20').catch((error) => {
-      var code = error.response.status;
-      expect(code).toBe(500);
-    });
+describe('500 Resp Tests', async () => {
+  test('Get tasks for user 500 Error', async () => {
+    var result = await axios.get(url + 'prediction?userId=20');
+    console.log(result);
+    var code = error.response.status;
+    expect(code).toBe(500);
+    ///.catch((error) => {
+    ///});
   });
 
-  test('Get task 500 Error', () => {
+  test('Get task 500 Error', async () => {
     expect.assertions(1);
-    axios.get(url + '20').catch((error) => {
-      var code = error.response.status;
-      expect(code).toBe(500);
-    });
+    var result = await axios.get(url + '20');
+    //.catch((error) => {
+    //  var code = error.response.status;
+    //  console.error(error);
+    //  expect(code).toBe(500);
+    //});
+    console.log(result);
+    var code = result.response.status;
+    expect(code).toBe(500);
   });
 
   test('Create task 500 Error', () => {
