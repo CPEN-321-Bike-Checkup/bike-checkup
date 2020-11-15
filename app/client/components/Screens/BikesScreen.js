@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import {PressableListItem} from '../ListItems';
 import {flatListWrapper} from '../FlatListWrapper';
 
@@ -44,6 +45,23 @@ export default class BikesScreen extends React.Component {
     //   });;
   }
 
+  getBikes() {
+    /* Fetch predictions from server */
+    //var serverIp = '3.97.53.16';
+    var serverIp = '192.168.1.73';
+    axios
+      .get('http://' + serverIp + ':5000/bike/bikes')
+      .then((res) => {
+        var bikes = res.data.bikes;
+        console.log('INFO: Successfully fetched bikes: ' + bikes);
+
+        //this.setState({predictedDates: dates});
+      })
+      .catch((err) => {
+        console.log('ERRROR: Failed to fetch bikes: ', err);
+      });
+  }
+
   renderItem = ({item}) => {
     const testId = 'BikeListItem' + this.itemCount;
     this.itemCount++;
@@ -52,7 +70,8 @@ export default class BikesScreen extends React.Component {
       <PressableListItem
         title={item.title}
         onPress={() =>
-          this.navigation.navigate('Components', {bikeId: item.id})
+          //this.navigation.navigate('Components', {bikeId: item.id})
+          this.getBikes()
         }
         testID={testId}
       />

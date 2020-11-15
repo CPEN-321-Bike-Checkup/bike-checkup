@@ -5,7 +5,7 @@ const UserModel = require('../schemas/User').UserModel;
 class ComponentRepository extends Repository {
   constructor(componentModel, userModel) {
     super(componentModel);
-    this.userModel = userModel;
+    this.userModel = UserModel;
   }
 
   async GetComponents(bikeId) {
@@ -15,7 +15,7 @@ class ComponentRepository extends Repository {
     var components = [];
     bike.components.forEach((component) => {
       components.push(component);
-    })
+    });
 
     return components;
   }

@@ -5,10 +5,9 @@ const axios = require('axios');
 const express = require('express');
 const app = express();
 app.use(express.json());
-let server;
 const initUserRoutes = require('../../routes/UserRoutes');
+let server;
 
-var url = 'http://' + ip + ':' + port + '/user';
 beforeAll(() => {
   server = app.listen(port, () => {
     initUserRoutes(app);
@@ -19,6 +18,7 @@ afterAll(() => {
   server.close();
 });
 
+var url = 'http://' + ip + ':' + port + '/user';
 var user = {
   _id: 3,
   bikes: [],
@@ -50,13 +50,16 @@ deviceModifiedId0.token = 0;
 var deviceModifiedOwnerId0 = JSON.parse(JSON.stringify(device));
 deviceModifiedOwnerId0.ownerId = 0;
 
-describe('Get User Tests', () => {
-  test('Get user by ID 500 Error', () => {
+describe('Get User Tests', async () => {
+  test('Get user by ID 500 Error', async () => {
     expect.assertions(1);
-    axios.get(url + '/20').catch((error) => {
+    var result = await axios.get(url + '/20');
+    var code = result.status;
+    expect(code).toBe(500);
+    /*axios.get(url + '/20').catch((error) => {
       var code = error.response.status;
       expect(code).toBe(500);
-    });
+    });*/
   });
 
   test('Get user by ID 200 Ok', () => {

@@ -1,3 +1,5 @@
+const {getText} = require('detox-getprops');
+
 describe('Bike Stack', () => {
   beforeEach(async () => {
     await device.reloadReactNative();
@@ -9,6 +11,8 @@ describe('Bike Stack', () => {
   const veryifyBottomNavigator = async () => {
     await expect(element(by.id('BottomTabNavigator')));
     await expect(element(by.id('ScheduleTab'))).toBeVisible;
+    const getPropCheck = await getText(element(by.id('ScheduleTab')));
+    console.log(getPropCheck);
     await expect(element(by.id('HistoryTab'))).toBeVisible;
     await expect(element(by.id('BikesTab'))).toBeVisible;
     await expect(element(by.id('ActivitiesTab'))).toBeVisible;
