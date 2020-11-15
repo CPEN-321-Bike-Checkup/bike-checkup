@@ -3,10 +3,10 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
 
-import BikesScreen from '../Screens/BikesScreen';
-import ComponentsScreen from '../SubScreens/ComponentsScreen';
-import ComponentTaskScreen from '../SubScreens/ComponentTaskScreen';
-import AddTaskScreen from '../SubScreens/AddTaskScreen';
+import BikesScreen from './../Screens/BikesScreen';
+import ComponentsScreen from './../SubScreens/ComponentsScreen';
+import ComponentTaskScreen from './../SubScreens/ComponentTaskScreen';
+import AddTaskScreen from './../SubScreens/AddTaskScreen';
 
 export default class BikesStack extends React.Component {
   render() {

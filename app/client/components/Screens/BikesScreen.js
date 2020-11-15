@@ -13,7 +13,7 @@ const DATA = [
   },
 ];
 
-export default class ScheduleScreen extends React.Component {
+export default class BikesScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
