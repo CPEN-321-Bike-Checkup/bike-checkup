@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, TouchableOpacity} from 'react-native';
+import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
 import {RemovablePressableListItem} from '../ListItems';
 import {flatListWrapper} from '../FlatListWrapper';
 import CommonStyles from '../CommonStyles';
@@ -167,10 +167,39 @@ export default class ComponentsScreen extends React.Component {
   };
 
   render() {
-    return flatListWrapper(
-      this.state.componentData,
-      this.renderItem,
-      'ComponentsList',
+    return (
+      <View style={{flex: 1}}>
+        {flatListWrapper(
+          this.state.componentData,
+          this.renderItem,
+          'ComponentsList',
+        )}
+        <View style={styles.addComponentButtonContainer}>
+          <TouchableOpacity onPress={this.addComponent} style={styles.addComponentButton}>
+            <Text style={styles.addComponentButtonIcon}>+</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  addComponentButtonContainer: {
+    position: 'absolute',
+    bottom: 20,
+    width:'94%',
+    alignItems:'flex-end'
+  },
+  addComponentButton: {
+    backgroundColor: "#47ffb8",
+    width: 65,
+    height: 65,
+    borderRadius: 35,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  addComponentButtonIcon: {
+    fontSize: 20,
+  }
+});
