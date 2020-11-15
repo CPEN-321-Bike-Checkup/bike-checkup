@@ -51,20 +51,17 @@ var deviceModifiedOwnerId0 = JSON.parse(JSON.stringify(device));
 deviceModifiedOwnerId0.ownerId = 0;
 
 describe('Get User Tests', async () => {
-  test('Get user by ID 500 Error', async () => {
+  test('Get user by ID 500 Error', () => {
     expect.assertions(1);
-    var result = await axios.get(url + '/20');
-    var code = result.status;
-    expect(code).toBe(500);
-    /*axios.get(url + '/20').catch((error) => {
-      var code = error.response.status;
-      expect(code).toBe(500);
-    });*/
+    return axios.get(url + '/20').then((resp) => {
+      var code = resp.status;
+      expect(code).toBe(200);
+    });
   });
 
   test('Get user by ID 200 Ok', () => {
     expect.assertions(1);
-    axios.get(url + '/1').then((resp) => {
+    return axios.get(url + '/1').then((resp) => {
       var code = resp.status;
       expect(code).toBe(200);
     });
@@ -72,7 +69,7 @@ describe('Get User Tests', async () => {
 
   test('Get user by ID 404 Error', () => {
     expect.assertions(1);
-    axios.get(url + '/0').catch((error) => {
+    return axios.get(url + '/0').catch((error) => {
       var code = error.response.status;
       expect(code).toBe(404);
     });
@@ -82,7 +79,7 @@ describe('Get User Tests', async () => {
 describe('Create User Tests', () => {
   test('Create User 500 Error', () => {
     expect.assertions(1);
-    axios.post(url, user).catch((error) => {
+    return axios.post(url, user).catch((error) => {
       var code = error.response.status;
       expect(code).toBe(500);
     });
@@ -90,7 +87,7 @@ describe('Create User Tests', () => {
 
   test('Create user 200 Ok', () => {
     expect.assertions(1);
-    axios.post(url).then((resp) => {
+    return axios.post(url).then((resp) => {
       var code = resp.status;
       expect(code).toBe(200);
     });
@@ -98,7 +95,7 @@ describe('Create User Tests', () => {
 
   test('create user 400 Error', () => {
     expect.assertions(1);
-    axios.post(url, userModifiedNoId).catch((error) => {
+    return axios.post(url, userModifiedNoId).catch((error) => {
       var code = error.response.status;
       expect(code).toBe(400);
     });
@@ -108,7 +105,7 @@ describe('Create User Tests', () => {
 describe('Update User Tests', () => {
   test('Update user 500 Error', () => {
     expect.assertions(1);
-    axios.put(url, user).catch((error) => {
+    return axios.put(url, user).catch((error) => {
       var code = error.response.status;
       expect(code).toBe(500);
     });
@@ -116,7 +113,7 @@ describe('Update User Tests', () => {
 
   test('Update user 200 Ok', () => {
     expect.assertions(1);
-    axios.put(url, user).then((resp) => {
+    return axios.put(url, user).then((resp) => {
       var code = resp.status;
       expect(code).toBe(200);
     });
@@ -124,7 +121,7 @@ describe('Update User Tests', () => {
 
   test('Update user 404 Error', () => {
     expect.assertions(1);
-    axios.put(url, userModifiedId0).catch((error) => {
+    return axios.put(url, userModifiedId0).catch((error) => {
       var code = error.response.status;
       expect(code).toBe(404);
     });
@@ -132,7 +129,7 @@ describe('Update User Tests', () => {
 
   test('Update user 400 Error', () => {
     expect.assertions(1);
-    axios.put(url, userModifiedNoId).catch((error) => {
+    return axios.put(url, userModifiedNoId).catch((error) => {
       var code = error.response.status;
       expect(code).toBe(400);
     });
@@ -142,7 +139,7 @@ describe('Update User Tests', () => {
 describe('Delete Device Tests', () => {
   test('Delete device 500 Error', () => {
     expect.assertions(1);
-    axios.delete(url + 'registerDevice', device).catch((error) => {
+    return axios.delete(url + 'registerDevice', device).catch((error) => {
       var code = error.response.status;
       expect(code).toBe(500);
     });
@@ -150,7 +147,7 @@ describe('Delete Device Tests', () => {
 
   test('Delete device 200 Ok', () => {
     expect.assertions(1);
-    axios.delete(url + 'registerDevice', device).then((resp) => {
+    return axios.delete(url + 'registerDevice', device).then((resp) => {
       var code = resp.status;
       expect(code).toBe(200);
     });
@@ -158,7 +155,7 @@ describe('Delete Device Tests', () => {
 
   test('Delete device 404 Error', () => {
     expect.assertions(1);
-    axios.delete(url + 'registerDevice', deviceModifiedId0).catch((error) => {
+    return axios.delete(url + 'registerDevice', deviceModifiedId0).catch((error) => {
       var code = error.response.status;
       expect(code).toBe(404);
     });
@@ -166,7 +163,7 @@ describe('Delete Device Tests', () => {
 
   test('Delete device 400 Error', () => {
     expect.assertions(1);
-    axios.delete(url + 'registerDevice', deviceModifiedNoId).catch((error) => {
+    return axios.delete(url + 'registerDevice', deviceModifiedNoId).catch((error) => {
       var code = error.response.status;
       expect(code).toBe(400);
     });
@@ -176,7 +173,7 @@ describe('Delete Device Tests', () => {
 describe('Create Device Tests', () => {
   test('Create device 500 Error', () => {
     expect.assertions(1);
-    axios.post(url + 'registerDevice', device).catch((error) => {
+    return axios.post(url + 'registerDevice', device).catch((error) => {
       var code = error.response.status;
       expect(code).toBe(500);
     });
@@ -184,7 +181,7 @@ describe('Create Device Tests', () => {
 
   test('Create device 200 Ok', () => {
     expect.assertions(1);
-    axios.post(url + 'registerDevice', device).then((resp) => {
+    return axios.post(url + 'registerDevice', device).then((resp) => {
       var code = resp.status;
       expect(code).toBe(200);
     });
@@ -202,7 +199,7 @@ describe('Create Device Tests', () => {
 
   test('Create device 400 Error', () => {
     expect.assertions(1);
-    axios.post(url + 'registerDevice', deviceModifiedNoId).catch((error) => {
+    return axios.post(url + 'registerDevice', deviceModifiedNoId).catch((error) => {
       var code = error.response.status;
       expect(code).toBe(400);
     });

@@ -38,31 +38,25 @@ var schedModifiedId0 = JSON.parse(JSON.stringify(maintSchedule1));
 schedModifiedId0._id = 0;
 
 describe('500 Resp Tests', async () => {
-  test('Get tasks for user 500 Error', async () => {
-    var result = await axios.get(url + 'prediction?userId=20');
-    console.log(result);
-    var code = error.response.status;
-    expect(code).toBe(500);
-    ///.catch((error) => {
-    ///});
+  test('Get tasks for user 500 Error', () => {
+    expect.assertions(1);
+    return axios.get(url + 'prediction?userId=20').catch((error) => {
+      var code = error.response.status;
+      expect(code).toBe(500);
+    });
   });
 
   test('Get task 500 Error', async () => {
     expect.assertions(1);
-    var result = await axios.get(url + '20');
-    //.catch((error) => {
-    //  var code = error.response.status;
-    //  console.error(error);
-    //  expect(code).toBe(500);
-    //});
-    console.log(result);
-    var code = result.response.status;
-    expect(code).toBe(500);
+    return axios.get(url + '20').catch((error) => {
+      var code = error.response.status;
+      expect(code).toBe(500);
+    });
   });
 
   test('Create task 500 Error', () => {
     expect.assertions(1);
-    axios.post(url, maintSchedule1).catch((error) => {
+    return axios.post(url, maintSchedule1).catch((error) => {
       var code = error.response.status;
       expect(code).toBe(500);
     });
@@ -70,7 +64,7 @@ describe('500 Resp Tests', async () => {
 
   test('Mark task done 500 Error', () => {
     expect.assertions(1);
-    axios.post(url + 'complete', maintSchedule1).catch((error) => {
+    return axios.post(url + 'complete', maintSchedule1).catch((error) => {
       var code = error.response.status;
       expect(code).toBe(500);
     });
@@ -78,7 +72,7 @@ describe('500 Resp Tests', async () => {
 
   test('Update task 500 Error', () => {
     expect.assertions(1);
-    axios.put(url, maintSchedule1).catch((error) => {
+    return axios.put(url, maintSchedule1).catch((error) => {
       var code = error.response.status;
       expect(code).toBe(500);
     });
@@ -86,7 +80,7 @@ describe('500 Resp Tests', async () => {
 
   test('Delete task 500 Error', () => {
     expect.assertions(1);
-    axios.delete(url, maintSchedule1).catch((error) => {
+    return axios.delete(url, maintSchedule1).catch((error) => {
       var code = error.response.status;
       expect(code).toBe(500);
     });
@@ -96,7 +90,7 @@ describe('500 Resp Tests', async () => {
 describe('200 Resp Tests', () => {
   test('Get tasks for user 200 OK', () => {
     expect.assertions(1);
-    axios.get(url + 'prediction?userId=1').then((resp) => {
+    return axios.get(url + 'prediction?userId=1').then((resp) => {
       var code = resp.status;
       expect(code).toBe(200);
     });
@@ -104,7 +98,7 @@ describe('200 Resp Tests', () => {
 
   test('Get task 200 OK', () => {
     expect.assertions(1);
-    axios.get(url + '1').then((resp) => {
+    return axios.get(url + '1').then((resp) => {
       var code = resp.status;
       expect(code).toBe(200);
     });
@@ -112,7 +106,7 @@ describe('200 Resp Tests', () => {
 
   test('Create task 200 OK', () => {
     expect.assertions(1);
-    axios.post(url, maintSchedule1).then((resp) => {
+    return axios.post(url, maintSchedule1).then((resp) => {
       var code = resp.status;
       expect(code).toBe(200);
     });
@@ -120,7 +114,7 @@ describe('200 Resp Tests', () => {
 
   test('Mark task done 200 OK', () => {
     expect.assertions(1);
-    axios.post(url + 'complete', maintSchedule1).then((resp) => {
+    return axios.post(url + 'complete', maintSchedule1).then((resp) => {
       var code = resp.status;
       expect(code).toBe(200);
     });
@@ -128,7 +122,7 @@ describe('200 Resp Tests', () => {
 
   test('Update task 200 OK', () => {
     expect.assertions(1);
-    axios.put(url, maintSchedule1).then((resp) => {
+    return axios.put(url, maintSchedule1).then((resp) => {
       var code = resp.status;
       expect(code).toBe(200);
     });
@@ -136,7 +130,7 @@ describe('200 Resp Tests', () => {
 
   test('Delete task 200 OK', () => {
     expect.assertions(1);
-    axios.delete(url, maintSchedule1).then((resp) => {
+    return axios.delete(url, maintSchedule1).then((resp) => {
       var code = resp.status;
       expect(code).toBe(200);
     });
@@ -146,7 +140,7 @@ describe('200 Resp Tests', () => {
 describe('400 Resp Tests', () => {
   test('Get tasks for user 400 Error', () => {
     expect.assertions(1);
-    axios.get(url + 'prediction?user=1').catch((error) => {
+    return axios.get(url + 'prediction?user=1').catch((error) => {
       var code = error.response.status;
       expect(code).toBe(400);
     });
@@ -154,7 +148,7 @@ describe('400 Resp Tests', () => {
 
   test('Create task 400 Error', () => {
     expect.assertions(1);
-    axios.post(url, schedModifiedNoId).catch((error) => {
+    return axios.post(url, schedModifiedNoId).catch((error) => {
       var code = error.response.status;
       expect(code).toBe(400);
     });
@@ -162,7 +156,7 @@ describe('400 Resp Tests', () => {
 
   test('Mark task done 400 Error', () => {
     expect.assertions(1);
-    axios.post(url + 'complete', schedModifiedNoId).catch((error) => {
+    return axios.post(url + 'complete', schedModifiedNoId).catch((error) => {
       var code = error.response.status;
       expect(code).toBe(400);
     });
@@ -170,7 +164,7 @@ describe('400 Resp Tests', () => {
 
   test('Update task 400 Error', () => {
     expect.assertions(1);
-    axios.put(url, schedModifiedNoId).catch((error) => {
+    return axios.put(url, schedModifiedNoId).catch((error) => {
       var code = error.response.status;
       expect(code).toBe(400);
     });
@@ -178,7 +172,7 @@ describe('400 Resp Tests', () => {
 
   test('Delete task 400 Error', () => {
     expect.assertions(1);
-    axios.delete(url, maintSchedule1).catch((error) => {
+    return axios.delete(url, maintSchedule1).catch((error) => {
       var code = error.response.status;
       expect(code).toBe(400);
     });
@@ -188,7 +182,7 @@ describe('400 Resp Tests', () => {
 describe('404 Resp Tests', () => {
   test('Get tasks for user 404 Error', () => {
     expect.assertions(1);
-    axios.get(url + 'prediction?user=0').catch((error) => {
+    return axios.get(url + 'prediction?user=0').catch((error) => {
       var code = error.response.status;
       expect(code).toBe(404);
     });
@@ -196,7 +190,7 @@ describe('404 Resp Tests', () => {
 
   test('Create task 404 Error', () => {
     expect.assertions(1);
-    axios.post(url, schedModifiedId0).catch((error) => {
+    return axios.post(url, schedModifiedId0).catch((error) => {
       var code = error.response.status;
       expect(code).toBe(404);
     });
@@ -204,7 +198,7 @@ describe('404 Resp Tests', () => {
 
   test('Mark task done 404 Error', () => {
     expect.assertions(1);
-    axios.post(url + 'complete', schedModifiedId0).catch((error) => {
+    return axios.post(url + 'complete', schedModifiedId0).catch((error) => {
       var code = error.response.status;
       expect(code).toBe(404);
     });
@@ -212,7 +206,7 @@ describe('404 Resp Tests', () => {
 
   test('Update task 404 Error', () => {
     expect.assertions(1);
-    axios.put(url, schedModifiedId0).catch((error) => {
+    return axios.put(url, schedModifiedId0).catch((error) => {
       var code = error.response.status;
       expect(code).toBe(404);
     });
@@ -220,7 +214,7 @@ describe('404 Resp Tests', () => {
 
   test('Delete task 404 Error', () => {
     expect.assertions(1);
-    axios.delete(url, schedModifiedId0).catch((error) => {
+    return axios.delete(url, schedModifiedId0).catch((error) => {
       var code = error.response.status;
       expect(code).toBe(404);
     });
