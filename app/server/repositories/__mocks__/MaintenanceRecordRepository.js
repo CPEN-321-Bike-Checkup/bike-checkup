@@ -9,6 +9,6 @@ class MaintenanceRecordRepository extends Repository {
 
 var data = [];
 
-var maintRecordRepo = MaintenanceRecordRepository(data);
+var maintRecordRepo = new MaintenanceRecordRepository(data);
 
 module.exports = maintRecordRepo;

@@ -23,6 +23,14 @@ class UserService {
         console.error(err);
       });
   }
+
+  DeleteDevice(userId, deviceToken) {
+    return this.deviceTokenRepository.Delete({
+      token: deviceToken,
+      owner: userId,
+    });
+  }
+
   GetAllUsers() {
     return userRepository.GetAll();
   }

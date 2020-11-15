@@ -1,6 +1,5 @@
 const express = require('express');
 const UserService = require('../services/UserService');
-const NotificationService = require('../services/NotificationService');
 
 const initUserRouting = (app) => {
   const userRouter = express.Router();
@@ -17,6 +16,12 @@ const initUserRouting = (app) => {
     UserService.RegisterNewDevice(req.body.userId, req.body.token);
 
     console.log('registered');
+    res.sendStatus(200);
+  });
+
+  userRouter.delete('/registerDevice', (req, res, next) => {
+    UserService.DeleteDevice(req.body.userId, req.body.token);
+
     res.sendStatus(200);
   });
 
