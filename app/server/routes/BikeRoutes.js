@@ -1,5 +1,5 @@
 const express = require('express');
-const BikeService = require('../services/BikeService');
+// const BikeService = require('../services/BikeService');
 const deviceTokenRepo = require('../repositories/DeviceTokenRepository');
 
 const initBikeRouting = (app) => {

@@ -3,7 +3,7 @@ const ComponentModel = require('../schemas/Component').ComponentModel;
 const UserModel = require('../schemas/User').UserModel;
 
 class ComponentRepository extends Repository {
-  constructor(componentModel) {
+  constructor(componentModel, userModel) {
     super(componentModel);
     this.userModel = userModel;
   }
