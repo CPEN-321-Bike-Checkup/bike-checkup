@@ -22,7 +22,7 @@ export const ListItem = ({title, subText, rightText}) => {
   );
 };
 
-export const EditableListItem = ({title, editMode, onRemovePress}) => {
+export const RemovableListItem = ({title, editMode, onRemovePress}) => {
   return (
     <TouchableHighlight style={styles.touchableItem} underlayColor="gainsboro">
       <View style={styles.itemViewWrapper}>
@@ -34,6 +34,42 @@ export const EditableListItem = ({title, editMode, onRemovePress}) => {
         <Text style={styles.itemText}>{title}</Text>
       </View>
     </TouchableHighlight>
+  );
+};
+
+export const CompletableListItem = ({
+  title,
+  subText,
+  rightText,
+  editMode,
+  onCompletePress,
+  testId,
+}) => {
+  return (
+    <View style={styles.item}>
+      {/* //   <View
+    //     style={{
+    //       // flexDirection: 'row',
+    //       alignItems: 'center',
+    //     }}> */}
+      <View>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.rightText}>{rightText}</Text>
+          {editMode ? (
+            <TouchableOpacity
+              style={styles.removeIcon}
+              onPress={onCompletePress}>
+              <MaterialIcons name="check-circle" color={'green'} size={24} />
+            </TouchableOpacity>
+          ) : null}
+        </View>
+        <View>
+          <Text style={styles.subText}>{subText}</Text>
+        </View>
+      </View>
+    </View>
+    // </View>
   );
 };
 
@@ -57,7 +93,7 @@ export const PressableListItem = ({title, onPress, testID}) => {
   );
 };
 
-export const EditablePressableListItem = ({
+export const RemovablePressableListItem = ({
   title,
   editMode,
   onRemovePress,

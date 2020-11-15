@@ -4,7 +4,7 @@
 import React from 'react';
 import {SectionList, StyleSheet, Text, View} from 'react-native';
 
-export let selectionListWrapper = (data, renderItem) => {
+export let selectionListWrapper = (data, renderItem, testID) => {
   return (
     <SectionList
       sections={data}
@@ -14,6 +14,7 @@ export let selectionListWrapper = (data, renderItem) => {
         <Text style={styles.headerText}>{title}</Text>
       )}
       ItemSeparatorComponent={() => <View style={styles.separator} />}
+      testID={testID}
     />
   );
 };
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 2,
     paddingBottom: 4,
     paddingTop: 7,
-    paddingLeft: 5
+    paddingLeft: 5,
   },
   separator: {
     borderBottomColor: 'grey',

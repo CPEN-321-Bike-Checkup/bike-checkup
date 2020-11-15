@@ -60,6 +60,6 @@ export default class ScheduleScreen extends React.Component {
   };
 
   render() {
-    return flatListWrapper(DATA, this.renderItem);
+    return flatListWrapper(DATA, this.renderItem, 'BikesList');
   }
 }

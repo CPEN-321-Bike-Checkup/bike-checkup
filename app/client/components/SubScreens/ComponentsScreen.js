@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text, TouchableOpacity} from 'react-native';
-import {EditablePressableListItem} from '../ListItems';
+import {RemovablePressableListItem} from '../ListItems';
 import {flatListWrapper} from '../FlatListWrapper';
 import CommonStyles from '../CommonStyles';
 
@@ -89,7 +89,7 @@ export default class ScheduleScreen extends React.Component {
       for (var i = 0; i < newComponentData.length; i++) {
         if (newComponentData[i].id == id) {
           let component = newComponentData.splice(i, 1);
-          this.removedComponents.push(component.id);  // Remember removed component IDs
+          this.removedComponents.push(component.id); // Remember removed component IDs
           this.setState({componentData: newComponentData});
         }
       }
@@ -111,7 +111,7 @@ export default class ScheduleScreen extends React.Component {
     this.itemCount++;
 
     return (
-      <EditablePressableListItem
+      <RemovablePressableListItem
         title={item.title}
         editMode={this.state.editMode}
         onPress={() => {
@@ -130,7 +130,7 @@ export default class ScheduleScreen extends React.Component {
     return flatListWrapper(
       this.state.componentData,
       this.renderItem,
-      'BikesList',
+      'ComponentsList',
     );
   }
 }

@@ -1,6 +1,8 @@
 import React from 'react';
-import {ListItem} from '../ListItems';
+import {Text, TouchableOpacity} from 'react-native';
+import {CompletableListItem} from '../ListItems';
 import {selectionListWrapper} from '../SectionListWrapper';
+import CommonStyles from '../CommonStyles';
 
 let getDate = function (offset) {
   let currentDate = new Date();
@@ -13,20 +15,60 @@ const DATA = [
   {
     title: 'Next 10 days',
     data: [
-      {bike: 'Norco Sasquatch', task: 'Oil chain', date: getDate(0)},
-      {bike: 'Giant Contend AR 1', task: 'Oil chain', date: getDate(2)},
-      {bike: 'Norco Sasquatch', task: 'Check brake pads', date: getDate(7)},
+      {taskId: 0, bike: 'Norco Sasquatch', task: 'Oil chain', date: getDate(0)},
+      {
+        taskId: 1,
+        bike: 'Giant Contend AR 1',
+        task: 'Oil chain',
+        date: getDate(2),
+      },
+      {
+        taskId: 2,
+        bike: 'Norco Sasquatch',
+        task: 'Check brake pads',
+        date: getDate(7),
+      },
     ],
   },
   {
     title: 'Next 50 Days',
     data: [
-      {bike: 'Giant Contend AR 1', task: 'Replace chain', date: getDate(13)},
-      {bike: 'Giant Contend AR 1', task: 'Check brake pads', date: getDate(22)},
-      {bike: 'Norco Sasquatch', task: 'Oil chain', date: getDate(27)},
-      {bike: 'Giant Contend AR 1', task: 'Oil chain', date: getDate(30)},
-      {bike: 'Norco Sasquatch', task: 'Bleed brakes', date: getDate(46)},
-      {bike: 'Giant Contend AR 1', task: 'Bleed brakes', date: getDate(50)},
+      {
+        taskId: 3,
+        bike: 'Giant Contend AR 1',
+        task: 'Replace chain',
+        date: getDate(13),
+      },
+      {
+        taskId: 4,
+        bike: 'Giant Contend AR 1',
+        task: 'Check brake pads',
+        date: getDate(22),
+      },
+      {
+        taskId: 5,
+        bike: 'Norco Sasquatch',
+        task: 'Oil chain',
+        date: getDate(27),
+      },
+      {
+        taskId: 6,
+        bike: 'Giant Contend AR 1',
+        task: 'Oil chain',
+        date: getDate(30),
+      },
+      {
+        taskId: 7,
+        bike: 'Norco Sasquatch',
+        task: 'Bleed brakes',
+        date: getDate(46),
+      },
+      {
+        taskId: 8,
+        bike: 'Giant Contend AR 1',
+        task: 'Bleed brakes',
+        date: getDate(50),
+      },
     ],
   },
 ];
@@ -35,8 +77,10 @@ export default class ScheduleScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      maintenanceData: [],
+      scheduleData: [],
+      editMode: false,
     };
+    this.navigation = props.navigation;
   }
 
   updateMaintenanceData() {
@@ -58,14 +102,76 @@ export default class ScheduleScreen extends React.Component {
     //   .finally(() => {
     //     // this.setState({ isLoading: false });
     //   });;
+
+    this.setState({scheduleData: DATA});
+
+    // Add edit button to navigation bar (side effect)
+    this.navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity onPress={this.toggleEditMode}>
+          <Text style={CommonStyles.editButtonText}>Edit</Text>
+        </TouchableOpacity>
+      ),
+    });
   }
-  render() {
-    return selectionListWrapper(DATA, ({item}) => (
-      <ListItem
+
+  // Note: arrow function needed to bind correct context
+  toggleEditMode = () => {
+    // TODO: Notify server of removed components
+    if (this.state.editMode) {
+      this.removedComponents = [];
+    }
+
+    this.setState({editMode: this.state.editMode ? false : true});
+  };
+
+  scheduledTaskCompleted = (id) => {
+    return () => {
+      // Remove component
+      let newScheduleData = [...this.state.ScheduleData];
+      for (var i = 0; i < newScheduleData.length; i++) {
+        if (newScheduleData[i].id == id) {
+          let component = newScheduleData.splice(i, 1);
+          this.removedComponents.push(component.id); // Remember removed component IDs
+          this.setState({ScheduleData: newScheduleData});
+        }
+      }
+    };
+  };
+
+  renderItem = ({item}) => {
+    const testId = 'ScheduleListItem' + this.itemCount;
+    this.itemCount++;
+
+    return (
+      <CompletableListItem
         title={item.task}
         subText={item.bike}
         rightText={item.date}
+        onCompletePress={this.scheduledTaskCompleted(item.id)}
+        editMode={this.state.editMode}
+        testID={testId}
       />
-    ));
+      // <RemovablePressableListItem
+      //   title={item.title}
+      //   editMode={this.state.editMode}
+      //   onPress={() => {
+      //     this.navigation.navigate('ComponentTaskScreen', {
+      //       bikId: this.bikeId,
+      //       componentId: item.id,
+      //     });
+      //   }}
+      //   onRemovePress={this.removeBikeComponent(item.id)}
+      //   testID={testId}
+      // />
+    );
+  };
+
+  render() {
+    return selectionListWrapper(
+      this.state.scheduleData,
+      this.renderItem,
+      'ScheduleList',
+    );
   }
 }

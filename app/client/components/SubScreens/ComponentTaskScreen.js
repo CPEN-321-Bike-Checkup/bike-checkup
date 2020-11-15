@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
-import {EditableListItem, EditablePressableListItem} from '../ListItems';
+import {RemovableListItem, RemovablePressableListItem} from '../ListItems';
 import {flatListWrapper} from '../FlatListWrapper';
 import CommonStyles from '../CommonStyles';
 
@@ -107,7 +107,7 @@ export default class ComponentTaskScreen extends React.Component {
   renderItem = ({item}) => {
     if (this.state.editMode) {
       var renderableItem = (
-        <EditablePressableListItem
+        <RemovablePressableListItem
           title={item.description}
           editMode={this.state.editMode}
           onPress={() => {
@@ -121,7 +121,7 @@ export default class ComponentTaskScreen extends React.Component {
       );
     } else {
       var renderableItem = (
-        <EditableListItem
+        <RemovableListItem
           title={item.description}
           editMode={this.state.editMode}
         />
