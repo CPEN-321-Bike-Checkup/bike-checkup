@@ -13,9 +13,10 @@ const initStravaRouting = (app) => {
     userService.CreateOrUpdateUsers(user).then(async (resp) => {
       await stravaService.UpdateBikesForUser(user._id);
       stravaService.SaveNewActivitiesForUser(user._id).then((activitiesRes) => {
-        //maintenanceTaskService.MaintenancePredict(user._id);
+        maintenanceTaskService.MaintenancePredict(user._id);
+        res.status(200);
+        res.send(activitiesRes);
       });
-      res.sendStatus(200);
     });
   });
 };

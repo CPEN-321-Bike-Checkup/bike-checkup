@@ -109,7 +109,7 @@ var bike1 = {
   _id: 201,
   owner: 3,
   label: 'mountain bike',
-  components: [],
+  components: [301, 302],
   distance: 500,
 };
 
@@ -121,7 +121,7 @@ var component1 = {
   removal_date: new Date('2020-12-20'),
   maintenance_tasks: [],
   maintenance_records: [],
-  activities: [],
+  activities: [1],
   predicted_maintenance_date: new Date('2020-11-15'),
 };
 
@@ -133,8 +133,17 @@ var component2 = {
   removal_date: new Date('2021-02-15'),
   maintenance_tasks: [],
   maintenance_records: [],
-  activities: [],
+  activities: [1],
   predicted_maintenance_date: new Date('2020-12-15'),
+};
+
+const activity1 = {
+  _id: 1,
+  description: 'test',
+  distance: 50,
+  time_s: 360,
+  date: new Date('2020-10-21'),
+  components: [1],
 };
 
 //user without an id
@@ -220,15 +229,14 @@ describe('User requests scheduled maintenance tasks for a component Tests', () =
 });
 
 //The latter tasks will depend on the prior tasks to pass
-//TODO: #4 of expected behaviour
 describe('User adds/updates a new maintenance item for a component Tests', () => {
-  test('1. Create maint task that already exists 200 Ok', async () => {
+  test('1. Create maint task that already exists 400 Error', async () => {
     expect.assertions(2);
     await axios
       .post(url + '/maintenanceTask' + '/', maintSchedule1_update)
       .catch((resp) => {
         var code = resp.status;
-        expect(code).toBe(500); //TODO: No item created, which status code?
+        expect(code).toBe(400);
       });
 
     //maint schedule 1 should be updated
@@ -339,22 +347,22 @@ describe('User deletes a maintenance item Tests', () => {
   });
 });
 
-//TODO: fill out expected return data
 describe('User requests their Strava activities Tests', () => {
   test('get activities belonging to user 200 Ok', async () => {
     expect.assertions(2);
     await axios
-      .get(url + '/strava' + '/3' + '/connectedStrava')
+      //.get(url + '/strava' + '/3' + '/connectedStrava')
+      .get(url + '/activities/user' + '/3')
       .catch((resp) => {
         var code = resp.status;
         expect(code).toBe(200);
-        expect(resp.data).toBe([]);
+        expect(resp.data._id).toBe(activity1._id);
       });
   });
 });
 
 describe('User requests their maintenance history Tests', () => {
-  test('get activities belonging to user 200 Ok', async () => {
+  test('get history belonging to user 200 Ok', async () => {
     expect.assertions(2);
     await axios
       .get(url + '/maintenanceRecord' + '/3' + '/days' + '/50')
@@ -384,7 +392,6 @@ describe('User completes a scheduled maintenance task Tests', () => {
     });
 
     //maintSchedule2 is added to maint record list
-    //TODO: fill out expected return data
     await axios
       .get(url + '/maintenanceRecord' + '/3' + '/days' + '/50')
       .catch((resp) => {

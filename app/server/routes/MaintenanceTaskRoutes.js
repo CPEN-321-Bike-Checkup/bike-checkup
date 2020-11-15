@@ -20,11 +20,10 @@ const initMaintenanceTaskRouting = (app) => {
       });
     } catch (err) {
       if (err instanceof Mongoose.Error.ValidationError) {
-        res.statusCode(400);
+        res.status(400);
         res.send('Error: Invalid Request syntax');
       } else {
-        res.statusCode(500);
-        res.send('Error: Internal Server Error');
+        res.status(500).send('Error: Internal Server Error');
       }
     }
   });
@@ -41,14 +40,11 @@ const initMaintenanceTaskRouting = (app) => {
       50,
     ).catch((err) => {
       if (err instanceof Mongoose.Error.ValidationError) {
-        res.statusCode(400);
-        res.send('Error: Invalid Request syntax');
+        res.status(400).send('Error: Invalid Request syntax');
       } else if (err instanceof Mongoose.Error.DocumentNotFoundError) {
-        res.statusCode(404);
-        res.send('Error: Task not Found');
+        res.status(404).send('Error: Task not Found');
       } else {
-        res.statusCode(500);
-        res.send('Error: Internal Server Error');
+        res.status(500).send('Error: Internal Server Error');
       }
     });
     res.send(JSON.stringify({dates: dates}));
@@ -75,16 +71,13 @@ const initMaintenanceTaskRouting = (app) => {
   maintenanceTaskRouter.post('/', (req, res, next) => {
     var result = MaintenanceTaskService.Create(req.body)
       .then((result) => {
-        res.statusCode(201);
-        res.send('Created Task');
+        res.statusCode(201).send('Created Task');
       })
       .catch((err) => {
         if (err instanceof Mongoose.Error.ValidationError) {
-          res.statusCode(400);
-          res.send('Error: Invalid Request syntax');
+          res.status(400).send('Error: Invalid Request syntax');
         } else {
-          res.statusCode(500);
-          res.send('Error: Internal Server Error');
+          res.status(500).send('Error: Internal Server Error');
         }
       });
   });
@@ -92,19 +85,15 @@ const initMaintenanceTaskRouting = (app) => {
   maintenanceTaskRouter.post('/complete', (req, res, next) => {
     var result = MaintenanceTaskService.MarkCompleted(req.body)
       .then((result) => {
-        res.statusCode(201);
-        res.send('Marked Task as Done');
+        res.status(201).send('Marked Task as Done');
       })
       .catch((err) => {
         if (err instanceof Mongoose.Error.ValidationError) {
-          res.statusCode(400);
-          res.send('Error: Invalid Request syntax');
+          res.status(400).send('Error: Invalid Request syntax');
         } else if (err instanceof Mongoose.Error.DocumentNotFoundError) {
-          res.statusCode(404);
-          res.send('Error: Task not Found');
+          res.status(404).send('Error: Task not Found');
         } else {
-          res.statusCode(500);
-          res.send('Error: Internal Server Error');
+          res.status(500).send('Error: Internal Server Error');
         }
       });
   });
@@ -112,19 +101,15 @@ const initMaintenanceTaskRouting = (app) => {
   maintenanceTaskRouter.put('/', (req, res, next) => {
     var result = MaintenanceTaskService.Update(req.body)
       .then((result) => {
-        res.statusCode(200);
-        res.send('Updated Task');
+        res.status(200).send('Updated Task');
       })
       .catch((err) => {
         if (err instanceof Mongoose.Error.ValidationError) {
-          res.statusCode(400);
-          res.send('Error: Invalid Request syntax');
+          res.status(400).send('Error: Invalid Request syntax');
         } else if (err instanceof Mongoose.Error.DocumentNotFoundError) {
-          res.statusCode(404);
-          res.send('Error: Task not Found');
+          res.status(404).send('Error: Task not Found');
         } else {
-          res.statusCode(500);
-          res.send('Error: Internal Server Error');
+          res.status(500).send('Error: Internal Server Error');
         }
       });
   });
@@ -132,19 +117,15 @@ const initMaintenanceTaskRouting = (app) => {
   maintenanceTaskRouter.delete('/', (req, res, next) => {
     var result = MaintenanceTaskService.Delete(req.body)
       .then((result) => {
-        res.statusCode(200);
-        res.send('Deleted Task');
+        res.status(200).send('Deleted Task');
       })
       .catch((err) => {
         if (err instanceof Mongoose.Error.ValidationError) {
-          res.statusCode(400);
-          res.send('Error: Invalid Request syntax');
+          res.status(400).send('Error: Invalid Request syntax');
         } else if (err instanceof Mongoose.Error.DocumentNotFoundError) {
-          res.statusCode(404);
-          res.send('Error: Task not Found');
+          res.status(404).send('Error: Task not Found');
         } else {
-          res.statusCode(500);
-          res.send('Error: Internal Server Error');
+          res.status(500).send('Error: Internal Server Error');
         }
       });
   });

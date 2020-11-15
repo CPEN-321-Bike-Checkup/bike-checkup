@@ -87,12 +87,13 @@ describe('500 Resp Tests', async () => {
   });
 });
 
-describe('200 Resp Tests', () => {
+describe('20X Resp Tests', () => {
   test('Get tasks for user 200 OK', () => {
     expect.assertions(1);
     return axios.get(url + 'prediction?userId=1').then((resp) => {
       var code = resp.status;
       expect(code).toBe(200);
+      expect(resp.data.length).toBe(3);
     });
   });
 
@@ -101,14 +102,15 @@ describe('200 Resp Tests', () => {
     return axios.get(url + '1').then((resp) => {
       var code = resp.status;
       expect(code).toBe(200);
+      expect(resp.data._id).toBe(1);
     });
   });
 
-  test('Create task 200 OK', () => {
+  test('Create task 201 OK', () => {
     expect.assertions(1);
     return axios.post(url, maintSchedule1).then((resp) => {
       var code = resp.status;
-      expect(code).toBe(200);
+      expect(code).toBe(201);
     });
   });
 
@@ -165,14 +167,6 @@ describe('400 Resp Tests', () => {
   test('Update task 400 Error', () => {
     expect.assertions(1);
     return axios.put(url, schedModifiedNoId).catch((error) => {
-      var code = error.response.status;
-      expect(code).toBe(400);
-    });
-  });
-
-  test('Delete task 400 Error', () => {
-    expect.assertions(1);
-    return axios.delete(url, maintSchedule1).catch((error) => {
       var code = error.response.status;
       expect(code).toBe(400);
     });

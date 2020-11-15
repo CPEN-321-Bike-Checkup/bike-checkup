@@ -85,11 +85,11 @@ describe('Create User Tests', () => {
     });
   });
 
-  test('Create user 200 Ok', () => {
+  test('Create user 201 Ok', () => {
     expect.assertions(1);
     return axios.post(url).then((resp) => {
       var code = resp.status;
-      expect(code).toBe(200);
+      expect(code).toBe(201);
     });
   });
 
@@ -179,11 +179,11 @@ describe('Create Device Tests', () => {
     });
   });
 
-  test('Create device 200 Ok', () => {
+  test('Create device 201 Ok', () => {
     expect.assertions(1);
     return axios.post(url + 'registerDevice', device).then((resp) => {
       var code = resp.status;
-      expect(code).toBe(200);
+      expect(code).toBe(201);
     });
   });
 
