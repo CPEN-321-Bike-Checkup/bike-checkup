@@ -89,6 +89,7 @@ export default class ComponentsScreen extends React.Component {
       modalVisible: false,
       componentTypeInputText: '',
       componentNameInputText: '',
+      nextId: 3,
     };
     this.navigation = props.navigation;
     this.bikeId = props.route.params.bikeId;
@@ -197,7 +198,7 @@ export default class ComponentsScreen extends React.Component {
                 autoCapitalize="words"
                 autoCorrect={true}
                 containerStyle={styles.typeInput}
-                data={components.length === 1 && comp(componentTypeInputText, components[0]) ? [] : components}
+                data={components.length >= 1 && comp(componentTypeInputText, components[0]) ? [] : components}
                 defaultValue={componentTypeInputText}
                 onChangeText={text => this.setState({ componentTypeInputText: text })}
                 placeholder="Enter a component type"
@@ -220,7 +221,17 @@ export default class ComponentsScreen extends React.Component {
             <TouchableHighlight
               style={styles.addComponentButton}
               onPress={() => {
-                // TODO: Add new component item using form data
+                // Add new component
+                let componentData = [...this.state.componentData];
+                componentData.push({
+                  bikeId: this.bikeId,
+                  id: this.state.nextId,
+                  title: this.state.componentTypeInputText.concat(' - ', this.state.componentNameInputText),
+                });
+                this.setState({componentData});
+                this.setState({ nextId: this.state.nextId + 1 });
+
+                // Close modal
                 this.setState({modalVisible: false});
               }}>
               <Text style={styles.textStyle}>Add Component</Text>
