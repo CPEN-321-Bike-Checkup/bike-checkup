@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
+import {Text, TouchableOpacity, View, Modal,TouchableHighlight, StyleSheet} from 'react-native';
 import {RemovablePressableListItem} from '../ListItems';
 import {flatListWrapper} from '../FlatListWrapper';
 import CommonStyles from '../CommonStyles';
@@ -88,6 +88,7 @@ export default class ComponentsScreen extends React.Component {
     this.state = {
       componentData: [], // TODO: make into associative array
       editMode: false,
+      modalVisible: false,
     };
     this.navigation = props.navigation;
     this.bikeId = props.route.params.bikeId;
@@ -110,8 +111,6 @@ export default class ComponentsScreen extends React.Component {
 
     this.updatecomponentData();
   }
-
-  addBikeComponent() {}
 
   removeBikeComponent(id) {
     return () => {
@@ -166,10 +165,29 @@ export default class ComponentsScreen extends React.Component {
           'ComponentsList',
         )}
         <View style={styles.addComponentButtonContainer}>
-          <TouchableOpacity onPress={this.addComponent} style={styles.addComponentButton}>
+          <TouchableOpacity 
+            onPress={() => {
+              this.setState({modalVisible: true})
+            }} 
+            style={styles.addComponentButton}>
             <Text style={styles.addComponentButtonIcon}>+</Text>
           </TouchableOpacity>
         </View>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={this.state.modalVisible}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Hello World!</Text>
+            <TouchableHighlight
+              style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+              onPress={() => {
+                this.setState({modalVisible: false});
+              }}>
+              <Text style={styles.textStyle}>Hide Modal</Text>
+            </TouchableHighlight>
+          </View>
+        </Modal>
       </View>
     );
   }
