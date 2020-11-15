@@ -62,7 +62,7 @@ class StravaService {
     });
 
     activitiesResp.data.forEach((a) => {
-      var components = this.componentRepository.GetByBikeId(a.gear_id);
+      var components = this.componentRepository.GetComponent(a.gear_id);
       var activity = {
         description: a.name,
         distance: a.distance,

@@ -1,40 +1,48 @@
 import React from 'react';
-import {Text, TouchableOpacity} from 'react-native';
+import {Text, TouchableOpacity, View, Modal,TouchableHighlight, TextInput, StyleSheet} from 'react-native';
+import Autocomplete from 'react-native-autocomplete-input';
 import {RemovablePressableListItem} from '../ListItems';
 import {flatListWrapper} from '../FlatListWrapper';
 import CommonStyles from '../CommonStyles';
 
-const GIANT_DATA = [
-  {
-    id: 1,
-    title: 'Brakes - Shimano 105 Hydraulic Disc, 160mm',
-  },
-  {
-    id: 2,
-    title: 'Chain - KMC X11EL-1',
-  },
-  {
-    id: 3,
-    title: 'Brake pads - Shimano BR-M555 M02',
-  },
+const BIKE_COMPONENTS_LIST = [
+  "Front Wheel",
+  "Rear Wheel",
+  "Fork",
+  "Handlebar",
+  "Pedals",
+  "Front Tire",
+  "Rear Tire",
+  "Bottom Bracket",
+  "Front Brake",
+  "Rear Brake",
+  "Front Brake Pads",
+  "Rear Brake Pads",
+  "Front Brake Lever",
+  "Rear Brake Lever",
+  "Cassette",
+  "Chainrings",
+  "Crankset",
+  "Front Derailleur",
+  "Rear Derailleur",
+  "Headset",
+  "Saddle",
+  "Seatpost",
+  "Stem",
+  "Front Brake Cable",
+  "Rear Brake Cable",
+  "Front Shifter Cable",
+  "Rear Shifter Cable",
+  "Shift Levers",
+  "Front Shock",
+  "Rear Shock",
+  "Front Brake Rotor",
+  "Rear Brake Rotor",
+  "Helmet",
+  "Cleats"
 ];
 
-const NORCO_DATA = [
-  {
-    id: 1,
-    title: 'Brakes - Shimano BR-RS305-R Hydraulic Disc, 150mm',
-  },
-  {
-    id: 2,
-    title: 'Chain - CN-9000',
-  },
-  {
-    id: 3,
-    title: 'Brake pads - Brake Authority Avids',
-  },
-];
-
-export default class ScheduleScreen extends React.Component {
+export default class ComponentsScreen extends React.Component {
   constructor(props) {
     console.log('ComponentScreen Props:');
     console.log(props);
@@ -42,32 +50,17 @@ export default class ScheduleScreen extends React.Component {
     this.state = {
       componentData: [], // TODO: make into associative array
       editMode: false,
+      modalVisible: false,
+      componentTypeInputText: '',
+      componentNameInputText: '',
+      nextId: 0,
     };
     this.navigation = props.navigation;
     this.bikeId = props.route.params.bikeId;
     this.removedComponents = [];
   }
 
-  updatecomponentData() {
-    // this.setState({componentData: })
-  }
-
   componentDidMount() {
-    // fetch('3.97.53.16:8080/maintenance-schedule/', {
-    //   method: 'GET'
-    //   })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     this.updatecomponentData({dateJSON: data})
-    //   })
-    //   .catch((error) => {
-    //     // this.setState({dateJSON: 'Error fetching data'})
-    //     console.error(error);
-    //   })
-    //   .finally(() => {
-    //     // this.setState({ isLoading: false });
-    //   });;
-
     // Add edit button to navigation bar (side effect)
     this.navigation.setOptions({
       headerRight: () => (
@@ -76,11 +69,7 @@ export default class ScheduleScreen extends React.Component {
         </TouchableOpacity>
       ),
     });
-
-    this.setState({componentData: this.bikeId === 1 ? NORCO_DATA : GIANT_DATA});
   }
-
-  addBikeComponent() {}
 
   removeBikeComponent(id) {
     return () => {
@@ -94,6 +83,13 @@ export default class ScheduleScreen extends React.Component {
         }
       }
     };
+  }
+
+  findBikeComponent(inputText) {
+    if (inputText === '') return [];
+
+    const regex = new RegExp(`${inputText.trim()}`, 'i');
+    return BIKE_COMPONENTS_LIST.sort().filter(component => component.search(regex) >= 0);
   }
 
   // Note: arrow function needed to bind correct context
@@ -115,8 +111,8 @@ export default class ScheduleScreen extends React.Component {
         title={item.title}
         editMode={this.state.editMode}
         onPress={() => {
-          this.navigation.navigate('ComponentTaskScreen', {
-            bikId: this.bikeId,
+          this.navigation.navigate('Tasks', {
+            bikeId: this.bikeId,
             componentId: item.id,
           });
         }}
@@ -127,10 +123,146 @@ export default class ScheduleScreen extends React.Component {
   };
 
   render() {
-    return flatListWrapper(
-      this.state.componentData,
-      this.renderItem,
-      'ComponentsList',
+    const { componentTypeInputText } = this.state;
+    const components = this.findBikeComponent(componentTypeInputText);
+    const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
+
+    return (
+      <View style={{flex: 1}}>
+        {flatListWrapper(
+          this.state.componentData,
+          this.renderItem,
+          'ComponentsList',
+        )}
+        <View style={styles.openModalButtonContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              this.setState({modalVisible: true})
+            }}
+            style={styles.openModalButton}>
+            <Text style={styles.openModalButtonIcon}>+</Text>
+          </TouchableOpacity>
+        </View>
+
+        <Modal
+          animationType="slide"
+          visible={this.state.modalVisible}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalTitle}>Add New Component</Text>
+
+            <View style={styles.modalInputContainer}>
+              <Text>Type:</Text>
+              <Autocomplete
+                autoCapitalize="words"
+                autoCorrect={true}
+                containerStyle={styles.typeInput}
+                data={components.length >= 1 && comp(componentTypeInputText, components[0]) ? [] : components}
+                defaultValue={componentTypeInputText}
+                onChangeText={text => this.setState({ componentTypeInputText: text })}
+                placeholder="Enter a component type"
+                renderItem={({ item, i }) => (
+                  <TouchableOpacity onPress={() => this.setState({ componentTypeInputText: item })}>
+                    <Text>{item}</Text>
+                  </TouchableOpacity>
+                )}
+                keyExtractor={(item, i) => i.toString()}
+              />
+            </View>
+
+            <Text style={styles.modalName}>Name:</Text>
+            <TextInput
+              style={styles.nameInput}
+              placeholder="Enter a component name"
+              onChangeText={text => this.setState({ componentNameInputText: text })}
+            />
+
+            <TouchableHighlight
+              style={styles.addComponentButton}
+              onPress={() => {
+                // Add new component if all information was entered (TODO: Don't let modal close/show error message if only partly filled out)
+                if (this.state.componentTypeInputText && this.state.componentNameInputText) {
+                  let componentData = [...this.state.componentData];
+                  componentData.push({
+                    bikeId: this.bikeId,
+                    id: this.state.nextId,
+                    title: this.state.componentTypeInputText.concat(' - ', this.state.componentNameInputText),
+                  });
+                  this.setState({componentData});
+                  this.setState({ nextId: this.state.nextId + 1 });
+              }
+
+                // Close modal
+                this.setState({modalVisible: false});
+              }}>
+              <Text style={styles.textStyle}>Add Component</Text>
+            </TouchableHighlight>
+          </View>
+        </Modal>
+
+      </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  openModalButtonContainer: {
+    position: 'absolute',
+    bottom: 20,
+    width:'94%',
+    alignItems:'flex-end'
+  },
+  openModalButton: {
+    backgroundColor: "#47ffb8",
+    width: 65,
+    height: 65,
+    borderRadius: 35,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  openModalButtonIcon: {
+    fontSize: 20,
+  },
+  modalInputContainer: {
+    flex: 1,
+    paddingTop: 25
+  },
+  typeInput: {
+    flex: 1,
+    left: 0,
+    position: 'absolute',
+    right: 0,
+    top: 55,
+    zIndex: 1,
+  },
+  nameInput: {
+    height: 40,
+    width: '100%',
+    borderColor: '#b9b9b9',
+    borderWidth: 1,
+    borderRadius: 1,
+    position: 'absolute',
+    top: 200,
+  },
+  modalTitle: {
+    textAlign: 'center',
+    padding: 15,
+    fontWeight: 'bold',
+  },
+  modalName: {
+    paddingBottom: 10,
+    position: 'absolute',
+    top: 170,
+  },
+  addComponentButton: {
+    backgroundColor: "#47ffb8",
+    alignSelf: 'center',
+    padding: 10,
+    position: 'absolute',
+    bottom: 30,
+  },
+  modalView: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+  }
+});

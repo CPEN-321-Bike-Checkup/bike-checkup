@@ -23,6 +23,7 @@
     "moment-timezone": "^0.5.31",
     "react": "16.13.1",
     "react-native": "0.63.3",
+    "react-native-autocomplete-input": "^4.2.0",
     "react-native-gesture-handler": "^1.8.0",
     "react-native-paper": "^4.2.0",
     "react-native-push-notification": "^6.1.2",

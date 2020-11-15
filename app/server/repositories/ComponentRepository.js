@@ -1,20 +1,44 @@
 const Repository = require('./Repository');
 const ComponentModel = require('../schemas/Component').ComponentModel;
+const UserModel = require('../schemas/User').UserModel;
 
 class ComponentRepository extends Repository {
   constructor(componentModel) {
     super(componentModel);
+    this.userModel = userModel;
   }
 
-  GetByBikeId(bikeId) {
-    this.documentModel.find({bike: bikeId}).exec();
+  async GetComponents(bikeId) {
+    var bike = this.documentModel.find({bike: bikeId}).exec();
+    if (bike == null) return null;
+
+    var components = [];
+    bike.components.forEach((component) => {
+      components.push(component);
+    })
+
+    return components;
   }
 
-  //Supporting function for front end
-  GetTasksByComponentId(componentId) {
-    var components = this.documentModel.find({_id: componentId}).exec();
-    return components.maintenance_tasks;
+  async GetBike(componentId) {
+    var component = this.documentModel.find({_id: componentId}).exec();
+    return component.bike;
+  }
+
+  async GetTasks(componentId) {
+    var component = this.documentModel.find({_id: componentId}).exec();
+    return component.maintenance_tasks;
+  }
+
+  async AddComponent() {
+    // TODO: Implement this
+    // Return new componentId after MongoDB exchange
+  }
+
+  async RemoveComponent(componentId) {
+    // TODO: Implement this
   }
 }
-const componentRepository = new ComponentRepository(ComponentModel);
+
+const componentRepository = new ComponentRepository(ComponentModel, UserModel);
 module.exports = componentRepository;

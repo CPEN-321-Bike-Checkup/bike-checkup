@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-export default class TimeScreen extends React.Component {
+export default class ActivitiesScreen extends React.Component {
   constructor(props) {
     super(props);
   }
