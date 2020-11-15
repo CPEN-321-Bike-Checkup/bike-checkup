@@ -20,7 +20,7 @@ export default class BikesStack extends React.Component {
         <Stack.Screen name="Bikes" component={BikesScreen} />
         <Stack.Screen name="Components" component={ComponentsScreen} />
         <Stack.Screen
-          name="ComponentTaskScreen"
+          name="Tasks"
           component={ComponentTaskScreen}
         />
         <Stack.Screen name="AddTaskScreen" component={AddTaskScreen} />
