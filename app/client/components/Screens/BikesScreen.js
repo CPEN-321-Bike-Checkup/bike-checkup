@@ -58,7 +58,7 @@ export default class BikesScreen extends React.Component {
         //this.setState({predictedDates: dates});
       })
       .catch((err) => {
-        console.log('ERRROR: Failed to fetch bikes: ', err);
+        console.log('ERROR: Failed to fetch bikes: ', err);
       });
   }
 

@@ -49,7 +49,7 @@ export default class MaintenancePrediction extends React.Component {
         this.setState({predictedDates: dates});
       })
       .catch((err) => {
-        console.log('ERRROR: Failed to fetch predictions: ', err);
+        console.log('ERROR: Failed to fetch predictions: ', err);
       });
   }
 
@@ -65,7 +65,7 @@ export default class MaintenancePrediction extends React.Component {
         //this.setState({predictedDates: dates});
       })
       .catch((err) => {
-        console.log('ERRROR: Failed to fetch tasks: ', err);
+        console.log('ERROR: Failed to fetch tasks: ', err);
       });
   }
 
