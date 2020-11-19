@@ -1,18 +1,21 @@
 const express = require('express');
-const BikeService = require('../services/BikeService');
-const deviceTokenRepo = require('../repositories/DeviceTokenRepository');
+const bikeService = require('../services/BikeService');
 
 const initBikeRouting = (app) => {
   const bikeRouter = express.Router();
 
   app.use('/bike', bikeRouter);
 
-  bikeRouter.get('/:userId/bikes', (req, res) => {
-    deviceTokenRepo.GetAll().then(function (deviceTokens) {
-      console.log('correct bike route');
-      var bikes = []; //BikeService.getBikes(req.params[0]);
-      res.send(JSON.stringify({bikes: bikes}));
-    });
+  //add error handling
+  bikeRouter.get('/:userId/', async (req, res) => {
+    var bikes = await bikeService
+      .GetBikesForUser(parseInt(req.params.userId))
+      .then((bikes) => {
+        res.status(200).send(JSON.stringify(bikes));
+      })
+      .catch((err) => {
+        res.status(500).send(err);
+      });
   });
 };
 

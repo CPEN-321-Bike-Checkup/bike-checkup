@@ -6,11 +6,20 @@ class MaintenanceRecordService {
   }
 
   // TODO: remove this - records will be created by TaskService when a task is completed
-  async createRecord(document) {
-    this.maintenanceRecordRepository.Create(document);
+  CreateRecord(document) {
+    return this.maintenanceRecordRepository.Create(document);
   }
 
-  async getMaintenanceRecords(userId, daysOfHistory) {
+  GetMaintenanceRecordsForUserInRange(userId, startDate, numberOfDays) {
+    //update repo function to give days of history starting at date
+    return maintenanceRecordRepository.GetMaintenanceRecordsForUserInRange(
+      userId,
+      startDate,
+      numberOfDays,
+    );
+  }
+
+  GetMaintenanceRecords(userId, daysOfHistory) {
     return maintenanceRecordRepository.GetMaintenanceRecordsHistory(
       userId,
       daysOfHistory,

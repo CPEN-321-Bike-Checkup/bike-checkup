@@ -8,9 +8,8 @@ class BikeRepository extends Repository {
     this.userModel = userModel;
   }
 
-  async GetBikesForUser(userId) {
-    var user = await this.userModel.find({_id: userId}).exec();
-    return user.bikes;
+  GetBikesForUser(userId) {
+    return this.documentModel.find({owner: userId}).exec();
   }
 }
 const bikeRepository = new BikeRepository(BikeModel, UserModel);

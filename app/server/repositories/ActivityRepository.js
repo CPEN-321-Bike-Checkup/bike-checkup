@@ -7,22 +7,17 @@ class ActivityRepository extends Repository {
     super(activityModel);
   }
 
-  GetActivitiesAfterDateForUser(userId, date) {
-    this.documentModel
-      .find({athlete_id: userId, date: {$gte: date}})
-      .exec()
-      .then((activities) => {
-        return activities;
+  // update to use numberOfDays
+  GetActivitiesForUserInRange(userId, date, numberOfDays) {
+    var endDate = new Date();
+    endDate.setDate(date.getDate() + numberOfDays);
+    console.log(date);
+    return this.documentModel
+      .find({
+        athlete_id: userId,
+        date: {$gte: date, $lte: endDate},
       })
-      .catch((err) => {
-        console.error(err);
-        throw new Error(
-          'Could not fetch activities for user: ' +
-            userId +
-            'before date: ' +
-            date,
-        );
-      });
+      .exec();
   }
 }
 const activityRepository = new ActivityRepository(ActivityModel);

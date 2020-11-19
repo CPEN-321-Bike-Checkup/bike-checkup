@@ -6,18 +6,21 @@ const initMaintenanceRecordRouting = (app) => {
 
   app.use('/maintenanceRecord', maintenanceRecordRouter);
 
-  maintenanceRecordRouter.get(
-    '/:userId/days/:daysOfHistory',
-    (req, res, next) => {
-      MaintenanceRecordService.getMaintenanceRecords(
+  maintenanceRecordRouter.get('/:userId/', (req, res, next) => {
+    if (req.query.afterDate !== undefined && req.query.numDays !== undefined) {
+      MaintenanceRecordService.GetMaintenanceRecordsForUserInRange(
         parseInt(req.params.userId),
-        parseInt(req.params.daysOfHistory),
-      ).then(
-        (records) => res.send(JSON.stringify(records)),
-        (err) => res.send(JSON.stringify(err)),
-      );
-    },
-  );
+        req.query.afterDate,
+        req.query.numDays,
+      )
+        .then((records) => {
+          res.status(200).send(JSON.stringify(records));
+        })
+        .catch((err) => {
+          res.status(500).send(err);
+        });
+    }
+  });
 };
 
 module.exports = initMaintenanceRecordRouting;

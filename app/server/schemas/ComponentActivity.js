@@ -6,7 +6,7 @@ const componentActivitySchema = new mongoose.Schema({
     ref: 'Component',
   },
   activity_id: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.Number,
     ref: 'Activity',
   },
 });

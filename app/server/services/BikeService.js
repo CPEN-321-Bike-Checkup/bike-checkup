@@ -10,20 +10,8 @@ class BikeService {
     this.bikeRepository.Create(document);
   }
 
-  getBikes(userId) {
-    //debugging bike route
-    /*
-    console.log('hello bikes!');
-
-    const bike1 = {
-      bike_id: 1,
-      bike_name: 'bike 1',
-    };
-    var bikes = [bike1];
-    return bikes;
-    */
-
-    return bikeRepository.GetBikesForUser(userId);
+  GetBikesForUser(userId) {
+    return this.bikeRepository.GetBikesForUser(userId);
   }
 }
 

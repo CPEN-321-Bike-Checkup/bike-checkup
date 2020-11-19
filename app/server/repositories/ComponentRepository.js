@@ -8,16 +8,8 @@ class ComponentRepository extends Repository {
     this.userModel = UserModel;
   }
 
-  async GetComponents(bikeId) {
-    var bike = this.documentModel.find({bike: bikeId}).exec();
-    if (bike == null) return null;
-
-    var components = [];
-    bike.components.forEach((component) => {
-      components.push(component);
-    });
-
-    return components;
+  async GetComponentsForBike(bikeId) {
+    return this.documentModel.find({bike_id: bikeId}).exec();
   }
 
   async GetBike(componentId) {

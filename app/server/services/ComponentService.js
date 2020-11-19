@@ -5,12 +5,10 @@ class ComponentService {
     this.componentRepository = componentRepository;
   }
 
-  async getComponents(bikeId) {
-    return componentRepository.getComponents(bikeId);
+  GetComponentsForBike(bikeId) {
+    return this.componentRepository.GetComponentsForBike(bikeId);
   }
 }
 
-const componentService = new ComponentService(
-  componentRepository,
-);
+const componentService = new ComponentService(componentRepository);
 module.exports = componentService;

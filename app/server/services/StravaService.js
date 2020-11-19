@@ -64,6 +64,7 @@ class StravaService {
     activitiesResp.data.forEach((a) => {
       var components = this.componentRepository.GetComponent(a.gear_id);
       var activity = {
+        athlete_id: a.athlete.id,
         description: a.name,
         distance: a.distance,
         time_s: a.elapsed_time,

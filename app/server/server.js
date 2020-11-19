@@ -45,6 +45,7 @@ const initStravaRoutes = require('./routes/StravaRoutes');
 const initMaintenanceRecordRoutes = require('./routes/MaintenanceRecordRoutes');
 const initBikeRoutes = require('./routes/BikeRoutes');
 const initComponentRoutes = require('./routes/ComponentRoutes');
+const initActivityRoutes = require('./routes/ActivityRoutes');
 
 initUserRoutes(app);
 initStravaRoutes(app);
@@ -52,6 +53,7 @@ initMaintenanceTaskRoutes(app);
 initMaintenanceRecordRoutes(app);
 initBikeRoutes(app);
 initComponentRoutes(app);
+initActivityRoutes(app);
 
 app.get('/stravaRedirect', function (req, res, next) {
   console.log('Strava Auth Hit');
