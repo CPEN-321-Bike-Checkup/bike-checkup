@@ -1,4 +1,5 @@
 const express = require('express');
+const {isDate, isInteger} = require('lodash');
 const activityService = require('../services/ActivityService');
 
 const initActivityRouting = (app) => {
@@ -8,18 +9,22 @@ const initActivityRouting = (app) => {
 
   //add error handling
   activityRouter.get('/:userId/', (req, res) => {
-    activityService
-      .GetActivitiesForUserInRange(
-        parseInt(req.params.userId),
-        new Date(req.query.afterDate),
-        parseInt(req.query.numDays),
-      )
-      .then((activities) => {
-        res.status(200).send(JSON.stringify(activities));
-      })
-      .catch((err) => {
-        res.status(500).send(err);
-      });
+    var userId = parseInt(req.params.userId);
+    var afterDate = new Date(req.query.afterDate);
+    var numberOfDays = parseInt(req.query.numDays);
+    if (isInteger(userId) && isDate(afterDate) && isInteger(numberOfDays)) {
+      activityService
+        .GetActivitiesForUserInRange(userId, afterDate, numberOfDays)
+        .then((activities) => {
+          res.status(200).send(JSON.stringify(activities));
+        })
+        .catch((err) => {
+          console.error(err);
+          res.status(500).send(err);
+        });
+    } else {
+      res.status(400).send('Incorrect query parameters');
+    }
   });
 };
 

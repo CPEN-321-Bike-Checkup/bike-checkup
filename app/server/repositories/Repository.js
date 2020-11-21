@@ -26,6 +26,10 @@ class Repository {
     }
   }
 
+  Exists(documentProperties) {
+    return this.documentModel.exists(documentProperties);
+  }
+
   Create(documents) {
     if (Array.isArray(documents)) {
       return this.documentModel.insertMany(documents);

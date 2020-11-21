@@ -7,7 +7,6 @@ const initMaintenanceTaskRouting = (app) => {
 
   app.use('/maintenanceTask', maintenanceTaskRouter);
 
-  //
   maintenanceTaskRouter.get('/prediction', async (req, res) => {
     if (req.query.userId !== undefined && req.query.userId) {
       var predictions = await maintenanceTaskService.MaintenancePredictForUser(
@@ -29,6 +28,9 @@ const initMaintenanceTaskRouting = (app) => {
         .GetTaskScheduleForUser(req.query.userId)
         .then((tasks) => {
           res.send(JSON.stringify(tasks));
+        })
+        .catch((err) => {
+          res.status(500).send('Internal server error');
         });
       //get tasks specific to component for component screen flow
     } else if (req.query.componentId !== undefined && req.query.componentId) {
@@ -36,7 +38,13 @@ const initMaintenanceTaskRouting = (app) => {
         .GetTasksForComponent(req.query.componentId)
         .then((tasks) => {
           res.send(JSON.stringify(tasks));
+        })
+        .catch((err) => {
+          console.err('GET maintenanceTask/ Error: ', err);
+          res.status(500).send('Internal server error');
         });
+    } else {
+      res.status(400).send('Invalid query parameters');
     }
   });
 

@@ -43,6 +43,11 @@ class MaintenanceTaskService {
     return record;
   }
 
+  //change service function to do 1. from views file
+  GetTaskScheduleForUser(userId) {
+    return this.GetScheduledTasksSorted(userId, 50);
+  }
+
   /*
    * Gets all tasks in the future within certain range of days
    * @param     userId - id of user whose tasks are to be retrieved
@@ -53,11 +58,18 @@ class MaintenanceTaskService {
    * @modifies  nothing
    */
 
-  GetScheduledTasksSorted(userId, numDays) {
+  async GetScheduledTasksSorted(userId, numDays) {
     const num_of_days = 50;
-    let all_tasks = maintenanceTaskRepository.GetMaintenanceTasksForUser(
+    var all_tasks = await this.maintenanceTaskRepository.GetMaintenanceTasksForUser(
       userId,
     );
+    //.then((tasks) => {
+    //  all_tasks = tasks;
+    //  console.log('tasks: ', all_tasks);
+    //})
+    //.catch((err) => {
+    //  console.log(err);
+    //});
 
     let cutoff_date = this.addDays(new Date(), num_of_days);
     let filtered_tasks = all_tasks.filter(function (value, index, arr) {
@@ -88,9 +100,9 @@ class MaintenanceTaskService {
    */
 
   GetTasksForComponent(componentId) {
-    var tasks = this.maintenanceTaskRepository.GetTasksForComponent(
+    var tasks = this.maintenanceTaskRepository.GetTasksForComponents([
       componentId,
-    );
+    ]);
     return tasks.map((task) => {
       return {
         'task id': task._id,
@@ -102,7 +114,8 @@ class MaintenanceTaskService {
     });
   }
 
-  async MaintenancePredict(userId) {
+  //TODO make the equivalent for component and use that function to do this for user
+  async MaintenancePredictForUser(userId) {
     //remove mock data later
 
     let maintenanceList = await maintenanceTaskRepository.GetMaintenanceTasksForUser(

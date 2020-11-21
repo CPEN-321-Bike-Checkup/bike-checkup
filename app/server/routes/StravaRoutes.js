@@ -12,11 +12,17 @@ const initStravaRouting = (app) => {
     var user = req.body;
     userService.CreateOrUpdateUsers(user).then(async (resp) => {
       await stravaService.UpdateBikesForUser(user._id);
-      stravaService.SaveNewActivitiesForUser(user._id).then((activitiesRes) => {
-        maintenanceTaskService.MaintenancePredict(user._id);
-        res.status(200);
-        res.send(activitiesRes);
-      });
+      stravaService
+        .SaveNewActivitiesForUser(user._id)
+        .then((activitiesRes) => {
+          maintenanceTaskService.MaintenancePredict(user._id);
+          res.status(200);
+          res.send(activitiesRes);
+        })
+        .catch((err) => {
+          console.error(err);
+          res.status(500).send(err);
+        });
     });
   });
 };

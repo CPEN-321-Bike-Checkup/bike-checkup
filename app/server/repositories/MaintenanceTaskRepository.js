@@ -1,35 +1,62 @@
-const {ComponentModel} = require('../schemas/Component');
 const Repository = require('./Repository');
-const MaintenanceTaskModel = require('../schemas/MaintenanceTask')
-  .MaintenanceTaskModel;
-const UserModel = require('../schemas/User').UserModel;
+const {MaintenanceTaskModel} = require('../schemas/MaintenanceTask');
+const {ComponentModel} = require('../schemas/Component');
+const {BikeModel} = require('../schemas/Bike');
 
 class MaintenanceTaskRepository extends Repository {
-  constructor(maintenanceTaskModel, userModel, componentModel) {
+  constructor(maintenanceTaskModel, bikeModel, componentModel) {
     super(maintenanceTaskModel);
-    this.userModel = userModel;
+    this.MaintenanceTaskModel = this.documentModel;
+    this.bikeModel = bikeModel;
     this.componentModel = componentModel;
   }
 
-  async GetMaintenanceTasksForUser(userId) {
-    var user = await this.userModel.find({_id: userId}).exec();
-    var tasks = [];
-    user.bikes.forEach((bike) => {
-      bike.components.forEach((component) => {
-        tasks.concat(component.maintenance_tasks);
-      });
+  GetMaintenanceTasksForUser(userId) {
+    return new Promise((resolve, reject) => {
+      this.bikeModel
+        .find({owner_id: userId})
+        .exec()
+        .then((bikes) => {
+          console.log(bikes);
+          this.componentModel
+            .find({bike_id: {$in: bikes.map((b) => b._id)}})
+            .exec()
+            .then((components) => {
+              console.log(components);
+              resolve(
+                this.GetMaintenanceTasksForComponents(
+                  components.map((comp) => comp._id),
+                ),
+              );
+            })
+            .catch((err) => {
+              reject(err);
+            });
+        })
+        .catch((err) => {
+          reject(err);
+        });
     });
-    return tasks;
   }
 
-  async GetMaintenanceTasksForComponent(componentId) {
-    var component = await this.componentModel.findById(componentId).exec();
-    return component.maintenance_tasks;
+  GetMaintenanceTasksForComponents(componentIds) {
+    return new Promise((resolve, reject) => {
+      console.log('components: ', componentIds);
+      this.documentModel
+        .find({component_id: {$in: componentIds}})
+        .exec()
+        .then((tasks) => {
+          resolve(tasks);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
   }
 }
 const maintenanceTaskRepository = new MaintenanceTaskRepository(
   MaintenanceTaskModel,
-  UserModel,
+  BikeModel,
   ComponentModel,
 );
 module.exports = maintenanceTaskRepository;
