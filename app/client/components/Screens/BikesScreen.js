@@ -70,8 +70,8 @@ export default class BikesScreen extends React.Component {
       <PressableListItem
         title={item.title}
         onPress={() =>
-          //this.navigation.navigate('Components', {bikeId: item.id})
-          this.getBikes()
+          this.navigation.navigate('Components', {bikeId: item.id})
+          // this.getBikes()
         }
         testID={testId}
       />
@@ -79,6 +79,7 @@ export default class BikesScreen extends React.Component {
   };
 
   render() {
+    this.itemCount = 0;
     return flatListWrapper(DATA, this.renderItem, 'BikesList');
   }
 }
