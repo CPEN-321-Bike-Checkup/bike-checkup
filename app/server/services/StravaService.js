@@ -53,15 +53,15 @@ class StravaService {
     }
   }
 
-  async SaveNewActivitiesForUser(userId) {
+  //syncs updates to existing and creation of new activities over the last 4 months
+  async UpdateActivitiesForUser(userId) {
     var activities = [];
     var token = await this.GetTokenForUser(userId);
     var user = await this.userRepository.GetById(userId);
 
+    //update last 4 months of activities
     var activitiesUrl = 'https://www.strava.com/api/v3/athlete/activities';
-    if (user.activity_cache_date instanceof Date) {
-      activitiesUrl.concat('?after=').concat(activity_cache_date);
-    }
+    activitiesUrl.concat('?after=').concat(Date.now.addDays(-30 * 4));
 
     var activitiesResp = await axios.get(activitiesUrl, {
       headers: {Authorization: 'Bearer '.concat(token)},
@@ -69,9 +69,9 @@ class StravaService {
 
     for (var i = 0; i < activitiesResp.data.length; i++) {
       var a = activitiesResp.data[i];
-      var /*compsPromise*/ components = await this.componentRepository.GetComponentsForBike(
-          a.gear_id,
-        );
+      var compsPromise = await this.componentRepository.GetComponentsForBike(
+        a.gear_id,
+      );
       var activity = {
         _id: random(0, 1000), //a._id,
         athlete_id: a.athlete.id,
@@ -80,14 +80,12 @@ class StravaService {
         time_s: a.elapsed_time,
         date: a.start_date,
       };
-      var /*activityPromise*/ newActivity = await this.activityRepository.Create(
-          activity,
-        );
+      var activityPromise = await this.activityRepository.Create(activity);
 
-      //let [components, newActivity] = await Promise.all([
-      //  compsPromise,
-      //  activityPromise,
-      //]);
+      let [components, newActivity] = await Promise.all([
+        compsPromise,
+        activityPromise,
+      ]);
       components.forEach((component) => {
         var componentActivity = {
           activity_id: newActivity._id,
@@ -99,6 +97,35 @@ class StravaService {
       activities.push(newActivity);
     }
     return activities;
+  }
+
+  async UpdateComponentActivitiesForUser(userId) {
+    //get all components for user that are not removed
+    var componentPromise = this.componentRepository.GetComponentsForUser(
+      userId,
+      {removal_date: {$exists: false}},
+    );
+    var activitiesPromise = this.activityRepository.GetByQuery({
+      date: {$gte: Date.now().addDays(-30 * 4)},
+    });
+    let [components, activities] = await Promise.all([
+      compsPromise,
+      activityPromise,
+    ]);
+
+    var componentActivities = [];
+    components.forEach((comp) => {
+      for (var i = 0; i < activities.length; i++) {
+        var a = activities[i];
+        if (a.date <= comp.attatchement_date) {
+          continue;
+        }
+        componentActivities.push({component_id: comp._id, activity_id: a._id});
+      }
+    });
+    return this.componentActivityRepostiory.CreateIfDoesntExist(
+      componentActivities,
+    );
   }
 
   async GetTokenForUser(userId) {

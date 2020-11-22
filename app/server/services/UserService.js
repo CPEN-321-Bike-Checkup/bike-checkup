@@ -7,8 +7,8 @@ class UserService {
     this.deviceTokenRepository = deviceTokenRepository;
   }
 
-  CreateOrUpdateUsers(users) {
-    return this.userRepository.CreateOrUpdate(users);
+  UserExists(userId) {
+    return this.userRepository.Exists({_id: userId});
   }
 
   async RegisterNewDevice(userId, deviceToken) {
@@ -32,7 +32,7 @@ class UserService {
   }
 
   GetAllUsers() {
-    return userRepository.GetAll();
+    return this.userRepository.GetAll();
   }
 
   GetUserById(id) {
@@ -40,11 +40,15 @@ class UserService {
   }
 
   GetUserByStravaToken(token) {
-    return userRepository.GetUserByStravaToken(token);
+    return this.userRepository.GetUserByStravaToken(token);
   }
 
-  CreateUsers(users) {
-    return userRepository.Create(users);
+  CreateUser(user) {
+    return this.userRepository.Create(users);
+  }
+
+  UpdateUser(user) {
+    return this.userRepository.Update(user);
   }
 }
 
