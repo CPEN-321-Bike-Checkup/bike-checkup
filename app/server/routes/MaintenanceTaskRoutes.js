@@ -1,13 +1,57 @@
 const express = require('express');
 const maintenanceTaskService = require('../services/MaintenanceTaskService');
 const {Mongoose} = require('mongoose');
+const {isInteger} = require('lodash');
 
 const initMaintenanceTaskRouting = (app) => {
   const maintenanceTaskRouter = express.Router();
 
   app.use('/maintenanceTask', maintenanceTaskRouter);
 
-  maintenanceTaskRouter.get('/prediction', async (req, res) => {
+  maintenanceTaskRouter.get('/prediction/:userId', (req, res) => {
+    var userId = parseInt(req.params.userId, 10);
+    if (isInteger(userId)) {
+      maintenanceTaskService
+        .MaintenancePredictForUser(userId)
+        .then((predictions) => {
+          res.status(200).send(JSON.stringify(predictions));
+        })
+        .catch((err) => {
+          console.error(err);
+          if (err.name === 'ValidationError') {
+            res.status(400).send('Error: Invalid Request syntax');
+          } else {
+            res.status(500).send('Error: Internal Server Error');
+          }
+        });
+    } else {
+      res.status(400).send('Improper user parameter');
+    }
+  });
+
+  maintenanceTaskRouter.get('/prediction/:userId/:componentId', (req, res) => {
+    var userId = parseInt(req.params.userId, 10);
+    var componentId = req.params.componentId;
+    if (isInteger(userId)) {
+      maintenanceTaskService
+        .MaintenancePredictForComponent(userId, componentId)
+        .then((predictions) => {
+          res.status(200).send(JSON.stringify(predictions));
+        })
+        .catch((err) => {
+          console.error(err);
+          if (err.name === 'ValidationError') {
+            res.status(400).send('Error: Invalid Request syntax');
+          } else {
+            res.status(500).send('Error: Internal Server Error');
+          }
+        });
+    } else {
+      res.status(400).send('Improper user parameter');
+    }
+  });
+
+  /*maintenanceTaskRouter.get('/prediction', async (req, res) => {
     if (req.query.userId !== undefined && req.query.userId) {
       var predictions = await maintenanceTaskService.MaintenancePredictForUser(
         req.query.userId,
@@ -19,7 +63,7 @@ const initMaintenanceTaskRouting = (app) => {
       );
       res.status(200).send(JSON.stringify(prediction));
     }
-  });
+  });*/
 
   maintenanceTaskRouter.get('/', (req, res) => {
     if (req.query.userId !== undefined && req.query.userId) {
