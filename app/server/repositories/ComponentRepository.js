@@ -18,7 +18,7 @@ class ComponentRepository extends Repository {
     var bikes = await this.bikeModel.find(fullQuery).exec();
     var compPromises = [];
     for (var i = 0; i < bikes.length; i++) {
-      compPromises.push(this.GetComponentsForBike(bikes[i]._id));
+      compPromises.concat(this.GetComponentsForBike(bikes[i]._id));
     }
     return Promise.all(compPromises);
   }

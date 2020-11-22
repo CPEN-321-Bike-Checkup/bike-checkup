@@ -23,6 +23,12 @@ class StravaService {
     this.componentActivityRepostiory = componentActivityRepostiory;
   }
 
+  Get4MonthsAgo() {
+    var date = new Date();
+    date.setDate(date.getDate() - 30 * 4);
+    return date;
+  }
+
   async UpdateBikesForUser(userId) {
     var athlete = await this.GetAthlete(userId);
     var user = await this.userRepository.GetById(userId);
@@ -60,8 +66,9 @@ class StravaService {
     var user = await this.userRepository.GetById(userId);
 
     //update last 4 months of activities
+    var dateString = this.Get4MonthsAgo().toString();
     var activitiesUrl = 'https://www.strava.com/api/v3/athlete/activities';
-    activitiesUrl.concat('?after=').concat(Date.now.addDays(-30 * 4));
+    activitiesUrl.concat('?after=').concat(dateString);
 
     var activitiesResp = await axios.get(activitiesUrl, {
       headers: {Authorization: 'Bearer '.concat(token)},
@@ -69,48 +76,33 @@ class StravaService {
 
     for (var i = 0; i < activitiesResp.data.length; i++) {
       var a = activitiesResp.data[i];
-      var compsPromise = await this.componentRepository.GetComponentsForBike(
-        a.gear_id,
-      );
       var activity = {
-        _id: random(0, 1000), //a._id,
+        _id: a.id,
         athlete_id: a.athlete.id,
         description: a.name,
         distance: a.distance,
         time_s: a.elapsed_time,
         date: a.start_date,
       };
-      var activityPromise = await this.activityRepository.Create(activity);
-
-      let [components, newActivity] = await Promise.all([
-        compsPromise,
-        activityPromise,
-      ]);
-      components.forEach((component) => {
-        var componentActivity = {
-          activity_id: newActivity._id,
-          component_id: component._id,
-        };
-        this.componentActivityRepostiory.Create(componentActivity);
-      });
+      var newActivity = this.activityRepository.CreateOrUpdate(activity);
 
       activities.push(newActivity);
     }
-    return activities;
+    return Promise.all(activities);
   }
 
   async UpdateComponentActivitiesForUser(userId) {
     //get all components for user that are not removed
-    var componentPromise = this.componentRepository.GetComponentsForUser(
-      userId,
-      {removal_date: {$exists: false}},
-    );
-    var activitiesPromise = this.activityRepository.GetByQuery({
-      date: {$gte: Date.now().addDays(-30 * 4)},
+    var compsPromise = this.componentRepository.GetComponentsForUser(userId, {
+      removal_date: {$exists: false},
     });
+    var activitiesPromise = this.activityRepository.GetByQuery({
+      date: {$gte: this.Get4MonthsAgo()},
+    });
+
     let [components, activities] = await Promise.all([
       compsPromise,
-      activityPromise,
+      activitiesPromise,
     ]);
 
     var componentActivities = [];

@@ -62,8 +62,8 @@ class Repository {
       documents = [documents];
     }
 
-    for (var i = 0; i < document.length; i++) {
-      doc = documents[i];
+    for (var i = 0; i < documents.length; i++) {
+      var doc = documents[i];
       var exists = await this.Exists(doc);
       if (!exists) {
         promises.push(this.Create(doc));
@@ -72,12 +72,13 @@ class Repository {
     return Promise.all(promises);
   }
 
+  //requires that schema has an _id and uses it as its key
   async CreateOrUpdate(documents) {
     var promises = [];
     if (!Array.isArray(documents)) {
       documents = [documents];
     }
-    var existingKeys = await this.GetByQuery(
+    var existingKeys = await this.GetById(
       documents.map((doc) => this.GetDocumentKey(doc)),
     );
     existingKeys = existingKeys.map((doc) => this.GetDocumentKey(doc));

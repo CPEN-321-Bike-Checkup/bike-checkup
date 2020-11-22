@@ -11,13 +11,12 @@ const initStravaRouting = (app) => {
   stravaRouter.post('/:userId/connectedStrava', async (req, res) => {
     var user = req.body;
     var userPromise = await userService.CreateOrUpdateUsers(user);
-    var userId = userPromise[0]._id;
-    stravaService.UpdateBikesForUser(userId);
+    stravaService.UpdateBikesForUser(user._id);
     stravaService
-      .UpdateActivitiesForUser(userId)
+      .UpdateActivitiesForUser(user._id)
       .then((activitiesRes) => {
         stravaService
-          .UpdateComponentActivitiesForUser(userId)
+          .UpdateComponentActivitiesForUser(user._id)
           .then((compActivitiesRes) => {
             //maintenanceTaskService.MaintenancePredictForUser(user._id);
             res.status(200);
