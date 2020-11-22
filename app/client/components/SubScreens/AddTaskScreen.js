@@ -36,7 +36,7 @@ export default class AddTaskScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.inputContainer}>
+      <View style={styles.inputContainer} testID="AddTaskScreen">
         <TextInput
           style={styles.textInput}
           placeholder="Your name"
