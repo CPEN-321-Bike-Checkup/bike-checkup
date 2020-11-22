@@ -18,7 +18,7 @@ class Repository {
     return this.documentModel.find({}).exec();
   }
 
-  GetById(ids) {
+  async GetById(ids) {
     if (Array.isArray(ids)) {
       return this.documentModel.find({_id: {$in: ids}}).exec();
     } else {
@@ -48,7 +48,7 @@ class Repository {
             .exec(),
         );
       });
-      return promises;
+      return Promise.all(promises);
     } else {
       return this.documentModel
         .updateOne(this.GetDocumentKey(newDocumentsVals), newDocumentsVals)
@@ -56,6 +56,23 @@ class Repository {
     }
   }
 
+  async CreateIfDoesntExist(documents) {
+    var promises = [];
+    if (!Array.isArray(documents)) {
+      documents = [documents];
+    }
+
+    for (var i = 0; i < documents.length; i++) {
+      var doc = documents[i];
+      var exists = await this.Exists(doc);
+      if (!exists) {
+        promises.push(this.Create(doc));
+      }
+    }
+    return Promise.all(promises);
+  }
+
+  //requires that schema has an _id and uses it as its key
   async CreateOrUpdate(documents) {
     var promises = [];
     if (!Array.isArray(documents)) {
@@ -80,7 +97,7 @@ class Repository {
         promises.push(this.Create(document));
       }
     });
-    return promises;
+    return Promise.all(promises);
   }
 
   Delete(documents) {
@@ -89,7 +106,7 @@ class Repository {
       documents.forEach((document) => {
         promises.add(this.documentModel.deleteOne(document).exec());
       });
-      return promises;
+      return Promise.all(promises);
     } else {
       return this.documentModel.deleteOne(documents).exec();
     }

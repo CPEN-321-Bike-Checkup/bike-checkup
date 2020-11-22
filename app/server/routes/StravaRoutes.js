@@ -8,22 +8,25 @@ const initStravaRouting = (app) => {
 
   app.use('/strava', stravaRouter);
 
-  stravaRouter.post('/:userId/connectedStrava', async (req, res, next) => {
+  stravaRouter.post('/:userId/connectedStrava', async (req, res) => {
     var user = req.body;
-    userService.CreateOrUpdateUsers(user).then(async (resp) => {
-      await stravaService.UpdateBikesForUser(user._id);
-      stravaService
-        .SaveNewActivitiesForUser(user._id)
-        .then((activitiesRes) => {
-          //maintenanceTaskService.MaintenancePredictForUser(user._id);
-          res.status(200);
-          res.send(activitiesRes);
-        })
-        .catch((err) => {
-          console.error(err);
-          res.status(500).send(err);
-        });
-    });
+    var userPromise = await userService.CreateOrUpdateUsers(user);
+    stravaService.UpdateBikesForUser(user._id);
+    stravaService
+      .UpdateActivitiesForUser(user._id)
+      .then((activitiesRes) => {
+        stravaService
+          .UpdateComponentActivitiesForUser(user._id)
+          .then((compActivitiesRes) => {
+            //maintenanceTaskService.MaintenancePredictForUser(user._id);
+            res.status(200);
+            res.send('Sync Strava OK');
+          });
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send(err);
+      });
   });
 };
 

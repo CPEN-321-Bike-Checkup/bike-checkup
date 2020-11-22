@@ -1,15 +1,36 @@
 const Repository = require('./Repository');
 const ComponentModel = require('../schemas/Component').ComponentModel;
-const UserModel = require('../schemas/User').UserModel;
+const BikeModel = require('../schemas/Bike').BikeModel;
 
 class ComponentRepository extends Repository {
-  constructor(componentModel, userModel) {
+  constructor(componentModel, bikeModel) {
     super(componentModel);
-    this.userModel = UserModel;
+    this.bikeModel = bikeModel;
   }
 
-  GetComponentsForBike(bikeId) {
-    var promise = this.documentModel.find({bike_id: bikeId}).exec();
+  async GetComponentsForUser(userId, query) {
+    let fullQuery;
+    if (query !== undefined) {
+      fullQuery = {...query, owner_id: userId};
+    } else {
+      fullQuery = {owner_id: userId};
+    }
+    var bikes = await this.bikeModel.find(fullQuery).exec();
+    var compPromises = [];
+    for (var i = 0; i < bikes.length; i++) {
+      compPromises.concat(this.GetComponentsForBike(bikes[i]._id));
+    }
+    return Promise.all(compPromises);
+  }
+
+  GetComponentsForBike(bikeId, query) {
+    let fullQuery;
+    if (query !== undefined) {
+      fullQuery = {...query, bike_id: bikeId};
+    } else {
+      fullQuery = {bike_id: bikeId};
+    }
+    var promise = this.documentModel.find(fullQuery).exec();
     return promise;
   }
 
@@ -33,5 +54,5 @@ class ComponentRepository extends Repository {
   }
 }
 
-const componentRepository = new ComponentRepository(ComponentModel, UserModel);
+const componentRepository = new ComponentRepository(ComponentModel, BikeModel);
 module.exports = componentRepository;
