@@ -19,6 +19,10 @@ class ActivityRepository extends Repository {
       })
       .exec();
   }
+
+  GetActivitiesByIds(activityIds) {
+    return this.documentModel.find({_id: {$in: activityIds}}).exec();
+  }
 }
 const activityRepository = new ActivityRepository(ActivityModel);
 module.exports = activityRepository;

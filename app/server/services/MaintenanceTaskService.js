@@ -1,4 +1,5 @@
 const activityRepository = require('../repositories/ActivityRepository');
+const componentActivityRepository = require('../repositories/ComponentActivityRepository');
 const maintenanceTaskRepository = require('../repositories/MaintenanceTaskRepository');
 const moment = require('moment');
 const maintenanceRecordRepository = require('../repositories/MaintenanceRecordRepository');
@@ -9,10 +10,12 @@ class MaintenanceTaskService {
     activityRepository,
     maintenanceTaskRepository,
     maintenanceRecordRepository,
+    componentActivityRepository,
   ) {
     this.activityRepository = activityRepository;
     this.maintenanceTaskRepository = maintenanceTaskRepository;
     this.maintenanceRecordRepository = maintenanceRecordRepository;
+    this.componentActivityRepository = componentActivityRepository;
   }
 
   GetById(id) {
@@ -216,44 +219,47 @@ class MaintenanceTaskService {
     var maint_index;
     for (maint_index = 0; maint_index < maintenanceList.length; maint_index++) {
       //no predictions to be made if schedule is not distance based
-      //console.log(maintenanceList[maint_index].schedule_type);
       if (maintenanceList[maint_index].schedule_type != 'distance') {
-        //console.log('not the right schedule type!!!');
         predict_dates.push(null);
         continue;
       }
+
+      //retrieve all activities since maintenance day for specified component
       var last_maint_date = maintenanceList[
         maint_index
       ].last_maintenance_val.getTime();
+      var component_id = maintenanceList[maint_index].component_id;
 
-      var activityList = await activityRepository.GetActivitiesAfterDateForUser(
-        userId,
+      var activityListId = await componentActivityRepository.GetActivityIdsForComponentAfterDate(
+        component_id,
         last_maint_date,
       );
-      if (activityList.length == 0) {
+      if (activityListId.length == 0) {
         //no activities found, make no changes to predicted_due_date, skip
-        predict_dates.push(null); //predict dates used to debug on maintenance screen
         continue;
       }
 
-      var component_id = maintenanceList[maint_index].component_id;
+      var activityList = await activityRepository.GetActivitiesByIds(
+        activityListId,
+      );
+
+      //create x data (days) and y data (distance travelled)
       var distance_sum = 0;
       var activity_date_dataset = [0];
       var activity_distance_dataset = [0];
       var activity_index;
+
       for (
         activity_index = 0;
         activity_index < activityList.length;
         activity_index++
       ) {
-        if (activityList[activity_index].components.includes(component_id)) {
-          activity_date_dataset.push(
-            (activityList[activity_index].date.getTime() - last_maint_date) /
-              (MILLISECONDS_PER_SECOND * SECONDS_PER_DAY),
-          );
-          distance_sum += activityList[activity_index].distance;
-          activity_distance_dataset.push(distance_sum);
-        }
+        activity_date_dataset.push(
+          (activityList[activity_index].date.getTime() - last_maint_date) /
+            (MILLISECONDS_PER_SECOND * SECONDS_PER_DAY),
+        );
+        distance_sum += activityList[activity_index].distance;
+        activity_distance_dataset.push(distance_sum);
       }
 
       var x_mean = mean(activity_date_dataset);
