@@ -158,28 +158,14 @@ class MaintenanceTaskService {
     });
   }
 
-  async MaintenancePredictForComponent(userId, componentId) {
-    console.log('predicting for component...'); //DEBUG
-    /*let maintenanceList = await maintenanceTaskRepository.GetMaintenanceTasksForComponents(
-      componentId,
-    );*/
-
-    let maintenanceList = [];
-
-    this.MaintenancePredict(userId, maintenanceList);
-  }
-
+  //TODO make the equivalent for component and use that function to do this for user
   async MaintenancePredictForUser(userId) {
-    console.log('predicting for user...'); //DEBUG
+    //remove mock data later
+
     let maintenanceList = await maintenanceTaskRepository.GetMaintenanceTasksForUser(
       userId,
     );
 
-    this.MaintenancePredict(userId, maintenanceList);
-  }
-
-  //TODO make the equivalent for component and use that function to do this for user
-  async MaintenancePredict(userId, maintenanceList) {
     maintenanceList = maintenanceList.filter(function (value, index, arr) {
       return arr[index].schedule_type == 'distance';
     });
@@ -222,12 +208,17 @@ class MaintenanceTaskService {
       return mean_y - slope * mean_x;
     }
 
+    //get JSON data from Strava call
+    //normalize units if necessary -> convert-units or just mile->km manual conversion
     //linear regression taken from: https://machinelearningmastery.com/implement-simple-linear-regression-scratch-python/
     var predict_dates = [];
+    var predictionText = '';
     var maint_index;
     for (maint_index = 0; maint_index < maintenanceList.length; maint_index++) {
       //no predictions to be made if schedule is not distance based
+      //console.log(maintenanceList[maint_index].schedule_type);
       if (maintenanceList[maint_index].schedule_type != 'distance') {
+        //console.log('not the right schedule type!!!');
         predict_dates.push(null);
         continue;
       }
