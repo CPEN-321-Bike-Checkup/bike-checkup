@@ -3,7 +3,10 @@ const activityRepository = require('../repositories/ActivityRepository');
 const bikeRepository = require('../repositories/BikeRepository');
 const componentRepository = require('../repositories/ComponentRepository');
 const userRepository = require('../repositories/UserRepository');
+const componentActivityRepostiory = require('../repositories/ComponentActivityRepository');
 const Keys = require('../../client/keys.json');
+const {ComponentSchema} = require('../schemas/Component');
+const {random} = require('lodash');
 
 class StravaService {
   constructor(
@@ -11,11 +14,13 @@ class StravaService {
     bikeRepository,
     componentRepository,
     userRepository,
+    componentActivityRepostiory,
   ) {
     this.activityRepository = activityRepository;
     this.bikeRepository = bikeRepository;
     this.componentRepository = componentRepository;
     this.userRepository = userRepository;
+    this.componentActivityRepostiory = componentActivityRepostiory;
   }
 
   async UpdateBikesForUser(userId) {
@@ -26,8 +31,9 @@ class StravaService {
     var bikes = athlete.bikes.map((bike) => {
       return {
         _id: bike.id,
-        owner: userId,
+        owner_id: userId,
         label: bike.name,
+        distance: bike.distance,
       };
     });
     user.bikes = bikes;
@@ -61,19 +67,37 @@ class StravaService {
       headers: {Authorization: 'Bearer '.concat(token)},
     });
 
-    activitiesResp.data.forEach((a) => {
-      var components = this.componentRepository.GetComponent(a.gear_id);
+    for (var i = 0; i < activitiesResp.data.length; i++) {
+      var a = activitiesResp.data[i];
+      var /*compsPromise*/ components = await this.componentRepository.GetComponentsForBike(
+          a.gear_id,
+        );
       var activity = {
+        _id: random(0, 1000), //a._id,
         athlete_id: a.athlete.id,
         description: a.name,
         distance: a.distance,
         time_s: a.elapsed_time,
         date: a.start_date,
-        components: components,
       };
-      this.activityRepository.Create(activity);
-      activities.push(activity);
-    });
+      var /*activityPromise*/ newActivity = await this.activityRepository.Create(
+          activity,
+        );
+
+      //let [components, newActivity] = await Promise.all([
+      //  compsPromise,
+      //  activityPromise,
+      //]);
+      components.forEach((component) => {
+        var componentActivity = {
+          activity_id: newActivity._id,
+          component_id: component._id,
+        };
+        this.componentActivityRepostiory.Create(componentActivity);
+      });
+
+      activities.push(newActivity);
+    }
     return activities;
   }
 
@@ -99,5 +123,6 @@ const stravaService = new StravaService(
   bikeRepository,
   componentRepository,
   userRepository,
+  componentActivityRepostiory,
 );
 module.exports = stravaService;

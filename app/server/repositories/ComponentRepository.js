@@ -8,16 +8,17 @@ class ComponentRepository extends Repository {
     this.userModel = UserModel;
   }
 
-  async GetComponentsForBike(bikeId) {
-    return this.documentModel.find({bike_id: bikeId}).exec();
+  GetComponentsForBike(bikeId) {
+    var promise = this.documentModel.find({bike_id: bikeId}).exec();
+    return promise;
   }
 
-  async GetBike(componentId) {
+  GetBike(componentId) {
     var component = this.documentModel.find({_id: componentId}).exec();
     return component.bike;
   }
 
-  async GetTasks(componentId) {
+  GetTasks(componentId) {
     var component = this.documentModel.find({_id: componentId}).exec();
     return component.maintenance_tasks;
   }

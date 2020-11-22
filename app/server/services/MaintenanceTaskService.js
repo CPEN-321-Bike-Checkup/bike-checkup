@@ -16,11 +16,13 @@ class MaintenanceTaskService {
   }
 
   GetById(id) {
-    return this.maintenanceTaskRepository.GetById(id);
+    var promise = this.maintenanceTaskRepository.GetById(id);
+    return promise;
   }
 
-  Create(maintenanceTask) {
-    return this.maintenanceTaskRepository.Create(maintenanceTask);
+  Create(maintenanceTasks) {
+    var promise = this.maintenanceTaskRepository.Create(maintenanceTasks);
+    return promise;
   }
 
   MarkCompleted(maintenanceTask) {
@@ -28,14 +30,17 @@ class MaintenanceTaskService {
     var createRecordResult = this.maintenanceRecordRepository.Create(
       MaintenanceRecordFromTask(maintenanceTask),
     );
+    return Promise.all([updateResult, createRecordResult]);
   }
 
   Update(maintenanceTask) {
-    return this.maintenanceTaskRepository.Update(maintenanceTask);
+    var promise = this.maintenanceTaskRepository.Update(maintenanceTask);
+    return promise;
   }
 
   Delete(maintenanceTask) {
-    return this.maintenanceTaskRepository.Delete(maintenanceTask);
+    var promise = this.maintenanceTaskRepository.Delete(maintenanceTask);
+    return promise;
   }
 
   MaintenanceRecordFromTask(maintenanceTask) {
@@ -43,9 +48,51 @@ class MaintenanceTaskService {
     return record;
   }
 
-  //change service function to do 1. from views file
+  //assumes predicted due dates are stored as only a date not a time
   GetTaskScheduleForUser(userId) {
-    return this.GetScheduledTasksSorted(userId, 50);
+    var tasks = this.GetScheduledTasksSorted(userId, 50);
+    var schedule = [
+      {
+        title: 'Overdue',
+        data: [],
+      },
+      {
+        title: 'Today',
+        data: [],
+      },
+      {
+        title: 'Next 7 Days',
+        data: [],
+      },
+      {
+        //feel free to change this title
+        //only includes tasks after next 7 days
+        title: 'Upcoming',
+        data: [],
+      },
+    ];
+
+    let today = new Date(
+      Date.now().getFullYear(),
+      Date.now().getMonth(),
+      Date.now().getDate(),
+    );
+    for (var i = 0; i < tasks.length; i++) {
+      if (tasks[i].predicted_due_date < today) {
+        schedule[0].data.push(tasks[i]);
+      } else if (tasks[i].predicted_due_date === today) {
+        schedule[1].data.push(tasks[i]);
+      } else if (
+        tasks[i].predicted_due_date > today &&
+        tasks[i].predicted_due_date < today.addDays(7)
+      ) {
+        schedule[2].data.push(tasks[i]);
+      } else {
+        schedule[3].data.push(tasks[i]);
+      }
+      tasks.splice(i, 1);
+    }
+    return tasks;
   }
 
   /*
@@ -59,28 +106,25 @@ class MaintenanceTaskService {
    */
 
   async GetScheduledTasksSorted(userId, numDays) {
-    const num_of_days = 50;
+    const num_of_days = 0;
     var all_tasks = await this.maintenanceTaskRepository.GetMaintenanceTasksForUser(
       userId,
     );
-    //.then((tasks) => {
-    //  all_tasks = tasks;
-    //  console.log('tasks: ', all_tasks);
-    //})
-    //.catch((err) => {
-    //  console.log(err);
-    //});
 
-    let cutoff_date = this.addDays(new Date(), num_of_days);
-    let filtered_tasks = all_tasks.filter(function (value, index, arr) {
-      return arr[index].predicted_due_date <= cutoff_date;
-    });
+    let filtered_tasks;
+    if (numDays > 0) {
+      let cutoff_date = this.addDays(new Date(), num_of_days);
+      filtered_tasks = all_tasks.filter(function (value, index, arr) {
+        return arr[index].predicted_due_date <= cutoff_date;
+      });
+    } else {
+      filtered_tasks = all_tasks;
+    }
 
     let sorted_tasks = filtered_tasks.sort(function (x, y) {
       return x.predicted_due_date - y.predicted_due_date;
     });
 
-    //console.log(sorted_tasks);
     return sorted_tasks;
   }
 

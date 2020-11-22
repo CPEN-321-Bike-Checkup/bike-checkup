@@ -5,8 +5,14 @@ class ComponentService {
     this.componentRepository = componentRepository;
   }
 
+  CreateComponents(components) {
+    var promise = this.componentRepository.Create(components);
+    return promise;
+  }
+
   GetComponentsForBike(bikeId) {
-    return this.componentRepository.GetComponentsForBike(bikeId);
+    var promise = this.componentRepository.GetComponentsForBike(bikeId);
+    return promise;
   }
 }
 

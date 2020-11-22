@@ -82,13 +82,14 @@ const initMaintenanceTaskRouting = (app) => {
   //  res.sendStatus(200);
   //});
 
-  maintenanceTaskRouter.post('/', (req, res, next) => {
+  maintenanceTaskRouter.post('/', (req, res) => {
     maintenanceTaskService
       .Create(req.body)
-      .then((result) => {
-        res.statusCode(201).send('Created Task');
+      .then((tasks) => {
+        res.status(201).send(tasks);
       })
       .catch((err) => {
+        console.error(err);
         if (err.name === 'ValidationError') {
           res.status(400).send('Error: Invalid Request syntax');
         } else {
@@ -97,7 +98,7 @@ const initMaintenanceTaskRouting = (app) => {
       });
   });
 
-  maintenanceTaskRouter.post('/complete', (req, res, next) => {
+  maintenanceTaskRouter.post('/complete', (req, res) => {
     var result = maintenanceTaskService
       .MarkCompleted(req.body)
       .then((result) => {
@@ -114,7 +115,7 @@ const initMaintenanceTaskRouting = (app) => {
       });
   });
 
-  maintenanceTaskRouter.put('/', (req, res, next) => {
+  maintenanceTaskRouter.put('/', (req, res) => {
     var result = maintenanceTaskService
       .Update(req.body)
       .then((result) => {
@@ -131,7 +132,7 @@ const initMaintenanceTaskRouting = (app) => {
       });
   });
 
-  maintenanceTaskRouter.delete('/', (req, res, next) => {
+  maintenanceTaskRouter.delete('/', (req, res) => {
     var result = maintenanceTaskService
       .Delete(req.body)
       .then((result) => {

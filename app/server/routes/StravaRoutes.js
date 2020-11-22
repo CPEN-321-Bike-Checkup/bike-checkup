@@ -15,7 +15,7 @@ const initStravaRouting = (app) => {
       stravaService
         .SaveNewActivitiesForUser(user._id)
         .then((activitiesRes) => {
-          maintenanceTaskService.MaintenancePredict(user._id);
+          //maintenanceTaskService.MaintenancePredictForUser(user._id);
           res.status(200);
           res.send(activitiesRes);
         })

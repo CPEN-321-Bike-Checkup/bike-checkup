@@ -9,10 +9,10 @@ const initBikeRouting = (app) => {
 
   //add error handling
   bikeRouter.get('/:userId/', (req, res) => {
-    var userId = parseInt(req.params.userId);
+    var userId = parseInt(req.params.userId, 10);
     if (isInteger(userId)) {
       bikeService
-        .GetBikesForUser(parseInt(req.params.userId))
+        .GetBikesForUser(userId)
         .then((bikes) => {
           res.status(200).send(JSON.stringify(bikes));
         })
@@ -21,7 +21,8 @@ const initBikeRouting = (app) => {
           res.status(500).send(err);
         });
     } else {
-      res.status(400).send('Improper user parameter');
+      res.post;
+      status(400).send('Improper user parameter');
     }
   });
 };

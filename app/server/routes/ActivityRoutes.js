@@ -9,9 +9,9 @@ const initActivityRouting = (app) => {
 
   //add error handling
   activityRouter.get('/:userId/', (req, res) => {
-    var userId = parseInt(req.params.userId);
+    var userId = parseInt(req.params.userId, 10);
     var afterDate = new Date(req.query.afterDate);
-    var numberOfDays = parseInt(req.query.numDays);
+    var numberOfDays = parseInt(req.query.numDays, 10);
     if (isInteger(userId) && isDate(afterDate) && isInteger(numberOfDays)) {
       activityService
         .GetActivitiesForUserInRange(userId, afterDate, numberOfDays)

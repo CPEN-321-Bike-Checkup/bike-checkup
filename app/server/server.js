@@ -9,6 +9,14 @@ const app = express();
 const port = 5000;
 
 app.use(express.json());
+app.use((req, res, err, next) => {
+  if (err instanceof SyntaxError && 'body' in err && err.status === 400) {
+    console.error(err);
+    return res.status(400).send('Error: Incorrect body syntax');
+  }
+  next();
+});
+
 app.listen(port, () => {
   console.log('Server is running on port: ' + port);
 });
