@@ -1,45 +1,69 @@
 import React from 'react';
-import {Text, TouchableOpacity, View, Modal,TouchableHighlight, TextInput, StyleSheet} from 'react-native';
+import {
+  Text,
+  TouchableOpacity,
+  View,
+  Modal,
+  TouchableHighlight,
+  TextInput,
+  StyleSheet,
+} from 'react-native';
 import Autocomplete from 'react-native-autocomplete-input';
 import {RemovablePressableListItem} from '../ListItems';
 import {flatListWrapper} from '../FlatListWrapper';
 import CommonStyles from '../CommonStyles';
 
 const BIKE_COMPONENTS_LIST = [
-  "Front Wheel",
-  "Rear Wheel",
-  "Fork",
-  "Handlebar",
-  "Pedals",
-  "Front Tire",
-  "Rear Tire",
-  "Bottom Bracket",
-  "Front Brake",
-  "Rear Brake",
-  "Front Brake Pads",
-  "Rear Brake Pads",
-  "Front Brake Lever",
-  "Rear Brake Lever",
-  "Cassette",
-  "Chainrings",
-  "Crankset",
-  "Front Derailleur",
-  "Rear Derailleur",
-  "Headset",
-  "Saddle",
-  "Seatpost",
-  "Stem",
-  "Front Brake Cable",
-  "Rear Brake Cable",
-  "Front Shifter Cable",
-  "Rear Shifter Cable",
-  "Shift Levers",
-  "Front Shock",
-  "Rear Shock",
-  "Front Brake Rotor",
-  "Rear Brake Rotor",
-  "Helmet",
-  "Cleats"
+  'Front Wheel',
+  'Rear Wheel',
+  'Fork',
+  'Handlebar',
+  'Pedals',
+  'Front Tire',
+  'Rear Tire',
+  'Bottom Bracket',
+  'Front Brake',
+  'Rear Brake',
+  'Front Brake Pads',
+  'Rear Brake Pads',
+  'Front Brake Lever',
+  'Rear Brake Lever',
+  'Cassette',
+  'Chainrings',
+  'Crankset',
+  'Front Derailleur',
+  'Rear Derailleur',
+  'Headset',
+  'Saddle',
+  'Seatpost',
+  'Stem',
+  'Front Brake Cable',
+  'Rear Brake Cable',
+  'Front Shifter Cable',
+  'Rear Shifter Cable',
+  'Shift Levers',
+  'Front Shock',
+  'Rear Shock',
+  'Front Brake Rotor',
+  'Rear Brake Rotor',
+  'Helmet',
+  'Cleats',
+];
+
+// TODO: remove when all testing is done
+const NORCO_DATA = [
+  {
+    id: 1,
+    title: 'Chain - CN-9000',
+  },
+  {
+    id: 2,
+    title: 'Brakes - Shimano BR-RS305-R Hydraulic Disc, 150mm',
+  },
+  {
+    id: 3,
+    title: 'Brake pads - Brake Authority Avids',
+  },
 ];
 
 // TODO: remove when we're done all testing
@@ -106,7 +130,9 @@ export default class ScheduleScreen extends React.Component {
     if (inputText === '') return [];
 
     const regex = new RegExp(`${inputText.trim()}`, 'i');
-    return BIKE_COMPONENTS_LIST.sort().filter(component => component.search(regex) >= 0);
+    return BIKE_COMPONENTS_LIST.sort().filter(
+      (component) => component.search(regex) >= 0,
+    );
   }
 
   // Note: arrow function needed to bind correct context
@@ -140,30 +166,29 @@ export default class ScheduleScreen extends React.Component {
   };
 
   render() {
-    const { componentTypeInputText } = this.state;
+    const {componentTypeInputText} = this.state;
     const components = this.findBikeComponent(componentTypeInputText);
     const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
 
     return (
       <View style={{flex: 1}}>
         {flatListWrapper(
-          this.state.componentData,
+          // this.state.componentData,
+          NORCO_DATA,
           this.renderItem,
           'ComponentsList',
         )}
         <View style={styles.openModalButtonContainer}>
           <TouchableOpacity
             onPress={() => {
-              this.setState({modalVisible: true})
+              this.setState({modalVisible: true});
             }}
             style={styles.openModalButton}>
             <Text style={styles.openModalButtonIcon}>+</Text>
           </TouchableOpacity>
         </View>
 
-        <Modal
-          animationType="slide"
-          visible={this.state.modalVisible}>
+        <Modal animationType="slide" visible={this.state.modalVisible}>
           <View style={styles.modalView}>
             <Text style={styles.modalTitle}>Add New Component</Text>
 
@@ -173,12 +198,22 @@ export default class ScheduleScreen extends React.Component {
                 autoCapitalize="words"
                 autoCorrect={true}
                 containerStyle={styles.typeInput}
-                data={components.length >= 1 && comp(componentTypeInputText, components[0]) ? [] : components}
+                data={
+                  components.length >= 1 &&
+                  comp(componentTypeInputText, components[0])
+                    ? []
+                    : components
+                }
                 defaultValue={componentTypeInputText}
-                onChangeText={text => this.setState({ componentTypeInputText: text })}
+                onChangeText={(text) =>
+                  this.setState({componentTypeInputText: text})
+                }
                 placeholder="Enter a component type"
-                renderItem={({ item, i }) => (
-                  <TouchableOpacity onPress={() => this.setState({ componentTypeInputText: item })}>
+                renderItem={({item, i}) => (
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.setState({componentTypeInputText: item})
+                    }>
                     <Text>{item}</Text>
                   </TouchableOpacity>
                 )}
@@ -190,23 +225,31 @@ export default class ScheduleScreen extends React.Component {
             <TextInput
               style={styles.nameInput}
               placeholder="Enter a component name"
-              onChangeText={text => this.setState({ componentNameInputText: text })}
+              onChangeText={(text) =>
+                this.setState({componentNameInputText: text})
+              }
             />
 
             <TouchableHighlight
               style={styles.addComponentButton}
               onPress={() => {
                 // Add new component if all information was entered (TODO: Don't let modal close/show error message if only partly filled out)
-                if (this.state.componentTypeInputText && this.state.componentNameInputText) {
+                if (
+                  this.state.componentTypeInputText &&
+                  this.state.componentNameInputText
+                ) {
                   let componentData = [...this.state.componentData];
                   componentData.push({
                     bikeId: this.bikeId,
                     id: this.state.nextId,
-                    title: this.state.componentTypeInputText.concat(' - ', this.state.componentNameInputText),
+                    title: this.state.componentTypeInputText.concat(
+                      ' - ',
+                      this.state.componentNameInputText,
+                    ),
                   });
                   this.setState({componentData});
-                  this.setState({ nextId: this.state.nextId + 1 });
-              }
+                  this.setState({nextId: this.state.nextId + 1});
+                }
 
                 // Close modal
                 this.setState({modalVisible: false});
@@ -215,8 +258,13 @@ export default class ScheduleScreen extends React.Component {
             </TouchableHighlight>
           </View>
         </Modal>
-
       </View>
+      // this.itemCount = 0;
+
+      // return flatListWrapper(
+      //   this.state.componentData,
+      //   this.renderItem,
+      //   'ComponentsList',
     );
   }
 }
@@ -225,11 +273,11 @@ const styles = StyleSheet.create({
   openModalButtonContainer: {
     position: 'absolute',
     bottom: 20,
-    width:'94%',
-    alignItems:'flex-end'
+    width: '94%',
+    alignItems: 'flex-end',
   },
   openModalButton: {
-    backgroundColor: "#47ffb8",
+    backgroundColor: '#47ffb8',
     width: 65,
     height: 65,
     borderRadius: 35,
@@ -241,7 +289,7 @@ const styles = StyleSheet.create({
   },
   modalInputContainer: {
     flex: 1,
-    paddingTop: 25
+    paddingTop: 25,
   },
   typeInput: {
     flex: 1,
@@ -271,7 +319,7 @@ const styles = StyleSheet.create({
     top: 170,
   },
   addComponentButton: {
-    backgroundColor: "#47ffb8",
+    backgroundColor: '#47ffb8',
     alignSelf: 'center',
     padding: 10,
     position: 'absolute',
@@ -281,5 +329,5 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'flex-start',
-  }
+  },
 });

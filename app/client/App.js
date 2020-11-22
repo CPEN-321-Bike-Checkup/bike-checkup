@@ -17,7 +17,7 @@ import ActivitiesStack from './components/Stacks/ActivitiesStack';
 import Keys from './keys.json';
 
 // Dev debug flags
-const SKIP_AUTHENTICATION = false; // Set to false before committing!
+const SKIP_AUTHENTICATION = true; // Set to false before committing!
 
 const Tab = createMaterialBottomTabNavigator();
 
