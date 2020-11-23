@@ -4,13 +4,13 @@ import {
   View,
   TextInput,
   StyleSheet,
-  Modal,
   Text,
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import CheckBox from '@react-native-community/checkbox';
+import ErrorPopup from '../ErrorPopup';
 
 const TASK_TYPES = {
   TIME: 0,
@@ -22,6 +22,10 @@ const PLACEHOLDER_DATA = [
   {label: 'Item 2', value: 'item2'},
 ];
 
+const BIKE_DATA = [];
+
+const COMPONENT_DATA = [];
+
 const TASK_TYPE_DATA = [
   {label: 'Time', value: TASK_TYPES.TIME},
   {label: 'Distance', value: TASK_TYPES.DISTANCE},
@@ -32,12 +36,16 @@ export default class AddTaskScreen extends React.Component {
     super(props);
     this.state = {
       maintenanceData: [],
-      editMode: false,
+      isSaving: false,
+      isError: false,
+      errorText: null,
+      /* Task Fields */
       bike: null,
       component: null,
+      title: null,
       taskType: null,
+      threshold: null,
       isRepeating: false,
-      isSaving: false,
     };
     this.navigation = props.navigation;
     this.newTask = props.route.params.newTask; // boolean for update or new
@@ -63,7 +71,15 @@ export default class AddTaskScreen extends React.Component {
     //   .finally(() => {
     //     // this.setState({ isLoading: false });
     //   });;
+
+    if (!this.props.fixedBike) {
+      getBikeList();
+    }
   }
+
+  getBikeList = () => {};
+
+  getComponentList = () => {};
 
   getDropDownPicker(data, onChangeCallback) {
     return (
@@ -82,7 +98,7 @@ export default class AddTaskScreen extends React.Component {
     );
   }
 
-  getTextInput(numeric = false) {
+  getTextInput(onTextCallback, numeric = false) {
     const keyboard = numeric ? 'numeric' : 'default';
     return (
       <TextInput
@@ -90,6 +106,7 @@ export default class AddTaskScreen extends React.Component {
         placeholderTextColor="#616161"
         underlineColorAndroid="#000000"
         keyboardType={keyboard}
+        onChangeText={onTextCallback}
         style={{
           paddingLeft: 6,
           fontSize: 16,
@@ -136,18 +153,28 @@ export default class AddTaskScreen extends React.Component {
   };
 
   setBike = (item) => {
-    console.log(item);
     this.setState({bike: item.value});
+
+    // Fetch the bike's components
+    this.getComponentList(item.value)
   };
 
   setComponent = (item) => {
-    console.log(item);
     this.setState({component: item.value});
   };
 
+  setTaskTitle = (taskTitle) => {
+    this.setState({title: taskTitle});
+  };
+
   setTaskType = (item) => {
-    console.log(item);
+    this.setState({taskThreshold: null}); // Clear any previously set threshold
     this.setState({taskType: item.value});
+  };
+
+  setTaskThreshold = (thresholdStr) => {
+    let threshold = parseInt(thresholdStr.replace(/[^0-9]/g, ''));
+    this.setState({threshold: threshold});
   };
 
   setRepeatOption = (newVal) => {
@@ -155,35 +182,77 @@ export default class AddTaskScreen extends React.Component {
   };
 
   cancel = () => {
-    this.navigation.navigate('Tasks');
+    if (!this.state.isSaving) {
+      this.navigation.navigate('Tasks');
+    }
   };
 
   save = () => {
     this.setState({isSaving: true});
 
+    let {bike, component, taskType, threshold} = this.state;
+
+    // Check for form errors
+    let errorText = null;
+    if (bike == null) {
+      errorText = 'Please select a bike.';
+    } else if (component == null) {
+      errorText = 'Please select a component.';
+    } else if (taskType == null) {
+      errorText = 'Please select a task type (distance or time).';
+    } else if (threshold == null) {
+      errorText = 'Please enter a threshold.';
+    }
+
+    if (errorText) {
+      this.setState({
+        isError: true,
+        errorText: errorText,
+      });
+      return;
+    }
+
+    let newTask = {
+      bike: this.state.bike,
+      component: this.state.component,
+      title: this.state.title,
+      taskType: this.state.taskType,
+      threshold: this.state.threshold,
+      isRepeating: this.state.isRepeating,
+    };
+
     // POST task to database
-    fetch('3.97.53.16:8080/tasks/', {
+    fetch(`${global.serverIp}/maintenanceTask/`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        firstParam: 'yourValue',
-        secondParam: 'yourOtherValue',
-      }),
+      body: JSON.stringify(newTask),
     })
       .then((response) => response.json())
       .then((data) => {
         this.updateMaintenanceData({dateJSON: data});
       })
       .catch((error) => {
-        // this.setState({dateJSON: 'Error fetching data'})
+        // Display error popup
+        this.setState({
+          isError: true,
+          errorText: 'Failed to save task. Check network connection.',
+        });
+
         console.error(error);
       })
-      .finally(() => {
-        // this.setState({ isLoading: false });
-      });
+      .finally(() => {});
+  };
+
+  onErrorAccepted = () => {
+    // Clear error state
+    this.setState({
+      isError: false,
+      errorText: null,
+      isSaving: false,
+    });
   };
 
   render() {
@@ -195,8 +264,8 @@ export default class AddTaskScreen extends React.Component {
         {this.getBikeFormItem()}
         {this.getComponentFormItem()}
         <View style={styles.formItemColumn}>
-          <Text style={styles.formItemHeaderText}>Name:</Text>
-          {this.getTextInput()}
+          <Text style={styles.formItemHeaderText}>Title:</Text>
+          {this.getTextInput(this.setTaskTitle)}
         </View>
         <View style={styles.formItemColumn}>
           <Text style={styles.formItemHeaderText}>Type:</Text>
@@ -207,7 +276,7 @@ export default class AddTaskScreen extends React.Component {
             <Text style={styles.formItemHeaderText}>
               Time Until Task (Days):
             </Text>
-            {this.getTextInput()}
+            {this.getTextInput(this.setTaskThreshold, true)}
           </View>
         ) : null}
         {this.state.taskType === TASK_TYPES.DISTANCE ? (
@@ -215,7 +284,7 @@ export default class AddTaskScreen extends React.Component {
             <Text style={styles.formItemHeaderText}>
               Distance Until Task (km):
             </Text>
-            {this.getTextInput(true)}
+            {this.getTextInput(this.setTaskThreshold, true)}
           </View>
         ) : null}
         <View style={styles.formItemRow}>
@@ -223,7 +292,7 @@ export default class AddTaskScreen extends React.Component {
           <CheckBox
             style={{marginLeft: 8}}
             value={this.state.isRepeating}
-            onValueChange={(newValue) => this.setRepeatOption(newValue)}
+            onValueChange={this.setRepeatOption}
           />
         </View>
         <View style={styles.buttonContainer}>
@@ -244,6 +313,12 @@ export default class AddTaskScreen extends React.Component {
             <ActivityIndicator size="large" color="#47ffbf" />
           )}
         </View>
+
+        {ErrorPopup(
+          this.state.errorText,
+          this.onErrorAccepted,
+          this.state.isError,
+        )}
       </ScrollView>
     );
   }
@@ -307,70 +382,4 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'black',
   },
-  // centeredView: {
-  //   flex: 1,
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   marginTop: 22,
-  // },
-  // modalView: {
-  //   margin: 20,
-  //   backgroundColor: 'white',
-  //   borderRadius: 20,
-  //   padding: 35,
-  //   alignItems: 'center',
-  //   shadowColor: '#000',
-  //   shadowOffset: {
-  //     width: 0,
-  //     height: 2,
-  //   },
-  //   shadowOpacity: 0.25,
-  //   shadowRadius: 3.84,
-  //   elevation: 5,
-  // },
-  // openButton: {
-  //   backgroundColor: '#F194FF',
-  //   borderRadius: 20,
-  //   padding: 10,
-  //   elevation: 2,
-  // },
-  // textStyle: {
-  //   color: 'white',
-  //   fontWeight: 'bold',
-  //   textAlign: 'center',
-  // },
-  // modalText: {
-  //   marginBottom: 15,
-  //   textAlign: 'center',
-  // },
 });
-
-//   render() {
-//     return (
-//       <View style={styles.inputContainer} testID="AddTaskScreen">
-//         <TextInput
-//           style={styles.textInput}
-//           placeholder="Your name"
-//           maxLength={20}
-//         />
-//       </View>
-//     );
-//   }
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     paddingHorizontal: 10,
-//   },
-//   button: {
-//     alignItems: 'center',
-//     backgroundColor: '#DDDDDD',
-//     padding: 10,
-//   },
-//   countContainer: {
-//     alignItems: 'center',
-//     padding: 10,
-//   },
-// });

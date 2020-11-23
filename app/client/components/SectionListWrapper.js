@@ -21,10 +21,10 @@ export let selectionListWrapper = (data, renderItem, testID) => {
 
 const styles = StyleSheet.create({
   headerText: {
-    fontSize: 22,
+    fontSize: 21,
     fontWeight: 'bold',
     color: 'black',
-    backgroundColor: 'tomato',
+    backgroundColor: '#ffa494',
     borderBottomColor: 'black',
     borderBottomWidth: 2,
     borderTopColor: 'black',

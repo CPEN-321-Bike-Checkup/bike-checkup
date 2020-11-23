@@ -43,6 +43,9 @@ export default class App extends Component {
       refreshToken: '',
       athleteData: '', // In JSON form
     };
+
+    // Set global variables
+    global.serverIp = serverIp;
   }
 
   render() {
