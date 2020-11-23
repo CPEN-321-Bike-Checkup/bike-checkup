@@ -17,15 +17,6 @@ const TASK_TYPES = {
   DISTANCE: 1,
 };
 
-const PLACEHOLDER_DATA = [
-  {label: 'Item 1', value: 'item1'},
-  {label: 'Item 2', value: 'item2'},
-];
-
-const BIKE_DATA = [];
-
-const COMPONENT_DATA = [];
-
 const TASK_TYPE_DATA = [
   {label: 'Time', value: TASK_TYPES.TIME},
   {label: 'Distance', value: TASK_TYPES.DISTANCE},
@@ -39,6 +30,9 @@ export default class AddTaskScreen extends React.Component {
       isSaving: false,
       isError: false,
       errorText: null,
+      bikeList: [],
+      componentList: [],
+      fatalError: false,
       /* Task Fields */
       bike: null,
       component: null,
@@ -52,34 +46,94 @@ export default class AddTaskScreen extends React.Component {
     this.taskData = props.route.params.taskData; // TODO: get all availabe task data if not new
   }
 
-  updateMaintenanceData() {
-    // this.setState({maintenanceData: })
-  }
-
   componentDidMount() {
-    // fetch('3.97.53.16:8080/maintenance-schedule/', {
-    //   method: 'GET'
-    //   })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     this.updateMaintenanceData({dateJSON: data})
-    //   })
-    //   .catch((error) => {
-    //     // this.setState({dateJSON: 'Error fetching data'})
-    //     console.error(error);
-    //   })
-    //   .finally(() => {
-    //     // this.setState({ isLoading: false });
-    //   });;
-
     if (!this.props.fixedBike) {
-      getBikeList();
+      this.updateBikeList();
     }
   }
 
-  getBikeList = () => {};
+  transformBikeList = (bikes) => {
+    let bikesList = [];
+    for (let bike of bikes) {
+      console.log(bike);
+      console.log(bike.label);
+      let newBike = {
+        label: bike.label,
+        value: bike._id,
+      };
+      bikesList.push(newBike);
+    }
+    return bikesList;
+  };
 
-  getComponentList = () => {};
+  transformComponentList = (components) => {
+    let componentsList = [];
+    for (let component of components) {
+      let newComponent = {
+        label: component.label,
+        value: component._id,
+      };
+      componentsList.push(newComponent);
+    }
+    return componentsList;
+  };
+
+  updateBikeList = () => {
+    fetch(`http://${global.serverIp}:5000/bike/${global.userId}`, {
+      method: 'GET',
+    })
+      .then((response) => response.json())
+      .then((bikes) => {
+        console.log('GOT BIKES:');
+        console.log(bikes);
+        this.setState({bikeList: this.transformBikeList(bikes)});
+      })
+      .catch((error) => {
+        // Display error popup
+        this.setState({
+          isError: true,
+          errorText: 'Failed to retrieve your bikes. Check network connection.',
+          fatalError: true,
+        });
+
+        console.error(error);
+      });
+  };
+
+  updateComponentList = (bikeId) => {
+    fetch(`http://${global.serverIp}:5000/component/${bikeId}`, {
+      method: 'GET',
+    })
+      .then((response) => response.json())
+      .then((components) => {
+        console.log('GOT COMPONENTS:');
+        console.log(components);
+
+        // Navigate back if can't add a component
+        if (components.length == 0) {
+          this.setState({
+            isError: true,
+            errorText:
+              'This bike has no components. A task needs to be attached to a component.',
+          });
+        }
+
+        this.setState({
+          componentList: this.transformComponentList(components),
+        });
+      })
+      .catch((error) => {
+        // Display error popup
+        this.setState({
+          isError: true,
+          errorText:
+            "Failed to retrieve your bike's components. Check network connection.",
+          fatalError: true,
+        });
+
+        console.error(error);
+      });
+  };
 
   getDropDownPicker(data, onChangeCallback) {
     return (
@@ -127,7 +181,7 @@ export default class AddTaskScreen extends React.Component {
       return (
         <View style={styles.formItemColumn}>
           <Text style={styles.formItemHeaderText}>Bike:</Text>
-          {this.getDropDownPicker(PLACEHOLDER_DATA, this.setBike)}
+          {this.getDropDownPicker(this.state.bikeList, this.setBike)}
         </View>
       );
     }
@@ -146,7 +200,7 @@ export default class AddTaskScreen extends React.Component {
       return (
         <View style={styles.formItemColumn}>
           <Text style={styles.formItemHeaderText}>Component:</Text>
-          {this.getDropDownPicker(PLACEHOLDER_DATA, this.setComponent)}
+          {this.getDropDownPicker(this.state.componentList, this.setComponent)}
         </View>
       );
     }
@@ -156,7 +210,7 @@ export default class AddTaskScreen extends React.Component {
     this.setState({bike: item.value});
 
     // Fetch the bike's components
-    this.getComponentList(item.value)
+    this.updateComponentList(item.value);
   };
 
   setComponent = (item) => {
@@ -183,7 +237,7 @@ export default class AddTaskScreen extends React.Component {
 
   cancel = () => {
     if (!this.state.isSaving) {
-      this.navigation.navigate('Tasks');
+      this.navigation.goBack();
     }
   };
 
@@ -222,7 +276,7 @@ export default class AddTaskScreen extends React.Component {
     };
 
     // POST task to database
-    fetch(`${global.serverIp}/maintenanceTask/`, {
+    fetch(`http://${global.serverIp}:5000/maintenanceTask/`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -230,9 +284,11 @@ export default class AddTaskScreen extends React.Component {
       },
       body: JSON.stringify(newTask),
     })
-      .then((response) => response.json())
-      .then((data) => {
-        this.updateMaintenanceData({dateJSON: data});
+      .then((response) => {
+        // TODO: check response status
+        // TODO: make sure back-end makes prediction for task before responding
+        console.log('SUCCESSFULLY SAVED TASK');
+        this.navigation.goBack();
       })
       .catch((error) => {
         // Display error popup
@@ -247,6 +303,10 @@ export default class AddTaskScreen extends React.Component {
   };
 
   onErrorAccepted = () => {
+    if (this.state.fatalError) {
+      this.navigation.goBack();
+    }
+
     // Clear error state
     this.setState({
       isError: false,
@@ -256,8 +316,6 @@ export default class AddTaskScreen extends React.Component {
   };
 
   render() {
-    const {modalVisible} = this.state;
-
     return (
       // NOTE: fix bike and component fields when entering from component task screen
       <ScrollView containerStyle={styles.formContainer}>

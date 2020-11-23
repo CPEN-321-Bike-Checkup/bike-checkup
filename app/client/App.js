@@ -28,7 +28,8 @@ const CODE_LABEL_LENGTH = 5;
 const PARAM_SEPARATOR_LENGTH = 1;
 
 // Push notification configuration
-const serverIp = '3.97.53.16';
+// const serverIp = '3.97.53.16';
+const serverIp = '192.168.1.83';  // Brennan's local IP
 const senderID = 517168871348;
 
 export default class App extends Component {
@@ -46,6 +47,7 @@ export default class App extends Component {
 
     // Set global variables
     global.serverIp = serverIp;
+    global.userId = 71747974; // TODO: set to actual ID fetched during login
   }
 
   render() {
@@ -177,6 +179,8 @@ export default class App extends Component {
             var athlete = response.data.athlete;
             console.log('Athlete data: ', response.data.athlete);
             console.log('strava access token', response.data.access_token);
+            // TODO: uncomment when done local testing
+            // global.userId = athlete.id; // Save athlete id with global access
             axios
               .post(
                 'http://' +

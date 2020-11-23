@@ -50,22 +50,6 @@ const BIKE_COMPONENTS_LIST = [
   'Cleats',
 ];
 
-// TODO: remove when all testing is done
-const NORCO_DATA = [
-  {
-    id: 1,
-    title: 'Chain - CN-9000',
-  },
-  {
-    id: 2,
-    title: 'Brakes - Shimano BR-RS305-R Hydraulic Disc, 150mm',
-  },
-  {
-    id: 3,
-    title: 'Brake pads - Brake Authority Avids',
-  },
-];
-
 // TODO: remove when we're done all testing
 const NORCO_DATA = [
   {

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, TouchableOpacity} from 'react-native';
+import {Text, TouchableOpacity, StyleSheet, View} from 'react-native';
 import {CompletableListItem} from '../ListItems';
 import {selectionListWrapper} from '../SectionListWrapper';
 import CommonStyles from '../CommonStyles';
@@ -165,10 +165,44 @@ export default class ScheduleScreen extends React.Component {
   render() {
     this.itemCount = 0;
 
-    return selectionListWrapper(
-      this.state.scheduleData,
-      this.renderItem,
-      'ScheduleList',
+    return (
+      <View style={{flex: 1}}>
+        {selectionListWrapper(
+          this.state.scheduleData,
+          this.renderItem,
+          'ScheduleList',
+        )}
+        <View style={styles.openModalButtonContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              this.navigation.navigate('Add Task', {newTask: true});
+            }}
+            style={styles.openModalButton}>
+            <Text style={styles.openModalButtonIcon}>+</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  openModalButtonContainer: {
+    position: 'absolute',
+    bottom: 20,
+    width: '94%',
+    alignItems: 'flex-end',
+  },
+  openModalButton: {
+    backgroundColor: '#47ffb8',
+    width: 65,
+    height: 65,
+    borderRadius: 35,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  openModalButtonIcon: {
+    fontSize: 26,
+    marginBottom: 3,
+  },
+});
