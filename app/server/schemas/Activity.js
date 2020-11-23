@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
 const activitySchema = new mongoose.Schema({
-  _id: Number,
+  _id: {type: Number, required: true},
   athlete_id: {type: mongoose.Schema.Types.Number, ref: 'User'},
   description: String,
-  distance: Number,
+  distance: {type: Number, required: true},
   time_s: Number,
-  date: Date,
+  date: {type: Date, required: true},
 });
 
 const activityModel = mongoose.model('Activity', activitySchema);

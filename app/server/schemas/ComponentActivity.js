@@ -1,14 +1,15 @@
 const mongoose = require('mongoose');
 
 const componentActivitySchema = new mongoose.Schema({
-  _id: false,
   component_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Component',
+    required: true,
   },
   activity_id: {
     type: mongoose.Schema.Types.Number,
     ref: 'Activity',
+    required: true,
   },
 });
 componentActivitySchema.index(

@@ -5,8 +5,9 @@ const maintenanceRecordSchema = new mongoose.Schema({
   component_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Component',
+    required: true,
   },
-  maintenance_date: Date,
+  maintenance_date: {type: Date, required: true},
   replacement_comp_id: Number,
 });
 const maintenanceRecordModel = mongoose.model(

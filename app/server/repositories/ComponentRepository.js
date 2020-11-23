@@ -8,29 +8,17 @@ class ComponentRepository extends Repository {
     this.bikeModel = bikeModel;
   }
 
-  async GetComponentsForUser(userId, query) {
-    let fullQuery;
-    if (query !== undefined) {
-      fullQuery = {...query, owner_id: userId};
-    } else {
-      fullQuery = {owner_id: userId};
-    }
-    var bikes = await this.bikeModel.find(fullQuery).exec();
+  async GetComponentsForUser(userId) {
+    var bikes = await this.bikeModel.find({owner_id: userId}).exec();
     var compPromises = [];
     for (var i = 0; i < bikes.length; i++) {
-      compPromises.concat(this.GetComponentsForBike(bikes[i]._id));
+      compPromises.push(this.GetComponentsForBike(bikes[i]._id));
     }
     return Promise.all(compPromises);
   }
 
-  GetComponentsForBike(bikeId, query) {
-    let fullQuery;
-    if (query !== undefined) {
-      fullQuery = {...query, bike_id: bikeId};
-    } else {
-      fullQuery = {bike_id: bikeId};
-    }
-    var promise = this.documentModel.find(fullQuery).exec();
+  GetComponentsForBike(bikeId) {
+    var promise = this.documentModel.find({bike_id: bikeId}).exec();
     return promise;
   }
 

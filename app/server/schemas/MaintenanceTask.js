@@ -5,11 +5,12 @@ const maintenanceTaskSchema = new mongoose.Schema({
   component_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Component',
+    required: true,
   },
-  schedule_type: String,
-  threshold_val: Number,
-  last_maintenance_val: Date,
-  repeats: Boolean,
+  schedule_type: {type: String, required: true},
+  threshold_val: {type: Number, required: true},
+  last_maintenance_val: {type: Date, required: true},
+  repeats: {type: Boolean, required: true},
   predicted_due_date: Date,
 });
 const maintenanceTaskModel = mongoose.model(

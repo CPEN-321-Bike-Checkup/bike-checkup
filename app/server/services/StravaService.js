@@ -93,28 +93,32 @@ class StravaService {
 
   async UpdateComponentActivitiesForUser(userId) {
     //get all components for user that are not removed
-    var compsPromise = this.componentRepository.GetComponentsForUser(userId, {
-      removal_date: {$exists: false},
-    });
+    var compsPromise = this.componentRepository.GetComponentsForUser(userId);
     var activitiesPromise = this.activityRepository.GetByQuery({
       date: {$gte: this.Get4MonthsAgo()},
     });
 
-    let [components, activities] = await Promise.all([
+    let [bikeComponents, activities] = await Promise.all([
       compsPromise,
       activitiesPromise,
     ]);
+    var components = [].concat.apply([], bikeComponents);
 
     var componentActivities = [];
-    components.forEach((comp) => {
-      for (var i = 0; i < activities.length; i++) {
-        var a = activities[i];
-        if (a.date <= comp.attatchement_date) {
-          continue;
+    components
+      .filter((c) => c.removal_date === undefined)
+      .forEach((comp) => {
+        for (var i = 0; i < activities.length; i++) {
+          var a = activities[i];
+          if (a.date <= comp.attachment_date) {
+            continue;
+          }
+          componentActivities.push({
+            component_id: comp._id,
+            activity_id: a._id,
+          });
         }
-        componentActivities.push({component_id: comp._id, activity_id: a._id});
-      }
-    });
+      });
     return this.componentActivityRepostiory.CreateIfDoesntExist(
       componentActivities,
     );
