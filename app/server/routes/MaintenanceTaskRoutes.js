@@ -1,6 +1,7 @@
 const express = require('express');
 const maintenanceTaskService = require('../services/MaintenanceTaskService');
 const {Mongoose} = require('mongoose');
+const {isError, isNumber, isInteger} = require('lodash');
 
 const initMaintenanceTaskRouting = (app) => {
   const maintenanceTaskRouter = express.Router();
@@ -22,10 +23,12 @@ const initMaintenanceTaskRouting = (app) => {
   });
 
   maintenanceTaskRouter.get('/', (req, res) => {
-    if (req.query.userId !== undefined && req.query.userId) {
+    var userId = parseInt(req.query.userId, 10);
+    var componentId = req.query.componentId;
+    if (isInteger(userId)) {
       //gets Overdue tasks, Todays tasks, this weeks tasks and the upcoming tasks for the user
       maintenanceTaskService
-        .GetTaskScheduleForUser(req.query.userId)
+        .GetTaskScheduleForUser(userId)
         .then((tasks) => {
           res.send(JSON.stringify(tasks));
         })
@@ -33,9 +36,9 @@ const initMaintenanceTaskRouting = (app) => {
           res.status(500).send('Internal server error');
         });
       //get tasks specific to component for component screen flow
-    } else if (req.query.componentId !== undefined && req.query.componentId) {
+    } else if (isString(componentId)) {
       maintenanceTaskService
-        .GetTasksForComponent(req.query.componentId)
+        .GetTasksForComponent(componentId)
         .then((tasks) => {
           res.send(JSON.stringify(tasks));
         })

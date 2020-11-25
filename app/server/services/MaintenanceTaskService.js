@@ -52,8 +52,8 @@ class MaintenanceTaskService {
   }
 
   //assumes predicted due dates are stored as only a date not a time
-  GetTaskScheduleForUser(userId) {
-    var tasks = this.GetScheduledTasksSorted(userId, 50);
+  async GetTaskScheduleForUser(userId) {
+    var tasks = await this.GetScheduledTasksSorted(userId);
     var schedule = [
       {
         title: 'Overdue',
@@ -75,10 +75,16 @@ class MaintenanceTaskService {
       },
     ];
 
+    let todayWithTime = new Date();
     let today = new Date(
-      Date.now().getFullYear(),
-      Date.now().getMonth(),
-      Date.now().getDate(),
+      todayWithTime.getFullYear(),
+      todayWithTime.getMonth(),
+      todayWithTime.getDate(),
+    );
+    let weekAfterToday = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate() + 7,
     );
     for (var i = 0; i < tasks.length; i++) {
       if (tasks[i].predicted_due_date < today) {
@@ -87,15 +93,14 @@ class MaintenanceTaskService {
         schedule[1].data.push(tasks[i]);
       } else if (
         tasks[i].predicted_due_date > today &&
-        tasks[i].predicted_due_date < today.addDays(7)
+        tasks[i].predicted_due_date < weekAfterToday
       ) {
         schedule[2].data.push(tasks[i]);
       } else {
         schedule[3].data.push(tasks[i]);
       }
-      tasks.splice(i, 1);
     }
-    return tasks;
+    return schedule;
   }
 
   /*
@@ -108,15 +113,14 @@ class MaintenanceTaskService {
    * @modifies  nothing
    */
 
-  async GetScheduledTasksSorted(userId, numDays) {
-    const num_of_days = 0;
+  async GetScheduledTasksSorted(userId, numDays = 0) {
     var all_tasks = await this.maintenanceTaskRepository.GetMaintenanceTasksForUser(
       userId,
     );
 
     let filtered_tasks;
     if (numDays > 0) {
-      let cutoff_date = this.addDays(new Date(), num_of_days);
+      let cutoff_date = this.addDays(new Date(), numDays);
       filtered_tasks = all_tasks.filter(function (value, index, arr) {
         return arr[index].predicted_due_date <= cutoff_date;
       });
