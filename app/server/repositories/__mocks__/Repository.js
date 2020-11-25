@@ -1,4 +1,5 @@
 const {Mongoose} = require('mongoose');
+const _ = require('lodash');
 
 class Repository {
   constructor(data) {
@@ -43,11 +44,16 @@ class Repository {
       if (doc._id === undefined) {
         throw new Error('ValidationError');
       } else if (doc._id === 0) {
-        throw new Error('DocumentNotFoundError');
+        resolve({n: 0, nModified: 0});
       } else if (this.count['update'] === 0) {
         throw new Error('InternalError');
       } else {
-        resolve(doc);
+        let existingDoc = this.data.find((datadoc) => datadoc._id === doc._id);
+        if (_.isEqual(existingDoc, doc)) {
+          resolve({n: 1, nModified: 0});
+        } else {
+          resolve({n: 1, nModified: 1});
+        }
       }
     });
   }
@@ -58,11 +64,15 @@ class Repository {
       if (doc._id === undefined) {
         throw new Error('ValidationError');
       } else if (doc._id === 0) {
-        throw new Error('DocumentNotFoundError');
+        resolve(false);
       } else if (this.count['delete'] === 0) {
         throw new Error('InternalError');
       } else {
-        resolve(true);
+        if (this.data.includes(doc)) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
       }
     });
   }

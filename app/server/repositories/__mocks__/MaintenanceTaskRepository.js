@@ -74,7 +74,7 @@ const maintSchedule2 = {
   description: 'tire check',
   last_maintenance_val: new Date('2020-10-10'),
   repeats: true,
-  predicted_due_date: new Date('2020-11-25'),
+  predicted_due_date: new Date('2020-12-01'),
 };
 
 const maintSchedule3 = {
@@ -85,7 +85,7 @@ const maintSchedule3 = {
   description: 'brake check',
   last_maintenance_val: new Date('2020-10-08'),
   repeats: true,
-  predicted_due_date: new Date('2020-11-15'),
+  predicted_due_date: new Date('2021-03-20'),
 };
 
 var data = [maintSchedule1, maintSchedule2, maintSchedule3];
