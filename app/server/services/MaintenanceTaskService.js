@@ -28,12 +28,20 @@ class MaintenanceTaskService {
     return promise;
   }
 
-  MarkCompleted(maintenanceTask) {
-    var updateResult = this.maintenanceTaskRepository.Update(maintenanceTask);
+  async MarkCompleted(maintenanceTask) {
+    let taskResult;
+    var task = await this.maintenanceTaskRepository.GetById(
+      maintenanceTask._id,
+    );
+    if (task.repeats) {
+      taskResult = this.maintenanceTaskRepository.Update(maintenanceTask);
+    } else {
+      taskResult = this.maintenanceTaskRepository.Delete(task);
+    }
     var createRecordResult = this.maintenanceRecordRepository.Create(
       this.MaintenanceRecordFromTask(maintenanceTask),
     );
-    return Promise.all([updateResult, createRecordResult]);
+    return Promise.all([taskResult, createRecordResult]);
   }
 
   Update(maintenanceTask) {
