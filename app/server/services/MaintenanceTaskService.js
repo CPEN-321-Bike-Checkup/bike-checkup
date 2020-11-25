@@ -170,7 +170,7 @@ class MaintenanceTaskService {
       componentId,
     );
 
-    this.MaintenancePredict(maintenanceList);
+    return this.MaintenancePredict(maintenanceList);
   }
 
   //TODO make the equivalent for component and use that function to do this for user
@@ -180,114 +180,142 @@ class MaintenanceTaskService {
       userId,
     );
 
-    this.MaintenancePredict(maintenanceList);
+    return this.MaintenancePredict(maintenanceList);
   }
 
   //TODO make the equivalent for component and use that function to do this for user
   async MaintenancePredict(maintenanceList) {
-    maintenanceList = maintenanceList.filter(function (value, index, arr) {
-      return arr[index].schedule_type == 'distance';
-    });
+    return new Promise(async (resolve, reject) => {
+      maintenanceList = maintenanceList.filter(function (value, index, arr) {
+        return arr[index].schedule_type == 'distance';
+      });
 
-    const MILLISECONDS_PER_SECOND = 1000;
-    const SECONDS_PER_DAY = 86400;
+      const MILLISECONDS_PER_SECOND = 1000;
+      const SECONDS_PER_DAY = 86400;
 
-    function mean(vals) {
-      var sum_vals = vals.reduce(function (accumulator, currVal) {
-        return accumulator + currVal;
-      }, 0);
-      return sum_vals / vals.length;
-    }
-
-    function variance(vals, mean) {
-      var sum_variance = vals.reduce(function (accumulator, currVal) {
-        return accumulator + Math.pow(currVal - mean, 2);
-      }, 0);
-      return sum_variance;
-    }
-
-    function covarianceSum(x_vals, x_mean, y_vals, y_mean) {
-      if (x_vals.length != y_vals.length) {
-        //differing data set lengths
-        return null;
-      }
-      var covariance_sum = 0.0;
-      var i;
-      for (i = 0; i < x_vals.length; i++) {
-        covariance_sum += (x_vals[i] - x_mean) * (y_vals[i] - y_mean);
-      }
-      return covariance_sum;
-    }
-
-    function predictSlope(covariance, variance_x) {
-      return covariance / variance_x;
-    }
-
-    function predictIntercept(mean_x, mean_y, slope) {
-      return mean_y - slope * mean_x;
-    }
-
-    //linear regression taken from: https://machinelearningmastery.com/implement-simple-linear-regression-scratch-python/
-    var predict_dates = [];
-    var predictionText = '';
-    var maint_index;
-    for (maint_index = 0; maint_index < maintenanceList.length; maint_index++) {
-      //retrieve all activities since maintenance day for specified component
-      var last_maint_date = maintenanceList[
-        maint_index
-      ].last_maintenance_val.getTime();
-      var component_id = maintenanceList[maint_index].component_id;
-
-      var activityListId = await componentActivityRepository.GetActivityIdsForComponent(
-        component_id,
-      );
-      if (activityListId.length == 0) {
-        //no activities found, make no changes to predicted_due_date, skip
-        continue;
+      function mean(vals) {
+        var sum_vals = vals.reduce(function (accumulator, currVal) {
+          return accumulator + currVal;
+        }, 0);
+        return sum_vals / vals.length;
       }
 
-      var activityList = await activityRepository.GetActivitiesByIdsAfterDate(
-        activityListId,
-        last_maint_date,
-      );
+      function variance(vals, mean) {
+        var sum_variance = vals.reduce(function (accumulator, currVal) {
+          return accumulator + Math.pow(currVal - mean, 2);
+        }, 0);
+        return sum_variance;
+      }
 
-      //create x data (days) and y data (distance travelled)
-      var distance_sum = 0;
-      var activity_date_dataset = [0];
-      var activity_distance_dataset = [0];
-      var activity_index;
+      function covarianceSum(x_vals, x_mean, y_vals, y_mean) {
+        if (x_vals.length != y_vals.length) {
+          //differing data set lengths
+          return null;
+        }
+        var covariance_sum = 0.0;
+        var i;
+        for (i = 0; i < x_vals.length; i++) {
+          covariance_sum += (x_vals[i] - x_mean) * (y_vals[i] - y_mean);
+        }
+        return covariance_sum;
+      }
 
+      function predictSlope(covariance, variance_x) {
+        return covariance / variance_x;
+      }
+
+      function predictIntercept(mean_x, mean_y, slope) {
+        return mean_y - slope * mean_x;
+      }
+
+      //linear regression taken from: https://machinelearningmastery.com/implement-simple-linear-regression-scratch-python/
+      var predict_dates = [];
+      var predictionText = '';
+      var maint_index;
       for (
-        activity_index = 0;
-        activity_index < activityList.length;
-        activity_index++
+        maint_index = 0;
+        maint_index < maintenanceList.length;
+        maint_index++
       ) {
-        activity_date_dataset.push(
-          (activityList[activity_index].date.getTime() - last_maint_date) /
-            (MILLISECONDS_PER_SECOND * SECONDS_PER_DAY),
-        );
-        distance_sum += activityList[activity_index].distance;
-        activity_distance_dataset.push(distance_sum);
-      }
+        //retrieve all activities since maintenance day for specified component
+        var last_maint_date = maintenanceList[
+          maint_index
+        ].last_maintenance_val.getTime();
+        var component_id = maintenanceList[maint_index].component_id;
 
-      var x_mean = mean(activity_date_dataset);
-      var y_mean = mean(activity_distance_dataset);
-      if (x_mean == null || y_mean == null) {
-        //handle null error, make no changes to predicted_due_date, skip
-        predict_dates.push(null); //predict dates used to debug on maintenance screen
-        continue;
-      }
-      var x_variance = variance(activity_date_dataset, x_mean);
-      var covar_sum = covarianceSum(
-        activity_date_dataset,
-        x_mean,
-        activity_distance_dataset,
-        y_mean,
-      );
-      if (x_variance == null || covar_sum == null) {
-        //handle null error, make no changes to predicted_due_date, skip
-        predict_dates.push(null); //predict dates used to debug on maintenance screen
-        continue;
+        var activityListId = await componentActivityRepository.GetActivityIdsForComponentAfterDate(
+          component_id,
+          last_maint_date,
+        );
+        if (activityListId.length == 0) {
+          //no activities found, make no changes to predicted_due_date, skip
+          continue;
+        }
+
+        var activityList = await activityRepository.GetActivitiesByIds(
+          activityListId,
+        );
+
+        //create x data (days) and y data (distance travelled)
+        var distance_sum = 0;
+        var activity_date_dataset = [0];
+        var activity_distance_dataset = [0];
+        var activity_index;
+
+        for (
+          activity_index = 0;
+          activity_index < activityList.length;
+          activity_index++
+        ) {
+          activity_date_dataset.push(
+            (activityList[activity_index].date.getTime() - last_maint_date) /
+              (MILLISECONDS_PER_SECOND * SECONDS_PER_DAY),
+          );
+          distance_sum += activityList[activity_index].distance;
+          activity_distance_dataset.push(distance_sum);
+        }
+
+        var x_mean = mean(activity_date_dataset);
+        var y_mean = mean(activity_distance_dataset);
+        if (x_mean == null || y_mean == null) {
+          //handle null error, make no changes to predicted_due_date, skip
+          predict_dates.push(null); //predict dates used to debug on maintenance screen
+          continue;
+        }
+        var x_variance = variance(activity_date_dataset, x_mean);
+        var covar_sum = covarianceSum(
+          activity_date_dataset,
+          x_mean,
+          activity_distance_dataset,
+          y_mean,
+        );
+        if (x_variance == null || covar_sum == null) {
+          //handle null error, make no changes to predicted_due_date, skip
+          predict_dates.push(null); //predict dates used to debug on maintenance screen
+          continue;
+        }
+        var slope = predictSlope(covar_sum, x_variance);
+        var intercept = predictIntercept(x_mean, y_mean, slope);
+        var predict_date =
+          (maintenanceList[maint_index].threshold_val - intercept) / slope;
+        var final_date = this.addDays(
+          maintenanceList[maint_index].last_maintenance_val,
+          predict_date,
+        );
+
+        //update with new predicted date
+        maintenanceList[maint_index].predicted_due_date = final_date;
+
+        //formatting for debug maintenance screen
+        final_date = moment(final_date, 'YYYY-MM-DD')
+          .tz('America/Los_Angeles')
+          .format('l');
+        predict_dates.push(final_date);
+        predictionText +=
+          maintenanceList[maint_index].description +
+          ' estimated due on: ' +
+          final_date +
+          '\n';
       }
       var slope = predictSlope(covar_sum, x_variance);
       var intercept = predictIntercept(x_mean, y_mean, slope);
@@ -314,8 +342,9 @@ class MaintenanceTaskService {
         '\n';
     }
 
-    this.maintenanceTaskRepository.Update(maintenanceList);
-    return predict_dates;
+      this.maintenanceTaskRepository.Update(maintenanceList);
+      resolve(predict_dates);
+    });
   }
 }
 

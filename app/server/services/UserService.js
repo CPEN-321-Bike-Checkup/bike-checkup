@@ -7,6 +7,10 @@ class UserService {
     this.deviceTokenRepository = deviceTokenRepository;
   }
 
+  GetUserDevices(userId) {
+    return this.deviceTokenRepository.GetByQuery({owner: userId});
+  }
+
   UserExists(userId) {
     return this.userRepository.Exists({_id: userId});
   }
@@ -16,16 +20,14 @@ class UserService {
   }
 
   async RegisterNewDevice(userId, deviceToken) {
-    await this.deviceTokenRepository
-      .Delete({token: deviceToken, owner: userId})
-      .catch((err) => {
-        console.error(err);
-      });
-    await this.deviceTokenRepository
-      .Create({token: deviceToken, owner: userId})
-      .catch((err) => {
-        console.error(err);
-      });
+    var device = {token: deviceToken, owner: userId};
+    var updateResp = await this.deviceTokenRepository.Update(device);
+    if (updateResp.n === 0) {
+      var resp = await this.deviceTokenRepository.Create(device);
+      return resp;
+    } else {
+      return updateResp;
+    }
   }
 
   DeleteDevice(userId, deviceToken) {

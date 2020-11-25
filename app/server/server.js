@@ -21,6 +21,21 @@ app.listen(port, () => {
   console.log('Server is running on port: ' + port);
 });
 
+//run job scheduler
+const autoReminderService = require('./services/AutoReminderService');
+//autoReminderService.StartJobSchedule();
+
+app.post('/runReminderJob', function () {
+  autoReminderService
+    .RunJob()
+    .then((result) => {
+      res.status(200).send(result);
+    })
+    .catch((err) => {
+      res.status(500).send('Job failed: ', err);
+    });
+});
+
 mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true});
 let db = mongoose.connection;
 //check connection
