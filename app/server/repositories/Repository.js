@@ -42,7 +42,7 @@ class Repository {
     var promises = [];
     if (Array.isArray(newDocumentsVals)) {
       newDocumentsVals.forEach((newDocumentVal) => {
-        promises.add(
+        promises.push(
           this.documentModel
             .updateOne(this.GetDocumentKey(newDocumentVal), newDocumentVal)
             .exec(),
@@ -104,7 +104,7 @@ class Repository {
     var promises = [];
     if (Array.isArray(documents)) {
       documents.forEach((document) => {
-        promises.add(this.documentModel.deleteOne(document).exec());
+        promises.push(this.documentModel.deleteOne(document).exec());
       });
       return Promise.all(promises);
     } else {

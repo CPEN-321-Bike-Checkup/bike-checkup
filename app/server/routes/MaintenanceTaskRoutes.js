@@ -1,6 +1,5 @@
 const express = require('express');
 const maintenanceTaskService = require('../services/MaintenanceTaskService');
-const {Mongoose} = require('mongoose');
 const {isInteger, isString} = require('lodash');
 
 const initMaintenanceTaskRouting = (app) => {
