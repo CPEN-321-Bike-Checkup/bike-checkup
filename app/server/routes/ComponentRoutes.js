@@ -7,8 +7,10 @@ const initComponentRouting = (app) => {
   app.use('/component', componentRouter);
 
   componentRouter.get('/:bikeId', (req, res) => {
-    componentService.GetComponentsForBike(parseInt(req.bikeId)).then(
-      (components) => res.send(JSON.stringify(components)),
+    componentService.GetComponentsForBike(req.params.bikeId).then(
+      (components) => {
+        res.send(JSON.stringify(components));
+      },
       (err) => res.send(JSON.stringify(err)),
     );
   });

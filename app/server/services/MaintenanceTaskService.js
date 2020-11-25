@@ -24,6 +24,7 @@ class MaintenanceTaskService {
   }
 
   Create(maintenanceTasks) {
+    maintenanceTasks.last_maintenance_val = new Date();
     var promise = this.maintenanceTaskRepository.Create(maintenanceTasks);
     return promise;
   }

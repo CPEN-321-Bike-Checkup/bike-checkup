@@ -9,7 +9,7 @@ class BikeRepository extends Repository {
   }
 
   GetBikesForUser(userId) {
-    return this.documentModel.find({owner: userId}).exec();
+    return this.documentModel.find({owner_id: userId}).exec();
   }
 }
 const bikeRepository = new BikeRepository(BikeModel, UserModel);
