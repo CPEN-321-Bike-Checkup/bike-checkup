@@ -31,7 +31,7 @@ class MaintenanceTaskService {
   MarkCompleted(maintenanceTask) {
     var updateResult = this.maintenanceTaskRepository.Update(maintenanceTask);
     var createRecordResult = this.maintenanceRecordRepository.Create(
-      MaintenanceRecordFromTask(maintenanceTask),
+      this.MaintenanceRecordFromTask(maintenanceTask),
     );
     return Promise.all([updateResult, createRecordResult]);
   }
@@ -47,7 +47,11 @@ class MaintenanceTaskService {
   }
 
   MaintenanceRecordFromTask(maintenanceTask) {
-    var record = {};
+    var record = {
+      description: maintenanceTask.description,
+      component_id: maintenanceTask.component_id,
+      maintenance_date: maintenanceTask.last_maintenance_val,
+    };
     return record;
   }
 
@@ -81,11 +85,6 @@ class MaintenanceTaskService {
       todayWithTime.getMonth(),
       todayWithTime.getDate(),
     );
-    let weekAfterToday = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate() + 7,
-    );
     for (var i = 0; i < tasks.length; i++) {
       if (tasks[i].predicted_due_date < today) {
         schedule[0].data.push(tasks[i]);
@@ -93,7 +92,7 @@ class MaintenanceTaskService {
         schedule[1].data.push(tasks[i]);
       } else if (
         tasks[i].predicted_due_date > today &&
-        tasks[i].predicted_due_date < weekAfterToday
+        tasks[i].predicted_due_date < this.addDays(today, 7)
       ) {
         schedule[2].data.push(tasks[i]);
       } else {
@@ -150,17 +149,18 @@ class MaintenanceTaskService {
    * @modifies  database entries of MaintenanceTask items
    */
 
-  GetTasksForComponent(componentId) {
-    var tasks = this.maintenanceTaskRepository.GetTasksForComponents([
-      componentId,
-    ]);
+  async GetTasksForComponent(componentId) {
+    var tasks = await this.maintenanceTaskRepository.GetMaintenanceTasksForComponents(
+      [componentId],
+    );
     return tasks.map((task) => {
       return {
-        'task id': task._id,
+        taskId: task._id,
         description: task.description,
         threshold: task.threshold_val,
         repeats: task.repeats,
-        last_maintenance_val: task.last_maintenance_val,
+        lastMaintenanceVal: task.last_maintenance_val,
+        scheduleType: task.schedule_type,
       };
     });
   }

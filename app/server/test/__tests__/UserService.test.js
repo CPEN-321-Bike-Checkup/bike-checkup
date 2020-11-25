@@ -55,15 +55,16 @@ describe('Get User Tests', async () => {
     expect.assertions(1);
     return axios.get(url + '/20').then((resp) => {
       var code = resp.status;
-      expect(code).toBe(200);
+      expect(code).toBe(500);
     });
   });
 
   test('Get user by ID 200 Ok', () => {
-    expect.assertions(1);
+    expect.assertions(2);
     return axios.get(url + '/1').then((resp) => {
       var code = resp.status;
       expect(code).toBe(200);
+      expect(resp.data._id).toBe(1);
     });
   });
 
@@ -155,18 +156,22 @@ describe('Delete Device Tests', () => {
 
   test('Delete device 404 Error', () => {
     expect.assertions(1);
-    return axios.delete(url + 'registerDevice', deviceModifiedId0).catch((error) => {
-      var code = error.response.status;
-      expect(code).toBe(404);
-    });
+    return axios
+      .delete(url + 'registerDevice', deviceModifiedId0)
+      .catch((error) => {
+        var code = error.response.status;
+        expect(code).toBe(404);
+      });
   });
 
   test('Delete device 400 Error', () => {
     expect.assertions(1);
-    return axios.delete(url + 'registerDevice', deviceModifiedNoId).catch((error) => {
-      var code = error.response.status;
-      expect(code).toBe(400);
-    });
+    return axios
+      .delete(url + 'registerDevice', deviceModifiedNoId)
+      .catch((error) => {
+        var code = error.response.status;
+        expect(code).toBe(400);
+      });
   });
 });
 
@@ -199,9 +204,11 @@ describe('Create Device Tests', () => {
 
   test('Create device 400 Error', () => {
     expect.assertions(1);
-    return axios.post(url + 'registerDevice', deviceModifiedNoId).catch((error) => {
-      var code = error.response.status;
-      expect(code).toBe(400);
-    });
+    return axios
+      .post(url + 'registerDevice', deviceModifiedNoId)
+      .catch((error) => {
+        var code = error.response.status;
+        expect(code).toBe(400);
+      });
   });
 });
