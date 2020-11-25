@@ -1,27 +1,23 @@
 jest.mock('../../repositories/ActivityRepository');
 jest.mock('../../repositories/MaintenanceTaskRepository');
 jest.mock('../../repositories/MaintenanceRecordRepository');
+jest.mock('../../repositories/ComponentActivityRepository');
 
 const axios = require('axios');
 const express = require('express');
 const app = express();
 app.use(express.json());
 const initMaintenanceTaskRoutes = require('../../routes/MaintenanceTaskRoutes');
+const maintenanceTaskService = require('../services/MaintenanceTaskService');
 let server;
 
-beforeAll(() => {
-  server = app.listen(port, () => {
-    initMaintenanceTaskRoutes(app);
-  });
-});
+beforeAll(() => {});
 
-afterAll(() => {
-  server.close();
-});
+afterAll(() => {});
 
 var url = 'http://' + ip + ':' + port + '/maintenanceTask/';
-var maintSchedule1 = {
-  _id: 400,
+const maintSchedule1 = {
+  _id: 1,
   component_id: 1,
   schedule_type: 'date',
   threshold_val: 450,
@@ -37,7 +33,35 @@ delete schedModifiedNoId._id;
 var schedModifiedId0 = JSON.parse(JSON.stringify(maintSchedule1));
 schedModifiedId0._id = 0;
 
+describe('GetById(id) Test Cases', () => {
+  test('Input with existing id', () => {
+    expect.assertions(3);
+    return maintenanceTaskService.GetById(1).then((resp) => {
+      expect(code).toBe(200);
+      expect(resp.data.length).toBe(1);
+      expect(resp.data.description).toBe('oil chain');
+    });
+  });
+
+  test('Input with nonexisting id', () => {
+    expect.assertions(3);
+    return maintenanceTaskService.GetById(1).then((resp) => {
+      expect(code).toBe(200);
+      expect(resp.data.length).toBe(1);
+    });
+  });
+});
+
 describe('500 Resp Tests', async () => {
+  test('Get tasks for user 200 OK', () => {
+    expect.assertions(1);
+    return axios.get(url + 'prediction?userId=1').then((resp) => {
+      var code = resp.status;
+      expect(code).toBe(200);
+      expect(resp.data.length).toBe(3);
+    });
+  });
+
   test('Get tasks for user 500 Error', () => {
     expect.assertions(1);
     return axios.get(url + 'prediction?userId=20').catch((error) => {

@@ -148,15 +148,6 @@ class MaintenanceTaskService {
     return final_date;
   }
 
-  /*
-   * Gets all tasks for user and predicts new due dates according
-   * to user's activities
-   * @param     userId - id of user whose tasks are to be retrieved
-   * @param     deviceTokens - device token used to send notifications
-   * @returns   array of maintenance tasks with updated predicted_due_dates
-   * @modifies  database entries of MaintenanceTask items
-   */
-
   async GetTasksForComponent(componentId) {
     var tasks = await this.maintenanceTaskRepository.GetMaintenanceTasksForComponents(
       [componentId],
@@ -247,17 +238,17 @@ class MaintenanceTaskService {
       ].last_maintenance_val.getTime();
       var component_id = maintenanceList[maint_index].component_id;
 
-      var activityListId = await componentActivityRepository.GetActivityIdsForComponentAfterDate(
+      var activityListId = await componentActivityRepository.GetActivityIdsForComponent(
         component_id,
-        last_maint_date,
       );
       if (activityListId.length == 0) {
         //no activities found, make no changes to predicted_due_date, skip
         continue;
       }
 
-      var activityList = await activityRepository.GetActivitiesByIds(
+      var activityList = await activityRepository.GetActivitiesByIdsAfterDate(
         activityListId,
+        last_maint_date,
       );
 
       //create x data (days) and y data (distance travelled)
@@ -307,13 +298,14 @@ class MaintenanceTaskService {
         predict_date,
       );
 
-      //update with new predicted date
-      maintenanceList[maint_index].predicted_due_date = final_date;
-
       //formatting for debug maintenance screen
       final_date = moment(final_date, 'YYYY-MM-DD')
         .tz('America/Los_Angeles')
         .format('l');
+
+      //update with new predicted date
+      maintenanceList[maint_index].predicted_due_date = final_date;
+
       predict_dates.push(final_date);
       predictionText +=
         maintenanceList[maint_index].description +

@@ -20,8 +20,13 @@ class ActivityRepository extends Repository {
       .exec();
   }
 
-  GetActivitiesByIds(activityIds) {
-    return this.documentModel.find({_id: {$in: activityIds}}).exec();
+  GetActivitiesByIdsAfterDate(activityIds, date) {
+    return this.documentModel
+      .find({
+        _id: {$in: activityIds},
+        date: {$gte: date},
+      })
+      .exec();
   }
 }
 const activityRepository = new ActivityRepository(ActivityModel);

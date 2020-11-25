@@ -14,7 +14,7 @@ class ComponentActivityRepository extends Repository {
     };
   }
 
-  GetActivityIdsForComponentInRange(componentId, date, numberOfDays) {
+  /*GetActivityIdsForComponentInRange(componentId, date, numberOfDays) {
     var endDate = new Date();
     endDate.setDate(date.getDate() + numberOfDays);
     console.log(date);
@@ -25,13 +25,12 @@ class ComponentActivityRepository extends Repository {
       })
       .select('activity_id')
       .exec();
-  }
+  }*/
 
-  GetActivityIdsForComponentAfterDate(componentId, date) {
+  GetActivityIdsForComponent(componentId) {
     return this.documentModel
       .find({
         component_id: componentId,
-        date: {$gte: date},
       })
       .select('activity_id')
       .exec();
