@@ -9,7 +9,6 @@ import {createMaterialBottomTabNavigator} from '@react-navigation/material-botto
 import {StyleSheet} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
-import MaintenanceScreen from './components/MaintenancePrediction';
 import BikesStack from './components/Stacks/BikesStack';
 import ScheduleStack from './components/Stacks/ScheduleStack';
 import HistoryStack from './components/Stacks/HistoryStack';
@@ -117,21 +116,6 @@ export default class App extends Component {
                   />
                 ),
                 tabBarTestID: 'ActivitiesTab',
-              }}
-            />
-            <Tab.Screen
-              name="Maintenance"
-              component={MaintenanceScreen}
-              options={{
-                tabBarColor: 'green',
-                tabBarIcon: ({color}) => (
-                  <MaterialCommunityIcons
-                    name="wrench"
-                    color={color}
-                    size={24}
-                  />
-                ),
-                tabBarTestID: 'MaintenanceTab',
               }}
             />
           </Tab.Navigator>
