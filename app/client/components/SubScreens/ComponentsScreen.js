@@ -80,7 +80,7 @@ export default class ScheduleScreen extends React.Component {
       nextId: 0,
     };
     this.navigation = props.navigation;
-    this.bikeId = props.route.params.bikeId;
+    this.bike = props.route.params.bike;
     this.removedComponents = [];
     this.itemCount = 0;
   }
@@ -139,8 +139,8 @@ export default class ScheduleScreen extends React.Component {
         editMode={this.state.editMode}
         onPress={() => {
           this.navigation.navigate('Tasks', {
-            bikeId: this.bikeId,
-            componentId: item.id,
+            bike: this.bike,
+            component: item,
           });
         }}
         onRemovePress={this.removeBikeComponent(item.id)}
@@ -224,7 +224,7 @@ export default class ScheduleScreen extends React.Component {
                 ) {
                   let componentData = [...this.state.componentData];
                   componentData.push({
-                    bikeId: this.bikeId,
+                    bikeId: this.bike.id,
                     id: this.state.nextId,
                     title: this.state.componentTypeInputText.concat(
                       ' - ',

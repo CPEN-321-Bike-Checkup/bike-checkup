@@ -175,7 +175,7 @@ export default class ScheduleScreen extends React.Component {
         <View style={styles.openModalButtonContainer}>
           <TouchableOpacity
             onPress={() => {
-              this.navigation.navigate('Add Task', {newTask: true});
+              this.navigation.navigate('Add Task', {isNewTask: true});
             }}
             style={styles.openModalButton}>
             <Text style={styles.openModalButtonIcon}>+</Text>

@@ -69,8 +69,8 @@ export default class BikesScreen extends React.Component {
     return (
       <PressableListItem
         title={item.title}
-        onPress={() =>
-          this.navigation.navigate('Components', {bikeId: item.id})
+        onPress={
+          () => this.navigation.navigate('Components', {bike: item})
           // this.getBikes()
         }
         testID={testId}

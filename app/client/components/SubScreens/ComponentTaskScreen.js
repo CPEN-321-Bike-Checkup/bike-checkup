@@ -33,8 +33,8 @@ export default class ComponentTaskScreen extends React.Component {
       editMode: false,
     };
     this.navigation = props.navigation;
-    // this.bikeId = props.route.params.bikeId;
-    this.componentId = props.route.params.componentId;
+    this.bike = props.route.params.bike;
+    this.component = props.route.params.component;
     this.removedTasks = [];
     this.itemCount = 0;
   }
@@ -77,7 +77,9 @@ export default class ComponentTaskScreen extends React.Component {
 
   addTask = () => {
     this.navigation.navigate('AddTaskScreen', {
-      newTask: true,
+      isNewTask: true,
+      fixedBike: this.bike,
+      fixedComponent: this.component,
     });
   };
 
@@ -87,8 +89,8 @@ export default class ComponentTaskScreen extends React.Component {
       let newTaskData = [...this.state.taskData];
       for (var i = 0; i < newTaskData.length; i++) {
         if (newTaskData[i].id == id) {
-          let component = newTaskData.splice(i, 1);
-          this.removedTasks.push(component.id); // Remember removed task IDs
+          let task = newTaskData.splice(i, 1);
+          this.removedTasks.push(task.id); // Remember removed task IDs
           this.setState({taskData: newTaskData});
         }
       }
@@ -116,8 +118,17 @@ export default class ComponentTaskScreen extends React.Component {
           editMode={this.state.editMode}
           onPress={() => {
             this.navigation.navigate('AddTaskScreen', {
+              fixedBike: this.bike,
+              fixedComponent: this.component,
               taskId: item.id,
-              newTask: false,
+              isNewTask: false,
+              task: {
+                id: item.id,
+                description: item.description,
+                taskType: item.scheduleType,
+                threshold: item.threshold,
+                isRepeating: item.repeats,
+              }
             });
           }}
           onRemovePress={this.removeTask(item.id)}

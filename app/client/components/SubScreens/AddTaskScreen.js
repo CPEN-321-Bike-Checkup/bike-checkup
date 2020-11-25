@@ -34,20 +34,39 @@ export default class AddTaskScreen extends React.Component {
       componentList: [],
       fatalError: false,
       /* Task Fields */
-      bike: null,
-      component: null,
-      title: null,
+      bikeId: null,
+      componentId: null,
+      description: null,
       taskType: null,
       threshold: null,
       isRepeating: false,
     };
     this.navigation = props.navigation;
-    this.newTask = props.route.params.newTask; // boolean for update or new
-    this.taskData = props.route.params.taskData; // TODO: get all availabe task data if not new
+
+    // Params
+    this.isNewTask = props.route.params.isNewTask; // boolean for update or new
+    if (!this.isNewTask) {
+      let {
+        id,
+        description,
+        taskType,
+        threshold,
+        isRepeating,
+      } = props.route.params.task;
+      this.state.taskId = id;
+      this.state.description = description;
+      this.state.taskType = taskType;
+      this.state.threshold = threshold;
+      this.state.isRepeating = isRepeating;
+    }
+
+    // Bike and component fixed if entering this screen from the ComponentTaskScreen
+    this.fixedBike = props.route.params.fixedBike;
+    this.fixedComponent = props.route.params.fixedComponent;
   }
 
   componentDidMount() {
-    if (!this.props.fixedBike) {
+    if (!this.fixedBike) {
       this.updateBikeList();
     }
   }
@@ -135,9 +154,64 @@ export default class AddTaskScreen extends React.Component {
       });
   };
 
-  getDropDownPicker(data, onChangeCallback) {
+  createTask = (task) => {
+    // Send POST request
+    fetch(`http://${global.serverIp}:5000/maintenanceTask/`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newTask),
+    })
+      .then((response) => {
+        // TODO: check response status
+        // TODO: make sure back-end makes prediction for task before responding
+        console.log('SUCCESSFULLY SAVED TASK');
+        this.navigation.goBack();
+      })
+      .catch((error) => {
+        // Display error popup
+        this.setState({
+          isError: true,
+          errorText: 'Failed to save task. Check network connection.',
+        });
+
+        console.error(error);
+      });
+  };
+
+  updateTask = (task) => {
+    // Send PUT request
+    fetch(`http://${global.serverIp}:5000/maintenanceTask/`, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newTask),
+    })
+      .then((response) => {
+        // TODO: check response status
+        // TODO: make sure back-end makes prediction for task before responding
+        console.log('SUCCESSFULLY SAVED TASK');
+        this.navigation.goBack();
+      })
+      .catch((error) => {
+        // Display error popup
+        this.setState({
+          isError: true,
+          errorText: 'Failed to update task. Check network connection.',
+        });
+
+        console.error(error);
+      });
+  };
+
+  getDropDownPicker(data, onChangeCallback, defaultValue) {
     return (
       <DropDownPicker
+        defaultValue={defaultValue} // Won't display if undefined or null
         style={{flex: 1}}
         items={data}
         itemStyle={{
@@ -152,10 +226,11 @@ export default class AddTaskScreen extends React.Component {
     );
   }
 
-  getTextInput(onTextCallback, numeric = false) {
+  getTextInput(onTextCallback, numeric, defaultValue) {
     const keyboard = numeric ? 'numeric' : 'default';
     return (
       <TextInput
+        defaultValue={defaultValue} // Won't display if undefined or null
         placeholder="Enter..."
         placeholderTextColor="#616161"
         underlineColorAndroid="#000000"
@@ -169,38 +244,44 @@ export default class AddTaskScreen extends React.Component {
   }
 
   getBikeFormItem = () => {
-    const {fixedBike} = this.props.route.params;
-    if (fixedBike) {
+    if (this.fixedBike) {
       return (
-        <View style={styles.formItemRow}>
+        <View style={styles.formItemColumn}>
           <Text style={styles.formItemHeaderText}>Bike: </Text>
-          <Text style={styles.fixedItemText}>{fixedBike}</Text>
+          <Text style={styles.fixedItemText}>{this.fixedBike.title}</Text>
         </View>
       );
     } else {
       return (
         <View style={styles.formItemColumn}>
           <Text style={styles.formItemHeaderText}>Bike:</Text>
-          {this.getDropDownPicker(this.state.bikeList, this.setBike)}
+          {this.getDropDownPicker(
+            this.state.bikeList,
+            this.setBike,
+            this.state.bikeId,
+          )}
         </View>
       );
     }
   };
 
   getComponentFormItem = () => {
-    const {fixedComponent} = this.props.route.params;
-    if (fixedComponent) {
+    if (this.fixedComponent) {
       return (
-        <View style={styles.formItemRow}>
+        <View style={styles.formItemColumn}>
           <Text style={styles.formItemHeaderText}>Component: </Text>
-          <Text style={styles.fixedItemText}>{fixedComponent}</Text>
+          <Text style={styles.fixedItemText}>{this.fixedComponent.title}</Text>
         </View>
       );
     } else {
       return (
         <View style={styles.formItemColumn}>
           <Text style={styles.formItemHeaderText}>Component:</Text>
-          {this.getDropDownPicker(this.state.componentList, this.setComponent)}
+          {this.getDropDownPicker(
+            this.state.componentList,
+            this.setComponent,
+            this.state.componentId,
+          )}
         </View>
       );
     }
@@ -214,11 +295,11 @@ export default class AddTaskScreen extends React.Component {
   };
 
   setComponent = (item) => {
-    this.setState({component: item.value});
+    this.setState({componentId: item.value});
   };
 
-  setTaskTitle = (taskTitle) => {
-    this.setState({title: taskTitle});
+  setTaskTitle = (description) => {
+    this.setState({description: description});
   };
 
   setTaskType = (item) => {
@@ -267,39 +348,22 @@ export default class AddTaskScreen extends React.Component {
     }
 
     let newTask = {
-      bike: this.state.bike,
-      component: this.state.component,
-      title: this.state.title,
+      bike: this.fixedBike ? this.fixedBike.id : this.state.bikeId,
+      component: this.fixedComponent
+        ? this.fixedComponent.id
+        : this.state.componentId,
+      description: this.state.description,
       taskType: this.state.taskType,
       threshold: this.state.threshold,
       isRepeating: this.state.isRepeating,
     };
 
-    // POST task to database
-    fetch(`http://${global.serverIp}:5000/maintenanceTask/`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newTask),
-    })
-      .then((response) => {
-        // TODO: check response status
-        // TODO: make sure back-end makes prediction for task before responding
-        console.log('SUCCESSFULLY SAVED TASK');
-        this.navigation.goBack();
-      })
-      .catch((error) => {
-        // Display error popup
-        this.setState({
-          isError: true,
-          errorText: 'Failed to save task. Check network connection.',
-        });
-
-        console.error(error);
-      })
-      .finally(() => {});
+    if (this.isNewTask) {
+      this.createTask(newTask);
+    } else {
+      newTask.id = this.state.taskId;
+      this.updateTask(newTask);
+    }
   };
 
   onErrorAccepted = () => {
@@ -323,18 +387,26 @@ export default class AddTaskScreen extends React.Component {
         {this.getComponentFormItem()}
         <View style={styles.formItemColumn}>
           <Text style={styles.formItemHeaderText}>Title:</Text>
-          {this.getTextInput(this.setTaskTitle)}
+          {this.getTextInput(this.setTaskTitle, false, this.state.description)}
         </View>
         <View style={styles.formItemColumn}>
           <Text style={styles.formItemHeaderText}>Type:</Text>
-          {this.getDropDownPicker(TASK_TYPE_DATA, this.setTaskType)}
+          {this.getDropDownPicker(
+            TASK_TYPE_DATA,
+            this.setTaskType,
+            this.state.taskType,
+          )}
         </View>
         {this.state.taskType === TASK_TYPES.TIME ? (
           <View style={styles.formItemColumn}>
             <Text style={styles.formItemHeaderText}>
               Time Until Task (Days):
             </Text>
-            {this.getTextInput(this.setTaskThreshold, true)}
+            {this.getTextInput(
+              this.setTaskThreshold,
+              true,
+              this.state.threshold.toString(),
+            )}
           </View>
         ) : null}
         {this.state.taskType === TASK_TYPES.DISTANCE ? (
@@ -342,7 +414,11 @@ export default class AddTaskScreen extends React.Component {
             <Text style={styles.formItemHeaderText}>
               Distance Until Task (km):
             </Text>
-            {this.getTextInput(this.setTaskThreshold, true)}
+            {this.getTextInput(
+              this.setTaskThreshold,
+              true,
+              this.state.taskType,
+            )}
           </View>
         ) : null}
         <View style={styles.formItemRow}>
@@ -414,7 +490,8 @@ const styles = StyleSheet.create({
   fixedItemText: {
     fontSize: 18,
     marginBottom: 5,
-    color: 'grey',
+    color: '#666666',
+    fontWeight: 'bold',
   },
 
   saveButton: {
