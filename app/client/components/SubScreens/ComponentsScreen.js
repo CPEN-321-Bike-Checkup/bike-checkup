@@ -13,6 +13,8 @@ import {RemovablePressableListItem} from '../ListItems';
 import {flatListWrapper} from '../FlatListWrapper';
 import CommonStyles from '../CommonStyles';
 import AddButton from '../AddButton';
+import ErrorPopup from '../ErrorPopup';
+import {timeout} from '../ScreenUtils';
 
 const BIKE_COMPONENTS_LIST = [
   'Front Wheel',
@@ -52,20 +54,20 @@ const BIKE_COMPONENTS_LIST = [
 ];
 
 // TODO: remove when we're done all testing
-const NORCO_DATA = [
-  {
-    id: 1,
-    title: 'Chain - CN-9000',
-  },
-  {
-    id: 2,
-    title: 'Brakes - Shimano BR-RS305-R Hydraulic Disc, 150mm',
-  },
-  {
-    id: 3,
-    title: 'Brake pads - Brake Authority Avids',
-  },
-];
+// const NORCO_DATA = [
+//   {
+//     id: 1,
+//     title: 'Chain - CN-9000',
+//   },
+//   {
+//     id: 2,
+//     title: 'Brakes - Shimano BR-RS305-R Hydraulic Disc, 150mm',
+//   },
+//   {
+//     id: 3,
+//     title: 'Brake pads - Brake Authority Avids',
+//   },
+// ];
 
 export default class ScheduleScreen extends React.Component {
   constructor(props) {
@@ -73,12 +75,14 @@ export default class ScheduleScreen extends React.Component {
     console.log(props);
     super(props);
     this.state = {
-      componentData: [], // TODO: make into associative array
+      componentData: [],
       editMode: false,
       modalVisible: false,
       componentTypeInputText: '',
       componentNameInputText: '',
       nextId: 0,
+      isError: false,
+      errorText: null,
     };
     this.navigation = props.navigation;
     this.bike = props.route.params.bike;
@@ -87,6 +91,8 @@ export default class ScheduleScreen extends React.Component {
   }
 
   componentDidMount() {
+    this.getComponents();
+
     // Add edit button to navigation bar (side effect)
     this.navigation.setOptions({
       headerRight: () => (
@@ -96,6 +102,52 @@ export default class ScheduleScreen extends React.Component {
       ),
     });
   }
+
+  getComponents() {
+    timeout(
+      3000,
+      fetch(`http://${global.serverIp}:5000/component/${this.bike.id}`, {
+        method: 'GET',
+      })
+        .then((response) => response.json())
+        .then((components) => {
+          console.log('GOT COMPONENTS:');
+          console.log(components);
+          this.setState({
+            componentData: this.transformComponentData(components),
+          });
+        }),
+    ).catch((error) => {
+      // Display error popup
+      this.setState({
+        isError: true,
+        errorText:
+          'Failed to retrieve your components. Check network connection.',
+      });
+
+      console.error(error);
+    });
+  }
+
+  transformComponentData = (components) => {
+    let componentsList = [];
+    for (let component of components) {
+      let newComponent = {
+        title: component.label,
+        id: component._id,
+      };
+      componentsList.push(newComponent);
+    }
+    return componentsList;
+  };
+
+  onErrorAccepted = () => {
+    // Clear error state
+    this.setState({
+      isError: false,
+      errorText: null,
+    });
+  };
 
   removeBikeComponent(id) {
     return () => {
@@ -159,7 +211,7 @@ export default class ScheduleScreen extends React.Component {
       <View style={{flex: 1}}>
         {flatListWrapper(
           // this.state.componentData,
-          NORCO_DATA,
+          this.state.componentData,
           this.renderItem,
           'ComponentsList',
         )}
@@ -236,13 +288,13 @@ export default class ScheduleScreen extends React.Component {
             </TouchableHighlight>
           </View>
         </Modal>
-      </View>
-      // this.itemCount = 0;
 
-      // return flatListWrapper(
-      //   this.state.componentData,
-      //   this.renderItem,
-      //   'ComponentsList',
+        {ErrorPopup(
+          this.state.errorText,
+          this.onErrorAccepted,
+          this.state.isError,
+        )}
+      </View>
     );
   }
 }

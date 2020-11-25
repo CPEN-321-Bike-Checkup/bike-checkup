@@ -4,6 +4,8 @@ import {RemovableListItem, RemovablePressableListItem} from '../ListItems';
 import {flatListWrapper} from '../FlatListWrapper';
 import CommonStyles from '../CommonStyles';
 import AddButton from '../AddButton';
+import ErrorPopup from '../ErrorPopup';
+import {timeout} from '../ScreenUtils';
 
 const DATA = [
   {
@@ -32,6 +34,8 @@ export default class ComponentTaskScreen extends React.Component {
     this.state = {
       taskData: [],
       editMode: false,
+      isError: false,
+      errorText: null,
     };
     this.navigation = props.navigation;
     this.bike = props.route.params.bike;
@@ -45,20 +49,7 @@ export default class ComponentTaskScreen extends React.Component {
   }
 
   componentDidMount() {
-    // fetch('3.97.53.16:8080/maintenance-schedule/', {
-    //   method: 'GET'
-    //   })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     this.updateMaintenanceData({dateJSON: data})
-    //   })
-    //   .catch((error) => {
-    //     // this.setState({dateJSON: 'Error fetching data'})
-    //     console.error(error);
-    //   })
-    //   .finally(() => {
-    //     // this.setState({ isLoading: false });
-    //   });;
+    this.getTasks();
 
     /* NOTE: In React class components, the render method itself shouldn’t cause 
      side effects. It would be too early — we typically want to perform our
@@ -72,9 +63,58 @@ export default class ComponentTaskScreen extends React.Component {
         </TouchableOpacity>
       ),
     });
-
-    this.setState({taskData: DATA});
   }
+
+  getTasks() {
+    timeout(
+      3000,
+      fetch(
+        `http://${global.serverIp}:5000/maintenanceTask?componentId=${this.component.id}`,
+        {
+          method: 'GET',
+        },
+      )
+        .then((response) => response.json())
+        .then((tasks) => {
+          console.log('GOT TASKS:');
+          console.log(tasks);
+          this.setState({taskData: this.transformTaskData(tasks)});
+        }),
+    ).catch((error) => {
+      // Display error popup
+      this.setState({
+        isError: true,
+        errorText: 'Failed to retrieve your tasks. Check network connection.',
+      });
+
+      console.error(error);
+    });
+  }
+
+  transformTaskData = (tasks) => {
+    let tasksList = [];
+    for (let task of tasks) {
+      console.log('Task:');
+      console.log(task);
+      let newTask = {
+        id: task.taskId,
+        description: task.description,
+        threshold: task.threshold,
+        repeats: task.repeats,
+        taskType: task.scheduleType,
+      };
+      tasksList.push(newTask);
+    }
+    return tasksList;
+  };
+
+  onErrorAccepted = () => {
+    // Clear error state
+    this.setState({
+      isError: false,
+      errorText: null,
+    });
+  };
 
   addTask = () => {
     this.navigation.navigate('AddTaskScreen', {
@@ -126,7 +166,7 @@ export default class ComponentTaskScreen extends React.Component {
               task: {
                 id: item.id,
                 description: item.description,
-                taskType: item.scheduleType,
+                taskType: item.taskType,
                 threshold: item.threshold,
                 isRepeating: item.repeats,
               },
@@ -155,8 +195,12 @@ export default class ComponentTaskScreen extends React.Component {
     return (
       <View style={styles.container}>
         {flatListWrapper(this.state.taskData, this.renderItem, 'TasksList')}
-
         {AddButton(this.addTask)}
+        {ErrorPopup(
+          this.state.errorText,
+          this.onErrorAccepted,
+          this.state.isError,
+        )}
       </View>
     );
   }

@@ -1,66 +1,78 @@
 import React from 'react';
-import axios from 'axios';
 import {PressableListItem} from '../ListItems';
 import {flatListWrapper} from '../FlatListWrapper';
+import ErrorPopup from '../ErrorPopup';
+import {timeout} from '../ScreenUtils';
 
-const DATA = [
-  {
-    id: 1,
-    title: 'Norco Sasquatch',
-  },
-  {
-    id: 2,
-    title: 'Giant Contend Ar 1',
-  },
-];
+// const DATA = [
+//   {
+//     id: 1,
+//     title: 'Norco Sasquatch',
+//   },
+//   {
+//     id: 2,
+//     title: 'Giant Contend Ar 1',
+//   },
+// ];
 
 export default class BikesScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      maintenanceData: [],
+      bikeData: [],
+      isError: false,
+      errorText: null,
     };
     this.navigation = props.navigation;
     this.itemCount = 0;
   }
 
-  updateMaintenanceData() {
-    // this.setState({maintenanceData: })
-  }
-
   componentDidMount() {
-    // fetch('3.97.53.16:8080/maintenance-schedule/', {
-    //   method: 'GET'
-    //   })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     this.updateMaintenanceData({dateJSON: data})
-    //   })
-    //   .catch((error) => {
-    //     // this.setState({dateJSON: 'Error fetching data'})
-    //     console.error(error);
-    //   })
-    //   .finally(() => {
-    //     // this.setState({ isLoading: false });
-    //   });;
+    this.getBikes();
   }
 
-  //testing bike routes, remove if needed
   getBikes() {
-    /* Fetch predictions from server */
-    var serverIp = '3.97.53.16';
-    axios
-      .get('http://' + serverIp + ':5000/bike/bikes')
-      .then((res) => {
-        var bikes = res.data.bikes;
-        console.log('INFO: Successfully fetched bikes: ' + bikes);
-
-        //this.setState({predictedDates: dates});
+    timeout(
+      3000,
+      fetch(`http://${global.serverIp}:5000/bike/${global.userId}`, {
+        method: 'GET',
       })
-      .catch((err) => {
-        console.log('ERROR: Failed to fetch bikes: ', err);
+        .then((response) => response.json())
+        .then((bikes) => {
+          console.log('GOT BIKES:');
+          console.log(bikes);
+          this.setState({bikeData: this.transformBikeData(bikes)});
+        }),
+    ).catch((error) => {
+      // Display error popup
+      this.setState({
+        isError: true,
+        errorText: 'Failed to retrieve your bikes. Check network connection.',
       });
+
+      console.error(error);
+    });
   }
+
+  transformBikeData = (bikes) => {
+    let bikesList = [];
+    for (let bike of bikes) {
+      let newBike = {
+        title: bike.label,
+        id: bike._id,
+      };
+      bikesList.push(newBike);
+    }
+    return bikesList;
+  };
+
+  onErrorAccepted = () => {
+    // Clear error state
+    this.setState({
+      isError: false,
+      errorText: null,
+    });
+  };
 
   renderItem = ({item}) => {
     const testId = 'BikeListItem' + this.itemCount;
@@ -69,10 +81,7 @@ export default class BikesScreen extends React.Component {
     return (
       <PressableListItem
         title={item.title}
-        onPress={
-          () => this.navigation.navigate('Components', {bike: item})
-          // this.getBikes()
-        }
+        onPress={() => this.navigation.navigate('Components', {bike: item})}
         testID={testId}
       />
     );
@@ -80,6 +89,15 @@ export default class BikesScreen extends React.Component {
 
   render() {
     this.itemCount = 0;
-    return flatListWrapper(DATA, this.renderItem, 'BikesList');
+    return (
+      <>
+        {flatListWrapper(this.state.bikeData, this.renderItem, 'BikesList')}
+        {ErrorPopup(
+          this.state.errorText,
+          this.onErrorAccepted,
+          this.state.isError,
+        )}
+      </>
+    );
   }
 }

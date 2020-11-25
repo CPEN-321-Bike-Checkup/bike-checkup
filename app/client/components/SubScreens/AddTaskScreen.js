@@ -11,25 +11,17 @@ import {
 import DropDownPicker from 'react-native-dropdown-picker';
 import CheckBox from '@react-native-community/checkbox';
 import ErrorPopup from '../ErrorPopup';
+import {timeout} from '../ScreenUtils';
 
 const TASK_TYPES = {
-  TIME: 0,
-  DISTANCE: 1,
+  TIME: 'date',
+  DISTANCE: 'distance',
 };
 
 const TASK_TYPE_DATA = [
   {label: 'Time', value: TASK_TYPES.TIME},
   {label: 'Distance', value: TASK_TYPES.DISTANCE},
 ];
-
-function timeout(ms, promise) {
-  return new Promise(function (resolve, reject) {
-    setTimeout(function () {
-      reject(new Error('timeout'));
-    }, ms);
-    promise.then(resolve, reject);
-  });
-}
 
 export default class AddTaskScreen extends React.Component {
   constructor(props) {
@@ -67,6 +59,8 @@ export default class AddTaskScreen extends React.Component {
       this.state.taskType = taskType;
       this.state.threshold = threshold;
       this.state.isRepeating = isRepeating;
+      console.log(props.route.params.task);
+      console.log(this.state.taskType);
     }
 
     // Bike and component fixed if entering this screen from the ComponentTaskScreen
@@ -83,8 +77,6 @@ export default class AddTaskScreen extends React.Component {
   transformBikeList = (bikes) => {
     let bikesList = [];
     for (let bike of bikes) {
-      console.log(bike);
-      console.log(bike.label);
       let newBike = {
         label: bike.label,
         value: bike._id,
@@ -131,6 +123,7 @@ export default class AddTaskScreen extends React.Component {
   };
 
   updateComponentList = (bikeId) => {
+    console.log('UPDATE COMPONENT LIST');
     timeout(
       3000,
       fetch(`http://${global.serverIp}:5000/component/${bikeId}`, {
@@ -175,7 +168,7 @@ export default class AddTaskScreen extends React.Component {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(newTask),
+      body: JSON.stringify(task),
     })
       .then((response) => {
         // TODO: check response status
@@ -194,6 +187,7 @@ export default class AddTaskScreen extends React.Component {
       });
   };
 
+  // TODO: test this
   updateTask = (task) => {
     // Send PUT request
     fetch(`http://${global.serverIp}:5000/maintenanceTask/`, {
@@ -222,6 +216,7 @@ export default class AddTaskScreen extends React.Component {
   };
 
   getDropDownPicker(data, onChangeCallback, defaultValue) {
+    console.log(defaultValue);
     return (
       <DropDownPicker
         defaultValue={defaultValue} // Won't display if undefined or null
@@ -301,7 +296,7 @@ export default class AddTaskScreen extends React.Component {
   };
 
   setBike = (item) => {
-    this.setState({bike: item.value});
+    this.setState({bikeId: item.value});
 
     // Fetch the bike's components
     this.updateComponentList(item.value);
@@ -338,13 +333,13 @@ export default class AddTaskScreen extends React.Component {
   save = () => {
     this.setState({isSaving: true});
 
-    let {bike, component, taskType, threshold} = this.state;
+    let {bikeId, componentId, taskType, threshold} = this.state;
 
     // Check for form errors
     let errorText = null;
-    if (bike == null) {
+    if (bikeId == null) {
       errorText = 'Please select a bike.';
-    } else if (component == null) {
+    } else if (componentId == null) {
       errorText = 'Please select a component.';
     } else if (taskType == null) {
       errorText = 'Please select a task type (distance or time).';
@@ -361,14 +356,13 @@ export default class AddTaskScreen extends React.Component {
     }
 
     let newTask = {
-      bike: this.fixedBike ? this.fixedBike.id : this.state.bikeId,
-      component: this.fixedComponent
+      component_id: this.fixedComponent
         ? this.fixedComponent.id
         : this.state.componentId,
       description: this.state.description,
-      taskType: this.state.taskType,
-      threshold: this.state.threshold,
-      isRepeating: this.state.isRepeating,
+      schedule_type: this.state.taskType,
+      threshold_val: this.state.threshold,
+      repeats: this.state.isRepeating,
     };
 
     if (this.isNewTask) {
@@ -418,7 +412,7 @@ export default class AddTaskScreen extends React.Component {
             {this.getTextInput(
               this.setTaskThreshold,
               true,
-              this.state.threshold.toString(),
+              this.state.threshold ? this.state.threshold.toString() : null,
             )}
           </View>
         ) : null}
@@ -430,7 +424,7 @@ export default class AddTaskScreen extends React.Component {
             {this.getTextInput(
               this.setTaskThreshold,
               true,
-              this.state.taskType,
+              this.state.threshold ? this.state.threshold.toString() : null,
             )}
           </View>
         ) : null}
