@@ -22,6 +22,15 @@ const TASK_TYPE_DATA = [
   {label: 'Distance', value: TASK_TYPES.DISTANCE},
 ];
 
+function timeout(ms, promise) {
+  return new Promise(function (resolve, reject) {
+    setTimeout(function () {
+      reject(new Error('timeout'));
+    }, ms);
+    promise.then(resolve, reject);
+  });
+}
+
 export default class AddTaskScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -98,60 +107,64 @@ export default class AddTaskScreen extends React.Component {
   };
 
   updateBikeList = () => {
-    fetch(`http://${global.serverIp}:5000/bike/${global.userId}`, {
-      method: 'GET',
-    })
-      .then((response) => response.json())
-      .then((bikes) => {
-        console.log('GOT BIKES:');
-        console.log(bikes);
-        this.setState({bikeList: this.transformBikeList(bikes)});
+    timeout(
+      3000,
+      fetch(`http://${global.serverIp}:5000/bike/${global.userId}`, {
+        method: 'GET',
       })
-      .catch((error) => {
-        // Display error popup
-        this.setState({
-          isError: true,
-          errorText: 'Failed to retrieve your bikes. Check network connection.',
-          fatalError: true,
-        });
-
-        console.error(error);
+        .then((response) => response.json())
+        .then((bikes) => {
+          console.log('GOT BIKES:');
+          console.log(bikes);
+          this.setState({bikeList: this.transformBikeList(bikes)});
+        }),
+    ).catch((error) => {
+      // Display error popup
+      this.setState({
+        isError: true,
+        errorText: 'Failed to retrieve your bikes. Check network connection.',
+        fatalError: true,
       });
+
+      console.error(error);
+    });
   };
 
   updateComponentList = (bikeId) => {
-    fetch(`http://${global.serverIp}:5000/component/${bikeId}`, {
-      method: 'GET',
-    })
-      .then((response) => response.json())
-      .then((components) => {
-        console.log('GOT COMPONENTS:');
-        console.log(components);
-
-        // Navigate back if can't add a component
-        if (components.length == 0) {
-          this.setState({
-            isError: true,
-            errorText:
-              'This bike has no components. A task needs to be attached to a component.',
-          });
-        }
-
-        this.setState({
-          componentList: this.transformComponentList(components),
-        });
+    timeout(
+      3000,
+      fetch(`http://${global.serverIp}:5000/component/${bikeId}`, {
+        method: 'GET',
       })
-      .catch((error) => {
-        // Display error popup
-        this.setState({
-          isError: true,
-          errorText:
-            "Failed to retrieve your bike's components. Check network connection.",
-          fatalError: true,
-        });
+        .then((response) => response.json())
+        .then((components) => {
+          console.log('GOT COMPONENTS:');
+          console.log(components);
 
-        console.error(error);
+          // Navigate back if can't add a component
+          if (components.length == 0) {
+            this.setState({
+              isError: true,
+              errorText:
+                'This bike has no components. A task needs to be attached to a component.',
+            });
+          }
+
+          this.setState({
+            componentList: this.transformComponentList(components),
+          });
+        }),
+    ).catch((error) => {
+      // Display error popup
+      this.setState({
+        isError: true,
+        errorText:
+          "Failed to retrieve your bike's components. Check network connection.",
+        fatalError: true,
       });
+
+      console.error(error);
+    });
   };
 
   createTask = (task) => {
