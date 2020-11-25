@@ -3,6 +3,7 @@ import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
 import {RemovableListItem, RemovablePressableListItem} from '../ListItems';
 import {flatListWrapper} from '../FlatListWrapper';
 import CommonStyles from '../CommonStyles';
+import AddButton from '../AddButton';
 
 const DATA = [
   {
@@ -128,7 +129,7 @@ export default class ComponentTaskScreen extends React.Component {
                 taskType: item.scheduleType,
                 threshold: item.threshold,
                 isRepeating: item.repeats,
-              }
+              },
             });
           }}
           onRemovePress={this.removeTask(item.id)}
@@ -155,12 +156,7 @@ export default class ComponentTaskScreen extends React.Component {
       <View style={styles.container}>
         {flatListWrapper(this.state.taskData, this.renderItem, 'TasksList')}
 
-        <TouchableOpacity
-          onPress={this.addTask}
-          style={styles.addTaskButton}
-          testID="AddTaskBtn">
-          <Text style={styles.addTaskText}>ADD TASK</Text>
-        </TouchableOpacity>
+        {AddButton(this.addTask)}
       </View>
     );
   }
@@ -171,18 +167,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     flexDirection: 'column',
-  },
-  addTaskButton: {
-    alignItems: 'center',
-    backgroundColor: '#4787ff',
-    padding: 10,
-    borderBottomWidth: 2,
-    borderTopWidth: 2,
-    borderColor: 'black',
-  },
-  addTaskText: {
-    fontWeight: 'bold',
-    fontSize: 20,
-    color: 'white',
   },
 });

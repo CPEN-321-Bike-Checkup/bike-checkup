@@ -12,6 +12,7 @@ import Autocomplete from 'react-native-autocomplete-input';
 import {RemovablePressableListItem} from '../ListItems';
 import {flatListWrapper} from '../FlatListWrapper';
 import CommonStyles from '../CommonStyles';
+import AddButton from '../AddButton';
 
 const BIKE_COMPONENTS_LIST = [
   'Front Wheel',
@@ -162,15 +163,8 @@ export default class ScheduleScreen extends React.Component {
           this.renderItem,
           'ComponentsList',
         )}
-        <View style={styles.openModalButtonContainer}>
-          <TouchableOpacity
-            onPress={() => {
-              this.setState({modalVisible: true});
-            }}
-            style={styles.openModalButton}>
-            <Text style={styles.openModalButtonIcon}>+</Text>
-          </TouchableOpacity>
-        </View>
+
+        {AddButton(() => this.setState({modalVisible: true}))}
 
         <Modal animationType="slide" visible={this.state.modalVisible}>
           <View style={styles.modalView}>
@@ -254,23 +248,6 @@ export default class ScheduleScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  openModalButtonContainer: {
-    position: 'absolute',
-    bottom: 20,
-    width: '94%',
-    alignItems: 'flex-end',
-  },
-  openModalButton: {
-    backgroundColor: '#47ffb8',
-    width: 65,
-    height: 65,
-    borderRadius: 35,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  openModalButtonIcon: {
-    fontSize: 20,
-  },
   modalInputContainer: {
     flex: 1,
     paddingTop: 25,
