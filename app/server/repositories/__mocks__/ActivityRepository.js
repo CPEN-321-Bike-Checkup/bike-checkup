@@ -23,18 +23,17 @@ class ActivityRepository extends Repository {
   GetActivitiesByIdsAfterDate(activityIds, date) {
     this.count['afterDateForUser']++;
     return new Promise((resolve, reject) => {
-      if (userId === 0) {
-        throw new Mongoose.Error.ValidationError('Validation error');
-      } else if (this.count['afterDateForUser'] === 0) {
+      if (this.count['afterDateForUser'] === 0) {
         throw new Error('internal server error');
       } else {
         let returnData = [];
         //date check not necessary, all activities after maint date
-        for (index = 0; index < activityIds.length; index++) {
-          activityId = activityIds[index];
+        for (let index = 0; index < activityIds.length; index++) {
+          let activityId = activityIds[index];
           returnData.push(this.data[activityId - 1]);
         }
-        resolve(returnData);
+        //resolve(returnData);
+        resolve(data); //debug
       }
     });
   }
@@ -44,7 +43,7 @@ const activity1 = {
   _id: 1,
   athelete_id: 1,
   description: 'test',
-  distance: 50,
+  distance: 30,
   time_s: 360,
   date: new Date('2020-10-21'),
 };
@@ -62,7 +61,7 @@ const activity3 = {
   _id: 3,
   athelete_id: 1,
   description: 'test3',
-  distance: 50,
+  distance: 30,
   time_s: 320,
   date: new Date('2020-10-22'),
 };
@@ -71,7 +70,7 @@ const activity4 = {
   _id: 4,
   athelete_id: 1,
   description: 'test4',
-  distance: 60,
+  distance: 30,
   time_s: 400,
   date: new Date('2020-10-25'),
 };

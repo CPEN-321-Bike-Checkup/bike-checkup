@@ -8,7 +8,7 @@ const express = require('express');
 const app = express();
 app.use(express.json());
 const initMaintenanceTaskRoutes = require('../../routes/MaintenanceTaskRoutes');
-const maintenanceTaskService = require('../services/MaintenanceTaskService');
+const maintenanceTaskService = require('../../services/MaintenanceTaskService');
 let server;
 
 beforeAll(() => {});
@@ -20,23 +20,36 @@ const maintSchedule1 = {
   _id: 1,
   component_id: 1,
   schedule_type: 'date',
-  threshold_val: 450,
+  threshold_val: 30,
   description: 'oil chain',
   last_maintenance_val: new Date('2020-10-11'),
   repeats: false,
-  predicted_due_date: new Date('2020-11-22'),
+  predicted_due_date: new Date('2020-11-10'),
+};
+
+const maintSchedule2 = {
+  _id: 2,
+  component_id: 3,
+  schedule_type: 'distance',
+  threshold_val: 180,
+  description: 'tire check',
+  last_maintenance_val: new Date('2020-10-05'),
+  repeats: true,
+  predicted_due_date: new Date('Oct 1 2020'),
 };
 
 const maintSchedule3 = {
   _id: 3,
   component_id: 1,
   schedule_type: 'distance',
-  threshold_val: 180,
+  threshold_val: 200,
   description: 'brake check',
-  last_maintenance_val: new Date('2020-10-08'),
+  last_maintenance_val: new Date('2020-09-26'),
   repeats: true,
-  predicted_due_date: new Date('2020-11-15'),
+  predicted_due_date: new Date('2021-03-20'),
 };
+
+var schedule_data = [maintSchedule1, maintSchedule2, maintSchedule3];
 
 const maintSchedule3Update = {
   _id: 3,
@@ -77,7 +90,7 @@ describe('GetById(id) Test Cases', () => {
 describe('Create(maintenanceTask) Test Cases', () => {
   test('Valid new maintenanceTask', () => {
     expect.assertions(3);
-    return maintenanceTaskService.Create(maintSchedule3).then((resp) => {
+    return maintenanceTaskService.Create(maintSchedule1).then((resp) => {
       expect(code).toBe(200);
       expect(resp.data.length).toBe(1);
       expect(resp.data.description).toBe('brake check');
@@ -88,7 +101,7 @@ describe('Create(maintenanceTask) Test Cases', () => {
 describe('MarkCompleted(maintenanceTask) Test Cases', () => {
   test('Valid existing repeating maintenanceTask', () => {
     expect.assertions(5);
-    return maintenanceTaskService.MarkCompleted(maintSchedule3).then((resp) => {
+    return maintenanceTaskService.MarkCompleted(maintSchedule1).then((resp) => {
       expect(code).toBe(200);
       expect(resp.data.length).toBe(2);
       expect(resp.data.taskResult.n).toBe(1);
@@ -162,33 +175,36 @@ describe('MaintenanceRecordFromTask(maintenanceTask) Test Cases', () => {
 });
 
 describe('GetTaskScheduleForUser(userId) Test Cases', () => {
-  test('Get tasks for user - Update mock data dates', () => {
+  test('Get tasks for user - Update mock data dates', async () => {
     expect.assertions(8);
-    let schedule = maintenanceTaskService.GetTaskScheduleForUser(1);
+    let schedule = await maintenanceTaskService.GetTaskScheduleForUser(1);
     expect(schedule[0].title).toBe('Overdue');
-    expect(schedule[0].data.description).toBe('oil chain'); //maintSchedule1
+    expect(schedule[0].data[0].description).toBe('oil chain'); //maintSchedule1
     expect(schedule[1].title).toBe('Today');
     expect(schedule[1].data.length).toBe(0);
     expect(schedule[2].title).toBe('Next 7 Days');
-    expect(schedule[2].data.description).toBe('tire check'); //maintSchedule2
+    expect(schedule[2].data[0].description).toBe('tire check'); //maintSchedule2
     expect(schedule[3].title).toBe('Upcoming');
-    expect(schedule[3].data.description).toBe('brake check'); //maintSchedule3
+    expect(schedule[3].data[0].description).toBe('brake check'); //maintSchedule3
   });
 });
 
 describe('GetScheduledTasksSorted(userId, numDays) Test Cases', () => {
-  test('Get and sort tasks in date range, numDays = 0', () => {
+  test('Get and sort tasks in date range, numDays = 0', async () => {
     expect.assertions(4);
-    let sortedList = maintenanceTaskService.GetScheduledTasksSorted(1);
+    let sortedList = await maintenanceTaskService.GetScheduledTasksSorted(1);
     expect(sortedList.length).toBe(3);
     expect(sortedList[0].description).toBe('oil chain'); //maintSchedule1
     expect(sortedList[1].description).toBe('tire check'); //maintSchedule2
     expect(sortedList[2].description).toBe('brake check'); //maintSchedule3
   });
 
-  test('Get and sort tasks in date range, numDays = 30', () => {
+  test('Get and sort tasks in date range, numDays = 30', async () => {
     expect.assertions(3);
-    let sortedList = maintenanceTaskService.GetScheduledTasksSorted(1, 30);
+    let sortedList = await maintenanceTaskService.GetScheduledTasksSorted(
+      1,
+      30,
+    );
     expect(sortedList.length).toBe(2);
     expect(sortedList[0].description).toBe('oil chain'); //maintSchedule1
     expect(sortedList[1].description).toBe('tire check'); //maintSchedule2
@@ -198,10 +214,30 @@ describe('GetScheduledTasksSorted(userId, numDays) Test Cases', () => {
 //TODO: addDays test cases
 
 describe('GetTasksForComponent(componentId) Test Cases', () => {
-  test('Get task with valid componentId', () => {
+  test('Get task with valid componentId', async () => {
+    expect.assertions(2);
+    let tasks = await maintenanceTaskService.GetTasksForComponent([3]);
+    expect(tasks.length).toBe(1);
+    expect(tasks[0].description).toBe('tire check');
+  });
+
+  test('Get task with valid componentId', async () => {
     expect.assertions(1);
-    let tasks = maintenanceTaskService.GetTasksForComponent(3);
-    expect(tasks.description).toBe('tire check');
+    let tasks = await maintenanceTaskService.GetTasksForComponent([1, 3]);
+    expect(tasks.length).toBe(3);
+  });
+});
+
+//TODO: Double check dates with concrete data
+describe('MaintenancePredict(maintenanceList) Test Cases', () => {
+  test('Get task with valid componentId', async () => {
+    expect.assertions(3);
+    let predictions = await maintenanceTaskService.MaintenancePredict(
+      schedule_data,
+    );
+    expect(predictions.length).toBe(2);
+    expect(predictions[0]).toBe('11/5/2020');
+    expect(predictions[1]).toBe('11/18/2020');
   });
 });
 

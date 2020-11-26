@@ -23,13 +23,13 @@ class MaintenanceTaskRepository extends Repository {
   GetMaintenanceTasksForComponents(componentIds) {
     this.count['getForUser']++;
     return new Promise((resolve, reject) => {
-      if (userId === 0) {
+      if (componentIds === 0) {
         throw new Mongoose.Error.ValidationError('Validation error');
       } else if (this.count['getForUser'] === 0) {
         throw new Error('internal server error');
       } else {
         let returnData = [];
-        for (index = 0; index < componentIds.length; index++) {
+        for (let index = 0; index < componentIds.length; index++) {
           switch (componentIds[index]) {
             case 1:
               //check to avoid duplicate

@@ -151,8 +151,9 @@ class MaintenanceTaskService {
 
   async GetTasksForComponent(componentId) {
     var tasks = await this.maintenanceTaskRepository.GetMaintenanceTasksForComponents(
-      [componentId],
+      componentId,
     );
+
     return tasks.map((task) => {
       return {
         taskId: task._id,
@@ -233,6 +234,7 @@ class MaintenanceTaskService {
       var predict_dates = [];
       var predictionText = '';
       var maint_index;
+
       for (
         maint_index = 0;
         maint_index < maintenanceList.length;
@@ -244,17 +246,17 @@ class MaintenanceTaskService {
         ].last_maintenance_val.getTime();
         var component_id = maintenanceList[maint_index].component_id;
 
-        var activityListId = await componentActivityRepository.GetActivityIdsForComponentAfterDate(
+        var activityListId = await componentActivityRepository.GetActivityIdsForComponent(
           component_id,
-          last_maint_date,
         );
         if (activityListId.length == 0) {
           //no activities found, make no changes to predicted_due_date, skip
           continue;
         }
 
-        var activityList = await activityRepository.GetActivitiesByIds(
+        var activityList = await activityRepository.GetActivitiesByIdsAfterDate(
           activityListId,
+          last_maint_date,
         );
 
         //create x data (days) and y data (distance travelled)
@@ -299,6 +301,7 @@ class MaintenanceTaskService {
         var intercept = predictIntercept(x_mean, y_mean, slope);
         var predict_date =
           (maintenanceList[maint_index].threshold_val - intercept) / slope;
+
         var final_date = this.addDays(
           maintenanceList[maint_index].last_maintenance_val,
           predict_date,
@@ -318,30 +321,6 @@ class MaintenanceTaskService {
           final_date +
           '\n';
       }
-      var slope = predictSlope(covar_sum, x_variance);
-      var intercept = predictIntercept(x_mean, y_mean, slope);
-      var predict_date =
-        (maintenanceList[maint_index].threshold_val - intercept) / slope;
-      var final_date = this.addDays(
-        maintenanceList[maint_index].last_maintenance_val,
-        predict_date,
-      );
-
-      //formatting for debug maintenance screen
-      final_date = moment(final_date, 'YYYY-MM-DD')
-        .tz('America/Los_Angeles')
-        .format('l');
-
-      //update with new predicted date
-      maintenanceList[maint_index].predicted_due_date = final_date;
-
-      predict_dates.push(final_date);
-      predictionText +=
-        maintenanceList[maint_index].description +
-        ' estimated due on: ' +
-        final_date +
-        '\n';
-    }
 
       this.maintenanceTaskRepository.Update(maintenanceList);
       resolve(predict_dates);
