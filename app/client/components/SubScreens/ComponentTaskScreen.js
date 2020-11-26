@@ -103,15 +103,21 @@ export default class ComponentTaskScreen extends React.Component {
   }
 
   deleteTasks(tasks) {
+    console.log(tasks);
     timeout(
       3000,
       fetch(`http://${global.serverIp}:5000/maintenanceTask`, {
         method: 'DELETE',
         body: JSON.stringify(tasks),
-      }).then((response) => {
-        // TODO: check response status
-        console.log('SUCCESSFULLY DELETED TASK');
-      }),
+      })
+        .then((response) => {
+          // TODO: check response status
+          // TODO: make sure back-end makes prediction for task before responding
+          console.log('SUCCESSFULLY DELETED TASK: ', response);
+        })
+        .catch((err) => {
+          console.error('FAILED TO DELETE TASK: ', err);
+        }),
     ).catch((error) => {
       // Display error popup
       this.setState({
@@ -166,7 +172,7 @@ export default class ComponentTaskScreen extends React.Component {
       for (var i = 0; i < this.state.taskData.length; i++) {
         if (newTaskData[i].id == id) {
           let task = newTaskData.splice(i, 1);
-          this.removedTasks.push(task.id); // Remember removed task IDs
+          this.removedTasks.push({_id: task[0].id}); // Remember removed task IDs
           this.setState({taskData: newTaskData});
           break;
         }
