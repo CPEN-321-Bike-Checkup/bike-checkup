@@ -1,8 +1,11 @@
 const activityRepository = require('../repositories/ActivityRepository');
 const componentActivityRepository = require('../repositories/ComponentActivityRepository');
 const maintenanceTaskRepository = require('../repositories/MaintenanceTaskRepository');
+const bikeRepository = require('../repositories/BikeRepository');
 const moment = require('moment');
 const maintenanceRecordRepository = require('../repositories/MaintenanceRecordRepository');
+const bikeService = require('./BikeService');
+const componentRepository = require('../repositories/ComponentRepository');
 require('moment-timezone');
 
 class MaintenanceTaskService {
@@ -11,11 +14,15 @@ class MaintenanceTaskService {
     maintenanceTaskRepository,
     maintenanceRecordRepository,
     componentActivityRepository,
+    bikeRepository,
+    componentRepository,
   ) {
     this.activityRepository = activityRepository;
     this.maintenanceTaskRepository = maintenanceTaskRepository;
     this.maintenanceRecordRepository = maintenanceRecordRepository;
     this.componentActivityRepository = componentActivityRepository;
+    this.bikeRepository = bikeRepository;
+    this.componentRepository = componentRepository;
   }
 
   GetById(id) {
@@ -66,7 +73,33 @@ class MaintenanceTaskService {
 
   //assumes predicted due dates are stored as only a date not a time
   async GetTaskScheduleForUser(userId) {
-    var tasks = await this.GetScheduledTasksSorted(userId);
+    var taskPromise = this.GetScheduledTasksSorted(userId);
+    var bikesPromise = this.bikeRepository.GetBikesForUser(userId);
+    var componentsPromise = this.componentRepository.GetComponentsForUser(
+      userId,
+    );
+    var [taskData, bikeData, componentData] = await Promise.all([
+      taskPromise,
+      bikesPromise,
+      componentsPromise,
+    ]);
+    var tasks = [];
+
+    taskData.forEach((task) => {
+      var comp = componentData.find((c) => c._id.equals(task.component_id));
+      var bike = bikeData.find((b) => b._id === comp.bike_id);
+      var taskView = {
+        taskId: task._id,
+        bike: bike.label,
+        task: task.description,
+        component: comp.label,
+        date: task.predicted_due_date,
+        repeats: task.repeats,
+        threshold_val: task.threshold_val,
+      };
+      tasks.push(taskView);
+    });
+
     var schedule = [
       {
         title: 'Overdue',
@@ -95,13 +128,13 @@ class MaintenanceTaskService {
       todayWithTime.getDate(),
     );
     for (var i = 0; i < tasks.length; i++) {
-      if (tasks[i].predicted_due_date < today) {
+      if (tasks[i].date < today) {
         schedule[0].data.push(tasks[i]);
-      } else if (tasks[i].predicted_due_date === today) {
+      } else if (tasks[i].date === today) {
         schedule[1].data.push(tasks[i]);
       } else if (
-        tasks[i].predicted_due_date > today &&
-        tasks[i].predicted_due_date < this.addDays(today, 7)
+        tasks[i].date > today &&
+        tasks[i].date < this.addDays(today, 7)
       ) {
         schedule[2].data.push(tasks[i]);
       } else {
@@ -333,5 +366,7 @@ const maintenanceTaskService = new MaintenanceTaskService(
   maintenanceTaskRepository,
   maintenanceRecordRepository,
   componentActivityRepository,
+  bikeRepository,
+  componentRepository,
 );
 module.exports = maintenanceTaskService;

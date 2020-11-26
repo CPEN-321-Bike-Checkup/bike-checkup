@@ -24,26 +24,26 @@ class AutoReminderService {
             var schedule = await this.maintenanceTaskSerivice.GetTaskScheduleForUser(
               user,
             );
-            var messageData = [];
-            delete schedule[3];
-            schedule.forEach((sched) => {
-              if (sched.data.length > 0) {
-                messageData.push(sched);
-              }
-            });
-
-            var messageBody = 'Hey '
-              .concat(user.name)
-              .concat(
-                ', here are your overdue and upcoming maintenance tasks for this week.',
+            var messageBody = '';
+            var numOverdue = schedule[0].data.length;
+            var numThisWeek = schedule[1].data.length + schedule[2].data.length;
+            if (numOverdue > 0) {
+              messageBody = messageBody.concat(
+                'Tasks overdue: ' + numOverdue + '\n',
               );
+            }
+            if (numThisWeek > 0) {
+              messageBody = messageBody.concat(
+                'Tasks due this week: ' + numThisWeek + '\n',
+              );
+            }
 
             for (var j = 0; j < devices.length; j++) {
               var message = this.notificationService.CreateMessage(
                 'Weekly Maintenance Alert',
-                'Maintenance Task Alert',
+                'Weekly Maintenance Tasks Alert',
                 messageBody,
-                {messageData},
+                {},
                 devices[j].token,
               );
               this.notificationService.SendNotification(message);
