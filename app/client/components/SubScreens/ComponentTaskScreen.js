@@ -109,15 +109,11 @@ export default class ComponentTaskScreen extends React.Component {
       fetch(`http://${global.serverIp}:5000/maintenanceTask`, {
         method: 'DELETE',
         body: JSON.stringify(tasks),
-      })
-        .then((response) => {
-          // TODO: check response status
-          // TODO: make sure back-end makes prediction for task before responding
-          console.log('SUCCESSFULLY DELETED TASK: ', response);
-        })
-        .catch((err) => {
-          console.error('FAILED TO DELETE TASK: ', err);
-        }),
+      }).then((response) => {
+        // TODO: check response status
+        // TODO: make sure back-end makes prediction for task before responding
+        console.log('SUCCESSFULLY DELETED TASK: ', response);
+      }),
     ).catch((error) => {
       // Display error popup
       this.setState({

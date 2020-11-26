@@ -36,20 +36,22 @@ class MaintenanceTaskService {
     return promise;
   }
 
-  async MarkCompleted(maintenanceTask) {
-    let taskResult;
-    var task = await this.maintenanceTaskRepository.GetById(
-      maintenanceTask._id,
-    );
-    if (task.repeats) {
-      taskResult = this.maintenanceTaskRepository.Update(maintenanceTask);
-    } else {
-      taskResult = this.maintenanceTaskRepository.Delete(task);
+  async MarkCompleted(maintenanceTasks) {
+    var promises = [];
+    for (var i = 0; i < maintenanceTasks.length; i++) {
+      let taskResult;
+      var task = await this.maintenanceTaskRepository.GetById(t._id);
+      if (task.repeats) {
+        taskResult = this.maintenanceTaskRepository.Update(maintenanceTask);
+      } else {
+        taskResult = this.maintenanceTaskRepository.Delete(task);
+      }
+      var createRecordResult = this.maintenanceRecordRepository.Create(
+        this.MaintenanceRecordFromTask(maintenanceTask),
+      );
+      promises.concat([taskResult, createRecordResult]);
     }
-    var createRecordResult = this.maintenanceRecordRepository.Create(
-      this.MaintenanceRecordFromTask(maintenanceTask),
-    );
-    return Promise.all([taskResult, createRecordResult]);
+    return Promise.all(promises);
   }
 
   Update(maintenanceTask) {

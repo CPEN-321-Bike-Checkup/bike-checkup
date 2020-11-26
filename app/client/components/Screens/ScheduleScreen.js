@@ -102,6 +102,7 @@ export default class ScheduleScreen extends React.Component {
   }
 
   completeTasks(tasks) {
+    console.log('Completed tasks: ', JSON.stringify(tasks));
     timeout(
       3000,
       fetch(`http://${global.serverIp}:5000/maintenanceTask/complete`, {
@@ -109,7 +110,7 @@ export default class ScheduleScreen extends React.Component {
         body: JSON.stringify(tasks),
       }).then((response) => {
         // TODO: check response status (and throw error if not success)
-        console.log('SUCCESSFULLY SAVED TASK');
+        console.log('SUCCESSFULLY SAVED TASK: ', response);
       }),
     ).catch((error) => {
       // Display error popup
@@ -176,7 +177,7 @@ export default class ScheduleScreen extends React.Component {
         for (var i = 0; i < newScheduleData[j].data.length; i++) {
           if (newScheduleData[j].data[i].taskId == id) {
             let task = newScheduleData[j].data.splice(i, 1)[0];
-            this.removedTasks.push(task.taskId); // Remember completed task IDs
+            this.removedTasks.push({_id: task.taskId}); // Remember completed task IDs
             this.setState({scheduleData: newScheduleData});
             found = true;
             break;
