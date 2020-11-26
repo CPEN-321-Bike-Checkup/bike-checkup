@@ -368,7 +368,7 @@ export default class AddTaskScreen extends React.Component {
     if (this.isNewTask) {
       this.createTask(newTask);
     } else {
-      newTask.id = this.state.taskId;
+      newTask._id = this.state.taskId;
       this.updateTask(newTask);
     }
   };

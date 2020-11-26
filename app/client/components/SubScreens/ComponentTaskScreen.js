@@ -51,6 +51,7 @@ export default class ComponentTaskScreen extends React.Component {
     // Re-fetch data every time screen comes into focus
     this._unsubscribe = this.navigation.addListener('focus', () => {
       this.getTasks();
+      this.state.editMode = false;
     });
   }
 
@@ -109,7 +110,6 @@ export default class ComponentTaskScreen extends React.Component {
         body: JSON.stringify(tasks),
       }).then((response) => {
         // TODO: check response status
-        // TODO: make sure back-end makes prediction for task before responding
         console.log('SUCCESSFULLY DELETED TASK');
       }),
     ).catch((error) => {
