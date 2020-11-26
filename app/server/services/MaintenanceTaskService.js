@@ -168,7 +168,7 @@ class MaintenanceTaskService {
 
   async MaintenancePredictForComponent(componentId) {
     console.log('predicting for component...'); //DEBUG
-    let maintenanceList = await maintenanceTaskRepository.GetMaintenanceTasksForComponents(
+    let maintenanceList = await this.maintenanceTaskRepository.GetMaintenanceTasksForComponents(
       componentId,
     );
 
@@ -178,7 +178,7 @@ class MaintenanceTaskService {
   //TODO make the equivalent for component and use that function to do this for user
   async MaintenancePredictForUser(userId) {
     console.log('predicting for user...'); //DEBUG
-    let maintenanceList = await maintenanceTaskRepository.GetMaintenanceTasksForUser(
+    let maintenanceList = await this.maintenanceTaskRepository.GetMaintenanceTasksForUser(
       userId,
     );
 
@@ -249,7 +249,7 @@ class MaintenanceTaskService {
         var activityListId = await componentActivityRepository.GetActivityIdsForComponent(
           component_id,
         );
-        if (activityListId.length == 0) {
+        if (componentActivityList.length == 0) {
           //no activities found, make no changes to predicted_due_date, skip
           continue;
         }

@@ -25,7 +25,7 @@ app.listen(port, () => {
 const autoReminderService = require('./services/AutoReminderService');
 //autoReminderService.StartJobSchedule();
 
-app.post('/runReminderJob', function () {
+app.post('/runReminderJob', function (req, res) {
   autoReminderService
     .RunJob()
     .then((result) => {
@@ -47,7 +47,7 @@ db.on('error', function (err) {
   console.log(err);
 });
 
-app.get('/stravaActivities', async function (req, res, next) {
+app.get('/stravaActivities', async function (req, res) {
   var token = '07dad63ccaf2f16c846ca5a30c6128e27cd82338';
   axios
     .get('https://www.strava.com/api/v3/athlete/activities', {
