@@ -24,6 +24,13 @@ class AutoReminderService {
             var schedule = await this.maintenanceTaskSerivice.GetTaskScheduleForUser(
               user,
             );
+            var messageData = [];
+            delete schedule[3];
+            schedule.forEach((sched) => {
+              if (sched.data.length > 0) {
+                messageData.push(sched);
+              }
+            });
 
             var messageBody = 'Hey '
               .concat(user.name)
@@ -36,7 +43,7 @@ class AutoReminderService {
                 'Weekly Maintenance Alert',
                 'Maintenance Task Alert',
                 messageBody,
-                schedule.slice(0, 3),
+                {messageData},
                 devices[j].token,
               );
               this.notificationService.SendNotification(message);
