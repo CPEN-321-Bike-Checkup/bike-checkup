@@ -7,6 +7,12 @@ let CommonStyles = StyleSheet.create({
     padding: 10,
     fontWeight: 'bold',
   },
+  fetchFailedView: {
+    flex: 3,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 export default CommonStyles;

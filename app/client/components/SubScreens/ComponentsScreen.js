@@ -83,6 +83,7 @@ export default class ScheduleScreen extends React.Component {
       nextId: 0,
       isError: false,
       errorText: null,
+      fetchFailed: false,
     };
     this.navigation = props.navigation;
     this.bike = props.route.params.bike;
@@ -92,12 +93,15 @@ export default class ScheduleScreen extends React.Component {
 
   componentDidMount() {
     this.getComponents();
+  }
 
+  componentDidUpdate() {
     // Add edit button to navigation bar (side effect)
+    let text = this.state.editMode ? 'Done' : 'Edit';
     this.navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity onPress={this.toggleEditMode} testID="EditBtn">
-          <Text style={CommonStyles.editButtonText}>Edit</Text>
+          <Text style={CommonStyles.editButtonText}>{text}</Text>
         </TouchableOpacity>
       ),
     });
@@ -123,6 +127,7 @@ export default class ScheduleScreen extends React.Component {
         isError: true,
         errorText:
           'Failed to retrieve your components. Check network connection.',
+        fetchFailed: true,
       });
 
       console.error(error);
@@ -209,11 +214,16 @@ export default class ScheduleScreen extends React.Component {
 
     return (
       <View style={{flex: 1}}>
-        {flatListWrapper(
-          // this.state.componentData,
-          this.state.componentData,
-          this.renderItem,
-          'ComponentsList',
+        {!this.state.fetchFailed ? (
+          flatListWrapper(
+            this.state.componentData,
+            this.renderItem,
+            'ComponentsList',
+          )
+        ) : (
+          <View style={CommonStyles.fetchFailedView}>
+            <Text>Error fetching components.</Text>
+          </View>
         )}
 
         {AddButton(() => this.setState({modalVisible: true}))}
