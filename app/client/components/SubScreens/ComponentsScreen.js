@@ -69,7 +69,7 @@ const BIKE_COMPONENTS_LIST = [
 //   },
 // ];
 
-export default class ScheduleScreen extends React.Component {
+export default class ComponentScreen extends React.Component {
   constructor(props) {
     console.log('ComponentScreen Props:');
     console.log(props);
@@ -267,78 +267,9 @@ export default class ScheduleScreen extends React.Component {
           </View>
         )}
 
-        {AddButton(() => this.setState({modalVisible: true}))}
-
-        <Modal animationType="slide" visible={this.state.modalVisible}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalTitle}>Add New Component</Text>
-
-            <View style={styles.modalInputContainer}>
-              <Text>Type:</Text>
-              <Autocomplete
-                autoCapitalize="words"
-                autoCorrect={true}
-                containerStyle={styles.typeInput}
-                data={
-                  components.length >= 1 &&
-                  comp(componentTypeInputText, components[0])
-                    ? []
-                    : components
-                }
-                defaultValue={componentTypeInputText}
-                onChangeText={(text) =>
-                  this.setState({componentTypeInputText: text})
-                }
-                placeholder="Enter a component type"
-                renderItem={({item, i}) => (
-                  <TouchableOpacity
-                    onPress={() =>
-                      this.setState({componentTypeInputText: item})
-                    }>
-                    <Text>{item}</Text>
-                  </TouchableOpacity>
-                )}
-                keyExtractor={(item, i) => i.toString()}
-              />
-            </View>
-
-            <Text style={styles.modalName}>Name:</Text>
-            <TextInput
-              style={styles.nameInput}
-              placeholder="Enter a component name"
-              onChangeText={(text) =>
-                this.setState({componentNameInputText: text})
-              }
-            />
-
-            <TouchableHighlight
-              style={styles.addComponentButton}
-              onPress={() => {
-                // Add new component if all information was entered (TODO: Don't let modal close/show error message if only partly filled out)
-                if (
-                  this.state.componentTypeInputText &&
-                  this.state.componentNameInputText
-                ) {
-                  let componentData = [...this.state.componentData];
-                  componentData.push({
-                    bikeId: this.bike.id,
-                    id: this.state.nextId,
-                    title: this.state.componentTypeInputText.concat(
-                      ' - ',
-                      this.state.componentNameInputText,
-                    ),
-                  });
-                  this.setState({componentData});
-                  this.setState({nextId: this.state.nextId + 1});
-                }
-
-                // Close modal
-                this.setState({modalVisible: false});
-              }}>
-              <Text style={styles.textStyle}>Add Component</Text>
-            </TouchableHighlight>
-          </View>
-        </Modal>
+        {AddButton(() => {
+          this.navigation.navigate('Add Component');
+        })}
 
         {ErrorPopup(
           this.state.errorText,
@@ -349,49 +280,3 @@ export default class ScheduleScreen extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  modalInputContainer: {
-    flex: 1,
-    paddingTop: 25,
-  },
-  typeInput: {
-    flex: 1,
-    left: 0,
-    position: 'absolute',
-    right: 0,
-    top: 55,
-    zIndex: 1,
-  },
-  nameInput: {
-    height: 40,
-    width: '100%',
-    borderColor: '#b9b9b9',
-    borderWidth: 1,
-    borderRadius: 1,
-    position: 'absolute',
-    top: 200,
-  },
-  modalTitle: {
-    textAlign: 'center',
-    padding: 15,
-    fontWeight: 'bold',
-  },
-  modalName: {
-    paddingBottom: 10,
-    position: 'absolute',
-    top: 170,
-  },
-  addComponentButton: {
-    backgroundColor: '#47ffb8',
-    alignSelf: 'center',
-    padding: 10,
-    position: 'absolute',
-    bottom: 30,
-  },
-  modalView: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-  },
-});
