@@ -170,7 +170,7 @@ export default class ScheduleScreen extends React.Component {
       let newComponentData = [...this.state.componentData];
       for (var i = 0; i < newComponentData.length; i++) {
         if (newComponentData[i].id == id) {
-          let component = newComponentData.splice(i, 1);
+          let component = newComponentData.splice(i, 1)[0];
           this.removedComponents.push(component.id); // Remember removed component IDs
           this.setState({componentData: newComponentData});
         }

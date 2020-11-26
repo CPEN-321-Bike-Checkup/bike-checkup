@@ -175,7 +175,7 @@ export default class ScheduleScreen extends React.Component {
       for (var j = 0; j < this.state.scheduleData.length; j++) {
         for (var i = 0; i < newScheduleData[j].data.length; i++) {
           if (newScheduleData[j].data[i].taskId == id) {
-            let task = newScheduleData[j].data.splice(i, 1);
+            let task = newScheduleData[j].data.splice(i, 1)[0];
             this.removedTasks.push(task.taskId); // Remember completed task IDs
             this.setState({scheduleData: newScheduleData});
             found = true;

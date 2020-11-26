@@ -122,8 +122,7 @@ export default class ComponentTaskScreen extends React.Component {
       // Display error popup
       this.setState({
         isError: true,
-        errorText:
-          'Failed to retrieve delete your tasks. Check network connection.',
+        errorText: 'Failed to delete your tasks. Check network connection.',
         fetchFailed: true,
       });
 
@@ -171,8 +170,8 @@ export default class ComponentTaskScreen extends React.Component {
       let newTaskData = [...this.state.taskData];
       for (var i = 0; i < this.state.taskData.length; i++) {
         if (newTaskData[i].id == id) {
-          let task = newTaskData.splice(i, 1);
-          this.removedTasks.push({_id: task[0].id}); // Remember removed task IDs
+          let task = newTaskData.splice(i, 1)[0];
+          this.removedTasks.push(task.id); // Remember removed task IDs
           this.setState({taskData: newTaskData});
           break;
         }
