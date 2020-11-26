@@ -196,12 +196,12 @@ export default class AddTaskScreen extends React.Component {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(newTask),
+      body: JSON.stringify(task),
     })
       .then((response) => {
         // TODO: check response status
         // TODO: make sure back-end makes prediction for task before responding
-        console.log('SUCCESSFULLY SAVED TASK');
+        console.log('SUCCESSFULLY UPDATED TASK');
         this.navigation.goBack();
       })
       .catch((error) => {
@@ -337,9 +337,9 @@ export default class AddTaskScreen extends React.Component {
 
     // Check for form errors
     let errorText = null;
-    if (bikeId == null) {
+    if (!this.fixedBike && bikeId == null) {
       errorText = 'Please select a bike.';
-    } else if (componentId == null) {
+    } else if (!this.fixedComponent && componentId == null) {
       errorText = 'Please select a component.';
     } else if (taskType == null) {
       errorText = 'Please select a task type (distance or time).';

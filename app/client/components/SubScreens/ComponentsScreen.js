@@ -93,6 +93,11 @@ export default class ScheduleScreen extends React.Component {
 
   componentDidMount() {
     this.getComponents();
+
+    // Re-fetch data every time screen comes into focus
+    this._unsubscribe = this.navigation.addListener('focus', () => {
+      this.getComponents();
+    });
   }
 
   componentDidUpdate() {
@@ -105,6 +110,10 @@ export default class ScheduleScreen extends React.Component {
         </TouchableOpacity>
       ),
     });
+  }
+
+  componentWillUnmount() {
+    this._unsubscribe();
   }
 
   getComponents() {

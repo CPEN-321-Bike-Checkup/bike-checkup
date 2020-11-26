@@ -47,6 +47,11 @@ export default class ComponentTaskScreen extends React.Component {
 
   componentDidMount() {
     this.getTasks();
+
+    // Re-fetch data every time screen comes into focus
+    this._unsubscribe = this.navigation.addListener('focus', () => {
+      this.getTasks();
+    });
   }
 
   componentDidUpdate() {
@@ -63,6 +68,10 @@ export default class ComponentTaskScreen extends React.Component {
         </TouchableOpacity>
       ),
     });
+  }
+
+  componentWillUnmount() {
+    this._unsubscribe();
   }
 
   getTasks() {
@@ -101,7 +110,7 @@ export default class ComponentTaskScreen extends React.Component {
       }).then((response) => {
         // TODO: check response status
         // TODO: make sure back-end makes prediction for task before responding
-        console.log('SUCCESSFULLY SAVED TASK');
+        console.log('SUCCESSFULLY DELETED TASK');
       }),
     ).catch((error) => {
       // Display error popup
@@ -122,8 +131,6 @@ export default class ComponentTaskScreen extends React.Component {
   transformTaskData = (tasks) => {
     let tasksList = [];
     for (let task of tasks) {
-      console.log('Task:');
-      console.log(task);
       let newTask = {
         id: task.taskId,
         description: task.description,

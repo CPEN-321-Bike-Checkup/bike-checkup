@@ -99,6 +99,11 @@ export default class ScheduleScreen extends React.Component {
 
   componentDidMount() {
     this.getSchedule();
+
+    // Re-fetch data every time screen comes into focus
+    this._unsubscribe = this.navigation.addListener('focus', () => {
+      this.getSchedule();
+    });
   }
 
   componentDidUpdate() {
@@ -111,6 +116,10 @@ export default class ScheduleScreen extends React.Component {
         </TouchableOpacity>
       ),
     });
+  }
+
+  componentWillUnmount() {
+    this._unsubscribe();
   }
 
   getSchedule() {
@@ -235,7 +244,7 @@ export default class ScheduleScreen extends React.Component {
     return (
       <CompletableListItem
         title={item.task}
-        subText={item.bike + " - " + item.component}
+        subText={item.bike + ' - ' + item.component}
         rightText={item.date}
         onCompletePress={this.scheduledTaskCompleted(item.taskId)}
         editMode={this.state.editMode}

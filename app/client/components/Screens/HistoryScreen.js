@@ -19,14 +19,27 @@ export default class HistoryScreen extends React.Component {
   }
 
   componentDidMount() {
-    // TODO: pass id as a prop from App.js
-    let userId = 123;
+    this.getHistory();
 
+    // Re-fetch data every time screen comes into focus
+    this._unsubscribe = this.props.navigation.addListener('focus', () => {
+      this.getHistory();
+    });
+  }
+
+  componentWillUnmount() {
+    this._unsubscribe();
+  }
+
+  getHistory = () => {
     timeout(
       3000,
-      fetch(`http://3.97.53.16:5000/maintenanceRecord/${userId}/days/100`, {
-        method: 'GET',
-      })
+      fetch(
+        `http://3.97.53.16:5000/maintenanceRecord/${global.userId}/days/100`,
+        {
+          method: 'GET',
+        },
+      )
         .then((response) => response.json())
         .then((data) => {
           console.log(data);
@@ -43,7 +56,7 @@ export default class HistoryScreen extends React.Component {
 
       console.error(error);
     });
-  }
+  };
 
   onErrorAccepted = () => {
     // Clear error state

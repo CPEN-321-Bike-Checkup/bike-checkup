@@ -32,6 +32,15 @@ export default class BikesScreen extends React.Component {
 
   componentDidMount() {
     this.getBikes();
+
+    // Re-fetch data every time screen comes into focus
+    this._unsubscribe = this.navigation.addListener('focus', () => {
+      this.getBikes();
+    });
+  }
+
+  componentWillUnmount() {
+    this._unsubscribe();
   }
 
   getBikes() {
