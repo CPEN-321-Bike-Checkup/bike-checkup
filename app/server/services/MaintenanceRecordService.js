@@ -12,7 +12,7 @@ class MaintenanceRecordService {
 
   GetMaintenanceRecordsForUserInRange(userId, startDate, numberOfDays) {
     //update repo function to give days of history starting at date
-    return maintenanceRecordRepository.GetMaintenanceRecordsForUserInRange(
+    return this.maintenanceRecordRepository.GetMaintenanceRecordsHistory(
       userId,
       startDate,
       numberOfDays,
@@ -20,7 +20,7 @@ class MaintenanceRecordService {
   }
 
   GetMaintenanceRecords(userId, daysOfHistory) {
-    return maintenanceRecordRepository.GetMaintenanceRecordsHistory(
+    return this.maintenanceRecordRepository.GetMaintenanceRecordsHistory(
       userId,
       daysOfHistory,
     );

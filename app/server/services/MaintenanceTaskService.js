@@ -40,23 +40,53 @@ class MaintenanceTaskService {
     var promises = [];
     for (var i = 0; i < maintenanceTasks.length; i++) {
       let taskResult;
-      var task = await this.maintenanceTaskRepository.GetById(t._id);
+      var maintenanceTask = maintenanceTasks[i];
+      var task = await this.maintenanceTaskRepository.GetById(
+        maintenanceTask._id,
+      );
       if (task.repeats) {
-        taskResult = this.maintenanceTaskRepository.Update(maintenanceTask);
+        taskResult = this.maintenanceTaskRepository.Update({
+          last_maintenance_val: new Date(),
+          repeats: task.repeats,
+          _id: task._id,
+          threshold_val: task.threshold_val,
+          schedule_type: task.schedule_type,
+          component_id: task.component_id,
+          description: task.description,
+          predicted_due_date: task.predicted_due_date,
+        });
       } else {
         taskResult = this.maintenanceTaskRepository.Delete(task);
       }
       var createRecordResult = this.maintenanceRecordRepository.Create(
-        this.MaintenanceRecordFromTask(maintenanceTask),
+        this.MaintenanceRecordFromTask(task),
       );
-      promises.concat([taskResult, createRecordResult]);
+      promises = promises.concat([taskResult, createRecordResult]);
     }
     return Promise.all(promises);
   }
 
   Update(maintenanceTask) {
-    var promise = this.maintenanceTaskRepository.Update(maintenanceTask);
-    return promise;
+    return new Promise(async (resolve, reject) => {
+      if (maintenanceTask.schedule_type === 'date') {
+        maintenanceTask.predicted_due_date = this.addDays(
+          new Date(),
+          maintenanceTask.threshold_val,
+        );
+      }
+      var promise = await this.maintenanceTaskRepository.Update(
+        maintenanceTask,
+      );
+      if (maintenanceTask.schedule_type === 'distance') {
+        this.MaintenancePredictForComponent(maintenanceTask.component_id).then(
+          (result) => {
+            resolve(promise);
+          },
+        );
+      } else {
+        resolve(promise);
+      }
+    });
   }
 
   Delete(maintenanceTask) {
@@ -281,18 +311,19 @@ class MaintenanceTaskService {
         ].last_maintenance_val.getTime();
         var component_id = maintenanceList[maint_index].component_id;
 
-        var activityListId = await componentActivityRepository.GetActivityIdsForComponent(
+        var componentActivityListId = await this.componentActivityRepository.GetActivityIdsForComponent(
           component_id,
         );
-        if (activityListId.length == 0) {
+        var date = new Date(last_maint_date);
+        var activityList = await this.activityRepository.GetActivitiesByIdsAfterDate(
+          componentActivityListId.map((ac) => ac.activity_id),
+          date,
+        );
+
+        if (activityList.length == 0) {
           //no activities found, make no changes to predicted_due_date, skip
           continue;
         }
-
-        var activityList = await activityRepository.GetActivitiesByIdsAfterDate(
-          activityListId,
-          last_maint_date,
-        );
 
         //create x data (days) and y data (distance travelled)
         var distance_sum = 0;

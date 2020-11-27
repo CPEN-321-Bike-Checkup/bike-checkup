@@ -1,50 +1,46 @@
+const {add} = require('lodash');
+const {BikeModel} = require('../schemas/Bike');
+const {ComponentModel} = require('../schemas/Component');
 const Repository = require('./Repository');
 const MaintenanceRecordModel = require('../schemas/MaintenanceRecord')
   .MaintenanceRecordModel;
-const UserModel = require('../schemas/User').UserModel;
 const MILLISECONDS_PER_SECOND = 1000;
 const SECONDS_PER_DAY = 86400;
 
 class MaintenanceRecordRepository extends Repository {
-  constructor(maintenanceRecordModel, userModel) {
+  constructor(maintenanceRecordModel, bikeModel, componentModel) {
     super(maintenanceRecordModel);
-    this.userModel = userModel;
+    this.bikeModel = bikeModel;
+    this.componentModel = componentModel;
+  }
+
+  addDays(currentDate, daysToAdd) {
+    var final_date = new Date(currentDate);
+    final_date.setDate(final_date.getDate() + daysToAdd);
+    return final_date;
   }
 
   async GetMaintenanceRecordsForUser(userId) {
-    var users = await this.userModel.find({_id: userId}).lean().exec();
-    if (users.length == 0) return null;
-
-    var records = [];
-    users[0].bikes.forEach((bike) => {
-      bike.components.forEach((component) => {
-        // Add bike and component fields
-        component.maintenance_records.forEach((record) => {
-          record.bike = bike.label;
-          record.component = component.label;
-        });
-
-        records = records.concat(component.maintenance_records);
-      });
-    });
-
-    console.log(records);
-    return records;
+    var bikes = await this.bikeModel.find({owner_id: userId}).exec();
+    var components = await this.componentModel
+      .find({bike_id: {$in: bikes.map((b) => b._id)}})
+      .exec();
+    return this.documentModel
+      .find({component_id: {$in: components.map((c) => c._id)}})
+      .exec();
   }
 
   //Supporting function for front end
-  async GetMaintenanceRecordsHistory(userId, daysOfHistory) {
-    var today = new Date();
-    var historyDate = new Date(
-      today.getTime() -
-        daysOfHistory * SECONDS_PER_DAY * MILLISECONDS_PER_SECOND,
-    );
-
+  async GetMaintenanceRecordsHistory(userId, startDate, daysOfHistory) {
+    var endDate = this.addDays(startDate, -daysOfHistory);
     //get all records within history
     var allRecords = await this.GetMaintenanceRecordsForUser(userId);
     var historyRecords = [];
     allRecords.forEach(function (record) {
-      if (record.maintenance_date >= historyDate) {
+      if (
+        record.maintenance_date <= startDate &&
+        record.maintenance_date >= endDate
+      ) {
         historyRecords.push(record);
       }
     });
@@ -59,6 +55,7 @@ class MaintenanceRecordRepository extends Repository {
 }
 const maintenanceRecordRepository = new MaintenanceRecordRepository(
   MaintenanceRecordModel,
-  UserModel,
+  BikeModel,
+  ComponentModel,
 );
 module.exports = maintenanceRecordRepository;

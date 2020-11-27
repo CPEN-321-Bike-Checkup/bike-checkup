@@ -10,11 +10,14 @@ export default class HistoryScreen extends React.Component {
   constructor(props) {
     super(props);
 
+    var tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
     this.state = {
       maintenanceRecords: [],
       isError: false,
       fetchFailed: false,
       errorText: null,
+      beforeDateFilter: tomorrow,
     };
   }
 
@@ -35,7 +38,7 @@ export default class HistoryScreen extends React.Component {
     timeout(
       3000,
       fetch(
-        `http://3.97.53.16:5000/maintenanceRecord/${global.userId}/days/100`,
+        `http://${global.serverIp}:5000/maintenanceRecord/${global.userId}/?beforeDate=${this.state.beforeDateFilter}&numDays=30`,
         {
           method: 'GET',
         },

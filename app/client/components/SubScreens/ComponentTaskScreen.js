@@ -108,6 +108,11 @@ export default class ComponentTaskScreen extends React.Component {
       3000,
       fetch(`http://${global.serverIp}:5000/maintenanceTask`, {
         method: 'DELETE',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+
         body: JSON.stringify(tasks),
       }).then((response) => {
         // TODO: check response status

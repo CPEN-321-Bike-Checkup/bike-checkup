@@ -171,7 +171,7 @@ export default class ScheduleScreen extends React.Component {
       for (var i = 0; i < newComponentData.length; i++) {
         if (newComponentData[i].id == id) {
           let component = newComponentData.splice(i, 1)[0];
-          this.removedComponents.push(component.id); // Remember removed component IDs
+          this.removedComponents.push({_id: component.id}); // Remember removed component IDs
           this.setState({componentData: newComponentData});
         }
       }
@@ -196,6 +196,37 @@ export default class ScheduleScreen extends React.Component {
 
     this.setState({editMode: this.state.editMode ? false : true});
   };
+
+  deleteComponents(tasks) {
+    console.log(tasks);
+    timeout(
+      3000,
+      fetch(`http://${global.serverIp}:5000/maintenanceTask`, {
+        method: 'DELETE',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(tasks),
+      }).then((response) => {
+        // TODO: check response status
+        // TODO: make sure back-end makes prediction for task before responding
+        console.log('SUCCESSFULLY DELETED TASK: ', response);
+      }),
+    ).catch((error) => {
+      // Display error popup
+      this.setState({
+        isError: true,
+        errorText: 'Failed to delete your tasks. Check network connection.',
+        fetchFailed: true,
+      });
+
+      //refetch components
+      this.getComponents();
+
+      console.error(error);
+    });
+  }
 
   renderItem = ({item}) => {
     const testId = 'ComponentListItem' + this.itemCount;

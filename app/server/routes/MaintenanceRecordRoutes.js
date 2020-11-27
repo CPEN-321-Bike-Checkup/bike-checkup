@@ -7,10 +7,10 @@ const initMaintenanceRecordRouting = (app) => {
   app.use('/maintenanceRecord', maintenanceRecordRouter);
 
   maintenanceRecordRouter.get('/:userId/', (req, res, next) => {
-    if (req.query.afterDate !== undefined && req.query.numDays !== undefined) {
+    if (req.query.beforeDate !== undefined && req.query.numDays !== undefined) {
       MaintenanceRecordService.GetMaintenanceRecordsForUserInRange(
         parseInt(req.params.userId),
-        req.query.afterDate,
+        new Date(req.query.beforeDate),
         req.query.numDays,
       )
         .then((records) => {
