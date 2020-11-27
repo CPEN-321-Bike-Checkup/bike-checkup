@@ -36,6 +36,7 @@ export default class ComponentTaskScreen extends React.Component {
       editMode: false,
       isError: false,
       errorText: null,
+      fetchFailed: false,
     };
     this.navigation = props.navigation;
     this.bike = props.route.params.bike;
@@ -44,25 +45,34 @@ export default class ComponentTaskScreen extends React.Component {
     this.itemCount = 0;
   }
 
-  updateMaintenanceData() {
-    // this.setState({maintenanceData: })
-  }
-
   componentDidMount() {
     this.getTasks();
 
+    // Re-fetch data every time screen comes into focus
+    this._unsubscribe = this.navigation.addListener('focus', () => {
+      this.getTasks();
+      this.state.editMode = false;
+    });
+  }
+
+  componentDidUpdate() {
     /* NOTE: In React class components, the render method itself shouldn’t cause 
      side effects. It would be too early — we typically want to perform our
      effects after React has updated the DOM. */
 
     // Add edit button to navigation bar (side effect)
+    let text = this.state.editMode ? 'Done' : 'Edit';
     this.navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity onPress={this.toggleEditMode}>
-          <Text style={CommonStyles.editButtonText}>Edit</Text>
+        <TouchableOpacity onPress={this.toggleEditMode} testID="EditBtn">
+          <Text style={CommonStyles.editButtonText}>{text}</Text>
         </TouchableOpacity>
       ),
     });
+  }
+
+  componentWillUnmount() {
+    this._unsubscribe();
   }
 
   getTasks() {
@@ -85,7 +95,35 @@ export default class ComponentTaskScreen extends React.Component {
       this.setState({
         isError: true,
         errorText: 'Failed to retrieve your tasks. Check network connection.',
+        fetchFailed: true,
       });
+
+      console.error(error);
+    });
+  }
+
+  deleteTasks(tasks) {
+    console.log(tasks);
+    timeout(
+      3000,
+      fetch(`http://${global.serverIp}:5000/maintenanceTask`, {
+        method: 'DELETE',
+        body: JSON.stringify(tasks),
+      }).then((response) => {
+        // TODO: check response status
+        // TODO: make sure back-end makes prediction for task before responding
+        console.log('SUCCESSFULLY DELETED TASK: ', response);
+      }),
+    ).catch((error) => {
+      // Display error popup
+      this.setState({
+        isError: true,
+        errorText: 'Failed to delete your tasks. Check network connection.',
+        fetchFailed: true,
+      });
+
+      // Re-fetch tasks
+      getTasks();
 
       console.error(error);
     });
@@ -94,8 +132,6 @@ export default class ComponentTaskScreen extends React.Component {
   transformTaskData = (tasks) => {
     let tasksList = [];
     for (let task of tasks) {
-      console.log('Task:');
-      console.log(task);
       let newTask = {
         id: task.taskId,
         description: task.description,
@@ -128,11 +164,12 @@ export default class ComponentTaskScreen extends React.Component {
     return () => {
       // Remove task
       let newTaskData = [...this.state.taskData];
-      for (var i = 0; i < newTaskData.length; i++) {
+      for (var i = 0; i < this.state.taskData.length; i++) {
         if (newTaskData[i].id == id) {
-          let task = newTaskData.splice(i, 1);
+          let task = newTaskData.splice(i, 1)[0];
           this.removedTasks.push(task.id); // Remember removed task IDs
           this.setState({taskData: newTaskData});
+          break;
         }
       }
     };
@@ -140,8 +177,11 @@ export default class ComponentTaskScreen extends React.Component {
 
   // Note: arrow function needed to bind correct context
   toggleEditMode = () => {
-    // TODO: Notify server of removed tasks
+    // Delete removed tasks on remote
     if (this.state.editMode) {
+      if (this.removedTasks.length != 0) {
+        this.deleteTasks(this.removedTasks);
+      }
       this.removedTasks = [];
     }
 
@@ -194,7 +234,13 @@ export default class ComponentTaskScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-        {flatListWrapper(this.state.taskData, this.renderItem, 'TasksList')}
+        {!this.state.fetchFailed ? (
+          flatListWrapper(this.state.taskData, this.renderItem, 'TasksList')
+        ) : (
+          <View style={CommonStyles.fetchFailedView}>
+            <Text>Error fetching tasks.</Text>
+          </View>
+        )}
         {AddButton(this.addTask)}
         {ErrorPopup(
           this.state.errorText,

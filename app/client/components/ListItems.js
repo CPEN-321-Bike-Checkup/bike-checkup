@@ -56,7 +56,6 @@ export const CompletableListItem = ({
       <View>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text style={styles.title}>{title}</Text>
-          <Text style={styles.rightText}>{rightText}</Text>
           {editMode ? (
             <TouchableOpacity
               style={styles.removeIcon}
@@ -64,7 +63,9 @@ export const CompletableListItem = ({
               testID={testID + 'CompleteBtn'}>
               <MaterialIcons name="check-circle" color={'green'} size={24} />
             </TouchableOpacity>
-          ) : null}
+          ) : (
+            <Text style={styles.rightText}>{rightText}</Text>
+          )}
         </View>
         <View>
           <Text style={styles.subText}>{subText}</Text>

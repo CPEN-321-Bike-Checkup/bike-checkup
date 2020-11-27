@@ -10,11 +10,10 @@ class ComponentRepository extends Repository {
 
   async GetComponentsForUser(userId) {
     var bikes = await this.bikeModel.find({owner_id: userId}).exec();
-    var compPromises = [];
-    for (var i = 0; i < bikes.length; i++) {
-      compPromises.push(this.GetComponentsForBike(bikes[i]._id));
-    }
-    return Promise.all(compPromises);
+    var components = this.documentModel
+      .find({bike_id: {$in: bikes.map((b) => b._id)}})
+      .exec();
+    return components;
   }
 
   GetComponentsForBike(bikeId) {

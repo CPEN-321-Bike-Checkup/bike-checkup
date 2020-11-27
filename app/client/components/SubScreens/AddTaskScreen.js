@@ -162,57 +162,58 @@ export default class AddTaskScreen extends React.Component {
 
   createTask = (task) => {
     // Send POST request
-    fetch(`http://${global.serverIp}:5000/maintenanceTask/`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(task),
-    })
-      .then((response) => {
+    timeout(
+      3000,
+      fetch(`http://${global.serverIp}:5000/maintenanceTask/`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(task),
+      }).then((response) => {
         // TODO: check response status
         // TODO: make sure back-end makes prediction for task before responding
         console.log('SUCCESSFULLY SAVED TASK');
         this.navigation.goBack();
-      })
-      .catch((error) => {
-        // Display error popup
-        this.setState({
-          isError: true,
-          errorText: 'Failed to save task. Check network connection.',
-        });
-
-        console.error(error);
+      }),
+    ).catch((error) => {
+      // Display error popup
+      this.setState({
+        isError: true,
+        errorText: 'Failed to save task. Check network connection.',
       });
+
+      console.error(error);
+    });
   };
 
   // TODO: test this
   updateTask = (task) => {
     // Send PUT request
-    fetch(`http://${global.serverIp}:5000/maintenanceTask/`, {
-      method: 'PUT',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newTask),
-    })
-      .then((response) => {
+    timeout(
+      3000,
+      fetch(`http://${global.serverIp}:5000/maintenanceTask/`, {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(task),
+      }).then((response) => {
         // TODO: check response status
-        // TODO: make sure back-end makes prediction for task before responding
-        console.log('SUCCESSFULLY SAVED TASK');
+        console.log('SUCCESSFULLY UPDATED TASK');
         this.navigation.goBack();
-      })
-      .catch((error) => {
-        // Display error popup
-        this.setState({
-          isError: true,
-          errorText: 'Failed to update task. Check network connection.',
-        });
-
-        console.error(error);
+      }),
+    ).catch((error) => {
+      // Display error popup
+      this.setState({
+        isError: true,
+        errorText: 'Failed to update task. Check network connection.',
       });
+
+      console.error(error);
+    });
   };
 
   getDropDownPicker(data, onChangeCallback, defaultValue) {
@@ -337,9 +338,9 @@ export default class AddTaskScreen extends React.Component {
 
     // Check for form errors
     let errorText = null;
-    if (bikeId == null) {
+    if (!this.fixedBike && bikeId == null) {
       errorText = 'Please select a bike.';
-    } else if (componentId == null) {
+    } else if (!this.fixedComponent && componentId == null) {
       errorText = 'Please select a component.';
     } else if (taskType == null) {
       errorText = 'Please select a task type (distance or time).';
@@ -368,7 +369,7 @@ export default class AddTaskScreen extends React.Component {
     if (this.isNewTask) {
       this.createTask(newTask);
     } else {
-      newTask.id = this.state.taskId;
+      newTask._id = this.state.taskId;
       this.updateTask(newTask);
     }
   };

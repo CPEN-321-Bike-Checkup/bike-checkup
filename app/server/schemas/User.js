@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-const {BikeSchema} = require('./Bike');
-const {DeviceTokenSchema} = require('./DeviceToken');
 
 const userSchema = new mongoose.Schema({
   _id: Number,
