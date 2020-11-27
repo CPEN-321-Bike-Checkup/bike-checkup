@@ -22,6 +22,65 @@ class UserRepository extends Repository {
       }
     });
   }
+
+  CreateOrUpdate(users) {
+    this.count['usersCount']++;
+    return new Promise((resolve, reject) => {
+      if (this.count['usersCount'] === 0) {
+        throw new Error('internal server error');
+      } else {
+        if (!Array.isArray(users)) {
+          users = [users];
+        }
+        for (let index = 0; index < users.length; index++) {
+          if (users[index]._id === 0) {
+            throw new Mongoose.Error.ValidationError('Validation error');
+          } else if (this.count['usersCount'] === 0) {
+            throw new Error('internal server error');
+          } else {
+            if (users[index]._id == 1 || users[index]._id == 2) {
+              resolve({n: 1, nModified: 1});
+            } else {
+              resolve(users[index]);
+            }
+          }
+        }
+      }
+    });
+  }
+
+  GetAll() {
+    this.count['usersCount']++;
+    return new Promise((resolve, reject) => {
+      if (this.count['usersCount'] === 0) {
+        throw new Error('internal server error');
+      } else {
+        resolve(data);
+      }
+    });
+  }
+
+  GetUserByStravaToken(token) {
+    this.count['usersCount']++;
+    return new Promise((resolve, reject) => {
+      if (this.count['usersCount'] === 0) {
+        throw new Error('internal server error');
+      } else {
+        switch (token) {
+          case 'asldofujihoinuashdfb':
+            resolve(data[0]);
+            break;
+          case 'jhvjsdksjdhblkdjfhs':
+            resolve(data[1]);
+            break;
+          default:
+            resolve();
+            break;
+        }
+        resolve(data);
+      }
+    });
+  }
 }
 var data = [
   {
