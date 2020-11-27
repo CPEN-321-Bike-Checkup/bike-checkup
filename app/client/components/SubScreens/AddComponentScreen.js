@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import Autocomplete from 'react-native-autocomplete-input';
 import ErrorPopup from '../ErrorPopup';
+import {timeout} from '../ScreenUtils';
 
 const BIKE_COMPONENTS_LIST = [
   'Front Wheel',
@@ -56,30 +57,12 @@ export default class AddComponentScreen extends React.Component {
       isError: false,
       errorText: null,
       fatalError: false,
-      componentTypeInputText: '',
-      componentNameInputText: '',
-      /* Task Fields */
-      bikeId: null,
-      label: null,
+      componentType: '',
+      componentName: '',
     };
     this.navigation = props.navigation;
+    this.bike = props.route.params.bike;
   }
-
-  createComponent = (component) => {
-    // TODO
-  };
-
-  updateComponent = (component) => {
-    // TODO
-  };
-
-  setTaskTitle = (description) => {
-    // TODO
-  };
-
-  setTaskType = (item) => {
-    // TODO
-  };
 
   cancel = () => {
     if (!this.state.isSaving) {
@@ -88,7 +71,50 @@ export default class AddComponentScreen extends React.Component {
   };
 
   save = () => {
-    // TODO
+    this.setState({isSaving: true});
+    let {componentType, componentName} = this.state;
+
+    // Check for and handle any form errors
+    let errorText = null;
+    if (!componentType) {
+      errorText = 'Please select a component type.'
+    }
+    if (errorText) {
+      this.setState({
+        isError: true,
+        errorText: errorText,
+      });
+      return;
+    }
+
+    // Save component to db
+    let component = {
+      'bike_id': this.bike.id,
+      'label': componentName ? componentType : componentType + ': ' + componentName, // TODO: See if we can change schema to have type and optional name
+      'attachment_date': Date.now(), // TODO: Check this is the format BE needs
+    };
+
+    timeout(
+      3000,
+      fetch(`http://${global.serverIp}:5000/component/`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(component),
+      }).then((response) => {
+        console.log('Successfully saved component.');
+        this.navigation.goBack();
+      }),
+    ).catch((error) => {
+      // Display error popup
+      this.setState({
+        isError: true,
+        errorText: 'Failed to save component. Check network connection.',
+      });
+      console.error(error);
+    });
   };
 
   onErrorAccepted = () => {
@@ -114,8 +140,8 @@ export default class AddComponentScreen extends React.Component {
   }
 
   render() {
-    const {componentTypeInputText} = this.state;
-    const components = this.findBikeComponent(componentTypeInputText);
+    const {componentType} = this.state;
+    const components = this.findBikeComponent(componentType);
     const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
 
     return (
@@ -127,19 +153,19 @@ export default class AddComponentScreen extends React.Component {
             autoCorrect={true}
             data={
               components.length >= 1 &&
-              comp(componentTypeInputText, components[0])
+              comp(componentType, components[0])
                 ? []
                 : components
             }
-            defaultValue={componentTypeInputText}
+            defaultValue={componentType}
             onChangeText={(text) =>
-              this.setState({componentTypeInputText: text})
+              this.setState({componentType: text})
             }
             placeholder="Enter..."
             renderItem={({item, i}) => (
               <TouchableOpacity
                 onPress={() =>
-                  this.setState({componentTypeInputText: item})
+                  this.setState({componentType: item})
                 }>
                 <Text>{item}</Text>
               </TouchableOpacity>
@@ -150,7 +176,7 @@ export default class AddComponentScreen extends React.Component {
         </View>
 
         <View style={styles.formItemColumn}>
-          <Text style={styles.formItemHeaderText}>Name:</Text>
+          <Text style={styles.formItemHeaderText}>Name (Optional):</Text>
           <TextInput
             style={{
               paddingLeft: 6,
@@ -160,7 +186,7 @@ export default class AddComponentScreen extends React.Component {
             placeholderTextColor="#616161"
             underlineColorAndroid="#000000"
             onChangeText={(text) =>
-              this.setState({componentNameInputText: text})
+              this.setState({componentName: text})
             }
           />
         </View>

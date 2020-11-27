@@ -69,9 +69,9 @@ const BIKE_COMPONENTS_LIST = [
 //   },
 // ];
 
-export default class ComponentScreen extends React.Component {
+export default class ComponentsScreen extends React.Component {
   constructor(props) {
-    console.log('ComponentScreen Props:');
+    console.log('ComponentsScreen Props:');
     console.log(props);
     super(props);
     this.state = {
@@ -268,7 +268,7 @@ export default class ComponentScreen extends React.Component {
         )}
 
         {AddButton(() => {
-          this.navigation.navigate('Add Component');
+          this.navigation.navigate('Add Component', {bike: this.bike});
         })}
 
         {ErrorPopup(
