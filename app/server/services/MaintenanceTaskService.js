@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 const activityRepository = require('../repositories/ActivityRepository');
 const componentActivityRepository = require('../repositories/ComponentActivityRepository');
 const maintenanceTaskRepository = require('../repositories/MaintenanceTaskRepository');
@@ -56,7 +57,7 @@ class MaintenanceTaskService {
           predicted_due_date: task.predicted_due_date,
         });
       } else {
-        taskResult = this.maintenanceTaskRepository.Delete(task);
+        taskResult = await this.maintenanceTaskRepository.Delete(task);
       }
       var createRecordResult = this.maintenanceRecordRepository.Create(
         this.MaintenanceRecordFromTask(task),

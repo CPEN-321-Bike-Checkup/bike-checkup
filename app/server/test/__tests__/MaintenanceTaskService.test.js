@@ -105,8 +105,8 @@ describe('Create(maintenanceTask) Test Cases', () => {
 describe('MarkCompleted(maintenanceTask) Test Cases', () => {
   test('Valid existing repeating maintenanceTask', async () => {
     expect.assertions(4);
-    let response = await maintenanceTaskService.MarkCompleted(maintSchedule1);
-    expect(response.length).toBe(2);
+    let response = await maintenanceTaskService.MarkCompleted([maintSchedule1]);
+    expect(response).toBe(1);
     expect(response[0].n).toBe(1);
     expect(response[0].nModified).toBe(1);
     expect(response[1].description).toBe('oil chain');
@@ -114,8 +114,19 @@ describe('MarkCompleted(maintenanceTask) Test Cases', () => {
 
   test('Valid existing non-repeating maintenanceTask', async () => {
     expect.assertions(3);
-    let response = await maintenanceTaskService.MarkCompleted(maintSchedule2);
+    let response = await maintenanceTaskService.MarkCompleted([maintSchedule2]);
     expect(response.length).toBe(2);
+    expect(response[0]).toBe(true);
+    expect(response[1].description).toBe('tire check');
+  });
+
+  test('Valid existing non-repeating maintenanceTask', async () => {
+    expect.assertions(3);
+    let response = await maintenanceTaskService.MarkCompleted([
+      maintSchedule1,
+      maintSchedule2,
+    ]);
+    expect(response).toBe(2);
     expect(response[0]).toBe(true);
     expect(response[1].description).toBe('tire check');
   });

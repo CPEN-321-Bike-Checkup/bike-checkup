@@ -3,6 +3,8 @@
  * https://jestjs.io/docs/en/configuration.html
  */
 
+const {serviceusage} = require('googleapis/build/src/apis/serviceusage');
+
 module.exports = {
   // All imported modules in your tests should be mocked automatically
   // automock: false,
@@ -20,7 +22,7 @@ module.exports = {
   // collectCoverage: false,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
-  // collectCoverageFrom: undefined,
+  collectCoverageFrom: ['services/*.js'],
 
   // The directory where Jest should output its coverage files
   coverageDirectory: 'coverage',

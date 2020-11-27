@@ -6,17 +6,12 @@ const express = require('express');
 const app = express();
 app.use(express.json());
 const initUserRoutes = require('../../routes/UserRoutes');
+const userService = require('../../services/UserService');
 let server;
 
-beforeAll(() => {
-  server = app.listen(port, () => {
-    initUserRoutes(app);
-  });
-});
+beforeAll(() => {});
 
-afterAll(() => {
-  server.close();
-});
+afterAll(() => {});
 
 var url = 'http://' + ip + ':' + port + '/user';
 var user = {
@@ -50,6 +45,47 @@ deviceModifiedId0.token = 0;
 var deviceModifiedOwnerId0 = JSON.parse(JSON.stringify(device));
 deviceModifiedOwnerId0.ownerId = 0;
 
+describe('GetUserDevices(userId) Test Cases', () => {
+  test('1. Get devices with valid userId', async () => {
+    expect.assertions(5);
+    let response = await userService.GetUserDevices(1);
+    expect(response.length).toBe(2);
+    expect(response[0].ownerId).toBe('1');
+    expect(response[0].token).toBe('sdhflguhiuerhnbgsdlfughnaiujhrnf');
+    expect(response[1].ownerId).toBe('1');
+    expect(response[1].token).toBe('dfljghdsfnalsiujdfhnsdufniasjdhfn');
+  });
+});
+
+describe('UserExists(userId) Test Cases', () => {
+  test('1. User exists with valid userId', async () => {
+    expect.assertions(1);
+    let response = await userService.UserExists(1);
+    expect(response).toBe(true);
+  });
+
+  test('2. User exists with invalid userId', async () => {
+    expect.assertions(1);
+    let response = await userService.UserExists(5);
+    expect(response).toBe(false);
+  });
+});
+
+describe('CreateOrUpdateUsers(users) Test Cases', () => {
+  test('1. Create user with new ID', async () => {
+    expect.assertions(1);
+    let response = await userService.UserExists(1);
+    expect(response).toBe(true);
+  });
+
+  test('2. User exists with invalid userId', async () => {
+    expect.assertions(1);
+    let response = await userService.UserExists(5);
+    expect(response).toBe(false);
+  });
+});
+
+/*
 describe('Get User Tests', async () => {
   test('Get user by ID 500 Error', () => {
     expect.assertions(1);
@@ -212,3 +248,4 @@ describe('Create Device Tests', () => {
       });
   });
 });
+*/

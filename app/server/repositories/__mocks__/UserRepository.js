@@ -3,6 +3,24 @@ const Repository = require('./Repository');
 class UserRepository extends Repository {
   constructor(data) {
     super(data);
+    this.count['usersCount'] = 0;
+  }
+
+  Exists(userObj) {
+    this.count['usersCount']++;
+    return new Promise((resolve, reject) => {
+      if (userObj._id === 0) {
+        throw new Mongoose.Error.ValidationError('Validation error');
+      } else if (this.count['usersCount'] === 0) {
+        throw new Error('internal server error');
+      } else {
+        if (userObj._id == 1 || userObj._id == 2) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      }
+    });
   }
 }
 var data = [
