@@ -4,9 +4,10 @@ import {createStackNavigator} from '@react-navigation/stack';
 const Stack = createStackNavigator();
 
 import BikesScreen from './../Screens/BikesScreen';
-import ComponentsScreen from './../SubScreens/ComponentsScreen';
 import ComponentTaskScreen from './../SubScreens/ComponentTaskScreen';
 import AddTaskScreen from './../SubScreens/AddTaskScreen';
+import ComponentsScreen from '../SubScreens/ComponentsScreen';
+import AddComponentScreen from '../SubScreens/AddComponentScreen';
 
 export default class BikesStack extends React.Component {
   render() {
@@ -19,6 +20,7 @@ export default class BikesStack extends React.Component {
         }}>
         <Stack.Screen name="Bikes" component={BikesScreen} />
         <Stack.Screen name="Components" component={ComponentsScreen} />
+        <Stack.Screen name="Add Component" component={AddComponentScreen} />
         <Stack.Screen
           name="Tasks"
           component={ComponentTaskScreen}
