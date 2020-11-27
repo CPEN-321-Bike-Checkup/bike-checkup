@@ -249,7 +249,7 @@ class MaintenanceTaskService {
         var activityListId = await componentActivityRepository.GetActivityIdsForComponent(
           component_id,
         );
-        if (componentActivityList.length == 0) {
+        if (activityListId.length == 0) {
           //no activities found, make no changes to predicted_due_date, skip
           continue;
         }

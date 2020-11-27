@@ -23,7 +23,7 @@ const maintSchedule1 = {
   threshold_val: 30,
   description: 'oil chain',
   last_maintenance_val: new Date('2020-10-11'),
-  repeats: false,
+  repeats: true,
   predicted_due_date: new Date('2020-11-10'),
 };
 
@@ -33,9 +33,9 @@ const maintSchedule2 = {
   schedule_type: 'distance',
   threshold_val: 180,
   description: 'tire check',
-  last_maintenance_val: new Date('2020-10-05'),
-  repeats: true,
-  predicted_due_date: new Date('Oct 1 2020'),
+  last_maintenance_val: new Date('2020-10-10'),
+  repeats: false,
+  predicted_due_date: new Date('2020-12-01'),
 };
 
 const maintSchedule3 = {
@@ -62,6 +62,17 @@ const maintSchedule3Update = {
   predicted_due_date: new Date('2020-11-15'),
 };
 
+const maintSchedule4 = {
+  _id: 4,
+  component_id: 1,
+  schedule_type: 'distance',
+  threshold_val: 500,
+  description: 'brake check',
+  last_maintenance_val: new Date('2020-10-08'),
+  repeats: true,
+  predicted_due_date: new Date('2020-11-15'),
+};
+
 //schedule without an id
 var schedModifiedNoId = JSON.parse(JSON.stringify(maintSchedule1));
 delete schedModifiedNoId._id;
@@ -70,107 +81,86 @@ var schedModifiedId0 = JSON.parse(JSON.stringify(maintSchedule1));
 schedModifiedId0._id = 0;
 
 describe('GetById(id) Test Cases', () => {
-  test('Input with existing id', () => {
-    expect.assertions(3);
-    return maintenanceTaskService.GetById(1).then((resp) => {
-      expect(code).toBe(200);
-      expect(resp.data.length).toBe(1);
-      expect(resp.data.description).toBe('oil chain');
-    });
-  });
-
-  test('Input with nonexisting id', () => {
-    expect.assertions(1);
-    return maintenanceTaskService.GetById(99).then((resp) => {
-      expect(code).toBe(400);
-    });
+  test('Input with existing id', async () => {
+    expect.assertions(4);
+    let response = await maintenanceTaskService.GetById(1);
+    expect(response._id).toBe(1);
+    expect(response.description).toBe('oil chain');
+    expect(response.repeats).toBe(true);
+    expect(response.threshold_val).toBe(450);
   });
 });
 
 describe('Create(maintenanceTask) Test Cases', () => {
-  test('Valid new maintenanceTask', () => {
-    expect.assertions(3);
-    return maintenanceTaskService.Create(maintSchedule1).then((resp) => {
-      expect(code).toBe(200);
-      expect(resp.data.length).toBe(1);
-      expect(resp.data.description).toBe('brake check');
-    });
+  test('Valid new maintenanceTask', async () => {
+    expect.assertions(4);
+    let response = await maintenanceTaskService.Create(maintSchedule4);
+    expect(response._id).toBe(4);
+    expect(response.description).toBe('brake check');
+    expect(response.repeats).toBe(true);
+    expect(response.threshold_val).toBe(500);
   });
 });
 
 describe('MarkCompleted(maintenanceTask) Test Cases', () => {
-  test('Valid existing repeating maintenanceTask', () => {
-    expect.assertions(5);
-    return maintenanceTaskService.MarkCompleted(maintSchedule1).then((resp) => {
-      expect(code).toBe(200);
-      expect(resp.data.length).toBe(2);
-      expect(resp.data.taskResult.n).toBe(1);
-      expect(resp.data.taskResult.nModified).toBe(1);
-      expect(resp.data.createRecordResult.description).toBe('brake check');
-    });
+  test('Valid existing repeating maintenanceTask', async () => {
+    expect.assertions(4);
+    let response = await maintenanceTaskService.MarkCompleted(maintSchedule1);
+    expect(response.length).toBe(2);
+    expect(response[0].n).toBe(1);
+    expect(response[0].nModified).toBe(1);
+    expect(response[1].description).toBe('oil chain');
   });
 
-  test('Valid existing non-repeating maintenanceTask', () => {
-    expect.assertions(4);
-    return maintenanceTaskService.MarkCompleted(maintSchedule1).then((resp) => {
-      expect(code).toBe(200);
-      expect(resp.data.length).toBe(2);
-      expect(resp.data.taskResult).toBe(true);
-      expect(resp.data.createRecordResult.description).toBe('oil chain');
-    });
+  test('Valid existing non-repeating maintenanceTask', async () => {
+    expect.assertions(3);
+    let response = await maintenanceTaskService.MarkCompleted(maintSchedule2);
+    expect(response.length).toBe(2);
+    expect(response[0]).toBe(true);
+    expect(response[1].description).toBe('tire check');
   });
 });
 
 describe('Update(maintenanceTask) Test Cases', () => {
-  test('Update existing maintainenceTask with new changes', () => {
-    expect.assertions(4);
-    return maintenanceTaskService.Update(maintSchedule3Update).then((resp) => {
-      expect(code).toBe(200);
-      expect(resp.data.length).toBe(1);
-      expect(resp.data.n).toBe(1);
-      expect(resp.data.nModified).toBe(1);
-    });
+  test('Update existing maintainenceTask with new changes', async () => {
+    expect.assertions(2);
+    let response = await maintenanceTaskService.Update(maintSchedule3Update);
+    expect(response.n).toBe(1);
+    expect(response.nModified).toBe(1);
   });
 
-  test('Update existing maintainenceTask with no changes', () => {
-    expect.assertions(4);
-    return maintenanceTaskService.Update(maintSchedule3).then((resp) => {
-      expect(code).toBe(200);
-      expect(resp.data.length).toBe(1);
-      expect(resp.data.n).toBe(1);
-      expect(resp.data.nModified).toBe(0);
-    });
+  test('Update existing maintainenceTask with no changes', async () => {
+    expect.assertions(2);
+    let response = await maintenanceTaskService.Update(maintSchedule3);
+    expect(response.n).toBe(1);
+    expect(response.nModified).toBe(0);
   });
 });
 
 describe('Delete(maintenanceTask) Test Cases', () => {
-  test('Delete existing maintainenceTask', () => {
-    expect.assertions(2);
-    return maintenanceTaskService.Delete(maintSchedule3).then((resp) => {
-      expect(code).toBe(200);
-      expect(resp.data).toBe(true);
-    });
+  test('Delete existing maintainenceTask', async () => {
+    expect.assertions(1);
+    let response = await maintenanceTaskService.Delete(maintSchedule3);
+    expect(response).toBe(true);
   });
 
-  test('Delete non-existing maintainenceTask', () => {
-    expect.assertions(2);
-    return maintenanceTaskService.Delete(maintSchedule3Update).then((resp) => {
-      expect(code).toBe(200);
-      expect(resp.data).toBe(false);
-    });
+  test('Delete non-existing maintainenceTask', async () => {
+    expect.assertions(1);
+    let respose = await maintenanceTaskService.Delete(maintSchedule4);
+    expect(respose).toBe(false);
   });
 });
 
 describe('MaintenanceRecordFromTask(maintenanceTask) Test Cases', () => {
-  test('Make record from existing maintainenceTask', () => {
+  test('Make record from existing maintainenceTask', async () => {
     expect.assertions(3);
-    return maintenanceTaskService
-      .MaintenanceRecordFromTask(maintSchedule3)
-      .then((resp) => {
-        expect(resp.data.description).toBe('brake check');
-        expect(resp.data.component_id).toBe(1);
-        expect(resp.data.maintenance_date).toBe(new Date('2020-10-08'));
-      });
+    let record = await maintenanceTaskService.MaintenanceRecordFromTask(
+      maintSchedule3,
+    );
+
+    expect(record.description).toBe('brake check');
+    expect(record.component_id).toBe(1);
+    expect(record.maintenance_date).toStrictEqual(new Date('2020-09-26'));
   });
 });
 
@@ -212,6 +202,25 @@ describe('GetScheduledTasksSorted(userId, numDays) Test Cases', () => {
 });
 
 //TODO: addDays test cases
+describe('addDays(currentDate, daysToAdd) Test Cases', () => {
+  test('Check negative days to add', () => {
+    expect.assertions(1);
+    let response = maintenanceTaskService.addDays(new Date('2020-11-10'), -2);
+    expect(response).toStrictEqual(new Date('2020-11-08'));
+  });
+
+  test('Check positive days to add', () => {
+    expect.assertions(1);
+    let response = maintenanceTaskService.addDays(new Date('2020-11-10'), 5);
+    expect(response).toStrictEqual(new Date('2020-11-15'));
+  });
+
+  test('Check 0 days to add', () => {
+    expect.assertions(1);
+    let response = maintenanceTaskService.addDays(new Date('2020-11-10'), 0);
+    expect(response).toStrictEqual(new Date('2020-11-10'));
+  });
+});
 
 describe('GetTasksForComponent(componentId) Test Cases', () => {
   test('Get task with valid componentId', async () => {
@@ -228,6 +237,37 @@ describe('GetTasksForComponent(componentId) Test Cases', () => {
   });
 });
 
+describe('MaintenancePredictForComponent(componentId) Test Cases', () => {
+  test('Maintenance Predict with one valid componentId', async () => {
+    expect.assertions(2);
+    let predictions = await maintenanceTaskService.MaintenancePredictForComponent(
+      [3],
+    );
+    expect(predictions.length).toBe(1);
+    expect(predictions[0]).toBe('11/1/2020');
+  });
+
+  test('Maintenance Predict with multiple valid componentId', async () => {
+    expect.assertions(3);
+    let predictions = await maintenanceTaskService.MaintenancePredictForComponent(
+      [1, 3],
+    );
+    expect(predictions.length).toBe(2);
+    expect(predictions[0]).toBe('11/18/2020');
+    expect(predictions[1]).toBe('11/1/2020');
+  });
+});
+
+describe('MaintenancePredictForUser(userId) Test Cases', () => {
+  test('Get task with valid userId', async () => {
+    expect.assertions(3);
+    let predictions = await maintenanceTaskService.MaintenancePredictForUser(1);
+    expect(predictions.length).toBe(2);
+    expect(predictions[0]).toBe('11/1/2020');
+    expect(predictions[1]).toBe('11/18/2020');
+  });
+});
+
 //TODO: Double check dates with concrete data
 describe('MaintenancePredict(maintenanceList) Test Cases', () => {
   test('Get task with valid componentId', async () => {
@@ -236,7 +276,7 @@ describe('MaintenancePredict(maintenanceList) Test Cases', () => {
       schedule_data,
     );
     expect(predictions.length).toBe(2);
-    expect(predictions[0]).toBe('11/5/2020');
+    expect(predictions[0]).toBe('11/1/2020');
     expect(predictions[1]).toBe('11/18/2020');
   });
 });

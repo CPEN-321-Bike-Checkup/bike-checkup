@@ -12,9 +12,9 @@ class Repository {
   GetById(id) {
     this.count['getById']++;
     return new Promise((resolve, reject) => {
-      if (doc._id === undefined) {
+      if (id === undefined) {
         throw new Error('ValidationError');
-      } else if (doc._id === 0) {
+      } else if (id === 0) {
         throw new Error('DocumentNotFoundError');
       } else if (this.count['getById'] === 0) {
         throw new Error('InternalError');
@@ -27,11 +27,7 @@ class Repository {
   Create(doc) {
     this.count['create']++;
     return new Promise((resolve, reject) => {
-      if (doc._id === undefined) {
-        throw new Error('ValidationError');
-      } else if (doc._id === 0) {
-        throw new Error('DocumentNotFoundError');
-      } else if (this.count['create'] === 0) {
+      if (this.count['create'] === 0) {
         throw new Error('InternalError');
       } else {
         resolve(doc);
@@ -53,6 +49,7 @@ class Repository {
         if (_.isEqual(existingDoc, doc)) {
           resolve({n: 1, nModified: 0});
         } else {
+          //resolve(existingDoc); //DEBUG
           resolve({n: 1, nModified: 1});
         }
       }
@@ -69,7 +66,8 @@ class Repository {
       } else if (this.count['delete'] === 0) {
         throw new Error('InternalError');
       } else {
-        if (this.data.includes(doc)) {
+        //if (this.data.includes(doc)) {
+        if (this.data.some((task) => task._id === doc._id)) {
           resolve(true);
         } else {
           resolve(false);

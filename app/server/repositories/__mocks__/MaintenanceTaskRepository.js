@@ -62,7 +62,7 @@ const maintSchedule1 = {
   threshold_val: 450,
   description: 'oil chain',
   last_maintenance_val: new Date('2020-10-11'),
-  repeats: false,
+  repeats: true,
   predicted_due_date: new Date('2020-11-22'),
 };
 
@@ -73,7 +73,7 @@ const maintSchedule2 = {
   threshold_val: 180,
   description: 'tire check',
   last_maintenance_val: new Date('2020-10-10'),
-  repeats: true,
+  repeats: false,
   predicted_due_date: new Date('2020-12-01'),
 };
 
@@ -81,9 +81,9 @@ const maintSchedule3 = {
   _id: 3,
   component_id: 1,
   schedule_type: 'distance',
-  threshold_val: 180,
+  threshold_val: 200,
   description: 'brake check',
-  last_maintenance_val: new Date('2020-10-08'),
+  last_maintenance_val: new Date('2020-09-26'),
   repeats: true,
   predicted_due_date: new Date('2021-03-20'),
 };
