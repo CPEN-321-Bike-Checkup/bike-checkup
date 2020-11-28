@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   addButton: {
-    backgroundColor: '#61e7ff',
+    backgroundColor: '#4787ff',
     width: 65,
     height: 65,
     borderRadius: 35,

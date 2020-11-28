@@ -14,7 +14,7 @@ export default LoadButton = (onPress) => {
 
 const styles = StyleSheet.create({
   loadButton: {
-    backgroundColor: '#61e7ff',
+    backgroundColor: '#4787ff',
     padding: 10,
     alignItems: 'center',
     borderColor: 'black',
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   },
   loadButtonText: {
     fontSize: 16,
-    marginBottom: 3,
     fontWeight: 'bold',
+    color: 'white',
   },
 });

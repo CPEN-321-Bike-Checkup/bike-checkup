@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"unique":true,"key":{"component_id":{"$numberInt":"1"},"activity_id":{"$numberInt":"1"}},"name":"component_id_1_activity_id_1","background":true}],"uuid":"86114b1de2ce4e7ba8b7332055516aa7","collectionName":"componentactivities"}

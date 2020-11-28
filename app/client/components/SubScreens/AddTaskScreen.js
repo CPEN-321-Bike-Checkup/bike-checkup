@@ -514,7 +514,7 @@ const styles = StyleSheet.create({
 
   saveButton: {
     alignItems: 'center',
-    backgroundColor: '#61e7ff',
+    backgroundColor: '#47ffbf',
     padding: 10,
     borderWidth: 1,
     borderColor: 'black',
@@ -523,7 +523,7 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     alignItems: 'center',
-    backgroundColor: '#c7f7ff',
+    backgroundColor: '#beffe8',
     padding: 10,
     borderWidth: 1,
     borderColor: 'black',
