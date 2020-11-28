@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  Text,
-  TouchableOpacity,
-  View,
-  Modal,
-  TouchableHighlight,
-  TextInput,
-  StyleSheet,
-} from 'react-native';
-import Autocomplete from 'react-native-autocomplete-input';
+import {Text, TouchableOpacity, View} from 'react-native';
 import {RemovablePressableListItem} from '../ListItems';
 import {flatListWrapper} from '../FlatListWrapper';
 import CommonStyles from '../CommonStyles';
@@ -52,22 +43,6 @@ const BIKE_COMPONENTS_LIST = [
   'Helmet',
   'Cleats',
 ];
-
-// TODO: remove when we're done all testing
-// const NORCO_DATA = [
-//   {
-//     id: 1,
-//     title: 'Chain - CN-9000',
-//   },
-//   {
-//     id: 2,
-//     title: 'Brakes - Shimano BR-RS305-R Hydraulic Disc, 150mm',
-//   },
-//   {
-//     id: 3,
-//     title: 'Brake pads - Brake Authority Avids',
-//   },
-// ];
 
 export default class ComponentsScreen extends React.Component {
   constructor(props) {
@@ -207,15 +182,6 @@ export default class ComponentsScreen extends React.Component {
     };
   }
 
-  findBikeComponent(inputText) {
-    if (inputText === '') return [];
-
-    const regex = new RegExp(`${inputText.trim()}`, 'i');
-    return BIKE_COMPONENTS_LIST.sort().filter(
-      (component) => component.search(regex) >= 0,
-    );
-  }
-
   // Note: arrow function needed to bind correct context
   toggleEditMode = () => {
     if (this.state.editMode) {
@@ -253,10 +219,6 @@ export default class ComponentsScreen extends React.Component {
   };
 
   render() {
-    const {componentTypeInputText} = this.state;
-    const components = this.findBikeComponent(componentTypeInputText);
-    const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
-
     return (
       <View style={{flex: 1}}>
         {!this.state.fetchFailed ? (

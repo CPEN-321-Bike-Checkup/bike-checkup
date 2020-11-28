@@ -7,27 +7,6 @@ import AddButton from '../AddButton';
 import ErrorPopup from '../ErrorPopup';
 import {timeout} from '../ScreenUtils';
 
-const DATA = [
-  {
-    id: 1,
-    description: 'Bleed brakes',
-    threshold: 400,
-    repeats: true,
-  },
-  {
-    id: 2,
-    description: 'Replace chain',
-    threshold: 200,
-    repeats: true,
-  },
-  {
-    id: 3,
-    description: 'Check brake pads',
-    threshold: 54,
-    repeats: true,
-  },
-];
-
 export default class ComponentTaskScreen extends React.Component {
   constructor(props) {
     super(props);

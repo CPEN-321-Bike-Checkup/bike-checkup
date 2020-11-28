@@ -6,17 +6,6 @@ import ErrorPopup from '../ErrorPopup';
 import {timeout} from '../ScreenUtils';
 import CommonStyles from '../CommonStyles';
 
-// const DATA = [
-//   {
-//     id: 1,
-//     title: 'Norco Sasquatch',
-//   },
-//   {
-//     id: 2,
-//     title: 'Giant Contend Ar 1',
-//   },
-// ];
-
 export default class BikesScreen extends React.Component {
   constructor(props) {
     super(props);

@@ -48,11 +48,6 @@ export const CompletableListItem = ({
   console.log(testID);
   return (
     <View style={styles.item}>
-      {/* //   <View
-    //     style={{
-    //       // flexDirection: 'row',
-    //       alignItems: 'center',
-    //     }}> */}
       <View>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text style={styles.title}>{title}</Text>
@@ -72,7 +67,6 @@ export const CompletableListItem = ({
         </View>
       </View>
     </View>
-    // </View>
   );
 };
 

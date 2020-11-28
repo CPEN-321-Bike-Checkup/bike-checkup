@@ -50,6 +50,7 @@ export default class HistoryScreen extends React.Component {
       )
         .then((response) => response.json())
         .then((data) => {
+          console.log("GOT HISTORY")
           console.log(data);
           this.setState((stateOld) => {
             return {

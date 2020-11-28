@@ -7,28 +7,6 @@ import AddButton from '../AddButton';
 import ErrorPopup from '../ErrorPopup';
 import {timeout} from '../ScreenUtils';
 
-let getDate = function (offset) {
-  let currentDate = new Date();
-  currentDate.setDate(currentDate.getDate() + offset);
-  return currentDate.toLocaleDateString();
-};
-
-// Note: add separators based on dates
-const DATA = [
-  {
-    title: 'Overdue',
-    data: [],
-  },
-  {
-    title: 'Due Today',
-    data: [],
-  },
-  {
-    title: 'Future Tasks',
-    data: [],
-  },
-];
-
 export default class ScheduleScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -222,7 +200,7 @@ export default class ScheduleScreen extends React.Component {
     this.itemCount = 0;
 
     return (
-      <View style={{flex: 1, /*marginBottom: -20*/}}>
+      <View style={{flex: 1}}>
         {!this.state.fetchFailed ? (
           selectionListWrapper(
             this.state.scheduleData,

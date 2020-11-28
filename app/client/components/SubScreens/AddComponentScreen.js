@@ -78,7 +78,7 @@ export default class AddComponentScreen extends React.Component {
     // Check for and handle any form errors
     let errorText = null;
     if (!componentType) {
-      errorText = 'Please select a component type.'
+      errorText = 'Please select a component type.';
     }
     if (errorText) {
       this.setState({
@@ -90,9 +90,11 @@ export default class AddComponentScreen extends React.Component {
 
     // Save component to db
     let component = {
-      'bike_id': this.bike.id,
-      'label': componentName ? componentType + ': ' + componentName : componentType, // TODO: See if we can change schema to have type and optional name
-      'attachment_date': Date.now(), // TODO: Check this is the format BE needs
+      bike_id: this.bike.id,
+      label: componentName
+        ? componentType + ': ' + componentName
+        : componentType, // TODO: See if we can change schema to have type and optional name
+      attachment_date: Date.now(), // TODO: Check this is the format BE needs
     };
 
     timeout(
@@ -138,7 +140,7 @@ export default class AddComponentScreen extends React.Component {
     return BIKE_COMPONENTS_LIST.sort().filter(
       (component) => component.search(regex) >= 0,
     );
-  }
+  };
 
   render() {
     const {componentType} = this.state;
@@ -146,28 +148,25 @@ export default class AddComponentScreen extends React.Component {
     const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
 
     return (
-      <ScrollView containerStyle={styles.formContainer} keyboardShouldPersistTaps='always'>
+      <ScrollView
+        containerStyle={styles.formContainer}
+        keyboardShouldPersistTaps="always">
         <View style={styles.formItemColumn}>
           <Text style={styles.formItemHeaderText}>Type:</Text>
           <Autocomplete
             autoCapitalize="words"
             autoCorrect={true}
             data={
-              components.length >= 1 &&
-              comp(componentType, components[0])
+              components.length >= 1 && comp(componentType, components[0])
                 ? []
                 : components
             }
             defaultValue={componentType}
-            onChangeText={(text) =>
-              this.setState({componentType: text})
-            }
+            onChangeText={(text) => this.setState({componentType: text})}
             placeholder="Enter..."
             renderItem={({item, i}) => (
               <TouchableOpacity
-                onPress={() =>
-                  this.setState({componentType: item})
-                }>
+                onPress={() => this.setState({componentType: item})}>
                 <Text style={styles.itemText}>{item}</Text>
               </TouchableOpacity>
             )}
@@ -187,9 +186,7 @@ export default class AddComponentScreen extends React.Component {
             placeholder="Enter..."
             placeholderTextColor="#616161"
             underlineColorAndroid="#000000"
-            onChangeText={(text) =>
-              this.setState({componentName: text})
-            }
+            onChangeText={(text) => this.setState({componentName: text})}
             testID="ComponentNameTextInput"
           />
         </View>
@@ -227,7 +224,7 @@ export default class AddComponentScreen extends React.Component {
 const styles = StyleSheet.create({
   itemText: {
     fontSize: 15,
-    margin: 2
+    margin: 2,
   },
 
   formContainer: {
