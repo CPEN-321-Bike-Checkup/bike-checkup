@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import CheckBox from '@react-native-community/checkbox';
-import ErrorPopup from '../ErrorPopup';
+import ErrorPopup from '../SubComponents/ErrorPopup';
 import {timeout} from '../ScreenUtils';
 
 const TASK_TYPES = {

@@ -1,8 +1,8 @@
 import React from 'react';
 import {View, Text} from 'react-native';
-import {PressableListItem} from '../ListItems';
-import {flatListWrapper} from '../FlatListWrapper';
-import ErrorPopup from '../ErrorPopup';
+import {PressableListItem} from '../SubScreens/ListItems';
+import {flatListWrapper} from '../SubComponents/FlatListWrapper';
+import ErrorPopup from '../SubComponents/ErrorPopup';
 import {timeout} from '../ScreenUtils';
 import CommonStyles from '../CommonStyles';
 

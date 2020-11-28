@@ -1,10 +1,10 @@
 import React from 'react';
 import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
-import {RemovableListItem, RemovablePressableListItem} from '../ListItems';
-import {flatListWrapper} from '../FlatListWrapper';
+import {RemovableListItem, RemovablePressableListItem} from './ListItems';
+import {flatListWrapper} from '../SubComponents/FlatListWrapper';
 import CommonStyles from '../CommonStyles';
-import AddButton from '../AddButton';
-import ErrorPopup from '../ErrorPopup';
+import AddButton from '../SubComponents/AddButton';
+import ErrorPopup from '../SubComponents/ErrorPopup';
 import {timeout} from '../ScreenUtils';
 
 export default class ComponentTaskScreen extends React.Component {

@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import Autocomplete from 'react-native-autocomplete-input';
-import ErrorPopup from '../ErrorPopup';
+import ErrorPopup from '../SubComponents/ErrorPopup';
 import {timeout} from '../ScreenUtils';
 
 const BIKE_COMPONENTS_LIST = [

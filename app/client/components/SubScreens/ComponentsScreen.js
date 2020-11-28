@@ -1,10 +1,10 @@
 import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
-import {RemovablePressableListItem} from '../ListItems';
-import {flatListWrapper} from '../FlatListWrapper';
+import {RemovablePressableListItem} from './ListItems';
+import {flatListWrapper} from '../SubComponents/FlatListWrapper';
 import CommonStyles from '../CommonStyles';
-import AddButton from '../AddButton';
-import ErrorPopup from '../ErrorPopup';
+import AddButton from '../SubComponents/AddButton';
+import ErrorPopup from '../SubComponents/ErrorPopup';
 import {timeout} from '../ScreenUtils';
 
 const BIKE_COMPONENTS_LIST = [

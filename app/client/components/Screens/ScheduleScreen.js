@@ -1,10 +1,10 @@
 import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
-import {CompletableListItem} from '../ListItems';
-import {selectionListWrapper} from '../SectionListWrapper';
+import {CompletableListItem} from '../SubScreens/ListItems';
+import {selectionListWrapper} from '../SubComponents/SectionListWrapper';
 import CommonStyles from '../CommonStyles';
-import AddButton from '../AddButton';
-import ErrorPopup from '../ErrorPopup';
+import AddButton from '../SubComponents/AddButton';
+import ErrorPopup from '../SubComponents/ErrorPopup';
 import {timeout} from '../ScreenUtils';
 
 export default class ScheduleScreen extends React.Component {
@@ -188,7 +188,7 @@ export default class ScheduleScreen extends React.Component {
       <CompletableListItem
         title={item.task}
         subText={item.bike + ' - ' + item.component}
-        rightText={item.date}
+        rightText={new Date(item.date).toLocaleDateString()}
         onCompletePress={this.scheduledTaskCompleted(item.taskId)}
         editMode={this.state.editMode}
         testID={testId}
