@@ -38,7 +38,7 @@ export default class AddTaskScreen extends React.Component {
       bikeId: null,
       componentId: null,
       description: null,
-      taskType: TASK_TYPES.TIME,
+      taskType: null, // TODO: Brennan to temporarily change to TASK_TYPES.TIME when running e2e tests
       threshold: null,
       isRepeating: false,
     };

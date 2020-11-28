@@ -25,7 +25,7 @@ export default class BikesStack extends React.Component {
           name="Tasks"
           component={ComponentTaskScreen}
         />
-        <Stack.Screen name="AddTaskScreen" component={AddTaskScreen} />
+        <Stack.Screen name="Add Task for Component" component={AddTaskScreen} />
       </Stack.Navigator>
     );
   }

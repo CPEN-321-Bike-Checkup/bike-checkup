@@ -137,7 +137,7 @@ export default class ComponentTaskScreen extends React.Component {
   };
 
   addTask = () => {
-    this.navigation.navigate('AddTaskScreen', {
+    this.navigation.navigate('Add Task for Component', {
       isNewTask: true,
       fixedBike: this.bike,
       fixedComponent: this.component,
@@ -185,7 +185,7 @@ export default class ComponentTaskScreen extends React.Component {
           title={item.description}
           editMode={this.state.editMode}
           onPress={() => {
-            this.navigation.navigate('AddTaskScreen', {
+            this.navigation.navigate('Add Task for Component', {
               fixedBike: this.bike,
               fixedComponent: this.component,
               taskId: item.id,
