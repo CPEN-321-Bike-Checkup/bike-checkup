@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   openModalButton: {
-    backgroundColor: '#4787ff',
+    backgroundColor: '#47ffbf',
     width: 65,
     height: 65,
     borderRadius: 35,
