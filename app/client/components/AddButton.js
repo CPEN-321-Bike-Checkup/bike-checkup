@@ -3,25 +3,25 @@ import {Text, TouchableOpacity, StyleSheet, View} from 'react-native';
 
 export default AddButton = (onPress, testId) => {
   return (
-    <View style={styles.openModalButtonContainer}>
+    <View style={styles.addButtonContainer}>
       <TouchableOpacity
         onPress={onPress}
-        style={styles.openModalButton}
+        style={styles.addButton}
         testID={testId}>
-        <Text style={styles.openModalButtonIcon}>+</Text>
+        <Text style={styles.addButtonIcon}>+</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  openModalButtonContainer: {
+  addButtonContainer: {
     position: 'absolute',
     bottom: 40,
     width: '94%',
     alignItems: 'flex-end',
   },
-  openModalButton: {
+  addButton: {
     backgroundColor: '#47ffbf',
     width: 65,
     height: 65,
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  openModalButtonIcon: {
+  addButtonIcon: {
     fontSize: 26,
     marginBottom: 3,
   },
