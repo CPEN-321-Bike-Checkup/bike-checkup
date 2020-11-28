@@ -4,7 +4,12 @@
 import React from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 
-export let flatListWrapper = function (data, renderItem, testID) {
+export let flatListWrapper = function (
+  data,
+  renderItem,
+  testID,
+  footerComponent = null,
+) {
   return (
     <FlatList
       data={data}
@@ -12,6 +17,7 @@ export let flatListWrapper = function (data, renderItem, testID) {
       keyExtractor={(item, index) => item + index}
       ItemSeparatorComponent={() => <View style={styles.separator} />}
       testID={testID}
+      ListFooterComponent={footerComponent}
     />
   );
 };

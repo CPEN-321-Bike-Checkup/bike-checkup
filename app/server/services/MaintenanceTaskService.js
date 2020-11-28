@@ -66,13 +66,10 @@ class MaintenanceTaskService {
         taskResult = await this.maintenanceTaskRepository.Delete(task);
       }
 
-      if (maintenanceTask.schedule_type === 'distance') {
-        var createRecordResult = this.maintenanceRecordRepository.Create(
-          this.MaintenanceRecordFromTask(task),
-        );
-        promises = promises.concat([taskResult, createRecordResult]);
-      } else {
-      }
+      var createRecordResult = this.maintenanceRecordRepository.Create(
+        this.MaintenanceRecordFromTask(task),
+      );
+      promises = promises.concat([taskResult, createRecordResult]);
     }
     return Promise.all(promises);
   }
@@ -109,7 +106,7 @@ class MaintenanceTaskService {
     var record = {
       description: maintenanceTask.description,
       component_id: maintenanceTask.component_id,
-      maintenance_date: maintenanceTask.last_maintenance_val,
+      maintenance_date: new Date(),
     };
     return record;
   }
