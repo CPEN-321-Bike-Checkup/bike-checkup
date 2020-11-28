@@ -168,7 +168,7 @@ export default class AddComponentScreen extends React.Component {
                 onPress={() =>
                   this.setState({componentType: item})
                 }>
-                <Text>{item}</Text>
+                <Text style={styles.itemText}>{item}</Text>
               </TouchableOpacity>
             )}
             keyExtractor={(item, i) => i.toString()}
@@ -225,6 +225,11 @@ export default class AddComponentScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  itemText: {
+    fontSize: 15,
+    margin: 2
+  },
+
   formContainer: {
     flex: 1,
     flexDirection: 'column',
