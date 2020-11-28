@@ -27,8 +27,8 @@ const CODE_LABEL_LENGTH = 5;
 const PARAM_SEPARATOR_LENGTH = 1;
 
 // Push notification configuration
-// const serverIp = '3.97.53.16'; // Server IP
-const serverIp = '10.244.31.128'; // Amanda's local IP (ShawOpen, ubcsecure doesn't work)
+const serverIp = '3.97.53.16'; // Server IP
+// const serverIp = '10.244.31.128'; // Amanda's local IP (ShawOpen, ubcsecure doesn't work)
 // const serverIp = '192.168.1.11'; // Connor's local IP
 // const serverIp = '192.168.1.83';  // Brennan's local IP
 const senderID = 517168871348;
