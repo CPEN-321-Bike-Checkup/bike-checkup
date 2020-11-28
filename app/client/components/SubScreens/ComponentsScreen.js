@@ -87,7 +87,7 @@ export default class ComponentsScreen extends React.Component {
     };
     this.navigation = props.navigation;
     this.bike = props.route.params.bike;
-    this.removedComponents = [];
+    this.componentsToDeleteIds = [];
     this.itemCount = 0;
   }
 
@@ -164,14 +164,13 @@ export default class ComponentsScreen extends React.Component {
     });
   };
 
-  removeBikeComponent(id) {
+  sendComponentToBeDeleted(id) {
     return () => {
-      // Remove component
       let newComponentData = [...this.state.componentData];
       for (var i = 0; i < newComponentData.length; i++) {
         if (newComponentData[i].id == id) {
           let component = newComponentData.splice(i, 1)[0];
-          this.removedComponents.push({_id: component.id}); // Remember removed component IDs
+          this.componentsToDeleteIds.push({_id: component.id}); // Remember removed component IDs
           this.setState({componentData: newComponentData});
         }
       }
@@ -189,35 +188,34 @@ export default class ComponentsScreen extends React.Component {
 
   // Note: arrow function needed to bind correct context
   toggleEditMode = () => {
-    // TODO: Notify server of removed components
     if (this.state.editMode) {
-      this.removedComponents = [];
+      if (this.componentsToDeleteIds.length != 0) {
+        this.deleteComponents(this.componentsToDeleteIds);
+      }
+      this.componentsToDeleteIds = [];
     }
 
     this.setState({editMode: this.state.editMode ? false : true});
   };
 
-  deleteComponents(tasks) {
-    console.log(tasks);
+  deleteComponents(ids) {
     timeout(
-      3000,
-      fetch(`http://${global.serverIp}:5000/maintenanceTask`, {
+      3000, // TODO: Declare a global constant for the timeout value
+      fetch(`http://${global.serverIp}:5000/component`, {
         method: 'DELETE',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(tasks),
+        body: JSON.stringify(ids),
       }).then((response) => {
-        // TODO: check response status
-        // TODO: make sure back-end makes prediction for task before responding
-        console.log('SUCCESSFULLY DELETED TASK: ', response);
+        console.log('Successfully deleted component(s): ', response);
       }),
     ).catch((error) => {
-      // Display error popup
+      // Display error popup if any errors arise
       this.setState({
         isError: true,
-        errorText: 'Failed to delete your tasks. Check network connection.',
+        errorText: 'Failed to delete your component(s). Check network connection.',
         fetchFailed: true,
       });
 
@@ -246,7 +244,7 @@ export default class ComponentsScreen extends React.Component {
             component: item,
           });
         }}
-        onRemovePress={this.removeBikeComponent(item.id)}
+        onRemovePress={this.sendComponentToBeDeleted(item.id)}
         testID={testId}
       />
     );

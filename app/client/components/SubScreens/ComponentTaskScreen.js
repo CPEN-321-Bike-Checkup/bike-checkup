@@ -41,7 +41,7 @@ export default class ComponentTaskScreen extends React.Component {
     this.navigation = props.navigation;
     this.bike = props.route.params.bike;
     this.component = props.route.params.component;
-    this.removedTasks = [];
+    this.tasksToDeleteIds = [];
     this.itemCount = 0;
   }
 
@@ -102,8 +102,9 @@ export default class ComponentTaskScreen extends React.Component {
     });
   }
 
-  deleteTasks(tasks) {
-    console.log(tasks);
+  // Delete one or more tasks from DB:
+  deleteTasks(ids) {
+    console.log(ids);
     timeout(
       3000,
       fetch(`http://${global.serverIp}:5000/maintenanceTask`, {
@@ -113,17 +114,17 @@ export default class ComponentTaskScreen extends React.Component {
           'Content-Type': 'application/json',
         },
 
-        body: JSON.stringify(tasks),
+        body: JSON.stringify(ids),
       }).then((response) => {
         // TODO: check response status
         // TODO: make sure back-end makes prediction for task before responding
-        console.log('SUCCESSFULLY DELETED TASK: ', response);
+        console.log('SUCCESSFULLY DELETED TASK(S): ', response);
       }),
     ).catch((error) => {
       // Display error popup
       this.setState({
         isError: true,
-        errorText: 'Failed to delete your tasks. Check network connection.',
+        errorText: 'Failed to delete your task(s). Check network connection.',
         fetchFailed: true,
       });
 
@@ -165,14 +166,13 @@ export default class ComponentTaskScreen extends React.Component {
     });
   };
 
-  removeTask(id) {
+  sendTaskToBeDeleted(id) {
     return () => {
-      // Remove task
       let newTaskData = [...this.state.taskData];
       for (var i = 0; i < this.state.taskData.length; i++) {
         if (newTaskData[i].id == id) {
           let task = newTaskData.splice(i, 1)[0];
-          this.removedTasks.push(task.id); // Remember removed task IDs
+          this.tasksToDeleteIds.push(task.id); // Remember removed task IDs
           this.setState({taskData: newTaskData});
           break;
         }
@@ -182,12 +182,12 @@ export default class ComponentTaskScreen extends React.Component {
 
   // Note: arrow function needed to bind correct context
   toggleEditMode = () => {
-    // Delete removed tasks on remote
+    // Delete tasks to be deleted on remote
     if (this.state.editMode) {
-      if (this.removedTasks.length != 0) {
-        this.deleteTasks(this.removedTasks);
+      if (this.tasksToDeleteIds.length != 0) {
+        this.deleteTasks(this.tasksToDeleteIds);
       }
-      this.removedTasks = [];
+      this.tasksToDeleteIds = [];
     }
 
     this.setState({editMode: this.state.editMode ? false : true});
@@ -221,7 +221,7 @@ export default class ComponentTaskScreen extends React.Component {
               },
             });
           }}
-          onRemovePress={this.removeTask(item.id)}
+          onRemovePress={this.sendTaskToBeDeleted(item.id)}
           testId={testId}
         />
       );

@@ -30,15 +30,6 @@ class ComponentRepository extends Repository {
     var component = this.documentModel.find({_id: componentId}).exec();
     return component.maintenance_tasks;
   }
-
-  async AddComponent() {
-    // TODO: Implement this
-    // Return new componentId after MongoDB exchange
-  }
-
-  async RemoveComponent(componentId) {
-    // TODO: Implement this
-  }
 }
 
 const componentRepository = new ComponentRepository(ComponentModel, BikeModel);

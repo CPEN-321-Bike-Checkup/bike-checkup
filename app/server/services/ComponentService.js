@@ -14,6 +14,11 @@ class ComponentService {
     var promise = this.componentRepository.GetComponentsForBike(bikeId);
     return promise;
   }
+
+  Delete(component) {
+    var promise = this.componentRepository.Delete(component);
+    return promise;
+  }
 }
 
 const componentService = new ComponentService(componentRepository);
