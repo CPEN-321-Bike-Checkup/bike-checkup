@@ -132,6 +132,7 @@ const styles = StyleSheet.create({
     padding: 18,
   },
   title: {
+    maxWidth: "70%",
     fontSize: 20,
     fontWeight: 'bold',
   },
