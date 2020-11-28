@@ -121,7 +121,6 @@ export default class ScheduleScreen extends React.Component {
         isError: true,
         errorText:
           'Failed to retrieve complete your tasks. Check network connection.',
-        fetchFailed: true,
       });
 
       // Re-fetch schedule

@@ -125,7 +125,6 @@ export default class ComponentTaskScreen extends React.Component {
       this.setState({
         isError: true,
         errorText: 'Failed to delete your task(s). Check network connection.',
-        fetchFailed: true,
       });
 
       // Re-fetch tasks

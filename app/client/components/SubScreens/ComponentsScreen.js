@@ -144,6 +144,36 @@ export default class ComponentsScreen extends React.Component {
     });
   }
 
+  deleteComponents(components) {
+    console.log(components);
+    timeout(
+      3000,
+      fetch(`http://${global.serverIp}:5000/component`, {
+        method: 'DELETE',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(components),
+      }).then((response) => {
+        // TODO: check response status
+        console.log('SUCCESSFULLY DELETED COMPONENTS: ', response);
+      }),
+    ).catch((error) => {
+      // Display error popup
+      this.setState({
+        isError: true,
+        errorText:
+          'Failed to delete your components. Check network connection.',
+      });
+
+      // Re-fetch components
+      this.getComponents();
+
+      console.error(error);
+    });
+  }
+
   transformComponentData = (components) => {
     let componentsList = [];
     for (let component of components) {
@@ -198,34 +228,6 @@ export default class ComponentsScreen extends React.Component {
     this.setState({editMode: this.state.editMode ? false : true});
   };
 
-  deleteComponents(ids) {
-    timeout(
-      3000, // TODO: Declare a global constant for the timeout value
-      fetch(`http://${global.serverIp}:5000/component`, {
-        method: 'DELETE',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(ids),
-      }).then((response) => {
-        console.log('Successfully deleted component(s): ', response);
-      }),
-    ).catch((error) => {
-      // Display error popup if any errors arise
-      this.setState({
-        isError: true,
-        errorText: 'Failed to delete your component(s). Check network connection.',
-        fetchFailed: true,
-      });
-
-      //refetch components
-      this.getComponents();
-
-      console.error(error);
-    });
-  }
-
   renderItem = ({item}) => {
     const testId = 'ComponentListItem' + this.itemCount;
     this.itemCount++;
@@ -271,7 +273,7 @@ export default class ComponentsScreen extends React.Component {
 
         {AddButton(() => {
           this.navigation.navigate('Add Component', {bike: this.bike});
-        })}
+        }, 'AddComponentBtn')}
 
         {ErrorPopup(
           this.state.errorText,

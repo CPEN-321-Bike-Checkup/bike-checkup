@@ -38,7 +38,7 @@ export default class AddTaskScreen extends React.Component {
       bikeId: null,
       componentId: null,
       description: null,
-      taskType: null,
+      taskType: TASK_TYPES.TIME,
       threshold: null,
       isRepeating: false,
     };

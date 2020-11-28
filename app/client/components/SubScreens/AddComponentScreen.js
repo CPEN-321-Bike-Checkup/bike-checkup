@@ -28,6 +28,7 @@ const BIKE_COMPONENTS_LIST = [
   'Front Brake Lever',
   'Rear Brake Lever',
   'Cassette',
+  'Chain',
   'Chainrings',
   'Crankset',
   'Front Derailleur',
@@ -172,6 +173,7 @@ export default class AddComponentScreen extends React.Component {
             )}
             keyExtractor={(item, i) => i.toString()}
             containerStyle={{height: 50}}
+            testID="ComponentTypeAutoComplete"
           />
         </View>
 
@@ -188,6 +190,7 @@ export default class AddComponentScreen extends React.Component {
             onChangeText={(text) =>
               this.setState({componentName: text})
             }
+            testID="ComponentNameTextInput"
           />
         </View>
 
@@ -195,7 +198,7 @@ export default class AddComponentScreen extends React.Component {
           <TouchableOpacity
             onPress={this.cancel}
             style={styles.cancelButton}
-            testID="SaveBtn">
+            testID="CancelComponentBtn">
             <Text style={styles.addTaskText}>Cancel</Text>
           </TouchableOpacity>
 
@@ -203,7 +206,7 @@ export default class AddComponentScreen extends React.Component {
             <TouchableOpacity
               onPress={this.save}
               style={styles.saveButton}
-              testID="CancelBtn">
+              testID="SaveComponentBtn">
               <Text style={styles.addTaskText}>Save</Text>
             </TouchableOpacity>
           ) : (

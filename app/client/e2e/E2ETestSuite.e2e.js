@@ -84,26 +84,30 @@ describe('Bike Stack', () => {
 
   // NOTE: App should be in a test state where it has no data?? -No
 
+  // NOTE: make sure AddTaskScreen TaskType dropdown defaults to a value
   // it('Component should be added and then removed', async () => {
+  //   await sleep(1000);
   //   await veryifyBottomNavigator();
   //   await goToBikesTab();
   //   await goToBikeAtIndex(0);
 
   //   // Add component
-  //   const componentName = 'Chain';
-  //   const modelName = 'CN-9000';
-  //   await sleep(10000); // FAIL HERE
+  //   const componentType = 'Chain';
+  //   const componentName = 'CH9000';
+  //   // await sleep(10000); // FAIL HERE
   //   // Note: Can remove the following 4 lines to pass the test for M9
   //   await element(by.id('AddComponentBtn')).tap();
-  //   await element(by.id('ComponentName')).typeText(componentName);
-  //   await element(by.id('ModelName')).typeText(modelName);
-  //   await element(by.id('SaveBtn')).tap();
+  //   await element(by.id('ComponentTypeAutoComplete')).typeText(componentType);
+  //   await element(by.id('ComponentNameTextInput')).typeText(componentName);
+  //   await sleep(1000);
+  //   await element(by.id('SaveComponentBtn')).tap();
+  //   await sleep(5000);
 
   //   // Verify new component exists in the list
   //   await expect(
   //     element(
   //       by
-  //         .text(componentName + ' - ' + modelName)
+  //         .text(componentType + ': ' + componentName)
   //         .withAncestor(by.id('ComponentsList')),
   //     ),
   //   ).toExist();
@@ -116,7 +120,7 @@ describe('Bike Stack', () => {
   //   await expect(
   //     element(
   //       by
-  //         .text(componentName + ' - ' + modelName)
+  //         .text(componentType + ': ' + componentName)
   //         .withAncestor(by.id('ComponentsList')),
   //     ),
   //   ).not.toExist();
@@ -164,7 +168,7 @@ describe('Bike Stack', () => {
   // });
 
   it('Task should be marked as completed and reflected in maintenance record screen', async () => {
-    const taskTitle = 'Replace casette';
+    const taskTitle = 'Oil Chain';
     // Verify we start off on the schedule screen
     await expect(element(by.id('ScheduleList'))).toBeVisible();
     // Verify the expected a hard-coded maintenance task is present
