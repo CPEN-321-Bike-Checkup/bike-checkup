@@ -196,6 +196,10 @@ export default class ComponentTaskScreen extends React.Component {
   renderItem = ({item}) => {
     const testId = 'TasksListItem' + this.itemCount;
     this.itemCount++;
+    // Reset here as list may be re-rendered w/o call to render()
+    if (this.itemCount == this.state.taskData.length) {
+      this.itemCount = 0;
+    }
 
     if (this.state.editMode) {
       var renderableItem = (
@@ -246,7 +250,7 @@ export default class ComponentTaskScreen extends React.Component {
             <Text>Error fetching tasks.</Text>
           </View>
         )}
-        {AddButton(this.addTask)}
+        {AddButton(this.addTask, 'AddTaskBtn')}
         {ErrorPopup(
           this.state.errorText,
           this.onErrorAccepted,

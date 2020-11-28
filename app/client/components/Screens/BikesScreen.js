@@ -90,6 +90,10 @@ export default class BikesScreen extends React.Component {
   renderItem = ({item}) => {
     const testId = 'BikeListItem' + this.itemCount;
     this.itemCount++;
+    // Reset here as list may be re-rendered w/o call to render()
+    if (this.itemCount == this.state.bikeData.length) {
+      this.itemCount = 0;
+    }
 
     return (
       <PressableListItem
@@ -101,7 +105,6 @@ export default class BikesScreen extends React.Component {
   };
 
   render() {
-    this.itemCount = 0;
     return (
       <>
         {!this.state.fetchFailed ? (

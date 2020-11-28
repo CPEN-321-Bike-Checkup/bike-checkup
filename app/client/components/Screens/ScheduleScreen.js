@@ -98,7 +98,6 @@ export default class ScheduleScreen extends React.Component {
 
       console.error(error);
     });
-    this.setState({scheduleData: DATA}); // TODO: remove
   }
 
   completeTasks(tasks) {
@@ -192,9 +191,21 @@ export default class ScheduleScreen extends React.Component {
     };
   };
 
+  numListItems = () => {
+    let numItems = 0;
+    for (let category of this.state.scheduleData) {
+      numItems += category.data.length;
+    }
+    return numItems;
+  };
+
   renderItem = ({item}) => {
     const testId = 'ScheduleListItem' + this.itemCount;
     this.itemCount++;
+    // Reset here as list may be re-rendered w/o call to render()
+    if (this.itemCount == this.numListItems()) {
+      this.itemCount = 0;
+    }
 
     return (
       <CompletableListItem
@@ -212,7 +223,7 @@ export default class ScheduleScreen extends React.Component {
     this.itemCount = 0;
 
     return (
-      <View style={{flex: 1}}>
+      <View style={{flex: 1, /*marginBottom: -20*/}}>
         {!this.state.fetchFailed ? (
           selectionListWrapper(
             this.state.scheduleData,
@@ -227,7 +238,7 @@ export default class ScheduleScreen extends React.Component {
 
         {AddButton(() => {
           this.navigation.navigate('Add Task', {isNewTask: true});
-        })}
+        }, 'ScheduleAddTaskBtn')}
 
         {ErrorPopup(
           this.state.errorText,

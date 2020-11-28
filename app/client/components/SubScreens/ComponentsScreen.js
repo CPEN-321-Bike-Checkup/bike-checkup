@@ -231,6 +231,10 @@ export default class ComponentsScreen extends React.Component {
   renderItem = ({item}) => {
     const testId = 'ComponentListItem' + this.itemCount;
     this.itemCount++;
+    // Reset here as list may be re-rendered w/o call to render()
+    if (this.itemCount == this.state.componentData.length) {
+      this.itemCount = 0;
+    }
 
     return (
       <RemovablePressableListItem
