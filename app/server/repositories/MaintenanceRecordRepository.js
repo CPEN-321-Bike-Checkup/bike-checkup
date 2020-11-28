@@ -35,13 +35,32 @@ class MaintenanceRecordRepository extends Repository {
     var endDate = this.addDays(startDate, -daysOfHistory);
     //get all records within history
     var allRecords = await this.GetMaintenanceRecordsForUser(userId);
+    var components = await this.componentModel
+      .find({_id: {$in: allRecords.map((r) => r.component_id)}})
+      .exec();
+    var bikes = await this.bikeModel
+      .find({_id: components.map((c) => c.bike_id)})
+      .exec();
+
     var historyRecords = [];
     allRecords.forEach(function (record) {
       if (
         record.maintenance_date <= startDate &&
         record.maintenance_date >= endDate
       ) {
-        historyRecords.push(record);
+        var component = components.find((c) =>
+          c._id.equals(record.component_id),
+        );
+        var bike = bikes.find((b) => b._id === component.bike_id);
+
+        var recordView = {
+          _id: record._id,
+          component: component.label,
+          bike: bike.label,
+          description: record.description,
+          maintenance_date: record.maintenance_date,
+        };
+        historyRecords.push(recordView);
       }
     });
 
