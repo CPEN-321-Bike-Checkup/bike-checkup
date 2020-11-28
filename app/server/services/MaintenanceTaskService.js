@@ -46,6 +46,12 @@ class MaintenanceTaskService {
         maintenanceTask._id,
       );
       if (task.repeats) {
+        if (task.schedule_type === 'date') {
+          var newDueDate = new Date();
+          newDueDate.setDate(newDueDate.getDate() + task.threshold_val);
+          task.predicted_due_date = newDueDate;
+        }
+
         taskResult = this.maintenanceTaskRepository.Update({
           last_maintenance_val: new Date(),
           repeats: task.repeats,
@@ -59,10 +65,14 @@ class MaintenanceTaskService {
       } else {
         taskResult = await this.maintenanceTaskRepository.Delete(task);
       }
-      var createRecordResult = this.maintenanceRecordRepository.Create(
-        this.MaintenanceRecordFromTask(task),
-      );
-      promises = promises.concat([taskResult, createRecordResult]);
+
+      if (maintenanceTask.schedule_type === 'distance') {
+        var createRecordResult = this.maintenanceRecordRepository.Create(
+          this.MaintenanceRecordFromTask(task),
+        );
+        promises = promises.concat([taskResult, createRecordResult]);
+      } else {
+      }
     }
     return Promise.all(promises);
   }

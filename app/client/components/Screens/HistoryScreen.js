@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Button, Container} from 'react-native';
 import {ListItem} from '../ListItems';
 import {flatListWrapper} from '../FlatListWrapper';
 import ErrorPopup from '../ErrorPopup';
@@ -17,7 +17,7 @@ export default class HistoryScreen extends React.Component {
       isError: false,
       fetchFailed: false,
       errorText: null,
-      beforeDateFilter: tomorrow,
+      numDays: 30,
     };
   }
 
@@ -26,7 +26,10 @@ export default class HistoryScreen extends React.Component {
 
     // Re-fetch data every time screen comes into focus
     this._unsubscribe = this.props.navigation.addListener('focus', () => {
-      this.getHistory();
+      this.setState((stateOld) => {
+        console.log('days filer: ', stateOld.numDays - 30);
+        return {numDays: stateOld.numDays - 30};
+      }, this.getHistory());
     });
   }
 
@@ -35,10 +38,12 @@ export default class HistoryScreen extends React.Component {
   }
 
   getHistory = () => {
+    var tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
     timeout(
       3000,
       fetch(
-        `http://${global.serverIp}:5000/maintenanceRecord/${global.userId}/?beforeDate=${this.state.beforeDateFilter}&numDays=30`,
+        `http://${global.serverIp}:5000/maintenanceRecord/${global.userId}/?beforeDate=${tomorrow}&numDays=${this.state.numDays}`,
         {
           method: 'GET',
         },
@@ -46,7 +51,12 @@ export default class HistoryScreen extends React.Component {
         .then((response) => response.json())
         .then((data) => {
           console.log(data);
-          this.setState({maintenanceRecords: data});
+          this.setState((stateOld) => {
+            return {
+              maintenanceRecords: data,
+              numDays: stateOld.numDays + 30,
+            };
+          });
         }),
     ).catch((error) => {
       // Display error screen
@@ -81,11 +91,22 @@ export default class HistoryScreen extends React.Component {
     return (
       <>
         {!this.state.fetchFailed ? (
-          flatListWrapper(
-            this.state.maintenanceRecords,
-            this.renderItem,
-            'HistoryList',
-          )
+          <View>
+            <View style={{flex: 7}}>
+              {flatListWrapper(
+                this.state.maintenanceRecords,
+                this.renderItem,
+                'HistoryList',
+              )}
+            </View>
+            <View style={{flex: 1}}>
+              <Button
+                onPress={() => this.getHistory()}
+                title="Load Next 30 days of History"
+                style={{marginTop: -20}}
+              />
+            </View>
+          </View>
         ) : (
           <View style={CommonStyles.fetchFailedView}>
             <Text>Error fetching maintenance records.</Text>
