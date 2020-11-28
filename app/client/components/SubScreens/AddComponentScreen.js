@@ -90,7 +90,7 @@ export default class AddComponentScreen extends React.Component {
     // Save component to db
     let component = {
       'bike_id': this.bike.id,
-      'label': componentName ? componentType : componentType + ': ' + componentName, // TODO: See if we can change schema to have type and optional name
+      'label': componentName ? componentType + ': ' + componentName : componentType, // TODO: See if we can change schema to have type and optional name
       'attachment_date': Date.now(), // TODO: Check this is the format BE needs
     };
 
