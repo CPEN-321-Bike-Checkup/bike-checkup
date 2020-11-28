@@ -10,12 +10,12 @@ class ActivityRepository extends Repository {
   // update to use numberOfDays
   GetActivitiesForUserInRange(userId, date, numberOfDays) {
     var endDate = new Date();
-    endDate.setDate(date.getDate() + numberOfDays);
+    endDate.setDate(date.getDate() - numberOfDays);
     console.log(date);
     return this.documentModel
       .find({
         athlete_id: userId,
-        date: {$gte: date, $lte: endDate},
+        date: {$lte: date, $gte: endDate},
       })
       .exec();
   }

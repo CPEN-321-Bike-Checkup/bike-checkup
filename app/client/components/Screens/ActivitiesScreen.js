@@ -1,8 +1,8 @@
 import React from 'react';
 import {View, Text, StyleSheet, Button, L} from 'react-native';
-import {ListItem} from '../ListItems';
-import {flatListWrapper} from '../FlatListWrapper';
-import ErrorPopup from '../ErrorPopup';
+import {ListItem} from '../SubScreens/ListItems';
+import {flatListWrapper} from '../SubComponents/FlatListWrapper';
+import ErrorPopup from '../SubComponents/ErrorPopup';
 import {timeout} from '../ScreenUtils';
 import CommonStyles from '../CommonStyles';
 
@@ -43,7 +43,7 @@ export default class ActivitiesScreen extends React.Component {
     timeout(
       3000,
       fetch(
-        `http://${global.serverIp}:5000/maintenanceRecord/${global.userId}/?beforeDate=${tomorrow}&numDays=${this.state.numDays}`,
+        `http://${global.serverIp}:5000/activity/${global.userId}/?afterDate=${tomorrow}&numDays=${this.state.numDays}`,
         {
           method: 'GET',
         },
@@ -79,13 +79,20 @@ export default class ActivitiesScreen extends React.Component {
     });
   };
 
-  renderItem = ({item}) => (
-    <ListItem
-      title={item.description}
-      subText={item.bike + ' - ' + item.component}
-      rightText={new Date(item.maintenance_date).toLocaleDateString()}
-    />
-  );
+  renderItem = ({item}) => {
+    var date = new Date(0);
+    date.setSeconds(item.time_s); // specify value for SECONDS here
+    var timeString = date.toISOString().substr(11, 8);
+    console.log(timeString);
+    var distance = item.distance / 1000;
+    return (
+      <ListItem
+        title={item.description}
+        subText={distance.toFixed(2) + 'Km - ' + timeString}
+        rightText={new Date(item.date).toLocaleDateString()}
+      />
+    );
+  };
 
   render() {
     return (
