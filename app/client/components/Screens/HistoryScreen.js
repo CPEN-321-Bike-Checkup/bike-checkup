@@ -84,7 +84,7 @@ export default class HistoryScreen extends React.Component {
     <ListItem
       title={item.description}
       subText={item.bike + ' - ' + item.component}
-      rightText={new Date(item.maintenance_date).toLocaleDateString()}
+      rightText={new Date(item.date) instanceof Date && !isNaN(new Date(item.date)) ? new Date(item.maintenance_date).toLocaleDateString() : ''}
     />
   );
 

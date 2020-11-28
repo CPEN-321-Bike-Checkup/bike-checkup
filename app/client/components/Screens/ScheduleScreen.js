@@ -184,11 +184,13 @@ export default class ScheduleScreen extends React.Component {
       this.itemCount = 0;
     }
 
+    var isValidDate = new Date(item.date) instanceof Date && !isNaN(new Date(item.date));
+
     return (
       <CompletableListItem
         title={item.task}
         subText={item.bike + ' - ' + item.component}
-        rightText={new Date(item.date).toLocaleDateString()}
+        rightText={isValidDate ? new Date(item.date).toLocaleDateString() : ''}
         onCompletePress={this.scheduledTaskCompleted(item.taskId)}
         editMode={this.state.editMode}
         testID={testId}
