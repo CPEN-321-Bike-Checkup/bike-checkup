@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, Button, Container} from 'react-native';
+import {View, Text, StyleSheet, Button, L} from 'react-native';
 import {ListItem} from '../ListItems';
 import {flatListWrapper} from '../FlatListWrapper';
 import ErrorPopup from '../ErrorPopup';
@@ -91,22 +91,17 @@ export default class HistoryScreen extends React.Component {
     return (
       <>
         {!this.state.fetchFailed ? (
-          <View>
-            <View style={{flex: 7}}>
-              {flatListWrapper(
-                this.state.maintenanceRecords,
-                this.renderItem,
-                'HistoryList',
-              )}
-            </View>
-            <View style={{flex: 1}}>
-              <Button
-                onPress={() => this.getHistory()}
-                title="Load Next 30 days of History"
-                style={{marginTop: -20}}
-              />
-            </View>
-          </View>
+          flatListWrapper(
+            this.state.maintenanceRecords,
+            this.renderItem,
+            'HistoryList',
+            //footer
+            <Button
+              onPress={() => this.getHistory()}
+              title="Load Next 30 days of History"
+              style={{marginTop: -20}}
+            />,
+          )
         ) : (
           <View style={CommonStyles.fetchFailedView}>
             <Text>Error fetching maintenance records.</Text>
