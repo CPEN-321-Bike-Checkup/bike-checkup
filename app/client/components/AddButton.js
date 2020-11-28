@@ -1,10 +1,13 @@
 import React from 'react';
 import {Text, TouchableOpacity, StyleSheet, View} from 'react-native';
 
-export default AddButton = (onPress) => {
+export default AddButton = (onPress, testId) => {
   return (
     <View style={styles.openModalButtonContainer}>
-      <TouchableOpacity onPress={onPress} style={styles.openModalButton}>
+      <TouchableOpacity
+        onPress={onPress}
+        style={styles.openModalButton}
+        testID={testId}>
         <Text style={styles.openModalButtonIcon}>+</Text>
       </TouchableOpacity>
     </View>
@@ -14,7 +17,7 @@ export default AddButton = (onPress) => {
 const styles = StyleSheet.create({
   openModalButtonContainer: {
     position: 'absolute',
-    bottom: 20,
+    bottom: 40,
     width: '94%',
     alignItems: 'flex-end',
   },

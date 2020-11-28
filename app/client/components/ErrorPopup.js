@@ -16,7 +16,8 @@ export default errorPopup = function (text, pressCallback, visible) {
               style={styles.okButton}
               onPress={() => {
                 pressCallback();
-              }}>
+              }}
+              testID="ErrorPopupOkBtn">
               <Text style={styles.textStyle}>OK</Text>
             </TouchableHighlight>
           </View>

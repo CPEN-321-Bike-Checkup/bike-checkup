@@ -38,7 +38,7 @@ export default class AddTaskScreen extends React.Component {
       bikeId: null,
       componentId: null,
       description: null,
-      taskType: null,
+      taskType:  TASK_TYPES.TIME,
       threshold: null,
       isRepeating: false,
     };
@@ -217,7 +217,6 @@ export default class AddTaskScreen extends React.Component {
   };
 
   getDropDownPicker(data, onChangeCallback, defaultValue) {
-    console.log(defaultValue);
     return (
       <DropDownPicker
         defaultValue={defaultValue} // Won't display if undefined or null
@@ -235,7 +234,7 @@ export default class AddTaskScreen extends React.Component {
     );
   }
 
-  getTextInput(onTextCallback, numeric, defaultValue) {
+  getTextInput(onTextCallback, numeric, defaultValue, testID) {
     const keyboard = numeric ? 'numeric' : 'default';
     return (
       <TextInput
@@ -245,6 +244,7 @@ export default class AddTaskScreen extends React.Component {
         underlineColorAndroid="#000000"
         keyboardType={keyboard}
         onChangeText={onTextCallback}
+        testID={testID}
         style={{
           paddingLeft: 6,
           fontSize: 16,
@@ -255,7 +255,7 @@ export default class AddTaskScreen extends React.Component {
   getBikeFormItem = () => {
     if (this.fixedBike) {
       return (
-        <View style={styles.formItemColumn}>
+        <View style={styles.formItemColumn} testID="FixedBikeText">
           <Text style={styles.formItemHeaderText}>Bike: </Text>
           <Text style={styles.fixedItemText}>{this.fixedBike.title}</Text>
         </View>
@@ -277,7 +277,7 @@ export default class AddTaskScreen extends React.Component {
   getComponentFormItem = () => {
     if (this.fixedComponent) {
       return (
-        <View style={styles.formItemColumn}>
+        <View style={styles.formItemColumn} testID="FixedComponentText">
           <Text style={styles.formItemHeaderText}>Component: </Text>
           <Text style={styles.fixedItemText}>{this.fixedComponent.title}</Text>
         </View>
@@ -346,6 +346,8 @@ export default class AddTaskScreen extends React.Component {
       errorText = 'Please select a task type (distance or time).';
     } else if (threshold == null) {
       errorText = 'Please enter a threshold.';
+    } else if (threshold < 0) {
+      errorText = 'Threshold cannot be negative.';
     }
 
     if (errorText) {
@@ -390,14 +392,19 @@ export default class AddTaskScreen extends React.Component {
   render() {
     return (
       // NOTE: fix bike and component fields when entering from component task screen
-      <ScrollView containerStyle={styles.formContainer}>
+      <ScrollView containerStyle={styles.formContainer} testID="AddTaskScreen">
         {this.getBikeFormItem()}
         {this.getComponentFormItem()}
         <View style={styles.formItemColumn}>
           <Text style={styles.formItemHeaderText}>Title:</Text>
-          {this.getTextInput(this.setTaskTitle, false, this.state.description)}
+          {this.getTextInput(
+            this.setTaskTitle,
+            false,
+            this.state.description,
+            'TitleTextInput',
+          )}
         </View>
-        <View style={styles.formItemColumn}>
+        <View style={styles.formItemColumn} /* testID="TaskTypeDropdown" */>
           <Text style={styles.formItemHeaderText}>Type:</Text>
           {this.getDropDownPicker(
             TASK_TYPE_DATA,
@@ -414,6 +421,7 @@ export default class AddTaskScreen extends React.Component {
               this.setTaskThreshold,
               true,
               this.state.threshold ? this.state.threshold.toString() : null,
+              'ThresholdTextInput',
             )}
           </View>
         ) : null}
@@ -426,6 +434,7 @@ export default class AddTaskScreen extends React.Component {
               this.setTaskThreshold,
               true,
               this.state.threshold ? this.state.threshold.toString() : null,
+              'ThresholdTextInput',
             )}
           </View>
         ) : null}
@@ -435,20 +444,21 @@ export default class AddTaskScreen extends React.Component {
             style={{marginLeft: 8}}
             value={this.state.isRepeating}
             onValueChange={this.setRepeatOption}
+            testID="RepeatBtn"
           />
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             onPress={this.cancel}
             style={styles.cancelButton}
-            testID="SaveBtn">
+            testID="CancelTaskBtn">
             <Text style={styles.addTaskText}>Cancel</Text>
           </TouchableOpacity>
           {!this.state.isSaving ? (
             <TouchableOpacity
               onPress={this.save}
               style={styles.saveButton}
-              testID="CancelBtn">
+              testID="SaveTaskBtn">
               <Text style={styles.addTaskText}>Save</Text>
             </TouchableOpacity>
           ) : (
