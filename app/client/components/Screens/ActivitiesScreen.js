@@ -5,6 +5,7 @@ import {flatListWrapper} from '../SubComponents/FlatListWrapper';
 import ErrorPopup from '../SubComponents/ErrorPopup';
 import {timeout} from '../ScreenUtils';
 import CommonStyles from '../CommonStyles';
+import LoadButton from '../SubComponents/LoadButton';
 
 export default class ActivitiesScreen extends React.Component {
   constructor(props) {
@@ -102,12 +103,8 @@ export default class ActivitiesScreen extends React.Component {
             this.state.activities,
             this.renderItem,
             'HistoryList',
-            //footer
-            <Button
-              onPress={() => this.getActivities()}
-              title="Load Next 30 days of History"
-              style={{marginTop: -20}}
-            />,
+            // Footer
+            LoadButton(() => this.getActivities()),
           )
         ) : (
           <View style={CommonStyles.fetchFailedView}>

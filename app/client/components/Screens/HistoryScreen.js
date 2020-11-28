@@ -1,10 +1,11 @@
 import React from 'react';
-import {View, Text, StyleSheet, Button, L} from 'react-native';
+import {View, Text} from 'react-native';
 import {ListItem} from '../SubScreens/ListItems';
 import {flatListWrapper} from '../SubComponents/FlatListWrapper';
 import ErrorPopup from '../SubComponents/ErrorPopup';
 import {timeout} from '../ScreenUtils';
 import CommonStyles from '../CommonStyles';
+import LoadButton from '../SubComponents/LoadButton';
 
 export default class HistoryScreen extends React.Component {
   constructor(props) {
@@ -84,7 +85,11 @@ export default class HistoryScreen extends React.Component {
     <ListItem
       title={item.description}
       subText={item.bike + ' - ' + item.component}
-      rightText={new Date(item.date) instanceof Date && !isNaN(new Date(item.date)) ? new Date(item.maintenance_date).toLocaleDateString() : ''}
+      rightText={
+        new Date(item.date) instanceof Date && !isNaN(new Date(item.date))
+          ? new Date(item.maintenance_date).toLocaleDateString()
+          : ''
+      }
     />
   );
 
@@ -96,12 +101,8 @@ export default class HistoryScreen extends React.Component {
             this.state.maintenanceRecords,
             this.renderItem,
             'HistoryList',
-            //footer
-            <Button
-              onPress={() => this.getHistory()}
-              title="Load Next 30 days of History"
-              style={{marginTop: -20}}
-            />,
+            // Footer
+            LoadButton(() => this.getHistory()),
           )
         ) : (
           <View style={CommonStyles.fetchFailedView}>
