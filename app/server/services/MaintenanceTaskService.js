@@ -1,11 +1,9 @@
-/* eslint-disable prettier/prettier */
 const activityRepository = require('../repositories/ActivityRepository');
 const componentActivityRepository = require('../repositories/ComponentActivityRepository');
 const maintenanceTaskRepository = require('../repositories/MaintenanceTaskRepository');
 const bikeRepository = require('../repositories/BikeRepository');
 const moment = require('moment');
 const maintenanceRecordRepository = require('../repositories/MaintenanceRecordRepository');
-const bikeService = require('./BikeService');
 const componentRepository = require('../repositories/ComponentRepository');
 require('moment-timezone');
 
@@ -161,7 +159,6 @@ class MaintenanceTaskService {
         data: [],
       },
       {
-        //feel free to change this title
         //only includes tasks after next 7 days
         title: 'Upcoming',
         data: [],
@@ -200,7 +197,6 @@ class MaintenanceTaskService {
    *            by predicted date ascending
    * @modifies  nothing
    */
-
   async GetScheduledTasksSorted(userId, numDays = 0) {
     var all_tasks = await this.maintenanceTaskRepository.GetMaintenanceTasksForUser(
       userId,
@@ -247,7 +243,7 @@ class MaintenanceTaskService {
   }
 
   async MaintenancePredictForComponent(componentId) {
-    console.log('predicting for component...'); //DEBUG
+    console.log('Predicting for component...');
     let maintenanceList = await this.maintenanceTaskRepository.GetMaintenanceTasksForComponents(
       componentId,
     );
@@ -257,7 +253,7 @@ class MaintenanceTaskService {
 
   //TODO make the equivalent for component and use that function to do this for user
   async MaintenancePredictForUser(userId) {
-    console.log('predicting for user...'); //DEBUG
+    console.log('Predicting for user...');
     let maintenanceList = await this.maintenanceTaskRepository.GetMaintenanceTasksForUser(
       userId,
     );

@@ -1,9 +1,8 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
+import HistoryScreen from '../Screens/HistoryScreen';
 
 const Stack = createStackNavigator();
-
-import HistoryScreen from '../Screens/HistoryScreen';
 
 export default class HistoryStack extends React.Component {
   render() {

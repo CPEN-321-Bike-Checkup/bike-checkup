@@ -6,6 +6,7 @@ const componentSchema = new mongoose.Schema({
   attachment_date: {type: Date, required: true},
   removal_date: Date,
 });
+
 const componentModel = mongoose.model('Component', componentSchema);
 
 module.exports.ComponentModel = componentModel;

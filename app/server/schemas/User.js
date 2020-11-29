@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
   expires_in: {type: Number, required: true},
   refresh_token: {type: String, required: true},
 });
+
 const userModel = mongoose.model('User', userSchema);
 
 module.exports.UserSchema = userSchema;

@@ -40,8 +40,7 @@ export default class BikesScreen extends React.Component {
       })
         .then((response) => response.json())
         .then((bikes) => {
-          console.log('GOT BIKES:');
-          console.log(bikes);
+          console.log('Got bikes: ', bikes);
           this.setState({bikeData: this.transformBikeData(bikes)});
         }),
     ).catch((error) => {

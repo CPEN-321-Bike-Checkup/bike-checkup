@@ -11,7 +11,6 @@ class ActivityRepository extends Repository {
   GetActivitiesForUserInRange(userId, date, numberOfDays) {
     var endDate = new Date();
     endDate.setDate(date.getDate() - numberOfDays);
-    console.log(date);
     return this.documentModel
       .find({
         athlete_id: userId,

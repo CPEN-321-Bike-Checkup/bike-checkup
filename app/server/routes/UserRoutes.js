@@ -12,10 +12,10 @@ const initUserRouting = (app) => {
   });
 
   userRouter.post('/registerDevice', (req, res, next) => {
-    console.log('registering device');
+    console.log('Registering device');
     UserService.RegisterNewDevice(req.body.userId, req.body.token);
 
-    console.log('registered');
+    console.log('Device registered');
     res.sendStatus(200);
   });
 

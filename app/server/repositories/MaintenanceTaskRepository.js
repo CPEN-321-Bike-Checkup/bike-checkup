@@ -17,12 +17,10 @@ class MaintenanceTaskRepository extends Repository {
         .find({owner_id: userId})
         .exec()
         .then((bikes) => {
-          console.log(bikes);
           this.componentModel
             .find({bike_id: {$in: bikes.map((b) => b._id)}})
             .exec()
             .then((components) => {
-              console.log(components);
               resolve(
                 this.GetMaintenanceTasksForComponents(
                   components.map((comp) => comp._id),
@@ -41,7 +39,6 @@ class MaintenanceTaskRepository extends Repository {
 
   GetMaintenanceTasksForComponents(componentIds) {
     return new Promise((resolve, reject) => {
-      console.log('components: ', componentIds);
       this.documentModel
         .find({component_id: {$in: componentIds}})
         .exec()

@@ -13,6 +13,7 @@ const maintenanceTaskSchema = new mongoose.Schema({
   repeats: {type: Boolean, required: true},
   predicted_due_date: Date,
 });
+
 const maintenanceTaskModel = mongoose.model(
   'MaintenanceTask',
   maintenanceTaskSchema,

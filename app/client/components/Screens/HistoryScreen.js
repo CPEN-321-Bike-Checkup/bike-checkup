@@ -28,7 +28,7 @@ export default class HistoryScreen extends React.Component {
     // Re-fetch data every time screen comes into focus
     this._unsubscribe = this.props.navigation.addListener('focus', () => {
       this.setState((stateOld) => {
-        console.log('days filer: ', stateOld.numDays - 30);
+        console.log('Days filer: ', stateOld.numDays - 30);
         return {numDays: stateOld.numDays - 30};
       }, this.getHistory());
     });
@@ -50,12 +50,11 @@ export default class HistoryScreen extends React.Component {
         },
       )
         .then((response) => response.json())
-        .then((data) => {
-          console.log('GOT HISTORY');
-          console.log(data);
+        .then((history) => {
+          console.log('Got history: ', history);
           this.setState((stateOld) => {
             return {
-              maintenanceRecords: data,
+              maintenanceRecords: history,
               numDays: stateOld.numDays + 30,
             };
           });

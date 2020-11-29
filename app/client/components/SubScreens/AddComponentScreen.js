@@ -107,7 +107,7 @@ export default class AddComponentScreen extends React.Component {
         },
         body: JSON.stringify(component),
       }).then((response) => {
-        console.log('Successfully saved component.');
+        console.log('Successfully saved component');
         this.navigation.goBack();
       }),
     ).catch((error) => {
@@ -196,7 +196,7 @@ export default class AddComponentScreen extends React.Component {
             onPress={this.cancel}
             style={styles.cancelButton}
             testID="CancelComponentBtn">
-            <Text style={styles.addTaskText}>Cancel</Text>
+            <Text style={styles.addText}>Cancel</Text>
           </TouchableOpacity>
 
           {!this.state.isSaving ? (
@@ -204,7 +204,7 @@ export default class AddComponentScreen extends React.Component {
               onPress={this.save}
               style={styles.saveButton}
               testID="SaveComponentBtn">
-              <Text style={styles.addTaskText}>Save</Text>
+              <Text style={styles.addText}>Save</Text>
             </TouchableOpacity>
           ) : (
             <ActivityIndicator size="large" color="#47ffbf" />
@@ -226,42 +226,25 @@ const styles = StyleSheet.create({
     fontSize: 15,
     margin: 2,
   },
-
   formContainer: {
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'flex-start',
   },
-
   formItemColumn: {
     flexDirection: 'column',
     margin: 10,
   },
-
-  formItemRow: {
-    flexDirection: 'row',
-    margin: 10,
-  },
-
   buttonContainer: {
     marginTop: 15,
     marginBottom: 10,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
   },
-
   formItemHeaderText: {
     fontSize: 18,
     marginBottom: 5,
   },
-
-  fixedItemText: {
-    fontSize: 18,
-    marginBottom: 5,
-    color: '#666666',
-    fontWeight: 'bold',
-  },
-
   saveButton: {
     alignItems: 'center',
     backgroundColor: '#47ffbf',
@@ -280,7 +263,7 @@ const styles = StyleSheet.create({
     width: 125,
     borderRadius: 10,
   },
-  addTaskText: {
+  addText: {
     fontWeight: 'bold',
     fontSize: 20,
     color: 'black',

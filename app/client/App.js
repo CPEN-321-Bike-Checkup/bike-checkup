@@ -6,9 +6,6 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {WebView} from 'react-native-webview';
 import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
-import {StyleSheet} from 'react-native';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
-
 import BikesStack from './components/Stacks/BikesStack';
 import ScheduleStack from './components/Stacks/ScheduleStack';
 import HistoryStack from './components/Stacks/HistoryStack';
@@ -18,8 +15,6 @@ import Keys from './keys.json';
 // Dev debug flags
 const SKIP_AUTHENTICATION = true; // Set to false before committing!
 
-const Tab = createMaterialBottomTabNavigator();
-
 // Strava authentication constants
 const AUTH_URI =
   'https://www.strava.com/oauth/mobile/authorize?client_id=55933&redirect_uri=http://3.97.53.16:5000/stravaRedirect&response_type=code&approval_prompt=force&scope=read,read_all,profile:read_all,activity:read_all';
@@ -27,11 +22,13 @@ const CODE_LABEL_LENGTH = 5;
 const PARAM_SEPARATOR_LENGTH = 1;
 
 // Push notification configuration
-// const serverIp = '3.97.53.16'; // Server IP
+const serverIp = '3.97.53.16'; // Server IP
 // const serverIp = '10.244.31.128'; // Amanda's local IP (ShawOpen, ubcsecure doesn't work)
 // const serverIp = '192.168.1.11'; // Connor's local IP
-const serverIp = '192.168.1.83';  // Brennan's local IP
+// const serverIp = '192.168.1.83';  // Brennan's local IP
 const senderID = 517168871348;
+
+const Tab = createMaterialBottomTabNavigator();
 
 export default class App extends Component {
   constructor(props) {
@@ -164,7 +161,7 @@ export default class App extends Component {
             });
             var athlete = response.data.athlete;
             console.log('Athlete data: ', response.data.athlete);
-            console.log('strava access token', response.data.access_token);
+            console.log('Strava access token: ', response.data.access_token);
             // TODO: uncomment when done local testing
             // global.userId = athlete.id; // Save athlete id with global access
             axios
@@ -186,7 +183,7 @@ export default class App extends Component {
                 console.log('Successfully sent user tokens');
                 PushNotification.configure({
                   onRegister: (tokenData) => {
-                    console.log('Remote Notification Token: ', tokenData);
+                    console.log('Remote notification token: ', tokenData);
                     axios
                       .post(
                         'http://' + serverIp + ':5000/user/registerDevice',
@@ -196,7 +193,7 @@ export default class App extends Component {
                         },
                       )
                       .then((res) => {
-                        console.log('Registered Device');
+                        console.log('Registered device');
                       })
                       .catch((err) => {
                         console.log('Failed to register device: ', err);
@@ -204,7 +201,7 @@ export default class App extends Component {
                   },
 
                   onNotification: (notification) => {
-                    console.log('Remote Notification Received: ', notification);
+                    console.log('Remote notification received: ', notification);
                   },
                   senderID: senderID,
                   popInitialNotification: false,

@@ -45,7 +45,7 @@ export default class AddTaskScreen extends React.Component {
     this.navigation = props.navigation;
 
     // Params
-    this.isNewTask = props.route.params.isNewTask; // boolean for update or new
+    this.isNewTask = props.route.params.isNewTask; // Boolean for update or new
     if (!this.isNewTask) {
       let {
         id,
@@ -59,8 +59,6 @@ export default class AddTaskScreen extends React.Component {
       this.state.taskType = taskType;
       this.state.threshold = threshold;
       this.state.isRepeating = isRepeating;
-      console.log(props.route.params.task);
-      console.log(this.state.taskType);
     }
 
     // Bike and component fixed if entering this screen from the ComponentTaskScreen
@@ -106,8 +104,7 @@ export default class AddTaskScreen extends React.Component {
       })
         .then((response) => response.json())
         .then((bikes) => {
-          console.log('GOT BIKES:');
-          console.log(bikes);
+          console.log('Got bikes: ', bikes);
           this.setState({bikeList: this.transformBikeList(bikes)});
         }),
     ).catch((error) => {
@@ -123,7 +120,7 @@ export default class AddTaskScreen extends React.Component {
   };
 
   updateComponentList = (bikeId) => {
-    console.log('UPDATE COMPONENT LIST');
+    console.log('Update component list');
     timeout(
       3000,
       fetch(`http://${global.serverIp}:5000/component/${bikeId}`, {
@@ -131,8 +128,7 @@ export default class AddTaskScreen extends React.Component {
       })
         .then((response) => response.json())
         .then((components) => {
-          console.log('GOT COMPONENTS:');
-          console.log(components);
+          console.log('Got components: ', components);
 
           // Navigate back if can't add a component
           if (components.length == 0) {
@@ -174,7 +170,7 @@ export default class AddTaskScreen extends React.Component {
       }).then((response) => {
         // TODO: check response status
         // TODO: make sure back-end makes prediction for task before responding
-        console.log('SUCCESSFULLY SAVED TASK');
+        console.log('Successfully saved task');
         this.navigation.goBack();
       }),
     ).catch((error) => {
@@ -202,7 +198,7 @@ export default class AddTaskScreen extends React.Component {
         body: JSON.stringify(task),
       }).then((response) => {
         // TODO: check response status
-        console.log('SUCCESSFULLY UPDATED TASK');
+        console.log('Successfully updated task');
         this.navigation.goBack();
       }),
     ).catch((error) => {
@@ -404,7 +400,7 @@ export default class AddTaskScreen extends React.Component {
             'TitleTextInput',
           )}
         </View>
-        <View style={styles.formItemColumn} /* testID="TaskTypeDropdown" */>
+        <View style={styles.formItemColumn}>
           <Text style={styles.formItemHeaderText}>Type:</Text>
           {this.getDropDownPicker(
             TASK_TYPE_DATA,

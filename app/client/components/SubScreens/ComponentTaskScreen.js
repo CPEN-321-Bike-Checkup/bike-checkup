@@ -65,8 +65,7 @@ export default class ComponentTaskScreen extends React.Component {
       )
         .then((response) => response.json())
         .then((tasks) => {
-          console.log('GOT TASKS:');
-          console.log(tasks);
+          console.log('Got tasks: ', tasks);
           this.setState({taskData: this.transformTaskData(tasks)});
         }),
     ).catch((error) => {
@@ -83,7 +82,6 @@ export default class ComponentTaskScreen extends React.Component {
 
   // Delete one or more tasks from DB:
   deleteTasks(ids) {
-    console.log(ids);
     timeout(
       3000,
       fetch(`http://${global.serverIp}:5000/maintenanceTask`, {
@@ -94,10 +92,10 @@ export default class ComponentTaskScreen extends React.Component {
         },
 
         body: JSON.stringify(ids),
-      }).then((response) => {
+      }).then((tasks) => {
         // TODO: check response status
         // TODO: make sure back-end makes prediction for task before responding
-        console.log('SUCCESSFULLY DELETED TASK(S): ', response);
+        console.log('Successfully deleted task(s): ', tasks);
       }),
     ).catch((error) => {
       // Display error popup

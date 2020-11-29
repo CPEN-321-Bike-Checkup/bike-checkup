@@ -9,6 +9,7 @@ const maintenanceRecordSchema = new mongoose.Schema({
   },
   maintenance_date: {type: Date, required: true},
 });
+
 const maintenanceRecordModel = mongoose.model(
   'MaintenanceRecord',
   maintenanceRecordSchema,

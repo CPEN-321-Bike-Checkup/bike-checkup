@@ -1,9 +1,8 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
+import ActivitiesScreen from '../Screens/ActivitiesScreen';
 
 const Stack = createStackNavigator();
-
-import ActivitiesScreen from '../Screens/ActivitiesScreen';
 
 export default class ActivitiesStack extends React.Component {
   render() {

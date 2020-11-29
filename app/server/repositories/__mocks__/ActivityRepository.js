@@ -32,8 +32,7 @@ class ActivityRepository extends Repository {
           let activityId = activityIds[index];
           returnData.push(this.data[activityId - 1]);
         }
-        //resolve(returnData);
-        resolve(data); //debug
+        resolve(data);
       }
     });
   }

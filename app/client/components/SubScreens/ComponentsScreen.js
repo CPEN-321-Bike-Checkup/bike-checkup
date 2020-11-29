@@ -46,8 +46,6 @@ const BIKE_COMPONENTS_LIST = [
 
 export default class ComponentsScreen extends React.Component {
   constructor(props) {
-    console.log('ComponentsScreen Props:');
-    console.log(props);
     super(props);
     this.state = {
       componentData: [],
@@ -100,8 +98,7 @@ export default class ComponentsScreen extends React.Component {
       })
         .then((response) => response.json())
         .then((components) => {
-          console.log('GOT COMPONENTS:');
-          console.log(components);
+          console.log('Got components', components);
           this.setState({
             componentData: this.transformComponentData(components),
           });
@@ -120,7 +117,6 @@ export default class ComponentsScreen extends React.Component {
   }
 
   deleteComponents(components) {
-    console.log(components);
     timeout(
       3000,
       fetch(`http://${global.serverIp}:5000/component`, {
@@ -130,9 +126,9 @@ export default class ComponentsScreen extends React.Component {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(components),
-      }).then((response) => {
+      }).then((components) => {
         // TODO: check response status
-        console.log('SUCCESSFULLY DELETED COMPONENTS: ', response);
+        console.log('Successfully deleted components: ', components);
       }),
     ).catch((error) => {
       // Display error popup

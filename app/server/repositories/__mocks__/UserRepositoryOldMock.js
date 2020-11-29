@@ -1,13 +1,5 @@
 const UserModel = require('../../schemas/User').UserModel;
 
-//const userSchema =  new mongoose.Schema({
-//    _id: Number,
-//    bikes: [bikeSchema], //actually stores bike objects
-//    strava_token: String,
-//	name: String,
-//	deviceTokens: [deviceTokenSchema],
-//});
-
 var mockUserData = [
   {
     _id: 1,

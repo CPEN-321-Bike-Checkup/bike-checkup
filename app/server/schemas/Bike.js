@@ -6,6 +6,7 @@ const bikeSchema = new mongoose.Schema({
   label: String,
   distance: Number,
 });
+
 const bikeModel = mongoose.model('Bike', bikeSchema);
 
 module.exports.BikeModel = bikeModel;

@@ -45,7 +45,6 @@ export const CompletableListItem = ({
   onCompletePress,
   testID,
 }) => {
-  console.log(testID);
   return (
     <View style={styles.item}>
       <View>
@@ -71,7 +70,6 @@ export const CompletableListItem = ({
 };
 
 export const PressableListItem = ({title, onPress, testID}) => {
-  console.log(testID);
   return (
     <TouchableHighlight
       style={styles.touchableItem}
@@ -98,7 +96,6 @@ export const RemovablePressableListItem = ({
   onPress,
   testID,
 }) => {
-  console.log(testID);
   return (
     <TouchableHighlight
       style={styles.touchableItem}

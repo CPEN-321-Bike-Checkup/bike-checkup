@@ -2,9 +2,16 @@ const express = require('express');
 const mongoose = require('mongoose');
 const MongoClient = require('mongodb').MongoClient;
 const bodyParser = require('body-parser');
-const url = 'mongodb://localhost:27017/bikeCheckupDb';
 const axios = require('axios');
+const initMaintenanceTaskRoutes = require('./routes/MaintenanceTaskRoutes');
+const initUserRoutes = require('./routes/UserRoutes');
+const initStravaRoutes = require('./routes/StravaRoutes');
+const initMaintenanceRecordRoutes = require('./routes/MaintenanceRecordRoutes');
+const initBikeRoutes = require('./routes/BikeRoutes');
+const initComponentRoutes = require('./routes/ComponentRoutes');
+const initActivityRoutes = require('./routes/ActivityRoutes');
 
+const url = 'mongodb://localhost:27017/bikeCheckupDb';
 const app = express();
 const port = 5000;
 
@@ -21,9 +28,8 @@ app.listen(port, () => {
   console.log('Server is running on port: ' + port);
 });
 
-//run job scheduler
+// Run job scheduler
 const autoReminderService = require('./services/AutoReminderService');
-//autoReminderService.StartJobSchedule();
 
 app.post('/runReminderJob', function (req, res) {
   autoReminderService
@@ -38,13 +44,13 @@ app.post('/runReminderJob', function (req, res) {
 
 mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true});
 let db = mongoose.connection;
-//check connection
+// Check connection
 db.once('open', function () {
   console.log('Connected to MongoDB - bikeCheckupDb');
 });
-//check DB errors, print if any
+// Check DB errors, print if any
 db.on('error', function (err) {
-  console.log(err);
+  console.log('Database error: ', err);
 });
 
 app.get('/stravaActivities', async function (req, res) {
@@ -54,21 +60,12 @@ app.get('/stravaActivities', async function (req, res) {
       headers: {Authorization: 'Bearer '.concat(token)},
     })
     .then((resp) => {
-      console.log(resp.data);
       res.send(resp.data);
     })
     .catch((err) => {
       console.error(err);
     });
 });
-
-const initMaintenanceTaskRoutes = require('./routes/MaintenanceTaskRoutes');
-const initUserRoutes = require('./routes/UserRoutes');
-const initStravaRoutes = require('./routes/StravaRoutes');
-const initMaintenanceRecordRoutes = require('./routes/MaintenanceRecordRoutes');
-const initBikeRoutes = require('./routes/BikeRoutes');
-const initComponentRoutes = require('./routes/ComponentRoutes');
-const initActivityRoutes = require('./routes/ActivityRoutes');
 
 initUserRoutes(app);
 initStravaRoutes(app);
@@ -79,7 +76,7 @@ initComponentRoutes(app);
 initActivityRoutes(app);
 
 app.get('/stravaRedirect', function (req, res, next) {
-  console.log('Strava Auth Hit');
+  console.log('Strava auth hit');
   res.send('OK');
 });
 
@@ -117,12 +114,6 @@ let createTestData = async function (userId) {
     predicted_maintenance_date: new Date(),
   };
 
-  // let bike = {
-  //   id: 25,
-  //   label: 'Norco Sasquatch',
-  //   components: [component],
-  // };
-
   let bike1 = {
     _id: 'b8294806',
     owner: userId,
@@ -153,4 +144,3 @@ let createTestData = async function (userId) {
 };
 
 const userId = 123;
-// createTestData(userId);

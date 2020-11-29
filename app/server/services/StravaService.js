@@ -33,7 +33,6 @@ class StravaService {
     var athlete = await this.GetAthlete(userId);
     var user = await this.userRepository.GetById(userId);
 
-    console.log('BIKES ARE HERERERERERERERERR: ', athlete);
     var bikes = athlete.bikes.map((bike) => {
       return {
         _id: bike.id,

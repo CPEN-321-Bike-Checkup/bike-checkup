@@ -59,10 +59,9 @@ export default class ScheduleScreen extends React.Component {
       )
         .then((response) => response.json())
         .then((schedule) => {
-          console.log('GOT SCHEDULE:');
-          console.log(schedule);
+          console.log('Got schedule: ', schedule);
           this.setState({
-            scheduleData: /*this.transformSchedule(schedule)*/ schedule,
+            scheduleData: schedule,
           });
         }),
     ).catch((error) => {
@@ -91,7 +90,7 @@ export default class ScheduleScreen extends React.Component {
         body: JSON.stringify(tasks),
       }).then((response) => {
         // TODO: check response status (and throw error if not success)
-        console.log('SUCCESSFULLY SAVED TASK: ', response);
+        console.log('Successfully saved task: ', response);
       }),
     ).catch((error) => {
       // Display error popup
@@ -132,7 +131,7 @@ export default class ScheduleScreen extends React.Component {
     });
   };
 
-  // Note: arrow function needed to bind correct context
+  // Note: Arrow function needed to bind correct context
   toggleEditMode = () => {
     // Delete the removed components on remote
     if (this.state.editMode) {
@@ -148,7 +147,6 @@ export default class ScheduleScreen extends React.Component {
   scheduledTaskCompleted = (id) => {
     return () => {
       if (id == undefined) throw Error('Completed task id is undefined');
-      console.log('scheduledTaskCompleted');
 
       // Remove component
       let found = false;

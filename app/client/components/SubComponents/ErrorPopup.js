@@ -1,5 +1,3 @@
-// Error popup
-
 import React from 'react';
 import {Modal, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
 
