@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, Button, L} from 'react-native';
+import {View, Text} from 'react-native';
 import {ListItem} from '../SubScreens/ListItems';
 import {flatListWrapper} from '../SubComponents/FlatListWrapper';
 import ErrorPopup from '../SubComponents/ErrorPopup';
@@ -87,7 +87,7 @@ export default class ActivitiesScreen extends React.Component {
     return (
       <ListItem
         title={item.description}
-        subText={distance.toFixed(2) + 'Km - ' + timeString}
+        subText={distance.toFixed(2) + 'km - ' + timeString}
         rightText={new Date(item.date).toLocaleDateString()}
       />
     );
