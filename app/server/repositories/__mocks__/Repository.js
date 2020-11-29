@@ -1,5 +1,3 @@
-const {isInteger} = require('lodash');
-const {Mongoose} = require('mongoose');
 const _ = require('lodash');
 
 class Repository {

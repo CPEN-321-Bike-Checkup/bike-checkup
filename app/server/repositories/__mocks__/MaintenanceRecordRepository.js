@@ -1,4 +1,3 @@
-const {Mongoose} = require('mongoose');
 const Repository = require('./Repository');
 
 class MaintenanceRecordRepository extends Repository {
