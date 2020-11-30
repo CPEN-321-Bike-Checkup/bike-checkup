@@ -6,6 +6,9 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {WebView} from 'react-native-webview';
 import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import {createStackNavigator} from '@react-navigation/stack';
+import WelcomeScreen from './components/Screens/WelcomeScreen';
+import StravaAuthScreen from './components/Screens/StravaAuthScreen';
 import BikesStack from './components/Stacks/BikesStack';
 import ScheduleStack from './components/Stacks/ScheduleStack';
 import HistoryStack from './components/Stacks/HistoryStack';
@@ -30,6 +33,7 @@ const serverIp = '10.244.31.128'; // Amanda's local IP (ShawOpen, ubcsecure does
 const senderID = 517168871348;
 
 const Tab = createMaterialBottomTabNavigator();
+const Stack = createStackNavigator();
 
 export default class App extends Component {
   constructor(props) {
@@ -122,13 +126,17 @@ export default class App extends Component {
       )) ||
       // Intial authentication state:
       (!this.state.authCodeRetrieved && (
-        <WebView
-          ref={(ref) => {
-            this.webView = ref;
-          }}
-          source={{uri: AUTH_URI}}
-          onNavigationStateChange={this._onNavigationStateChange.bind(this)}
-        />
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName="Welcome"
+            screenOptions={{
+              headerTintColor: Colors.white,
+              headerStyle: {backgroundColor: Colors.primaryOrange},
+            }}>
+            <Stack.Screen name="Welcome" component={WelcomeScreen} />
+            <Stack.Screen name="Strava Authentication" component={StravaAuthScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
       ))
     );
   }
