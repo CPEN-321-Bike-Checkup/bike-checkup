@@ -441,6 +441,7 @@ export default class AddTaskScreen extends React.Component {
             style={{marginLeft: 8}}
             value={this.state.isRepeating}
             onValueChange={this.setRepeatOption}
+            tintColors={{true: Colors.accentBlue}}
             testID="RepeatBtn"
           />
         </View>
