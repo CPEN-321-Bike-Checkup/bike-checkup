@@ -84,6 +84,9 @@ describe('Bike Stack', () => {
 
   // NOTE: App should be in a test state where it has no data?? -No
 
+  /*
+   * Test #1: Add and remove a component
+   */
   // NOTE: make sure AddTaskScreen TaskType dropdown defaults to a value
   it('Component should be added and then removed', async () => {
     await sleep(1000);
@@ -126,6 +129,9 @@ describe('Bike Stack', () => {
     ).not.toExist();
   });
 
+  /*
+   * Test #2: Add a new task
+   */
   it('New task should be added', async () => {
     await veryifyBottomNavigator();
     await goToBikesTab();
@@ -167,6 +173,9 @@ describe('Bike Stack', () => {
     ).toExist();
   });
 
+  /*
+   * Test #3: Complete a task and view it in the completed task history
+   */
   it('Task should be marked as completed and reflected in maintenance record screen', async () => {
     const taskTitle = 'Replace Brake Pads';
     // Verify we start off on the schedule screen
