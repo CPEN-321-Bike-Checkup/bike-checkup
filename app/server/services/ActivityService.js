@@ -25,5 +25,5 @@ class ActivityService {
   }
 }
 
-const activityService = new ActivityService(activityRepository);
+const activityService = new ActivityService(activityRepository, componentActivityRepository);
 module.exports = activityService;

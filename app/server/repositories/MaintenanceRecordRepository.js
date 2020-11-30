@@ -4,8 +4,6 @@ const {ComponentModel} = require('../schemas/Component');
 const Repository = require('./Repository');
 const MaintenanceRecordModel = require('../schemas/MaintenanceRecord')
   .MaintenanceRecordModel;
-const MILLISECONDS_PER_SECOND = 1000;
-const SECONDS_PER_DAY = 86400;
 
 class MaintenanceRecordRepository extends Repository {
   constructor(maintenanceRecordModel, bikeModel, componentModel) {
