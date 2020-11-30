@@ -100,7 +100,7 @@ export default class StravaAuthScreen extends React.Component {
               });
 
             // Now that initial authentication flow is complete, navigate to main Home Navigator
-            this.navigation.navigate('Home');
+            this.navigation.replace('Home');
           },
           (error) => {
             console.log(error);

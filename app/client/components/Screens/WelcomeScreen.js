@@ -22,7 +22,7 @@ export default class WelcomeScreen extends React.Component {
         <Button
             title="Press me"
             color="#f194ff"
-            onPress={() => this.navigation.navigate('Strava Authentication')}
+            onPress={() => this.navigation.replace('Strava Authentication')}
         />
     </View>
     );
