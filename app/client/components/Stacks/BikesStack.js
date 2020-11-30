@@ -5,6 +5,7 @@ import ComponentTaskScreen from './../SubScreens/ComponentTaskScreen';
 import AddTaskScreen from './../SubScreens/AddTaskScreen';
 import ComponentsScreen from '../SubScreens/ComponentsScreen';
 import AddComponentScreen from '../SubScreens/AddComponentScreen';
+import {Colors} from './../../constants/Colors'
 
 const Stack = createStackNavigator();
 
@@ -15,7 +16,7 @@ export default class BikesStack extends React.Component {
         initialRouteName="Bikes"
         screenOptions={{
           headerTintColor: 'white',
-          headerStyle: {backgroundColor: 'tomato'},
+          headerStyle: {backgroundColor: Colors.primaryOrange},
         }}>
         <Stack.Screen name="Bikes" component={BikesScreen} />
         <Stack.Screen name="Components" component={ComponentsScreen} />

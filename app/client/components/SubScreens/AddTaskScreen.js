@@ -12,6 +12,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import CheckBox from '@react-native-community/checkbox';
 import ErrorPopup from '../SubComponents/ErrorPopup';
 import {timeout} from '../ScreenUtils';
+import {Colors} from './../../constants/Colors'
 
 const TASK_TYPES = {
   TIME: 'date',
@@ -222,8 +223,8 @@ export default class AddTaskScreen extends React.Component {
           justifyContent: 'flex-start',
         }}
         placeholder="Select..."
-        placeholderStyle={{color: '#616161', fontSize: 16}}
-        selectedLabelStyle={{color: 'black', fontSize: 16}}
+        placeholderStyle={{color: Colors.grey, fontSize: 16}}
+        selectedLabelStyle={{color: Colors.black, fontSize: 16}}
         containerStyle={{height: 50}}
         onChangeItem={(item) => onChangeCallback(item)}
       />
@@ -236,8 +237,8 @@ export default class AddTaskScreen extends React.Component {
       <TextInput
         defaultValue={defaultValue} // Won't display if undefined or null
         placeholder="Enter..."
-        placeholderTextColor="#616161"
-        underlineColorAndroid="#000000"
+        placeholderTextColor={Colors.grey}
+        underlineColorAndroid={Colors.black}
         keyboardType={keyboard}
         onChangeText={onTextCallback}
         testID={testID}
@@ -458,7 +459,7 @@ export default class AddTaskScreen extends React.Component {
               <Text style={styles.addTaskText}>Save</Text>
             </TouchableOpacity>
           ) : (
-            <ActivityIndicator size="large" color="#47ffbf" />
+            <ActivityIndicator size="large" color={Colors.accentBlue} />
           )}
         </View>
 
@@ -504,13 +505,13 @@ const styles = StyleSheet.create({
   fixedItemText: {
     fontSize: 18,
     marginBottom: 5,
-    color: '#666666',
+    color: Colors.grey,
     fontWeight: 'bold',
   },
 
   saveButton: {
     alignItems: 'center',
-    backgroundColor: '#47ffbf',
+    backgroundColor: Colors.accentBlue,
     padding: 10,
     borderWidth: 1,
     borderColor: 'black',
@@ -519,7 +520,7 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     alignItems: 'center',
-    backgroundColor: '#beffe8',
+    backgroundColor: Colors.accentLightBlue,
     padding: 10,
     borderWidth: 1,
     borderColor: 'black',

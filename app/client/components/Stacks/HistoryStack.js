@@ -1,6 +1,7 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import HistoryScreen from '../Screens/HistoryScreen';
+import {Colors} from './../../constants/Colors'
 
 const Stack = createStackNavigator();
 
@@ -11,7 +12,7 @@ export default class HistoryStack extends React.Component {
         initialRouteName="Bikes"
         screenOptions={{
           headerTintColor: 'white',
-          headerStyle: {backgroundColor: 'tomato'},
+          headerStyle: {backgroundColor: Colors.primaryOrange},
         }}>
         <Stack.Screen name="Maintenance Log" component={HistoryScreen} />
       </Stack.Navigator>

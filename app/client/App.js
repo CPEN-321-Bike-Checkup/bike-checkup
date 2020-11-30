@@ -11,6 +11,7 @@ import ScheduleStack from './components/Stacks/ScheduleStack';
 import HistoryStack from './components/Stacks/HistoryStack';
 import ActivitiesStack from './components/Stacks/ActivitiesStack';
 import Keys from './keys.json';
+import {Colors} from './constants/Colors'
 
 // Dev debug flags
 const SKIP_AUTHENTICATION = false; // Set to false before committing!
@@ -22,8 +23,8 @@ const CODE_LABEL_LENGTH = 5;
 const PARAM_SEPARATOR_LENGTH = 1;
 
 // Push notification configuration
-const serverIp = '3.97.53.16'; // Server IP
-// const serverIp = '10.244.31.128'; // Amanda's local IP (ShawOpen, ubcsecure doesn't work)
+// const serverIp = '3.97.53.16'; // Server IP
+const serverIp = '10.244.31.128'; // Amanda's local IP (ShawOpen, ubcsecure doesn't work)
 // const serverIp = '192.168.1.11'; // Connor's local IP
 // const serverIp = '192.168.1.83';  // Brennan's local IP
 const senderID = 517168871348;
@@ -55,10 +56,10 @@ export default class App extends Component {
         <NavigationContainer>
           <Tab.Navigator
             initialRouteName="Schedule"
-            activeColor="#f0edf6"
-            inactiveColor="#3e2465"
+            activeColor={Colors.activeTabLightWhite}
+            inactiveColor={Colors.inactiveTabLightBlack}
             labelStyle={{fontSize: 12}}
-            barStyle={{backgroundColor: 'tomato', marginTop: -22}}
+            barStyle={{backgroundColor: Colors.primaryOrange, marginTop: -22}}
             labeled={true}
             shifting={false}
             options={{
@@ -68,7 +69,6 @@ export default class App extends Component {
               name="Schedule"
               component={ScheduleStack}
               options={{
-                tabBarColor: '#694fad',
                 tabBarIcon: ({color}) => (
                   <MaterialIcons name="schedule" color={color} size={26} />
                 ),

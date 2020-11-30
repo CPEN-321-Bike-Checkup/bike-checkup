@@ -1,5 +1,6 @@
 import React from 'react';
 import {Modal, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
+import {Colors} from './../../constants/Colors'
 
 export default errorPopup = function (text, pressCallback, visible) {
   return (
@@ -34,11 +35,11 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: 'white',
+    backgroundColor: Colors.white,
     borderRadius: 20,
     padding: 35,
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: Colors.black,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -48,7 +49,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   okButton: {
-    backgroundColor: '#4787ff',
+    backgroundColor: Colors.accentBlue,
     borderRadius: 30,
     padding: 10,
     elevation: 2,

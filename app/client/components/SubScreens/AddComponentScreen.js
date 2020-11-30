@@ -11,6 +11,7 @@ import {
 import Autocomplete from 'react-native-autocomplete-input';
 import ErrorPopup from '../SubComponents/ErrorPopup';
 import {timeout} from '../ScreenUtils';
+import {Colors} from './../../constants/Colors'
 
 const BIKE_COMPONENTS_LIST = [
   'Front Wheel',
@@ -184,8 +185,8 @@ export default class AddComponentScreen extends React.Component {
               fontSize: 16,
             }}
             placeholder="Enter..."
-            placeholderTextColor="#616161"
-            underlineColorAndroid="#000000"
+            placeholderTextColor={Colors.grey}
+            underlineColorAndroid={Colors.black}
             onChangeText={(text) => this.setState({componentName: text})}
             testID="ComponentNameTextInput"
           />
@@ -207,7 +208,7 @@ export default class AddComponentScreen extends React.Component {
               <Text style={styles.addText}>Save</Text>
             </TouchableOpacity>
           ) : (
-            <ActivityIndicator size="large" color="#47ffbf" />
+            <ActivityIndicator size="large" color={Colors.accentBlue} />
           )}
         </View>
 
@@ -247,7 +248,7 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     alignItems: 'center',
-    backgroundColor: '#47ffbf',
+    backgroundColor: Colors.accentBlue,
     padding: 10,
     borderWidth: 1,
     borderColor: 'black',
@@ -256,7 +257,7 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     alignItems: 'center',
-    backgroundColor: '#beffe8',
+    backgroundColor: Colors.accentLightBlue,
     padding: 10,
     borderWidth: 1,
     borderColor: 'black',

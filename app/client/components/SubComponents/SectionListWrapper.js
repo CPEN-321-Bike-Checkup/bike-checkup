@@ -3,6 +3,7 @@
 
 import React from 'react';
 import {SectionList, StyleSheet, Text, View} from 'react-native';
+import {Colors} from './../../constants/Colors'
 
 export let selectionListWrapper = (data, renderItem, testID) => {
   return (
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
     fontSize: 21,
     fontWeight: 'bold',
     color: 'black',
-    backgroundColor: '#ffa494',
+    backgroundColor: Colors.primaryLightOrange,
     borderBottomColor: 'black',
     borderBottomWidth: 2,
     borderTopColor: 'black',

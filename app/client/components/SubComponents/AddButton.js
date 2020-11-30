@@ -1,5 +1,6 @@
 import React from 'react';
 import {Text, TouchableOpacity, StyleSheet, View} from 'react-native';
+import {Colors} from './../../constants/Colors'
 
 export default AddButton = (onPress, testId) => {
   return (
@@ -22,7 +23,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   addButton: {
-    backgroundColor: '#4787ff',
+    backgroundColor: Colors.accentBlue,
     width: 65,
     height: 65,
     borderRadius: 35,

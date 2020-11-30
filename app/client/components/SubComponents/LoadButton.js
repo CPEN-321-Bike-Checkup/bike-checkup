@@ -1,5 +1,6 @@
 import React from 'react';
 import {Text, TouchableHighlight, StyleSheet} from 'react-native';
+import {Colors} from './../../constants/Colors'
 
 export default LoadButton = (onPress) => {
   return (
@@ -14,7 +15,7 @@ export default LoadButton = (onPress) => {
 
 const styles = StyleSheet.create({
   loadButton: {
-    backgroundColor: '#4787ff',
+    backgroundColor: Colors.accentBlue,
     padding: 10,
     alignItems: 'center',
     borderColor: 'black',
