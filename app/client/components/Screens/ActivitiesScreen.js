@@ -51,10 +51,12 @@ export default class ActivitiesScreen extends React.Component {
       )
         .then((response) => response.json())
         .then((data) => {
-          this.setState((stateOld) => {
+          this.setState((prevState) => {
             return {
-              activities: data,
-              numDays: stateOld.numDays + 30,
+              activities: data.sort(function (x, y) {
+                return new Date(y.date) - new Date(x.date);
+              }),
+              numDays: prevState.numDays + 30,
             };
           });
         }),
