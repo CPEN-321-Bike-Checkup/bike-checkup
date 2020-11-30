@@ -7,7 +7,7 @@ export default LoadButton = (onPress) => {
       onPress={onPress}
       title="Load Next 30 days of History"
       style={styles.loadButton}>
-      <Text style={styles.loadButtonText}>Load Next 30 days</Text>
+      <Text style={styles.loadButtonText}>Load next 30 days</Text>
     </TouchableHighlight>
   );
 };

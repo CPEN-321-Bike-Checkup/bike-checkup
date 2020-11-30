@@ -308,7 +308,6 @@ class MaintenanceTaskService {
 
       //linear regression taken from: https://machinelearningmastery.com/implement-simple-linear-regression-scratch-python/
       var predict_dates = [];
-      var predictionText = '';
       var maint_index;
 
       for (

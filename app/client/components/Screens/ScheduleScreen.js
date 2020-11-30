@@ -34,7 +34,7 @@ export default class ScheduleScreen extends React.Component {
 
   componentDidUpdate() {
     // Add edit button to navigation bar (side effect)
-    let text = this.state.editMode ? 'Done' : 'Edit';
+    let text = this.state.editMode ? 'Done' : 'Complete';
     this.navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity onPress={this.toggleEditMode} testID="EditBtn">
