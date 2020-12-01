@@ -70,7 +70,7 @@ export default class ActivitiesScreen extends React.Component {
       this.setState({
         isError: true,
         errorText:
-          'Failed to retrieve your maintenance records. Check network connection.',
+          'Failed to retrieve your Activities. Check network connection.',
         fetchState: FETCH_FAILED,
       });
 
