@@ -220,7 +220,6 @@ export default class AddComponentScreen extends React.Component {
               </TouchableOpacity>
             )}
             keyExtractor={(item, i) => i.toString()}
-            containerStyle={{height: 50}}
             testID="ComponentTypeAutoComplete"
           />
         </View>
