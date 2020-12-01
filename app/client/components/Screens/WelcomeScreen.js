@@ -41,7 +41,8 @@ const styles = StyleSheet.create({
     title: {
       fontSize: 22,
       fontWeight: 'bold',
-      paddingVertical: 30,
+      paddingTop: 60,
+      paddingBottom: 30,
       fontFamily: 'notoserif',
     },
     image: {
