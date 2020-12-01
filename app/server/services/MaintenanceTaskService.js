@@ -247,7 +247,6 @@ class MaintenanceTaskService {
   }
 
   async MaintenancePredictForComponent(componentId) {
-    console.log('Predicting for component...');
     let maintenanceList = await this.maintenanceTaskRepository.GetMaintenanceTasksForComponents(
       componentId,
     );
@@ -257,7 +256,6 @@ class MaintenanceTaskService {
 
   //TODO make the equivalent for component and use that function to do this for user
   async MaintenancePredictForUser(userId) {
-    console.log('Predicting for user...');
     let maintenanceList = await this.maintenanceTaskRepository.GetMaintenanceTasksForUser(
       userId,
     );
@@ -290,10 +288,6 @@ class MaintenanceTaskService {
       }
 
       function covarianceSum(x_vals, x_mean, y_vals, y_mean) {
-        /*if (x_vals.length != y_vals.length) {
-          //differing data set lengths
-          return null;
-        }*/
         var covariance_sum = 0.0;
         var i;
         for (i = 0; i < x_vals.length; i++) {
@@ -320,10 +314,6 @@ class MaintenanceTaskService {
         maint_index < maintenanceList.length;
         maint_index++
       ) {
-        //DEBUG
-        //resolve(maintenanceList[maint_index]);
-        //return;
-
         //retrieve all activities since maintenance day for specified component
         var last_maint_date = maintenanceList[
           maint_index

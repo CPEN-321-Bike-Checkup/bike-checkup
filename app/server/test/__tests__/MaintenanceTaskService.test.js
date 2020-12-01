@@ -5,18 +5,11 @@ jest.mock('../../repositories/MaintenanceTaskRepository');
 jest.mock('../../repositories/MaintenanceRecordRepository');
 jest.mock('../../repositories/ComponentActivityRepository');
 
-const axios = require('axios');
 const express = require('express');
-const initMaintenanceTaskRoutes = require('../../routes/MaintenanceTaskRoutes');
 const maintenanceTaskService = require('../../services/MaintenanceTaskService');
 const app = express();
 app.use(express.json());
-let server;
 
-beforeAll(() => {});
-afterAll(() => {});
-
-var url = 'http://' + ip + ':' + port + '/maintenanceTask/';
 var maintSchedule1 = {
   _id: 1,
   component_id: 1,
@@ -84,13 +77,6 @@ const maintSchedule5 = {
   repeats: true,
   predicted_due_date: new Date('2020-11-15'),
 };
-
-//schedule without an id
-var schedModifiedNoId = JSON.parse(JSON.stringify(maintSchedule1));
-delete schedModifiedNoId._id;
-//schedule without an id of 0
-var schedModifiedId0 = JSON.parse(JSON.stringify(maintSchedule1));
-schedModifiedId0._id = 0;
 
 describe('GetById(id) Test Cases', () => {
   test('1. Input with existing id', async () => {

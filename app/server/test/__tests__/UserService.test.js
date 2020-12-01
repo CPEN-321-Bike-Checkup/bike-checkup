@@ -1,18 +1,11 @@
 jest.mock('../../repositories/UserRepository');
 jest.mock('../../repositories/DeviceTokenRepository');
 
-const axios = require('axios');
 const express = require('express');
-const initUserRoutes = require('../../routes/UserRoutes');
 const userService = require('../../services/UserService');
 const app = express();
 app.use(express.json());
-let server;
 
-beforeAll(() => {});
-afterAll(() => {});
-
-var url = 'http://' + ip + ':' + port + '/user';
 var user = {
   _id: 3,
   bikes: [],
@@ -40,26 +33,10 @@ var userUpdate = {
   activity_cache_date: new Date(),
 };
 
-//user without an id
-var userModifiedNoId = JSON.parse(JSON.stringify(user));
-delete userModifiedNoId._id;
-//user id of 0
-var userModifiedId0 = JSON.parse(JSON.stringify(user));
-userModifiedId0._id = 0;
-
 var device = {
   token: 'asonhcfoisjuheoqihbnfcxsaoid',
   ownerId: '3',
 };
-//device without an token
-var deviceModifiedNoId = JSON.parse(JSON.stringify(device));
-delete deviceModifiedNoId.token;
-//token of 0
-var deviceModifiedId0 = JSON.parse(JSON.stringify(device));
-deviceModifiedId0.token = 0;
-//owner of 0
-var deviceModifiedOwnerId0 = JSON.parse(JSON.stringify(device));
-deviceModifiedOwnerId0.ownerId = 0;
 
 describe('GetUserDevices(userId) Test Cases', () => {
   test('1. Get devices with valid userId', async () => {
@@ -188,4 +165,3 @@ describe('CreateUsers(users) Test Cases', () => {
     expect(response.name).toBe('Tim Sampleton');
   });
 });
-

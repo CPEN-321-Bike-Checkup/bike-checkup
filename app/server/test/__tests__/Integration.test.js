@@ -17,13 +17,13 @@ beforeAll(() => {
     initComponentRoutes(app);
 
     //setup database data
-    axios.post(url + '/user', user);
+    //axios.post(url + '/user', user);
     axios.post(url + '/maintenanceTask', maintSchedule1);
     axios.post(url + '/maintenanceTask', maintSchedule2);
-    axios.post(url + '/bike', bike1);
-    axios.post(url + '/component', component1);
-    axios.post(url + '/component', component2);
-    axios.post(url + '/maintenanceRecord', maintRecord1);
+    //axios.post(url + '/bike', bike1);
+    //axios.post(url + '/component', component1);
+    //axios.post(url + '/component', component2);
+    //axios.post(url + '/maintenanceRecord', maintRecord1);
   });
 });
 
@@ -32,18 +32,18 @@ afterAll(() => {
 });
 
 var maintSchedule1 = {
-  _id: 400,
-  component_id: 301,
+  //_id: 400,
+  component_id: 1,
   schedule_type: 'date',
-  threshold_val: 450,
+  threshold_val: 30,
   description: 'oil chain',
   last_maintenance_val: new Date('2020-10-11'),
-  repeats: false,
-  predicted_due_date: new Date('2020-11-22'),
+  repeats: true,
+  predicted_due_date: new Date('2020-11-11'),
 };
 
 var maintSchedule1_update = {
-  _id: 400,
+  //_id: 400,
   component_id: 301,
   schedule_type: 'date',
   threshold_val: 600,
@@ -54,7 +54,7 @@ var maintSchedule1_update = {
 };
 
 var maintSchedule2 = {
-  _id: 401,
+  //_id: 401,
   component_id: 302,
   schedule_type: 'distance',
   threshold_val: 450,
@@ -65,7 +65,7 @@ var maintSchedule2 = {
 };
 
 var maintSchedule3 = {
-  _id: 402,
+  //_id: 402,
   component_id: 302,
   schedule_type: 'distance',
   threshold_val: 1500,
@@ -76,7 +76,7 @@ var maintSchedule3 = {
 };
 
 var maintSchedule_error1 = {
-  _id: 401,
+  //_id: 401,
   component_id: 302,
   schedule_type: 'distance',
   threshold_val: -2,
@@ -87,7 +87,7 @@ var maintSchedule_error1 = {
 };
 
 var maintRecord1 = {
-  _id: 601,
+  //_id: 601,
   description: 'bled brakes',
   component_id: 301,
   maintenance_date: new Date('2020-11-01'),
@@ -106,7 +106,7 @@ var user = {
 };
 
 var bike1 = {
-  _id: 201,
+  //_id: 201,
   owner: 3,
   label: 'mountain bike',
   components: [301, 302],
@@ -114,7 +114,7 @@ var bike1 = {
 };
 
 var component1 = {
-  _id: 301,
+  //_id: 301,
   bike: 2,
   label: 'brakes',
   attachment_date: new Date('2020-10-11'),
@@ -126,7 +126,7 @@ var component1 = {
 };
 
 var component2 = {
-  _id: 302,
+  //_id: 302,
   bike: 2,
   label: 'chains',
   attachment_date: new Date('2020-09-01'),
@@ -138,7 +138,7 @@ var component2 = {
 };
 
 const activity1 = {
-  _id: 1,
+  //_id: 1,
   description: 'test',
   distance: 50,
   time_s: 360,
@@ -168,6 +168,58 @@ var deviceModifiedOwnerId0 = JSON.parse(JSON.stringify(device));
 deviceModifiedOwnerId0.ownerId = 0;
 
 describe('User requests their schedule Tests', () => {
+  test('1. Get schedule tasks 200 Ok', async () => {
+    expect.assertions(2);
+    let response = await axios.get(url + '/maintenanceTask' + '/?userId=1');
+    expect(response).toBe(); //DEBUG check return val
+    expect(response.status).toBe(200);
+  });
+});
+
+describe('User requests their bikes Tests', () => {
+  test('1. Get bikes 200 Ok', async () => {
+    expect.assertions(2);
+    let response = await axios.get(url + '/bike' + '/3');
+    expect(response).toBe(); //DEBUG check return val
+    expect(response.status).toBe(200);
+  });
+});
+
+describe('User requests a bikes components Tests', () => {
+  test('1. Get bikes components 200 Ok', async () => {
+    expect.assertions(2);
+    let response = await axios.get(url + '/component' + '/201');
+    expect(response).toBe(); //DEBUG check return val
+    expect(response.status).toBe(200);
+  });
+});
+
+/*describe('User requests scheduled maintenance tasks for a component Tests', () => {
+  test('1. Get scheduled maint tasks 200 Ok', async () => {
+    expect.assertions(2);
+    let response = await axios.get(
+      url + '/maintenanceTask' + '?componentId=301&userId=3',
+    );
+    expect(response).toBe(); //DEBUG check return val
+    expect(response.status).toBe(200);
+  });
+});*/
+
+//The latter tasks will depend on the prior tasks to pass
+/*describe('User adds/updates a new maintenance item for a component Tests', () => {
+  test('1. Create maint task that already exists 400 Error', async () => {
+    expect.assertions(2);
+    let response = await axios.post(
+      url + '/maintenanceTask' + '/',
+      maintSchedule1_update,
+    );
+    expect(response).toBe(); //DEBUG check return val
+    expect(response.status).toBe(200);
+  });
+});*/
+
+////////OLD TESTS FOR REFERENCE/////////
+/*describe('User requests their schedule Tests', () => {
   test('Get schedule tasks 200 Ok', async () => {
     expect.assertions(2);
 
@@ -386,4 +438,4 @@ describe('User completes a scheduled maintenance task Tests', () => {
         expect(resp.data).toBe([maintRecord1]);
       });
   });
-});
+});*/
