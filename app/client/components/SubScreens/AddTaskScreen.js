@@ -355,7 +355,7 @@ export default class AddTaskScreen extends React.Component {
       return;
     }
 
-    let newTask = {
+    let task = {
       component_id: this.fixedComponent
         ? this.fixedComponent.id
         : this.state.componentId,
@@ -366,10 +366,10 @@ export default class AddTaskScreen extends React.Component {
     };
 
     if (this.isNewTask) {
-      this.createTask(newTask);
+      this.createTask(task);
     } else {
-      newTask._id = this.state.taskId;
-      this.updateTask(newTask);
+      task._id = this.state.taskId;
+      this.updateTask(task);
     }
   };
 

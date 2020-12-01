@@ -15,6 +15,13 @@ class ComponentService {
     return promise;
   }
 
+  Update(component) {
+    return new Promise(async (resolve, reject) => {
+      var promise = await this.componentRepository.Update(component);
+      resolve(promise);
+    });
+  }
+
   Delete(component) {
     var promise = this.componentRepository.Delete(component);
     return promise;

@@ -203,20 +203,40 @@ export default class ComponentsScreen extends React.Component {
       this.itemCount = 0;
     }
 
-    return (
-      <RemovablePressableListItem
-        title={item.title}
-        editMode={this.state.editMode}
-        onPress={() => {
-          this.navigation.navigate('Tasks', {
-            bike: this.bike,
-            component: item,
-          });
-        }}
-        onRemovePress={this.sendComponentToBeDeleted(item.id)}
-        testID={testId}
-      />
-    );
+    if (this.state.editMode) {
+      return (
+        <RemovablePressableListItem
+          title={item.title}
+          editMode={this.state.editMode}
+          onPress={() => {
+            this.navigation.navigate('Add Component', {
+              isNewComponent: false,
+              bike: this.bike,
+              component: item,
+            });
+          }}
+          onRemovePress={this.sendComponentToBeDeleted(item.id)}
+          testID={testId}
+        />
+      );
+    } else {
+      return (
+        <RemovablePressableListItem
+          title={item.title}
+          editMode={this.state.editMode}
+          onPress={() => {
+            this.navigation.navigate('Tasks', {
+              bike: this.bike,
+              component: item,
+            });
+          }}
+          onRemovePress={this.sendComponentToBeDeleted(item.id)}
+          testID={testId}
+        />
+      );
+    }
+
+
   };
 
   render() {
@@ -247,7 +267,10 @@ export default class ComponentsScreen extends React.Component {
         {mainView}
 
         {AddButton(() => {
-          this.navigation.navigate('Add Component', {bike: this.bike});
+          this.navigation.navigate('Add Component', {
+            isNewComponent: true,
+            bike: this.bike,
+          });
         }, 'AddComponentBtn')}
 
         {ErrorPopup(

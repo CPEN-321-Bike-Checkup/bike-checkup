@@ -186,7 +186,7 @@ export default class ComponentTaskScreen extends React.Component {
     }
 
     if (this.state.editMode) {
-      var renderableItem = (
+      return (
         <RemovablePressableListItem
           title={item.description}
           editMode={this.state.editMode}
@@ -210,7 +210,7 @@ export default class ComponentTaskScreen extends React.Component {
         />
       );
     } else {
-      var renderableItem = (
+      return (
         <RemovableListItem
           title={item.description}
           editMode={this.state.editMode}
@@ -218,8 +218,6 @@ export default class ComponentTaskScreen extends React.Component {
         />
       );
     }
-
-    return renderableItem;
   };
 
   render() {

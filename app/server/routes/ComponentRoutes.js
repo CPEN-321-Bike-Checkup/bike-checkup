@@ -29,6 +29,31 @@ const initComponentRouting = (app) => {
       });
   });
 
+  componentRouter.put('/', (req, res) => {
+    componentService
+      .Update(req.body)
+      .then((result) => {
+        if (
+          (req.body.length !== undefined && req.body.length !== result.n) ||
+          (req.body.length === undefined && result.n !== 1)
+        ) {
+          res.status(404).send('Error: Component not Found');
+        } else {
+          res.status(200).send('Updated Component');
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        if (err.name === 'ValidationError' || err.name == 'CastError') {
+          res.status(400).send('Error: Invalid Request syntax');
+        } else if (err.name === 'DocumentNotFoundError') {
+          res.status(404).send('Error: Task not Found');
+        } else {
+          res.status(500).send('Error: Internal Server Error');
+        }
+      });
+  });
+
   componentRouter.delete('/', (req, res) => {
     componentService
       .Delete(req.body)

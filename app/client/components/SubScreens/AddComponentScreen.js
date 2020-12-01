@@ -59,11 +59,23 @@ export default class AddComponentScreen extends React.Component {
       isError: false,
       errorText: null,
       fatalError: false,
+      /* Component Fields */
+      componentId: null,
       componentType: '',
       componentName: '',
     };
     this.navigation = props.navigation;
+
+    // Params
     this.bike = props.route.params.bike;
+    this.isNewComponent = props.route.params.isNewComponent; // Boolean for update or new
+    if (!this.isNewComponent) {
+      var component = props.route.params.component;
+      var componentTitles = component.title.split(': ');
+      this.state.componentType = componentTitles[0];
+      this.state.componentName = componentTitles[1];
+      this.state.componentId = component.id;
+    }
   }
 
   cancel = () => {
@@ -98,6 +110,42 @@ export default class AddComponentScreen extends React.Component {
       attachment_date: Date.now(), // TODO: Check this is the format BE needs
     };
 
+    if (this.isNewComponent) {
+      this.createComponent(component);
+    } else {
+      component._id = this.state.componentId;
+      this.updateComponent(component);
+    }
+  };
+
+  updateComponent = (component) => {
+    // Send PUT request
+    timeout(
+      3000,
+      fetch(`http://${global.serverIp}:5000/component/`, {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(component),
+      }).then((response) => {
+        // TODO: check response status
+        console.log('Successfully updated component');
+        this.navigation.goBack();
+      }),
+    ).catch((error) => {
+      // Display error popup
+      this.setState({
+        isError: true,
+        errorText: 'Failed to update component. Check network connection.',
+      });
+
+      console.error(error);
+    });
+  };
+
+  createComponent = (newComponent) => {
     timeout(
       3000,
       fetch(`http://${global.serverIp}:5000/component/`, {
@@ -106,7 +154,7 @@ export default class AddComponentScreen extends React.Component {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(component),
+        body: JSON.stringify(newComponent),
       }).then((response) => {
         console.log('Successfully saved component');
         this.navigation.goBack();
@@ -184,6 +232,7 @@ export default class AddComponentScreen extends React.Component {
               paddingLeft: 6,
               fontSize: 16,
             }}
+            defaultValue={this.state.componentName}
             placeholder="Enter..."
             placeholderTextColor={Colors.grey}
             underlineColorAndroid={Colors.black}
