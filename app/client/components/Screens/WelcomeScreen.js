@@ -16,7 +16,7 @@ export default class WelcomeScreen extends React.Component {
         <Text style={styles.description}>
             Bike Checkup is an app to help you master the bike maintenance game.
             Here, you can create a schedule of maintenance tasks for your bikes, with tasks linked to your
-            Strava data so that you don't need to manually keep track of bike and component usage.
+            Strava data so that you no longer need to manually keep track of bike and component usage.
             Enter the tasks you want to accomplish, and we will notify you with a weekly summary of
             upcoming tasks for the week. {"\n"} {"\n"}
             To get started, you will first need to connect your Strava account.
