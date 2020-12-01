@@ -73,7 +73,7 @@ export default class ComponentTaskScreen extends React.Component {
           console.log('Got tasks: ', tasks);
           this.setState({
             taskData: this.transformTaskData(tasks),
-            setState: FETCH_SUCCEEDED,
+            fetchState: FETCH_SUCCEEDED,
           });
         }),
     ).catch((error) => {
