@@ -44,6 +44,10 @@ const BIKE_COMPONENTS_LIST = [
   'Cleats',
 ];
 
+const FETCH_IN_PROGRESS = 0;
+const FETCH_SUCCEEDED = 1;
+const FETCH_FAILED = 2;
+
 export default class ComponentsScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -56,7 +60,7 @@ export default class ComponentsScreen extends React.Component {
       nextId: 0,
       isError: false,
       errorText: null,
-      fetchFailed: false,
+      fetchState: FETCH_IN_PROGRESS,
     };
     this.navigation = props.navigation;
     this.bike = props.route.params.bike;
@@ -101,6 +105,7 @@ export default class ComponentsScreen extends React.Component {
           console.log('Got components', components);
           this.setState({
             componentData: this.transformComponentData(components),
+            fetchState: FETCH_SUCCEEDED,
           });
         }),
     ).catch((error) => {
@@ -109,7 +114,7 @@ export default class ComponentsScreen extends React.Component {
         isError: true,
         errorText:
           'Failed to retrieve your components. Check network connection.',
-        fetchFailed: true,
+        fetchState: FETCH_FAILED,
       });
 
       console.error(error);
@@ -215,19 +220,31 @@ export default class ComponentsScreen extends React.Component {
   };
 
   render() {
+    let mainView = null;
+
+    if (this.state.fetchState == FETCH_FAILED) {
+      mainView = (
+        <View style={CommonStyles.fetchFailedView}>
+          <Text>Error fetching components.</Text>
+        </View>
+      );
+    } else if (this.state.componentData.length > 0) {
+      mainView = flatListWrapper(
+        this.state.componentData,
+        this.renderItem,
+        'ComponentsList',
+      );
+    } else if (this.state.fetchState != FETCH_IN_PROGRESS) {
+      mainView = (
+        <View style={CommonStyles.fetchFailedView}>
+          <Text>{this.bike.title} has no components.</Text>
+        </View>
+      );
+    }
+
     return (
       <View style={{flex: 1}}>
-        {!this.state.fetchFailed ? (
-          flatListWrapper(
-            this.state.componentData,
-            this.renderItem,
-            'ComponentsList',
-          )
-        ) : (
-          <View style={CommonStyles.fetchFailedView}>
-            <Text>Error fetching components.</Text>
-          </View>
-        )}
+        {mainView}
 
         {AddButton(() => {
           this.navigation.navigate('Add Component', {bike: this.bike});

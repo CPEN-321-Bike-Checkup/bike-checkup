@@ -7,6 +7,10 @@ import {timeout} from '../ScreenUtils';
 import CommonStyles from '../CommonStyles';
 import LoadButton from '../SubComponents/LoadButton';
 
+const FETCH_IN_PROGRESS = 0;
+const FETCH_SUCCEEDED = 1;
+const FETCH_FAILED = 2;
+
 export default class ActivitiesScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -16,7 +20,7 @@ export default class ActivitiesScreen extends React.Component {
     this.state = {
       activities: [],
       isError: false,
-      fetchFailed: false,
+      fetchState: FETCH_IN_PROGRESS,
       errorText: null,
       numDays: 30,
     };
@@ -57,6 +61,7 @@ export default class ActivitiesScreen extends React.Component {
                 return new Date(y.date) - new Date(x.date);
               }),
               numDays: prevState.numDays + 30,
+              fetchState: FETCH_SUCCEEDED,
             };
           });
         }),
@@ -66,7 +71,7 @@ export default class ActivitiesScreen extends React.Component {
         isError: true,
         errorText:
           'Failed to retrieve your maintenance records. Check network connection.',
-        fetchFailed: true,
+        fetchState: FETCH_FAILED,
       });
 
       console.error(error);
@@ -96,26 +101,37 @@ export default class ActivitiesScreen extends React.Component {
   };
 
   render() {
+    let mainView = null;
+
+    if (this.state.fetchState == FETCH_FAILED) {
+      mainView = (
+        <View style={CommonStyles.fetchFailedView}>
+          <Text>Error fetching Strava activities.</Text>
+        </View>
+      );
+    } else if (this.state.activities.length > 0) {
+      mainView = flatListWrapper(
+        this.state.activities,
+        this.renderItem,
+        'ActivitiesList',
+      );
+    } else if (this.state.fetchState != FETCH_IN_PROGRESS) {
+      mainView = (
+        <View style={CommonStyles.fetchFailedView}>
+          <Text>No activities in last {this.state.numDays} days.</Text>
+        </View>
+      );
+    }
+
     return (
       <>
-        {!this.state.fetchFailed ? (
-          flatListWrapper(
-            this.state.activities,
-            this.renderItem,
-            'HistoryList',
-            // Footer
-            LoadButton(() => this.getActivities()),
-          )
-        ) : (
-          <View style={CommonStyles.fetchFailedView}>
-            <Text>Error fetching maintenance records.</Text>
-          </View>
-        )}
+        {mainView}
         {ErrorPopup(
           this.state.errorText,
           this.onErrorAccepted,
           this.state.isError,
         )}
+        {LoadButton(() => this.getActivities())}
       </>
     );
   }

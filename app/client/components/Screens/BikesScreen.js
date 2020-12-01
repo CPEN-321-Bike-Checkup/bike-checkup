@@ -6,13 +6,17 @@ import ErrorPopup from '../SubComponents/ErrorPopup';
 import {timeout} from '../ScreenUtils';
 import CommonStyles from '../CommonStyles';
 
+const FETCH_IN_PROGRESS = 0;
+const FETCH_SUCCEEDED = 1;
+const FETCH_FAILED = 2;
+
 export default class BikesScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       bikeData: [],
       isError: false,
-      fetchFailed: false,
+      fetchState: false,
       errorText: null,
     };
     this.navigation = props.navigation;
@@ -41,14 +45,17 @@ export default class BikesScreen extends React.Component {
         .then((response) => response.json())
         .then((bikes) => {
           console.log('Got bikes: ', bikes);
-          this.setState({bikeData: this.transformBikeData(bikes)});
+          this.setState({
+            bikeData: this.transformBikeData(bikes),
+            fetchState: FETCH_SUCCEEDED,
+          });
         }),
     ).catch((error) => {
       // Display error popup
       this.setState({
         isError: true,
         errorText: 'Failed to retrieve your bikes. Check network connection.',
-        fetchFailed: true,
+        fetchState: FETCH_FAILED,
       });
 
       console.error(error);
@@ -93,15 +100,31 @@ export default class BikesScreen extends React.Component {
   };
 
   render() {
+    let mainView = null;
+
+    if (this.state.fetchState == FETCH_FAILED) {
+      mainView = (
+        <View style={CommonStyles.fetchFailedView}>
+          <Text>Error fetching bikes.</Text>
+        </View>
+      );
+    } else if (this.state.bikeData.length > 0) {
+      mainView = flatListWrapper(
+        this.state.bikeData,
+        this.renderItem,
+        'BikesList',
+      );
+    } else if (this.state.fetchState != FETCH_IN_PROGRESS) {
+      mainView = (
+        <View style={CommonStyles.fetchFailedView}>
+          <Text>You have no bikes.</Text>
+        </View>
+      );
+    }
+
     return (
       <>
-        {!this.state.fetchFailed ? (
-          flatListWrapper(this.state.bikeData, this.renderItem, 'BikesList')
-        ) : (
-          <View style={CommonStyles.fetchFailedView}>
-            <Text>Error fetching bikes.</Text>
-          </View>
-        )}
+        {mainView}
         {ErrorPopup(
           this.state.errorText,
           this.onErrorAccepted,

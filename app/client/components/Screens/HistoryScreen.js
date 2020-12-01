@@ -7,6 +7,10 @@ import {timeout} from '../ScreenUtils';
 import CommonStyles from '../CommonStyles';
 import LoadButton from '../SubComponents/LoadButton';
 
+const FETCH_IN_PROGRESS = 0;
+const FETCH_SUCCEEDED = 1;
+const FETCH_FAILED = 2;
+
 export default class HistoryScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -16,7 +20,7 @@ export default class HistoryScreen extends React.Component {
     this.state = {
       maintenanceRecords: [],
       isError: false,
-      fetchFailed: false,
+      fetchState: FETCH_IN_PROGRESS,
       errorText: null,
       numDays: 30,
     };
@@ -56,6 +60,7 @@ export default class HistoryScreen extends React.Component {
             return {
               maintenanceRecords: history,
               numDays: stateOld.numDays + 30,
+              fetchState: FETCH_SUCCEEDED,
             };
           });
         }),
@@ -65,7 +70,7 @@ export default class HistoryScreen extends React.Component {
         isError: true,
         errorText:
           'Failed to retrieve your maintenance records. Check network connection.',
-        fetchFailed: true,
+        fetchState: FETCH_FAILED,
       });
 
       console.error(error);
@@ -85,7 +90,8 @@ export default class HistoryScreen extends React.Component {
       title={item.description}
       subText={item.bike + ' - ' + item.component}
       rightText={
-        new Date(item.maintenance_date) instanceof Date && !isNaN(new Date(item.maintenance_date))
+        new Date(item.maintenance_date) instanceof Date &&
+        !isNaN(new Date(item.maintenance_date))
           ? new Date(item.maintenance_date).toLocaleDateString()
           : ''
       }
@@ -93,26 +99,39 @@ export default class HistoryScreen extends React.Component {
   );
 
   render() {
+    let mainView = null;
+
+    if (this.state.fetchState == FETCH_FAILED) {
+      mainView = (
+        <View style={CommonStyles.fetchFailedView}>
+          <Text>Error fetching maintenance records.</Text>
+        </View>
+      );
+    } else if (this.state.maintenanceRecords.length > 0) {
+      mainView = flatListWrapper(
+        this.state.maintenanceRecords,
+        this.renderItem,
+        'HistoryList',
+      );
+    } else if (this.state.fetchState != FETCH_IN_PROGRESS) {
+      mainView = (
+        <View style={CommonStyles.fetchFailedView}>
+          <Text>
+            No maintenance history in the last {this.state.numDays} days.
+          </Text>
+        </View>
+      );
+    }
+
     return (
       <>
-        {!this.state.fetchFailed ? (
-          flatListWrapper(
-            this.state.maintenanceRecords,
-            this.renderItem,
-            'HistoryList',
-            // Footer
-            LoadButton(() => this.getHistory()),
-          )
-        ) : (
-          <View style={CommonStyles.fetchFailedView}>
-            <Text>Error fetching maintenance records.</Text>
-          </View>
-        )}
+        {mainView}
         {ErrorPopup(
           this.state.errorText,
           this.onErrorAccepted,
           this.state.isError,
         )}
+        {LoadButton(() => this.getHistory())}
       </>
     );
   }

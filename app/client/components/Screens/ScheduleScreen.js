@@ -7,6 +7,10 @@ import AddButton from '../SubComponents/AddButton';
 import ErrorPopup from '../SubComponents/ErrorPopup';
 import {timeout} from '../ScreenUtils';
 
+const FETCH_IN_PROGRESS = 0;
+const FETCH_SUCCEEDED = 1;
+const FETCH_FAILED = 2;
+
 export default class ScheduleScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -14,7 +18,7 @@ export default class ScheduleScreen extends React.Component {
       scheduleData: [],
       editMode: false,
       isError: false,
-      fetchFailed: false,
+      fetchState: FETCH_IN_PROGRESS,
       errorText: null,
     };
     this.navigation = props.navigation;
@@ -61,7 +65,8 @@ export default class ScheduleScreen extends React.Component {
         .then((schedule) => {
           console.log('Got schedule: ', schedule);
           this.setState({
-            scheduleData: schedule,
+            scheduleData: this.filterSchedule(schedule),
+            fetchState: FETCH_SUCCEEDED
           });
         }),
     ).catch((error) => {
@@ -70,7 +75,7 @@ export default class ScheduleScreen extends React.Component {
         isError: true,
         errorText:
           'Failed to retrieve your schedule. Check network connection.',
-        fetchFailed: true,
+        fetchState: FETCH_FAILED,
       });
 
       console.error(error);
@@ -107,20 +112,17 @@ export default class ScheduleScreen extends React.Component {
     });
   }
 
-  transformSchedule = (scheduleArr) => {
-    let newScheduleArr = [];
-    for (let task of scheduleArr) {
-      let newTask = {
-        // TODO: set all necessary fields (check that this works)
-        taskId: task.taskId,
-        bike: task.bike,
-        component: task.component,
-        task: task.task,
-        date: task.date,
-      };
-      newScheduleArr.push(newTask);
+  filterSchedule = (scheduleArr) => {
+    for (var i = 0; i < scheduleArr.length; ) {
+      console.log(scheduleArr[i].data);
+      // Remove category if it is empty
+      if (scheduleArr[i].data.length == 0) {
+        scheduleArr.splice(i, 1);
+      } else {
+        i++;
+      }
     }
-    return newScheduleArr;
+    return scheduleArr;
   };
 
   onErrorAccepted = () => {
@@ -182,7 +184,8 @@ export default class ScheduleScreen extends React.Component {
       this.itemCount = 0;
     }
 
-    var isValidDate = new Date(item.date) instanceof Date && !isNaN(new Date(item.date));
+    var isValidDate =
+      new Date(item.date) instanceof Date && !isNaN(new Date(item.date));
 
     return (
       <CompletableListItem
@@ -199,19 +202,31 @@ export default class ScheduleScreen extends React.Component {
   render() {
     this.itemCount = 0;
 
+    let mainView = null;
+
+    if (this.state.fetchState == FETCH_FAILED) {
+      mainView = (
+        <View style={CommonStyles.fetchFailedView}>
+          <Text>Error fetching your schedule.</Text>
+        </View>
+      );
+    } else if (this.state.scheduleData.length > 0) {
+      mainView = selectionListWrapper(
+        this.state.scheduleData,
+        this.renderItem,
+        'ScheduleList',
+      );
+    } else if (this.state.fetchState != FETCH_IN_PROGRESS) {
+      mainView = (
+        <View style={CommonStyles.fetchFailedView}>
+          <Text>No upcoming tasks scheduled.</Text>
+        </View>
+      );
+    }
+
     return (
       <View style={{flex: 1}}>
-        {!this.state.fetchFailed ? (
-          selectionListWrapper(
-            this.state.scheduleData,
-            this.renderItem,
-            'ScheduleList',
-          )
-        ) : (
-          <View style={CommonStyles.fetchFailedView}>
-            <Text>Error fetching your schedule.</Text>
-          </View>
-        )}
+        {mainView}
 
         {AddButton(() => {
           this.navigation.navigate('Add Task', {isNewTask: true});

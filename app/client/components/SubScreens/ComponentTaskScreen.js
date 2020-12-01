@@ -7,6 +7,10 @@ import AddButton from '../SubComponents/AddButton';
 import ErrorPopup from '../SubComponents/ErrorPopup';
 import {timeout} from '../ScreenUtils';
 
+const FETCH_IN_PROGRESS = 0;
+const FETCH_SUCCEEDED = 1;
+const FETCH_FAILED = 2;
+
 export default class ComponentTaskScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -15,7 +19,8 @@ export default class ComponentTaskScreen extends React.Component {
       editMode: false,
       isError: false,
       errorText: null,
-      fetchFailed: false,
+      fetchState: FETCH_IN_PROGRESS,
+      doneFetching: false,
     };
     this.navigation = props.navigation;
     this.bike = props.route.params.bike;
@@ -66,14 +71,17 @@ export default class ComponentTaskScreen extends React.Component {
         .then((response) => response.json())
         .then((tasks) => {
           console.log('Got tasks: ', tasks);
-          this.setState({taskData: this.transformTaskData(tasks)});
+          this.setState({
+            taskData: this.transformTaskData(tasks),
+            setState: FETCH_SUCCEEDED,
+          });
         }),
     ).catch((error) => {
       // Display error popup
       this.setState({
         isError: true,
         errorText: 'Failed to retrieve your tasks. Check network connection.',
-        fetchFailed: true,
+        fetchState: FETCH_FAILED,
       });
 
       console.error(error);
@@ -217,15 +225,31 @@ export default class ComponentTaskScreen extends React.Component {
   render() {
     this.itemCount = 0;
 
+    let mainView = null;
+
+    if (this.state.fetchState == FETCH_FAILED) {
+      mainView = (
+        <View style={CommonStyles.fetchFailedView}>
+          <Text>Error fetching tasks.</Text>
+        </View>
+      );
+    } else if (this.state.taskData.length > 0) {
+      mainView = flatListWrapper(
+        this.state.taskData,
+        this.renderItem,
+        'TasksList',
+      );
+    } else if (this.state.fetchState != FETCH_IN_PROGRESS) {
+      mainView = (
+        <View style={CommonStyles.fetchFailedView}>
+          <Text>{this.component.title} has no tasks.</Text>
+        </View>
+      );
+    }
+
     return (
       <View style={styles.container}>
-        {!this.state.fetchFailed ? (
-          flatListWrapper(this.state.taskData, this.renderItem, 'TasksList')
-        ) : (
-          <View style={CommonStyles.fetchFailedView}>
-            <Text>Error fetching tasks.</Text>
-          </View>
-        )}
+        {mainView}
         {AddButton(this.addTask, 'AddTaskBtn')}
         {ErrorPopup(
           this.state.errorText,

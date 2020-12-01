@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text, TouchableHighlight, StyleSheet} from 'react-native';
-import {Colors} from './../../constants/Colors'
+import {Colors} from './../../constants/Colors';
 
 export default LoadButton = (onPress) => {
   return (
@@ -21,6 +21,8 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     borderTopWidth: 2,
     borderBottomWidth: 2,
+    marginBottom: 22,
+    marginTop: -22,
   },
   loadButtonText: {
     fontSize: 16,
