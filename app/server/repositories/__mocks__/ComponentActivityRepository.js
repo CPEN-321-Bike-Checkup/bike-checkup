@@ -27,7 +27,7 @@ class ComponentActivityRepository extends Repository {
             resolve([componentActivity4, componentActivity5]);
             break;
           default:
-            resolve(data);
+            resolve([]);
         }
       }
     });

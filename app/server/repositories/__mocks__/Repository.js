@@ -47,7 +47,6 @@ class Repository {
         if (_.isEqual(existingDoc, doc)) {
           resolve({n: 1, nModified: 0});
         } else {
-          //resolve(existingDoc); //DEBUG
           resolve({n: 1, nModified: 1});
         }
       }

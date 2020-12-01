@@ -27,12 +27,16 @@ class ActivityRepository extends Repository {
         throw new Error('internal server error');
       } else {
         let returnData = [];
+        if (activityIds.length == 0) {
+          resolve([]);
+        }
         //date check not necessary, all activities after maint date
         for (let index = 0; index < activityIds.length; index++) {
           let activityId = activityIds[index];
           returnData.push(this.data[activityId - 1]);
         }
-        resolve(data);
+        resolve(returnData);
+        //resolve(data);
       }
     });
   }
@@ -44,7 +48,7 @@ const activity1 = {
   description: 'test',
   distance: 30,
   time_s: 360,
-  date: new Date('2020-10-21'),
+  date: new Date('2020-11-21'),
 };
 
 const activity2 = {
@@ -53,7 +57,7 @@ const activity2 = {
   description: 'test2',
   distance: 30,
   time_s: 300,
-  date: new Date('2020-10-22'),
+  date: new Date('2020-11-22'),
 };
 
 const activity3 = {
@@ -62,7 +66,7 @@ const activity3 = {
   description: 'test3',
   distance: 30,
   time_s: 320,
-  date: new Date('2020-10-22'),
+  date: new Date('2020-11-22'),
 };
 
 const activity4 = {
@@ -71,7 +75,7 @@ const activity4 = {
   description: 'test4',
   distance: 30,
   time_s: 400,
-  date: new Date('2020-10-25'),
+  date: new Date('2020-11-25'),
 };
 
 const activity5 = {
@@ -80,7 +84,7 @@ const activity5 = {
   description: 'test5',
   distance: 35,
   time_s: 350,
-  date: new Date('2020-10-26'),
+  date: new Date('2020-11-26'),
 };
 
 var data = [activity1, activity2, activity3, activity4, activity5];

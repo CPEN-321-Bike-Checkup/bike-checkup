@@ -59,11 +59,11 @@ const maintSchedule1 = {
   _id: 1,
   component_id: 1,
   schedule_type: 'date',
-  threshold_val: 450,
+  threshold_val: 30,
   description: 'oil chain',
   last_maintenance_val: new Date('2020-10-11'),
   repeats: true,
-  predicted_due_date: new Date('2020-11-22'),
+  predicted_due_date: new Date('2020-11-11'),
 };
 
 const maintSchedule2 = {
@@ -74,7 +74,7 @@ const maintSchedule2 = {
   description: 'tire check',
   last_maintenance_val: new Date('2020-10-10'),
   repeats: false,
-  predicted_due_date: new Date('2020-12-01'),
+  predicted_due_date: new Date('2020-12-05'),
 };
 
 const maintSchedule3 = {
@@ -88,7 +88,24 @@ const maintSchedule3 = {
   predicted_due_date: new Date('2021-03-20'),
 };
 
-var data = [maintSchedule1, maintSchedule2, maintSchedule3];
+let todayWithTime = new Date();
+
+const maintSchedule4 = {
+  _id: 4,
+  component_id: 1,
+  schedule_type: 'date',
+  threshold_val: 500,
+  description: 'brake check',
+  last_maintenance_val: new Date('2020-10-08'),
+  repeats: false,
+  predicted_due_date: new Date(
+    todayWithTime.getFullYear(),
+    todayWithTime.getMonth(),
+    todayWithTime.getDate(),
+  ),
+};
+
+var data = [maintSchedule1, maintSchedule2, maintSchedule3, maintSchedule4];
 
 var maintTaskRepo = new MaintenanceTaskRepository(data);
 

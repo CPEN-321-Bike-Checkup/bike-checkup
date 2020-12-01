@@ -131,7 +131,7 @@ class MaintenanceTaskService {
     var tasks = [];
 
     taskData.forEach((task) => {
-      var comp = componentData.find((c) => c._id.equals(task.component_id));
+      var comp = componentData.find((c) => c._id === task.component_id);
       var bike = bikeData.find((b) => b._id === comp.bike_id);
       var taskView = {
         taskId: task._id,
@@ -174,7 +174,11 @@ class MaintenanceTaskService {
     for (var i = 0; i < tasks.length; i++) {
       if (tasks[i].date < today) {
         schedule[0].data.push(tasks[i]);
-      } else if (tasks[i].date === today) {
+      } else if (
+        tasks[i].date.getFullYear() == today.getFullYear() &&
+        tasks[i].date.getMonth() == today.getMonth() &&
+        tasks[i].date.getDate() == today.getDate()
+      ) {
         schedule[1].data.push(tasks[i]);
       } else if (
         tasks[i].date > today &&
@@ -286,10 +290,10 @@ class MaintenanceTaskService {
       }
 
       function covarianceSum(x_vals, x_mean, y_vals, y_mean) {
-        if (x_vals.length != y_vals.length) {
+        /*if (x_vals.length != y_vals.length) {
           //differing data set lengths
           return null;
-        }
+        }*/
         var covariance_sum = 0.0;
         var i;
         for (i = 0; i < x_vals.length; i++) {
@@ -309,12 +313,17 @@ class MaintenanceTaskService {
       //linear regression taken from: https://machinelearningmastery.com/implement-simple-linear-regression-scratch-python/
       var predict_dates = [];
       var maint_index;
+      var predictionText;
 
       for (
         maint_index = 0;
         maint_index < maintenanceList.length;
         maint_index++
       ) {
+        //DEBUG
+        //resolve(maintenanceList[maint_index]);
+        //return;
+
         //retrieve all activities since maintenance day for specified component
         var last_maint_date = maintenanceList[
           maint_index
@@ -328,6 +337,7 @@ class MaintenanceTaskService {
         var componentActivityListId = await this.componentActivityRepository.GetActivityIdsForComponent(
           component_id,
         );
+
         var date = new Date(last_maint_date);
         var activityList = await this.activityRepository.GetActivitiesByIdsAfterDate(
           componentActivityListId.map((ac) => ac.activity_id),
@@ -336,9 +346,18 @@ class MaintenanceTaskService {
 
         if (activityList.length == 0) {
           //no activities found, make no changes to predicted_due_date, skip
-          maintenanceList[maint_index].predicted_due_date = null;
+          //maintenanceList[maint_index].predicted_due_date = null;
           continue;
         }
+
+        startDate = new Date(
+          Math.min.apply(
+            null,
+            activityList.map((activity) => activity.date),
+          ),
+        );
+
+        startDate.setDate(startDate.getDate() - 1);
 
         //create x data (days) and y data (distance travelled)
         var distance_sum = 0;
