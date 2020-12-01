@@ -131,7 +131,7 @@ class MaintenanceTaskService {
     var tasks = [];
 
     taskData.forEach((task) => {
-      var comp = componentData.find((c) => c._id === task.component_id);
+      var comp = componentData.find((c) => c._id.equals(task.component_id));
       var bike = bikeData.find((b) => b._id === comp.bike_id);
       var taskView = {
         taskId: task._id,

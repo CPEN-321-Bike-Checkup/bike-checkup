@@ -39,17 +39,18 @@ export default class WelcomeScreen extends React.Component {
     this.getData('userId')
       .then((data) => {
         if (data !== undefined) {
-          console.log('as;oldfhasd;f', data);
+          console.log(
+            'HHEHEH;LKASDJF;ALSDKFJMC;LSAIDJNFMCL;SKDJNF;LAKSJDNL;',
+            data,
+          );
           data = JSON.parse(data);
           if (data.userId !== undefined) {
-            global.userId = data.userId;
+            global.userId = parseInt(data.userId, 10);
             SyncStrava(data.userId);
-            this.removeValue('userId');
             this.navigation.replace('Home');
             return;
           }
         }
-        this.removeValue('userId');
         this.setState((oldState) => {
           return {showPage: true};
         });
@@ -98,13 +99,8 @@ const SyncStrava = (userId) => {
         ':5000/strava/' +
         userId +
         '/connectedStrava',
-      JSON.stringify({
-        _id: userId,
-      }),
       {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        _id: userId,
       },
     )
     .then((resp) => {
@@ -112,19 +108,12 @@ const SyncStrava = (userId) => {
       PushNotification.configure({
         onRegister: (tokenData) => {
           console.log('Remote notification token: ', tokenData);
+          tokenData = JSON.parse(tokenData);
           axios
-            .post(
-              'http://' + global.serverIp + ':5000/user/registerDevice',
-              {
-                userId: userId,
-                token: tokenData.token,
-              },
-              {
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-              },
-            )
+            .post('http://' + global.serverIp + ':5000/user/registerDevice', {
+              userId: userId,
+              token: tokenData.token,
+            })
             .then((res) => {
               console.log('Registered device');
             })

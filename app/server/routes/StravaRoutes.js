@@ -22,8 +22,7 @@ const initStravaRouting = (app) => {
         stravaService
           .UpdateComponentActivitiesForUser(user._id)
           .then((compActivitiesRes) => {
-            res.status(200);
-            res.send('Sync Strava OK');
+            res.status(200).send('Sync Strava OK');
           });
       })
       .catch((err) => {

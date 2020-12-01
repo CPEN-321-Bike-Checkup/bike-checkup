@@ -32,6 +32,7 @@ const initMaintenanceTaskRouting = (app) => {
           res.send(JSON.stringify(tasks));
         })
         .catch((err) => {
+          console.error('Error creating user schedule');
           res.status(500).send('Internal server error');
         });
       //get tasks specific to component for component screen flow
@@ -42,7 +43,7 @@ const initMaintenanceTaskRouting = (app) => {
           res.send(JSON.stringify(tasks));
         })
         .catch((err) => {
-          console.err('GET maintenanceTask/ Error: ', err);
+          console.error('GET maintenanceTask/ Error: ', err);
           res.status(500).send('Internal server error');
         });
     } else {

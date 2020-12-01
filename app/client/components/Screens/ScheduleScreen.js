@@ -62,7 +62,10 @@ export default class ScheduleScreen extends React.Component {
           method: 'GET',
         },
       )
-        .then((response) => response.json())
+        .then((response) => {
+          console.log(response);
+          return response.json();
+        })
         .then((schedule) => {
           console.log('Got schedule: ', schedule);
           this.setState({
@@ -220,7 +223,10 @@ export default class ScheduleScreen extends React.Component {
     } else if (this.state.fetchState != FETCH_IN_PROGRESS) {
       mainView = (
         <View style={CommonStyles.fetchFailedView}>
-          <Text style={CommonStyles.emptyStateText}>No upcoming tasks scheduled.{"\n"}Click on the add button to add a new task.</Text>
+          <Text style={CommonStyles.emptyStateText}>
+            No upcoming tasks scheduled.{'\n'}Click on the add button to add a
+            new task.
+          </Text>
         </View>
       );
     }

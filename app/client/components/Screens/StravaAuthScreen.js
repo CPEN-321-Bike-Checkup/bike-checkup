@@ -27,6 +27,9 @@ export default class StravaAuthScreen extends React.Component {
   constructor(props) {
     super(props);
     this.navigation = props.navigation;
+    this.state = {
+      authSent: false,
+    };
   }
 
   render() {
@@ -43,7 +46,7 @@ export default class StravaAuthScreen extends React.Component {
 
   _onNavigationStateChange(webViewState) {
     if (!webViewState.loading) {
-      if (webViewState.url.includes('code=')) {
+      if (webViewState.url.includes('code=') && this.state.authSent === false) {
         var startIndex = webViewState.url.indexOf('code=') + CODE_LABEL_LENGTH; // To get past 'code=' to the actual code
         var endIndex =
           webViewState.url.indexOf('scope=') - PARAM_SEPARATOR_LENGTH;
@@ -81,6 +84,9 @@ export default class StravaAuthScreen extends React.Component {
               )
               .then((resp) => {
                 global.userId = athleteData.id;
+                this.setState((stateOld) => {
+                  return {authSent: true};
+                });
                 console.log('set global user id', global.userId);
                 // Now that initial authentication flow is complete, navigate to main Home Navigator
                 this.navigation.replace('Home');
