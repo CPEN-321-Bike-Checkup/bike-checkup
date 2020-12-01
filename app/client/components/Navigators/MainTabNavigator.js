@@ -10,7 +10,7 @@ import {Colors} from '../../constants/Colors';
 
 const Tab = createMaterialBottomTabNavigator();
 
-export default class AppTabNavigator extends Component {
+export default class MainTabNavigator extends Component {
   constructor(props) {
     super(props);
   }

@@ -3,7 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import WelcomeScreen from '../Screens/WelcomeScreen';
 import StravaAuthScreen from '../Screens/StravaAuthScreen';
-import AppTabNavigator from './AppTabNavigator';
+import MainTabNavigator from './MainTabNavigator';
 
 const Stack = createStackNavigator();
 
@@ -25,7 +25,7 @@ export default class LoginStack extends React.Component {
             name="Strava Authentication"
             component={StravaAuthScreen}
           />
-          <Stack.Screen name="Home" component={AppTabNavigator} />
+          <Stack.Screen name="Home" component={MainTabNavigator} />
         </Stack.Navigator>
       </NavigationContainer>
     );
