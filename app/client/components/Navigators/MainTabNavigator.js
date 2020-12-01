@@ -7,6 +7,7 @@ import ScheduleStack from './ScheduleStack';
 import HistoryStack from './HistoryStack';
 import ActivitiesStack from './ActivitiesStack';
 import {Colors} from '../../constants/Colors';
+import SettingsStack from './SettingsStack';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -74,6 +75,21 @@ export default class MainTabNavigator extends Component {
               />
             ),
             tabBarTestID: 'ActivitiesTab',
+          }}
+        />
+        <Tab.Screen
+          name="Settings"
+          component={SettingsStack}
+          options={{
+            tabBarColor: 'green',
+            tabBarIcon: ({color}) => (
+              <MaterialCommunityIcons
+                name="bike-fast"
+                color={color}
+                size={24}
+              />
+            ),
+            tabBarTestID: 'SettingsTab',
           }}
         />
       </Tab.Navigator>
