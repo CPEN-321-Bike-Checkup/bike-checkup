@@ -3,7 +3,7 @@
  */
 
 import {AppRegistry} from 'react-native';
-import LoginStack from './components/Stacks/LoginStack';
+import LoginStack from './components/Navigators/LoginStack';
 import {name as appName} from './app.json';
 
 // Push notification configuration

@@ -2,11 +2,11 @@ import React, {Component} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
-import BikesStack from './Stacks/BikesStack';
-import ScheduleStack from './Stacks/ScheduleStack';
-import HistoryStack from './Stacks/HistoryStack';
-import ActivitiesStack from './Stacks/ActivitiesStack';
-import {Colors} from '../constants/Colors';
+import BikesStack from './BikesStack';
+import ScheduleStack from './ScheduleStack';
+import HistoryStack from './HistoryStack';
+import ActivitiesStack from './ActivitiesStack';
+import {Colors} from '../../constants/Colors';
 
 const Tab = createMaterialBottomTabNavigator();
 

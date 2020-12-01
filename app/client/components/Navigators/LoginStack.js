@@ -3,12 +3,15 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import WelcomeScreen from '../Screens/WelcomeScreen';
 import StravaAuthScreen from '../Screens/StravaAuthScreen';
-import AppTabNavigator from '../AppTabNavigator';
-import {Colors} from './../../constants/Colors';
+import AppTabNavigator from './AppTabNavigator';
 
 const Stack = createStackNavigator();
 
 export default class LoginStack extends React.Component {
+
+  // TODO: Fetch login token here and only render Welcome + Auth screens
+  // If not already logged in 
+
   render() {
     return (
       <NavigationContainer>
