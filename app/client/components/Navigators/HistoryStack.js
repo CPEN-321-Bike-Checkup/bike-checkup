@@ -9,12 +9,12 @@ export default class HistoryStack extends React.Component {
   render() {
     return (
       <Stack.Navigator
-        initialRouteName="Bikes"
+        initialRouteName='Maintenance History'
         screenOptions={{
           headerTintColor: 'white',
           headerStyle: {backgroundColor: Colors.primaryOrange},
         }}>
-        <Stack.Screen name="Maintenance Log" component={HistoryScreen} />
+        <Stack.Screen name='Maintenance History' component={HistoryScreen} />
       </Stack.Navigator>
     );
   }
