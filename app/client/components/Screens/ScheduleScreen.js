@@ -219,7 +219,7 @@ export default class ScheduleScreen extends React.Component {
     } else if (this.state.fetchState != FETCH_IN_PROGRESS) {
       mainView = (
         <View style={CommonStyles.fetchFailedView}>
-          <Text>No upcoming tasks scheduled.</Text>
+          <Text style={CommonStyles.emptyStateText}>No upcoming tasks scheduled.{"\n"}Click on the add button to add a new task.</Text>
         </View>
       );
     }

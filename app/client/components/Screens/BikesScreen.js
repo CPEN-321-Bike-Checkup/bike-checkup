@@ -117,7 +117,7 @@ export default class BikesScreen extends React.Component {
     } else if (this.state.fetchState != FETCH_IN_PROGRESS) {
       mainView = (
         <View style={CommonStyles.fetchFailedView}>
-          <Text>You have no bikes.</Text>
+          <Text style={CommonStyles.emptyStateText}>You have no bikes.{"\n"}Add at least one bike to your Strava account in order to add components and maintenance tasks.</Text>
         </View>
       );
     }

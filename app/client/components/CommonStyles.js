@@ -13,6 +13,11 @@ let CommonStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  emptyStateText: {
+    textAlign: 'center',
+    paddingHorizontal: 10,
+    fontSize: 16,
+  },
 });
 
 export default CommonStyles;

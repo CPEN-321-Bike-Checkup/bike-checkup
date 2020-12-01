@@ -7,43 +7,6 @@ import AddButton from '../SubComponents/AddButton';
 import ErrorPopup from '../SubComponents/ErrorPopup';
 import {timeout} from '../ScreenUtils';
 
-const BIKE_COMPONENTS_LIST = [
-  'Front Wheel',
-  'Rear Wheel',
-  'Fork',
-  'Handlebar',
-  'Pedals',
-  'Front Tire',
-  'Rear Tire',
-  'Bottom Bracket',
-  'Front Brake',
-  'Rear Brake',
-  'Front Brake Pads',
-  'Rear Brake Pads',
-  'Front Brake Lever',
-  'Rear Brake Lever',
-  'Cassette',
-  'Chainrings',
-  'Crankset',
-  'Front Derailleur',
-  'Rear Derailleur',
-  'Headset',
-  'Saddle',
-  'Seatpost',
-  'Stem',
-  'Front Brake Cable',
-  'Rear Brake Cable',
-  'Front Shifter Cable',
-  'Rear Shifter Cable',
-  'Shift Levers',
-  'Front Shock',
-  'Rear Shock',
-  'Front Brake Rotor',
-  'Rear Brake Rotor',
-  'Helmet',
-  'Cleats',
-];
-
 const FETCH_IN_PROGRESS = 0;
 const FETCH_SUCCEEDED = 1;
 const FETCH_FAILED = 2;
@@ -257,7 +220,7 @@ export default class ComponentsScreen extends React.Component {
     } else if (this.state.fetchState != FETCH_IN_PROGRESS) {
       mainView = (
         <View style={CommonStyles.fetchFailedView}>
-          <Text>{this.bike.title} has no components.</Text>
+          <Text style={CommonStyles.emptyStateText}>{this.bike.title} has no components.{"\n"}Click on the add button to add a new component.</Text>
         </View>
       );
     }

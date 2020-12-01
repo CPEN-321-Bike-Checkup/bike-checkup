@@ -240,7 +240,7 @@ export default class ComponentTaskScreen extends React.Component {
     } else if (this.state.fetchState != FETCH_IN_PROGRESS) {
       mainView = (
         <View style={CommonStyles.fetchFailedView}>
-          <Text>{this.component.title} has no tasks.</Text>
+          <Text style={CommonStyles.emptyStateText}>{this.component.title} has no tasks.{"\n"}Click on the add button to add a new task.</Text>
         </View>
       );
     }
