@@ -77,7 +77,7 @@ initActivityRoutes(app);
 
 app.get('/stravaRedirect', function (req, res, next) {
   console.log('Strava auth hit');
-  res.send('OK');
+  res.status(200).send();
 });
 
 let createTestData = async function (userId) {

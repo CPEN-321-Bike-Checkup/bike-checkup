@@ -2,6 +2,7 @@ const express = require('express');
 const maintenanceTaskService = require('../services/MaintenanceTaskService');
 const stravaService = require('../services/StravaService');
 const userService = require('../services/UserService');
+const _ = require('lodash');
 
 const initStravaRouting = (app) => {
   const stravaRouter = express.Router();
@@ -10,6 +11,9 @@ const initStravaRouting = (app) => {
 
   stravaRouter.post('/:userId/connectedStrava', async (req, res) => {
     var user = req.body;
+    if (_.isString(user._id)) {
+      user._id = parseInt(user._id);
+    }
     var userPromise = await userService.CreateOrUpdateUsers(user);
     stravaService.UpdateBikesForUser(user._id);
     stravaService

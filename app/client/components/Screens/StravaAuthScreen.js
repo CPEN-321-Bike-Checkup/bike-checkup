@@ -3,6 +3,7 @@ import {WebView} from 'react-native-webview';
 import axios from 'axios';
 import PushNotification from 'react-native-push-notification';
 import Keys from './../../keys.json';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Strava authentication constants
 const AUTH_URI =
@@ -13,6 +14,15 @@ const PARAM_SEPARATOR_LENGTH = 1;
 // Push notification constants
 const senderID = 517168871348;
 
+const storeData = async (key, value) => {
+  try {
+    await AsyncStorage.setItem(key, JSON.stringify(value));
+    console.log('saved ' + key + ': ', value);
+  } catch (e) {
+    console.error('Failed to save data to storage: ', key, val);
+  }
+};
+
 export default class StravaAuthScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -21,13 +31,13 @@ export default class StravaAuthScreen extends React.Component {
 
   render() {
     return (
-        <WebView
-          ref={(ref) => {
-            this.webView = ref;
-          }}
-          source={{uri: AUTH_URI}}
-          onNavigationStateChange={this._onNavigationStateChange.bind(this)}
-        />
+      <WebView
+        ref={(ref) => {
+          this.webView = ref;
+        }}
+        source={{uri: AUTH_URI}}
+        onNavigationStateChange={this._onNavigationStateChange.bind(this)}
+      />
     );
   }
 
@@ -70,13 +80,21 @@ export default class StravaAuthScreen extends React.Component {
                 },
               )
               .then((resp) => {
+                global.userId = athleteData.id;
+                console.log('set global user id', global.userId);
+                // Now that initial authentication flow is complete, navigate to main Home Navigator
+                this.navigation.replace('Home');
+
+                storeData('userId', {userId: athleteData.id.toString()});
                 console.log('Successfully sent user tokens');
                 PushNotification.configure({
                   onRegister: (tokenData) => {
                     console.log('Remote notification token: ', tokenData);
                     axios
                       .post(
-                        'http://' + global.serverIp + ':5000/user/registerDevice',
+                        'http://' +
+                          global.serverIp +
+                          ':5000/user/registerDevice',
                         {
                           userId: athleteData.id,
                           token: tokenData.token,
@@ -98,9 +116,6 @@ export default class StravaAuthScreen extends React.Component {
                   requestPermissions: true,
                 });
               });
-
-            // Now that initial authentication flow is complete, navigate to main Home Navigator
-            this.navigation.replace('Home');
           },
           (error) => {
             console.log(error);

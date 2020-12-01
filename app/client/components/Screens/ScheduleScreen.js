@@ -53,6 +53,7 @@ export default class ScheduleScreen extends React.Component {
   }
 
   getSchedule() {
+    console.log('schedule for user: ', global.userId);
     timeout(
       3000,
       fetch(
@@ -66,7 +67,7 @@ export default class ScheduleScreen extends React.Component {
           console.log('Got schedule: ', schedule);
           this.setState({
             scheduleData: this.filterSchedule(schedule),
-            fetchState: FETCH_SUCCEEDED
+            fetchState: FETCH_SUCCEEDED,
           });
         }),
     ).catch((error) => {

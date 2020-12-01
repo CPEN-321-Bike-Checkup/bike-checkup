@@ -3,7 +3,7 @@
 
 import React from 'react';
 import {SectionList, StyleSheet, Text, View} from 'react-native';
-import {Colors} from './../../constants/Colors'
+import {Colors} from './../../constants/Colors';
 
 export let selectionListWrapper = (data, renderItem, testID) => {
   return (

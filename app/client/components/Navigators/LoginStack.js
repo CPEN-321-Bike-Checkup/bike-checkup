@@ -6,12 +6,10 @@ import StravaAuthScreen from '../Screens/StravaAuthScreen';
 import MainTabNavigator from './MainTabNavigator';
 
 const Stack = createStackNavigator();
-
 export default class LoginStack extends React.Component {
-
   // TODO: Fetch login token here and only render Welcome + Auth screens
-  // If not already logged in 
-
+  //
+  // If not already logged in
   render() {
     return (
       <NavigationContainer>

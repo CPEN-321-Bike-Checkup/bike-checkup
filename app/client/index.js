@@ -14,6 +14,5 @@ const serverIp = '3.97.53.16'; // Server IP
 
 // Set global variables
 global.serverIp = serverIp;
-global.userId = 71747974; // TODO: set to actual ID fetched during login
 
 AppRegistry.registerComponent(appName, () => LoginStack);
