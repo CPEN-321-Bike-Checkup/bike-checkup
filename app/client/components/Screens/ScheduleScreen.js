@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
-import {CompletableListItem} from '../SubScreens/ListItems';
+import {CompletableListItem} from '../SubComponents/ListItems';
 import {selectionListWrapper} from '../SubComponents/SectionListWrapper';
 import CommonStyles from '../CommonStyles';
 import AddButton from '../SubComponents/AddButton';

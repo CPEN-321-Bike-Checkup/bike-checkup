@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text} from 'react-native';
-import {PressableListItem} from '../SubScreens/ListItems';
+import {PressableListItem} from '../SubComponents/ListItems';
 import {flatListWrapper} from '../SubComponents/FlatListWrapper';
 import Popup from '../SubComponents/Popup';
 import {timeout} from '../ScreenUtils';

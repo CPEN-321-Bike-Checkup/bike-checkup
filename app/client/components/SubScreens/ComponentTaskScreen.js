@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
-import {RemovableListItem, RemovablePressableListItem} from './ListItems';
+import {RemovableListItem, RemovablePressableListItem} from '../SubComponents/ListItems';
 import {flatListWrapper} from '../SubComponents/FlatListWrapper';
 import CommonStyles from '../CommonStyles';
 import AddButton from '../SubComponents/AddButton';
