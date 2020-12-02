@@ -24,7 +24,9 @@ export default class SettingsScreen extends React.Component {
   }
 
   syncStravaData() {
-    global.SyncStrava(global.userId);
+    global.SyncStrava(global.userId).then((result) => {
+      //when sync is done
+    });
   }
 
   render() {

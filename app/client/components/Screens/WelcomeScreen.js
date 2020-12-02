@@ -46,8 +46,9 @@ export default class WelcomeScreen extends React.Component {
           data = JSON.parse(data);
           if (data.userId !== undefined) {
             global.userId = parseInt(data.userId, 10);
-            global.SyncStrava(data.userId);
-            this.navigation.replace('Home');
+            global.SyncStrava(data.userId).then((result) => {
+              this.navigation.replace('Home');
+            });
             return;
           }
         }

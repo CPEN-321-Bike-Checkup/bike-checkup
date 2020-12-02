@@ -38,6 +38,9 @@ export default class StravaAuthScreen extends React.Component {
         ref={(ref) => {
           this.webView = ref;
         }}
+        cacheMode={'LOAD_NO_CACHE'}
+        cacheEnabled={false}
+        incognito={true}
         source={{uri: AUTH_URI}}
         onNavigationStateChange={this._onNavigationStateChange.bind(this)}
       />

@@ -172,7 +172,9 @@ class MaintenanceTaskService {
       todayWithTime.getDate(),
     );
     for (var i = 0; i < tasks.length; i++) {
-      if (tasks[i].date < today) {
+      if (tasks[i].date === undefined) {
+        schedule[3].data.push(tasks[i]);
+      } else if (tasks[i].date < today) {
         schedule[0].data.push(tasks[i]);
       } else if (
         tasks[i].date.getFullYear() == today.getFullYear() &&
