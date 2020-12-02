@@ -2,12 +2,12 @@ import React from 'react';
 import {Modal, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
 import {Colors} from '../../constants/Colors';
 
-Popup = function (
+Popup = (
   text,
   pressCallback,
   visible,
   errorPopup = true,
-) {
+) => {
   return (
     <View style={styles.centeredView}>
       <Modal animationType="slide" transparent={true} visible={visible}>
