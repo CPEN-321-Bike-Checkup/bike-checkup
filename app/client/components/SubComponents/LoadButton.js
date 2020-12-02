@@ -21,8 +21,6 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     borderTopWidth: 2,
     borderBottomWidth: 2,
-    marginBottom: 22,
-    marginTop: -22,
   },
   loadButtonText: {
     fontSize: 16,

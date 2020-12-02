@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import Autocomplete from 'react-native-autocomplete-input';
-import ErrorPopup from '../SubComponents/ErrorPopup';
+import Popup from '../SubComponents/Popup';
 import {timeout} from '../ScreenUtils';
 import {Colors} from './../../constants/Colors'
 
@@ -260,7 +260,7 @@ export default class AddComponentScreen extends React.Component {
           )}
         </View>
 
-        {ErrorPopup(
+        {Popup(
           this.state.errorText,
           this.onErrorAccepted,
           this.state.isError,

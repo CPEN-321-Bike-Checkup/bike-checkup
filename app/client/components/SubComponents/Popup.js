@@ -1,14 +1,21 @@
 import React from 'react';
 import {Modal, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
-import {Colors} from './../../constants/Colors'
+import {Colors} from '../../constants/Colors';
 
-export default errorPopup = function (text, pressCallback, visible) {
+export default Popup = function (
+  text,
+  pressCallback,
+  visible,
+  errorPopup = true,
+) {
   return (
     <View style={styles.centeredView}>
       <Modal animationType="slide" transparent={true} visible={visible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalHeaderText}>Error!</Text>
+            {errorPopup ? (
+              <Text style={styles.modalHeaderText}>Error!</Text>
+            ) : null}
             <Text style={styles.modalText}>{text}</Text>
 
             <TouchableHighlight
@@ -16,7 +23,7 @@ export default errorPopup = function (text, pressCallback, visible) {
               onPress={() => {
                 pressCallback();
               }}
-              testID="ErrorPopupOkBtn">
+              testID="PopupOkBtn">
               <Text style={styles.textStyle}>OK</Text>
             </TouchableHighlight>
           </View>

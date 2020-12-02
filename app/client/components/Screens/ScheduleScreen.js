@@ -4,7 +4,7 @@ import {CompletableListItem} from '../SubScreens/ListItems';
 import {selectionListWrapper} from '../SubComponents/SectionListWrapper';
 import CommonStyles from '../CommonStyles';
 import AddButton from '../SubComponents/AddButton';
-import ErrorPopup from '../SubComponents/ErrorPopup';
+import Popup from '../SubComponents/Popup';
 import {timeout} from '../ScreenUtils';
 
 const FETCH_IN_PROGRESS = 0;
@@ -239,7 +239,7 @@ export default class ScheduleScreen extends React.Component {
           this.navigation.navigate('Add Task', {isNewTask: true});
         }, 'ScheduleAddTaskBtn')}
 
-        {ErrorPopup(
+        {Popup(
           this.state.errorText,
           this.onErrorAccepted,
           this.state.isError,

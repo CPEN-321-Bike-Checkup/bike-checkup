@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import CheckBox from '@react-native-community/checkbox';
-import ErrorPopup from '../SubComponents/ErrorPopup';
+import Popup from '../SubComponents/Popup';
 import {timeout} from '../ScreenUtils';
 import {Colors} from './../../constants/Colors'
 
@@ -464,7 +464,7 @@ export default class AddTaskScreen extends React.Component {
           )}
         </View>
 
-        {ErrorPopup(
+        {Popup(
           this.state.errorText,
           this.onErrorAccepted,
           this.state.isError,

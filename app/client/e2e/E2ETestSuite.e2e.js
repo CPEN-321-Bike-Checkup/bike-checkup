@@ -159,7 +159,7 @@ describe('Bike Stack', () => {
 
     // Verify error message
     await expect(element(by.text('Please enter a threshold.'))).toExist();
-    await element(by.id('ErrorPopupOkBtn')).tap();
+    await element(by.id('PopupOkBtn')).tap();
 
     clearFormText();
 

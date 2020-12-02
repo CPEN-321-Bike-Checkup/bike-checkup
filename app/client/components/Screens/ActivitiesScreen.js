@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text} from 'react-native';
 import {ListItem} from '../SubScreens/ListItems';
 import {flatListWrapper} from '../SubComponents/FlatListWrapper';
-import ErrorPopup from '../SubComponents/ErrorPopup';
+import Popup from '../SubComponents/Popup';
 import {timeout} from '../ScreenUtils';
 import CommonStyles from '../CommonStyles';
 import LoadButton from '../SubComponents/LoadButton';
@@ -114,6 +114,7 @@ export default class ActivitiesScreen extends React.Component {
         this.state.activities,
         this.renderItem,
         'ActivitiesList',
+        LoadButton(() => this.getActivities()),
       );
     } else if (this.state.fetchState != FETCH_IN_PROGRESS) {
       mainView = (
@@ -126,12 +127,11 @@ export default class ActivitiesScreen extends React.Component {
     return (
       <>
         {mainView}
-        {ErrorPopup(
+        {Popup(
           this.state.errorText,
           this.onErrorAccepted,
           this.state.isError,
         )}
-        {LoadButton(() => this.getActivities())}
       </>
     );
   }

@@ -4,7 +4,7 @@ import {RemovableListItem, RemovablePressableListItem} from './ListItems';
 import {flatListWrapper} from '../SubComponents/FlatListWrapper';
 import CommonStyles from '../CommonStyles';
 import AddButton from '../SubComponents/AddButton';
-import ErrorPopup from '../SubComponents/ErrorPopup';
+import Popup from '../SubComponents/Popup';
 import {timeout} from '../ScreenUtils';
 
 const FETCH_IN_PROGRESS = 0;
@@ -249,7 +249,7 @@ export default class ComponentTaskScreen extends React.Component {
       <View style={styles.container}>
         {mainView}
         {AddButton(this.addTask, 'AddTaskBtn')}
-        {ErrorPopup(
+        {Popup(
           this.state.errorText,
           this.onErrorAccepted,
           this.state.isError,
