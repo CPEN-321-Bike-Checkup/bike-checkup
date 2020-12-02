@@ -17,11 +17,11 @@ const initBikeRouting = (app) => {
           res.status(200).send(JSON.stringify(bikes));
         })
         .catch((err) => {
-          console.error(err);
+          console.error('error getting bikes for user', err);
           res.status(500).send(err);
         });
     } else {
-      res.post;
+      console.error('error getting bikes for user, invalid user paramerter');
       status(400).send('Improper user parameter');
     }
   });

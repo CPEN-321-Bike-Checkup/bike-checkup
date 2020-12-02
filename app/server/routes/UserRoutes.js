@@ -5,31 +5,53 @@ const initUserRouting = (app) => {
   const userRouter = express.Router();
 
   app.use('/user', userRouter);
+  
+   userRouter.post('/', (req, res, next) => {
+    console.log('Creating user');
+    UserService.CreateUsers(req.body)
+      .then((result) => {
+        res.status(200).send(result);
+        console.log('Created user');
+      })
+      .catch((err) => {
+        console.error('error creating user', err);
+        res.sendStatus(500);
+      });
+  });
 
   userRouter.get('/:userId', (req, res, next) => {
-    var user = UserService.getUserById(req.params[0]);
-    res.send(JSON.stringify(user));
+    UserService.getUserById(req.params[0])
+      .then((user) => {
+        res.send(JSON.stringify(user));
+      })
+      .catch((err) => {
+        console.error('error getting user data', err);
+        res.status(500).send('error getting user data');
+      });
   });
 
   userRouter.post('/registerDevice', (req, res, next) => {
     console.log('Registering device');
-    UserService.RegisterNewDevice(req.body.userId, req.body.token);
-
-    console.log('Device registered');
-    res.sendStatus(200);
+    UserService.RegisterNewDevice(req.body.userId, req.body.token)
+      .then((result) => {
+        res.sendStatus(200);
+        console.log('Device registered');
+      })
+      .catch((err) => {
+        console.error('error registering device', err);
+        res.sendStatus(500);
+      });
   });
 
   userRouter.delete('/registerDevice', (req, res, next) => {
-    UserService.DeleteDevice(req.body.userId, req.body.token);
-
-    res.sendStatus(200);
+    UserService.DeleteDevice(req.body.userId, req.body.token)
+      .then((result) => {
+        res.sendStatus(200);
+      })
+      .catch((err) => {
+        console.error('error deleting device', err);
+        res.sendStatus(500);
+      });
   });
 
-  userRouter.post('/:userId/connectedStrava', (req, res, next) => {
-    var user = req.body;
-    UserService.CreateOrUpdateUser(user);
-    res.sendStatus(200);
-  });
-};
-
-module.exports = initUserRouting;
+ module.exports = initUserRouting;

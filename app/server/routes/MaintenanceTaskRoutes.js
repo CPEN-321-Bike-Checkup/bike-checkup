@@ -7,17 +7,27 @@ const initMaintenanceTaskRouting = (app) => {
 
   app.use('/maintenanceTask', maintenanceTaskRouter);
 
-  maintenanceTaskRouter.get('/prediction', async (req, res) => {
+  maintenanceTaskRouter.get('/prediction', (req, res) => {
     if (req.query.userId !== undefined && req.query.userId) {
-      var predictions = await maintenanceTaskService.MaintenancePredictForUser(
-        req.query.userId,
-      );
-      res.status(200).send(JSON.stringify(predictions));
+      maintenanceTaskService
+        .MaintenancePredictForUser(req.query.userId)
+        .then((predictions) => {
+          res.status(200).send(JSON.stringify(predictions));
+        })
+        .catch((err) => {
+          console.error('error creating predictions', err);
+          res.status(500).send('Error creating prediction', err);
+        });
     } else if (req.query.componentId !== undefined && req.query.componentId) {
-      var prediction = await maintenanceTaskService.MaintenancePredictForComponent(
-        req.query.componentId,
-      );
-      res.status(200).send(JSON.stringify(prediction));
+      maintenanceTaskService
+        .MaintenancePredictForComponent(req.query.componentId)
+        .then((predictions) => {
+          res.status(200).send(JSON.stringify(prediction));
+        })
+        .catch((err) => {
+          console.error('error creating predictions', err);
+          res.status(500).send('Error creating prediction', err);
+        });
     }
   });
 
@@ -47,6 +57,7 @@ const initMaintenanceTaskRouting = (app) => {
           res.status(500).send('Internal server error');
         });
     } else {
+      console.error('Invalid get schedule query params', err);
       res.status(400).send('Invalid query parameters');
     }
   });
@@ -74,7 +85,7 @@ const initMaintenanceTaskRouting = (app) => {
         res.status(201).send('Marked Task as Done');
       })
       .catch((err) => {
-        console.error(err);
+        console.error('error completing task', err);
         if (err.name === 'ValidationError' || err.name == 'CastError') {
           res.status(400).send('Error: Invalid Request syntax');
         } else if (err.name === 'DocumentNotFoundError') {
@@ -93,13 +104,14 @@ const initMaintenanceTaskRouting = (app) => {
           (req.body.length !== undefined && req.body.length !== result.n) ||
           (req.body.length === undefined && result.n !== 1)
         ) {
+          console.error('Error task not found');
           res.status(404).send('Error: Task not Found');
         } else {
           res.status(200).send('Updated Task');
         }
       })
       .catch((err) => {
-        console.error(err);
+        console.error('error updating task', err);
         if (err.name === 'ValidationError' || err.name == 'CastError') {
           res.status(400).send('Error: Invalid Request syntax');
         } else if (err.name === 'DocumentNotFoundError') {
@@ -124,7 +136,7 @@ const initMaintenanceTaskRouting = (app) => {
         }
       })
       .catch((err) => {
-        console.error(err);
+        console.error('error deleting tasks', err);
         if (err.name === 'ValidationError' || err.name == 'CastError') {
           res.status(400).send('Error: Invalid Request syntax');
         } else if (err.name === 'DocumentNotFoundError') {

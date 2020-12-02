@@ -17,6 +17,7 @@ const initMaintenanceRecordRouting = (app) => {
           res.status(200).send(JSON.stringify(records));
         })
         .catch((err) => {
+          console.log('error getting records', err);
           res.status(500).send(err);
         });
     }

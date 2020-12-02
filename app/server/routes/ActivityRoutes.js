@@ -19,10 +19,13 @@ const initActivityRouting = (app) => {
           res.status(200).send(JSON.stringify(activities));
         })
         .catch((err) => {
-          console.error(err);
+          console.error('error geting activities for user', err);
           res.status(500).send(err);
         });
     } else {
+      console.error(
+        'error getting activities for user, incorrect error params',
+      );
       res.status(400).send('Incorrect query parameters');
     }
   });
