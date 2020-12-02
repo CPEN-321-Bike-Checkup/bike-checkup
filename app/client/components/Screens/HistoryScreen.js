@@ -59,7 +59,7 @@ export default class HistoryScreen extends React.Component {
           console.log('Got history: ', history);
           this.setState((stateOld) => {
             return {
-              moreData: history.length != this.state.history.length,
+              moreData: history.length != this.state.maintenanceRecords.length,
               maintenanceRecords: history,
               numDays: stateOld.numDays + 30,
               fetchState: FETCH_SUCCEEDED,
