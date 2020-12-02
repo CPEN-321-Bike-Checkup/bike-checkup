@@ -14,7 +14,7 @@ class UserRepository extends Repository {
       } else if (this.count['usersCount'] === 0) {
         throw new Error('internal server error');
       } else {
-        if (userObj._id == 1 || userObj._id == 2) {
+        if (userObj._id === 1 || userObj._id === 2) {
           resolve(true);
         } else {
           resolve(false);
@@ -38,7 +38,7 @@ class UserRepository extends Repository {
           } else if (this.count['usersCount'] === 0) {
             throw new Error('internal server error');
           } else {
-            if (users[index]._id == 1 || users[index]._id == 2) {
+            if (users[index]._id === 1 || users[index]._id === 2) {
               resolve({n: 1, nModified: 1});
             } else {
               resolve(users[index]);

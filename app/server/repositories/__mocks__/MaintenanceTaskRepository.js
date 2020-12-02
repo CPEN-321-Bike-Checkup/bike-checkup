@@ -40,7 +40,7 @@ class MaintenanceTaskRepository extends Repository {
               break;
             case 3:
               //check to avoid duplicate
-              if (returnData.length != 1) {
+              if (returnData.length !== 1) {
                 returnData.push(maintSchedule2);
               }
               break;

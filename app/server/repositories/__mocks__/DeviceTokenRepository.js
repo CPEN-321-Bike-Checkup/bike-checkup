@@ -65,7 +65,7 @@ class DeviceTokenRepository extends Repository {
       } else if (this.count['tokensForUser'] === 0) {
         throw new Error('InternalError');
       } else {
-        if (doc.owner == 1 || doc.owner == 2) {
+        if (doc.owner === 1 || doc.owner === 2) {
           resolve(true);
         } else {
           resolve(false);

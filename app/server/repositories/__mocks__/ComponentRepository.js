@@ -15,7 +15,7 @@ class ComponentRepository extends Repository {
       } else if (this.count['componentsForUser'] === 0) {
         throw new Error('internal server error');
       } else {
-        if (userId == 1) {
+        if (userId === 1) {
           resolve(data);
         } else {
           resolve([]);

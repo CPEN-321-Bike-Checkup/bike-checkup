@@ -27,7 +27,7 @@ class ActivityRepository extends Repository {
         throw new Error('internal server error');
       } else {
         let returnData = [];
-        if (activityIds.length == 0) {
+        if (activityIds.length === 0) {
           resolve([]);
         }
         //date check not necessary, all activities after maint date

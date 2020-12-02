@@ -336,7 +336,7 @@ class MaintenanceTaskService {
           date,
         );
 
-        if (activityList.length == 0) {
+        if (activityList.length === 0) {
           //no activities found, make no changes to predicted_due_date, skip
           //maintenanceList[maint_index].predicted_due_date = null;
           continue;
