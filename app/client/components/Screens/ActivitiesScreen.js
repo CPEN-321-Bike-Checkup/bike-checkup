@@ -23,6 +23,7 @@ export default class ActivitiesScreen extends React.Component {
       fetchState: FETCH_IN_PROGRESS,
       errorText: null,
       numDays: 30,
+      moreData: false,
     };
   }
 
@@ -54,10 +55,13 @@ export default class ActivitiesScreen extends React.Component {
         },
       )
         .then((response) => response.json())
-        .then((data) => {
+        .then((activities) => {
+          console.log(activities)
           this.setState((prevState) => {
+            console.log(activities.length > 0)
             return {
-              activities: data.sort(function (x, y) {
+              moreData: activities.length != this.state.activities.length,
+              activities: activities.sort(function (x, y) {
                 return new Date(y.date) - new Date(x.date);
               }),
               numDays: prevState.numDays + 30,
@@ -114,12 +118,12 @@ export default class ActivitiesScreen extends React.Component {
         this.state.activities,
         this.renderItem,
         'ActivitiesList',
-        LoadButton(() => this.getActivities()),
+        this.state.moreData ? LoadButton(() => this.getActivities()) : null,
       );
     } else if (this.state.fetchState != FETCH_IN_PROGRESS) {
       mainView = (
         <View style={CommonStyles.fetchFailedView}>
-          <Text>No activities in last {this.state.numDays} days.</Text>
+          <Text>No activities.</Text>
         </View>
       );
     }
@@ -127,11 +131,7 @@ export default class ActivitiesScreen extends React.Component {
     return (
       <>
         {mainView}
-        {Popup(
-          this.state.errorText,
-          this.onErrorAccepted,
-          this.state.isError,
-        )}
+        {Popup(this.state.errorText, this.onErrorAccepted, this.state.isError)}
       </>
     );
   }

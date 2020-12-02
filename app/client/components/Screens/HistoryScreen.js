@@ -23,6 +23,7 @@ export default class HistoryScreen extends React.Component {
       fetchState: FETCH_IN_PROGRESS,
       errorText: null,
       numDays: 30,
+      moreDate: false,
     };
   }
 
@@ -58,6 +59,7 @@ export default class HistoryScreen extends React.Component {
           console.log('Got history: ', history);
           this.setState((stateOld) => {
             return {
+              moreData: history.length != this.state.history.length,
               maintenanceRecords: history,
               numDays: stateOld.numDays + 30,
               fetchState: FETCH_SUCCEEDED,
@@ -112,14 +114,12 @@ export default class HistoryScreen extends React.Component {
         this.state.maintenanceRecords,
         this.renderItem,
         'HistoryList',
-        LoadButton(() => this.getHistory()),
+        this.state.moreData ? LoadButton(() => this.getHistory()) : null,
       );
     } else if (this.state.fetchState != FETCH_IN_PROGRESS) {
       mainView = (
         <View style={CommonStyles.fetchFailedView}>
-          <Text>
-            No maintenance history in the last {this.state.numDays} days.
-          </Text>
+          <Text>No maintenance history.</Text>
         </View>
       );
     }
