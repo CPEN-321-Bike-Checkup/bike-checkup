@@ -62,29 +62,31 @@ export default class WelcomeScreen extends React.Component {
     if (!this.state.showPage) {
       return null;
     }
-    return (
-      <View style={styles.view}>
-        <Text style={styles.title}>Welcome to Bike Checkup!</Text>
-        <Image
-          source={require('./../../assets/AppIcon.png')}
-          style={styles.image}
-        />
-        <Text style={styles.description}>
-          Bike Checkup is an app to help you master the bike maintenance game.
-          Here, you can create a schedule of maintenance tasks for your bikes,
-          with tasks linked to your Strava data so that you no longer need to
-          manually keep track of bike and component usage. Enter the tasks you
-          want to accomplish, and we will notify you with a weekly summary of
-          upcoming tasks for the week. {'\n'} {'\n'}
-          To get started, you will first need to connect your Strava account.
-        </Text>
-        <Button
-          title="Continue to Strava connection"
-          color={Colors.primaryOrange}
-          onPress={() => this.navigation.replace('Strava Authentication')}
-        />
-      </View>
-    );
+    else {
+      return (
+        <View style={styles.view}>
+          <Text style={styles.title}>Welcome to Bike Checkup!</Text>
+          <Image
+            source={require('./../../assets/AppIcon.png')}
+            style={styles.image}
+          />
+          <Text style={styles.description}>
+            Bike Checkup is an app to help you master the bike maintenance game.
+            Here, you can create a schedule of maintenance tasks for your bikes,
+            with tasks linked to your Strava data so that you no longer need to
+            manually keep track of bike and component usage. Enter the tasks you
+            want to accomplish, and we will notify you with a weekly summary of
+            upcoming tasks for the week. {'\n'} {'\n'}
+            To get started, you will first need to connect your Strava account.
+          </Text>
+          <Button
+            title="Continue to Strava connection"
+            color={Colors.primaryOrange}
+            onPress={() => this.navigation.replace('Strava Authentication')}
+          />
+        </View>
+      );
+    }
   }
 }
 
