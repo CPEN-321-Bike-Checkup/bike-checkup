@@ -99,6 +99,7 @@ describe('Create(maintenanceTask) Test Cases', () => {
   test('2. Valid new maintenanceTask with distance schedule type', async () => {
     expect.assertions(1);
     let response = await maintenanceTaskService.Create(maintSchedule3Update);
+    expect(response).toBe({});
     expect(new Date(response[0]).getTime()).toBeGreaterThan(
       maintSchedule3Update.last_maintenance_val.getTime(),
     );

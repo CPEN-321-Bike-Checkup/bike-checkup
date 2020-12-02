@@ -66,7 +66,7 @@ module.exports = {
 
   // A set of global variables that need to be available in all test environments
   globals: {
-    ip: '192.168.1.64', // Update to your local IP
+    ip: 'localhost', // Update to your local IP
     port: 5000,
   },
 

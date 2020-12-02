@@ -318,7 +318,7 @@ class MaintenanceTaskService {
 
         //look at last 14 days
         var startDate = new Date();
-        startDate.setDate(startDate.getDate() - 14);
+        startDate.setDate(startDate.getDate() - 7);
 
         //var componentActivityListId = await this.componentActivityRepository.GetActivityIdsForComponent(
         //  component_id,
@@ -363,8 +363,7 @@ class MaintenanceTaskService {
           activity_index++
         ) {
           activity_date_dataset.push(
-            (activityList[activity_index].date.getTime() -
-              /*last_maint_date*/ startDate) /
+            (activityList[activity_index].date.getTime() - last_maint_date) /
               (MILLISECONDS_PER_SECOND * SECONDS_PER_DAY),
           );
           distance_sum += activityList[activity_index].distance;
@@ -393,7 +392,8 @@ class MaintenanceTaskService {
         var slope = predictSlope(covar_sum, x_variance);
         var intercept = predictIntercept(x_mean, y_mean, slope);
         var predict_date =
-          (maintenanceList[maint_index].threshold_val - intercept) / slope;
+          (maintenanceList[maint_index].threshold_val * 1000 - intercept) /
+          slope;
 
         var final_date = this.addDays(
           maintenanceList[maint_index].last_maintenance_val,
