@@ -55,12 +55,10 @@ export default class SettingsScreen extends React.Component {
       3000,
       fetch(`http://${global.serverIp}:5000/user/${global.userId}`, { method: 'GET'})
         .then((response) => {
-          console.log(response)
           response.json();
         })
         .then((data) => {
           this.setState(() => {
-            console.log(data)
             return {
               settingsTitle: data ? data + 's Settings' : 'Settings', // TODO: Figure out why data is undefined
             };
