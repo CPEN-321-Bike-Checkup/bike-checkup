@@ -40,7 +40,7 @@ const initComponentRouting = (app) => {
           (req.body.length !== undefined && req.body.length !== result.n) ||
           (req.body.length === undefined && result.n !== 1)
         ) {
-          console.log('error updating component', err);
+          console.error('error updating component');
           res.status(404).send('Error: Component not Found');
         } else {
           res.status(200).send('Updated Component');
@@ -66,14 +66,14 @@ const initComponentRouting = (app) => {
           (req.body.length !== undefined && req.body.length !== result.n) ||
           (req.body.length === undefined && result.n !== 1)
         ) {
-          console.log('error deleting component', err);
+          console.error('error deleting component');
           res.status(404).send('Error: Component not found!');
         } else {
           res.status(200).send('Component deletion successful.');
         }
       })
       .catch((err) => {
-        console.log('error deleting component', err);
+        console.error('error deleting component', err);
         if (err.name === 'ValidationError' || err.name == 'CastError') {
           res.status(400).send('Error: Invalid Request syntax');
         } else if (err.name === 'DocumentNotFoundError') {

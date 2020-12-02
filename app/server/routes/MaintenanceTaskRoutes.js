@@ -57,7 +57,7 @@ const initMaintenanceTaskRouting = (app) => {
           res.status(500).send('Internal server error');
         });
     } else {
-      console.error('Invalid get schedule query params', err);
+      console.error('Invalid get schedule query params');
       res.status(400).send('Invalid query parameters');
     }
   });
