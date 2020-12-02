@@ -84,7 +84,7 @@ export default class MainTabNavigator extends Component {
             tabBarColor: 'green',
             tabBarIcon: ({color}) => (
               <MaterialCommunityIcons
-                name="bike-fast"
+                name="account-settings"
                 color={color}
                 size={24}
               />

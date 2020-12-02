@@ -46,8 +46,9 @@ export default class WelcomeScreen extends React.Component {
           data = JSON.parse(data);
           if (data.userId !== undefined) {
             global.userId = parseInt(data.userId, 10);
-            global.SyncStrava(data.userId);
-            this.navigation.replace('Home');
+            global.SyncStrava(data.userId).then((result) => {
+              this.navigation.replace('Home');
+            });
             return;
           }
         }
@@ -100,7 +101,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: 'bold',
-    paddingTop: 60,
+    paddingTop: 70,
     paddingBottom: 30,
     fontFamily: 'notoserif',
   },
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
   },
   description: {
     paddingTop: 35,
-    paddingBottom: 10,
+    paddingBottom: 20,
     paddingHorizontal: 15,
     fontSize: 16,
     textAlign: 'justify',
