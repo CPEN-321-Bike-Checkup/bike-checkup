@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: 'bold',
-    paddingTop: 60,
+    paddingTop: 70,
     paddingBottom: 30,
     fontFamily: 'notoserif',
   },
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   },
   description: {
     paddingTop: 35,
-    paddingBottom: 10,
+    paddingBottom: 20,
     paddingHorizontal: 15,
     fontSize: 16,
     textAlign: 'justify',
