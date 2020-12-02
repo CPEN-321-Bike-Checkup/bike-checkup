@@ -3,7 +3,7 @@ import PushNotification from 'react-native-push-notification';
 
 const SyncStrava = (userId) => {
   return new Promise((resolve, reject) => {
-    console.log('post user id', userId);
+    console.log('Post user id', userId);
     axios
       .post(
         'http://' +
