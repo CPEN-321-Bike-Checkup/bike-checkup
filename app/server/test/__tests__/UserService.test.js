@@ -100,7 +100,7 @@ describe('DeleteDevice(userId, deviceToken) Test Cases', () => {
   test('1. Delete existing data', async () => {
     expect.assertions(1);
     let response = await userService.DeleteDevice(
-      '1',
+      1,
       'sdhflguhiuerhnbgsdlfughnaiujhrnf',
     );
     expect(response).toBe(true);

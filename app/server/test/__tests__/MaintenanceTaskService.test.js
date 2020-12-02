@@ -49,9 +49,9 @@ const maintSchedule3Update = {
   _id: 3,
   component_id: 3,
   schedule_type: 'distance',
-  threshold_val: 120,
+  threshold_val: 180,
   description: 'brake check',
-  last_maintenance_val: new Date('2020-10-08'),
+  last_maintenance_val: new Date('2020-06-08'),
   repeats: true,
   predicted_due_date: new Date('2020-11-15'),
 };
@@ -99,7 +99,7 @@ describe('Create(maintenanceTask) Test Cases', () => {
   test('2. Valid new maintenanceTask with distance schedule type', async () => {
     expect.assertions(1);
     let response = await maintenanceTaskService.Create(maintSchedule3Update);
-    expect(response).toBe({});
+    expect(response).toBe(maintSchedule3Update.last_maintenance_val);
     expect(new Date(response[0]).getTime()).toBeGreaterThan(
       maintSchedule3Update.last_maintenance_val.getTime(),
     );

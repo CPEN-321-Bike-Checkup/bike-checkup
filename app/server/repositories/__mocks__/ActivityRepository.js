@@ -14,13 +14,16 @@ class ActivityRepository extends Repository {
       if (this.count['afterDateForUser'] === 0) {
         throw new Error('internal server error');
       } else {
-        let returnData = [];
-        if (bikeId === 0) {
-          resolve([]);
+        switch (bikeId) {
+          case 1:
+            resolve([activity1, activity2, activity3]);
+            break;
+          case 2:
+            resolve([activity4, activity5]);
+            break;
+          default:
+            resolve([]);
         }
-        //date check not necessary, all activities after maint date
-        returnData = this.data.filter((a) => a.bikeId === bikeId);
-        resolve(returnData);
       }
     });
   }
