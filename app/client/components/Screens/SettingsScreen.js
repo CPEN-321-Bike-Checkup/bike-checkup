@@ -1,6 +1,6 @@
 import React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {View, Text, Button} from 'react-native';
+import {View, Text, Button, TouchableHighlightBase} from 'react-native';
 import {Colors} from './../../constants/Colors';
 
 removeValue = async (key) => {
@@ -15,6 +15,7 @@ removeValue = async (key) => {
 export default class SettingsScreen extends React.Component {
   constructor(props) {
     super(props);
+    this.navigation = props.navigation;
   }
 
   logout() {

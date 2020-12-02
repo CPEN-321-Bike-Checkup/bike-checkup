@@ -5,8 +5,8 @@ const initUserRouting = (app) => {
   const userRouter = express.Router();
 
   app.use('/user', userRouter);
-  
-   userRouter.post('/', (req, res, next) => {
+
+  userRouter.post('/', (req, res, next) => {
     console.log('Creating user');
     UserService.CreateUsers(req.body)
       .then((result) => {
@@ -53,5 +53,5 @@ const initUserRouting = (app) => {
         res.sendStatus(500);
       });
   });
-
- module.exports = initUserRouting;
+};
+module.exports = initUserRouting;
