@@ -7,6 +7,20 @@ const initBikeRouting = (app) => {
 
   app.use('/bike', bikeRouter);
 
+  bikeRouter.post('/', (req, res) => {
+    bikeService
+      .CreateBike(req.body)
+      .then((bikes) => res.status(201).send(JSON.stringify(bikes)))
+      .catch((err) => {
+        console.log('error creating bikes', err);
+        if (err.name === 'ValidationError') {
+          res.status(400).send('Error: Invalid Request syntax');
+        } else {
+          res.status(500).send('Error: Internal Server Error');
+        }
+      });
+  });
+
   //add error handling
   bikeRouter.get('/:userId/', (req, res) => {
     var userId = parseInt(req.params.userId, 10);

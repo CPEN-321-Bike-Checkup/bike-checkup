@@ -5,9 +5,8 @@ class BikeService {
     this.bikeRepository = bikeRepository;
   }
 
-  // TODO: new bike created by importing from strava?
-  async createBike(document) {
-    this.bikeRepository.Create(document);
+  CreateBike(document) {
+    return this.bikeRepository.Create(document);
   }
 
   GetBikesForUser(userId) {
