@@ -119,7 +119,7 @@ export default class HistoryScreen extends React.Component {
     } else if (this.state.fetchState != FETCH_IN_PROGRESS) {
       mainView = (
         <View style={CommonStyles.fetchFailedView}>
-          <Text>No maintenance history.</Text>
+          <Text style={CommonStyles.emptyStateText}>No maintenance history.{'\n'}Complete some tasks from your schedule to see entries.</Text>
         </View>
       );
     }
