@@ -176,12 +176,11 @@ describe('BikeRoute Tests', () => {
   };
 
   test('3. Post /registerDevice -> Register new token device', async () => {
-    expect.assertions(2);
+    expect.assertions(1);
     let response = await axios.post(
       url + '/user' + '/registerDevice/',
       deviceToken1,
     );
-    expect(response.data).toBe('OK');
     expect(response.status).toBe(200);
   });
 
