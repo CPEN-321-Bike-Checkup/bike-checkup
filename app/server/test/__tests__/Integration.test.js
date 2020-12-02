@@ -77,6 +77,7 @@ const component = {
   attachment_date: new Date('2020-12-02T04:34:39.940Z'),
 };
 
+// const taskTimeId = mongoose.Types.ObjectId('56cb91bdc3464f14678934ca');
 const taskTimeId = mongoose.Types.ObjectId();
 
 const taskTime = {
@@ -141,12 +142,56 @@ describe('BikeRoute Tests', () => {
     const bike = response.data.filter((bike) => {
       return bike._id == bikeId;
     })[0];
-    console.log(bike)
+    console.log(bike);
     expect(response.status).toBe(200);
     expect(bike._id).toBe(bikeId.toHexString());
     expect(bike.owner_id).toBe(userId);
     expect(bike.label).toBe(bike.label);
     expect(bike.distance).toBe(bike.distance);
+  });
+
+  test('2. Get /bike -> Get bikes by userId', async () => {
+    expect.assertions(5);
+    let response = await axios.get(url + '/bike/' + userId);
+    const bike = response.data.filter((bike) => {
+      return bike._id == bikeId;
+    })[0];
+    console.log(bike);
+    expect(response.status).toBe(200);
+    expect(bike._id).toBe(bikeId.toHexString());
+    expect(bike.owner_id).toBe(userId);
+    expect(bike.label).toBe(bike.label);
+    expect(bike.distance).toBe(bike.distance);
+  });
+
+  test('2. Get /bike -> Get bikes by userId invalid ID', async () => {
+    axios
+      .get(url + '/bike/' + null)
+      .catch((err) => expect(err.response.status).toBe(400));
+  });
+
+  const deviceToken1 = {
+    token: 'a1b2c3d4e5',
+    userId: userId,
+  };
+
+  test('3. Post /registerDevice -> Register new token device', async () => {
+    expect.assertions(2);
+    let response = await axios.post(
+      url + '/user' + '/registerDevice/',
+      deviceToken1,
+    );
+    expect(response.data).toBe('OK');
+    expect(response.status).toBe(200);
+  });
+
+  test('4. Delete /registerDevice -> Delete token device', async () => {
+    expect.assertions(1);
+    let response = await axios.delete(
+      url + '/user' + '/registerDevice/',
+      deviceToken1,
+    );
+    expect(response.status).toBe(200);
   });
 });
 
