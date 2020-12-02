@@ -53,7 +53,7 @@ export default class ScheduleScreen extends React.Component {
   }
 
   getSchedule() {
-    console.log('schedule for user: ', global.userId);
+    console.log('Schedule for user: ', global.userId);
     timeout(
       3000,
       fetch(
@@ -63,7 +63,6 @@ export default class ScheduleScreen extends React.Component {
         },
       )
         .then((response) => {
-          console.log(response);
           return response.json();
         })
         .then((schedule) => {
@@ -118,7 +117,6 @@ export default class ScheduleScreen extends React.Component {
 
   filterSchedule = (scheduleArr) => {
     for (var i = 0; i < scheduleArr.length; ) {
-      console.log(scheduleArr[i].data);
       // Remove category if it is empty
       if (scheduleArr[i].data.length == 0) {
         scheduleArr.splice(i, 1);

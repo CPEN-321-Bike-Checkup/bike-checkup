@@ -17,7 +17,7 @@ const senderID = 517168871348;
 const storeData = async (key, value) => {
   try {
     await AsyncStorage.setItem(key, JSON.stringify(value));
-    console.log('saved ' + key + ': ', value);
+    console.log('Saved ' + key + ': ', value);
   } catch (e) {
     console.error('Failed to save data to storage: ', key, val);
   }
@@ -90,7 +90,7 @@ export default class StravaAuthScreen extends React.Component {
                 this.setState((stateOld) => {
                   return {authSent: true};
                 });
-                console.log('set global user id', global.userId);
+                console.log('Set global user id', global.userId);
                 // Now that initial authentication flow is complete, navigate to main Home Navigator
                 this.navigation.replace('Home');
 

@@ -6,7 +6,6 @@ import {Colors} from './../../constants/Colors';
 removeValue = async (key) => {
   try {
     await AsyncStorage.removeItem(key);
-    console.log('removed item');
   } catch (e) {
     // remove error
   }

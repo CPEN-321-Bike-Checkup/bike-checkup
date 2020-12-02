@@ -29,7 +29,7 @@ export default class WelcomeScreen extends React.Component {
   removeValue = async (key) => {
     try {
       await AsyncStorage.removeItem(key);
-      console.log('removed item');
+      console.log('Removed item');
     } catch (e) {
       // remove error
     }
@@ -39,10 +39,7 @@ export default class WelcomeScreen extends React.Component {
     this.getData('userId')
       .then((data) => {
         if (data !== undefined) {
-          console.log(
-            'HHEHEH;LKASDJF;ALSDKFJMC;LSAIDJNFMCL;SKDJNF;LAKSJDNL;',
-            data,
-          );
+          console.log('Result of getData:', data);
           data = JSON.parse(data);
           if (data.userId !== undefined) {
             global.userId = parseInt(data.userId, 10);

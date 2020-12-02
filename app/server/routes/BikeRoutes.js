@@ -12,7 +12,7 @@ const initBikeRouting = (app) => {
       .CreateBike(req.body)
       .then((bikes) => res.status(201).send(JSON.stringify(bikes)))
       .catch((err) => {
-        console.log('error creating bikes', err);
+        console.log('Error creating bikes', err);
         if (err.name === 'ValidationError') {
           res.status(400).send('Error: Invalid Request syntax');
         } else {

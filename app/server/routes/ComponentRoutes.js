@@ -12,7 +12,7 @@ const initComponentRouting = (app) => {
         res.send(JSON.stringify(components));
       },
       (err) => {
-        console.log('error getting components', err);
+        console.log('Error getting components', err);
         res.send(JSON.stringify(err));
       },
     );
@@ -23,7 +23,7 @@ const initComponentRouting = (app) => {
       .CreateComponents(req.body)
       .then((components) => res.status(201).send(JSON.stringify(components)))
       .catch((err) => {
-        console.log('error creating component', err);
+        console.log('Error creating component', err);
         if (err.name === 'ValidationError') {
           res.status(400).send('Error: Invalid Request syntax');
         } else {
@@ -47,7 +47,7 @@ const initComponentRouting = (app) => {
         }
       })
       .catch((err) => {
-        console.log('error updating component', err);
+        console.log('Error updating component', err);
         if (err.name === 'ValidationError' || err.name == 'CastError') {
           res.status(400).send('Error: Invalid Request syntax');
         } else if (err.name === 'DocumentNotFoundError') {
