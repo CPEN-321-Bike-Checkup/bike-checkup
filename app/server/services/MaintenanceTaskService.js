@@ -51,13 +51,7 @@ class MaintenanceTaskService {
         maintenanceTask._id,
       );
       if (task.repeats) {
-        if (task.schedule_type === 'date') {
-          var newDueDate = new Date();
-          newDueDate.setDate(newDueDate.getDate() + task.threshold_val);
-          task.predicted_due_date = newDueDate;
-        }
-
-        taskResult = this.maintenanceTaskRepository.Update({
+        taskResult = this.Update({
           last_maintenance_val: new Date(),
           repeats: task.repeats,
           _id: task._id,
@@ -326,14 +320,20 @@ class MaintenanceTaskService {
         var startDate = new Date();
         startDate.setDate(startDate.getDate() - 14);
 
-        var componentActivityListId = await this.componentActivityRepository.GetActivityIdsForComponent(
-          component_id,
-        );
+        //var componentActivityListId = await this.componentActivityRepository.GetActivityIdsForComponent(
+        //  component_id,
+        //);
 
         var date = new Date(last_maint_date);
-        var activityList = await this.activityRepository.GetActivitiesByIdsAfterDate(
-          componentActivityListId.map((ac) => ac.activity_id),
-          new Date(startDate), //date,
+        //var activityList = await this.activityRepository.GetActivitiesByIdsAfterDate(
+        //  componentActivityListId.map((ac) => ac.activity_id),
+        //  new Date(startDate), //date,
+        //);
+        var component = await this.componentRepository.GetById(component_id);
+        var bike = await this.bikeRepository.GetById(component.bike_id);
+        var activityList = await this.activityRepository.GetActivitiesForBikeAfterDate(
+          bike._id,
+          date,
         );
 
         if (activityList.length == 0) {

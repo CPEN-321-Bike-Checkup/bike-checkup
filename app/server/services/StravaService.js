@@ -78,6 +78,7 @@ class StravaService {
       var activity = {
         _id: a.id,
         athlete_id: a.athlete.id,
+        bike_id: a.gear_id,
         description: a.name,
         distance: a.distance,
         time_s: a.elapsed_time,

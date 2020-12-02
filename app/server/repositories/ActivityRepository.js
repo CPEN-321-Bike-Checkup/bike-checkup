@@ -7,6 +7,16 @@ class ActivityRepository extends Repository {
     super(activityModel);
   }
 
+  GetActivitiesForBikeAfterDate(bikeId, date) {
+    return this.documentModel
+      .find({bike_id: bikeId, date: {$gte: date}})
+      .exec();
+  }
+
+  GetActivitiesForBike(bikeId) {
+    return this.documentModel.find({bike_id: bikeId}).exec();
+  }
+
   // update to use numberOfDays
   GetActivitiesForUserInRange(userId, date, numberOfDays) {
     var endDate = new Date();
