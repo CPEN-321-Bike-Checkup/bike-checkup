@@ -56,7 +56,6 @@ export default class ActivitiesScreen extends React.Component {
       )
         .then((response) => response.json())
         .then((activities) => {
-          console.log(activities)
           this.setState((prevState) => {
             console.log(activities.length > 0)
             return {
