@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {View, Text, Button, StyleSheet} from 'react-native';
 import {Colors} from './../../constants/Colors';
 import {timeout} from '../ScreenUtils';
+import Popup from '../SubComponents/Popup'
 
 removeValue = async (key) => {
   try {
@@ -18,6 +19,7 @@ export default class SettingsScreen extends React.Component {
 
     this.state = {
       settingsTitle: null,
+      syncCompletePopupVisible: false,
     };
 
     this.navigation = props.navigation;
@@ -35,6 +37,16 @@ export default class SettingsScreen extends React.Component {
   syncStravaData() {
     global.SyncStrava(global.userId).then((result) => {
       //when sync is done
+      this.setState({
+        syncCompletePopupVisible: true,
+      })
+    });
+  };
+
+  onPopupClose = () => {
+    // Clear error state
+    this.setState({
+      syncCompletePopupVisible: false,
     });
   };
 
@@ -82,6 +94,12 @@ export default class SettingsScreen extends React.Component {
           color={Colors.primaryOrange}
           onPress={() => this.logout()}
         />
+        {Popup(
+          'Strava Sync Successful',
+          this.onPopupClose,
+          this.state.syncCompletePopupVisible,
+          false
+        )}
       </View>
     );
   };
