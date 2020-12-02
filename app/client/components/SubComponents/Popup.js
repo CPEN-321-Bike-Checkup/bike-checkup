@@ -2,7 +2,7 @@ import React from 'react';
 import {Modal, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
 import {Colors} from '../../constants/Colors';
 
-export default Popup = function (
+Popup = function (
   text,
   pressCallback,
   visible,
@@ -80,3 +80,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
+
+export default Popup;

@@ -7,7 +7,8 @@ class DeviceTokenRepository extends Repository {
   }
 
   GetDocumentKey(document) {
-    return {token: document.token};
+    var docmentKey = {token: document.token};
+    return documentKey;
   }
 }
 const deviceTokenRepository = new DeviceTokenRepository(DeviceTokenModel);

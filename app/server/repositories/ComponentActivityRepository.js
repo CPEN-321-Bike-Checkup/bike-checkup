@@ -8,10 +8,11 @@ class ComponentActivityRepository extends Repository {
   }
 
   GetDocumentKey(document) {
-    return {
+    var documentKey = {
       component_id: document.component_id,
       activity_id: document.activity_id,
     };
+    return documentKey;
   }
 
   GetActivityIdsForComponent(componentId) {

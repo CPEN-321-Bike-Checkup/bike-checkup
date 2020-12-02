@@ -7,7 +7,8 @@ class Repository {
   }
 
   GetDocumentKey(document) {
-    return {_id: document._id};
+    var documentKey = {_id: document._id};
+    return documentKey;
   }
 
   GetByQuery(query) {
