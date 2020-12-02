@@ -22,7 +22,10 @@ module.exports = {
   // collectCoverage: false,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
-  collectCoverageFrom: ['services/*.js'],
+  collectCoverageFrom: [
+    'services/MaintenanceTaskService.js',
+    'services/UserService.js',
+  ],
 
   // The directory where Jest should output its coverage files
   coverageDirectory: 'coverage',
@@ -63,7 +66,7 @@ module.exports = {
 
   // A set of global variables that need to be available in all test environments
   globals: {
-    ip: '192.168.0.16', // Update to your local IP
+    ip: '192.168.1.64', // Update to your local IP
     port: 5000,
   },
 

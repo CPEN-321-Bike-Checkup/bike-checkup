@@ -5,6 +5,10 @@ class ComponentService {
     this.componentRepository = componentRepository;
   }
 
+  GetAll() {
+    return this.componentRepository.GetAll();
+  }
+
   CreateComponents(components) {
     var promise = this.componentRepository.Create(components);
     return promise;

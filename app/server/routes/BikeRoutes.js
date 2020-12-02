@@ -21,6 +21,18 @@ const initBikeRouting = (app) => {
       });
   });
 
+  bikeRouter.get('/', (req, res, next) => {
+    bikeService
+      .GetAllBikes()
+      .then((bike) => {
+        res.send(JSON.stringify(bike));
+      })
+      .catch((err) => {
+        console.error('error getting user data', err);
+        res.status(500).send('error getting user data');
+      });
+  });
+
   //add error handling
   bikeRouter.get('/:userId/', (req, res) => {
     var userId = parseInt(req.params.userId, 10);

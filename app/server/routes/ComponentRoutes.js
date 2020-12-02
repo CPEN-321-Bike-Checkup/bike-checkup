@@ -6,7 +6,19 @@ const initComponentRouting = (app) => {
 
   app.use('/component', componentRouter);
 
-  componentRouter.get('/:bikeId', (req, res) => {
+  /*componentRouter.get('/', (req, res) => {
+    componentService.GetAll().then(
+      (components) => {
+        res.send(JSON.stringify(components));
+      },
+      (err) => {
+        console.log('error getting components', err);
+        res.send(JSON.stringify(err));
+      },
+    );
+  });*/
+
+  componentRouter.get('/:bikeId/', (req, res) => {
     componentService.GetComponentsForBike(req.params.bikeId).then(
       (components) => {
         res.send(JSON.stringify(components));

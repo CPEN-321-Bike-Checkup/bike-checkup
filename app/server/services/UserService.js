@@ -52,6 +52,10 @@ class UserService {
   CreateUsers(users) {
     return this.userRepository.Create(users);
   }
+
+  DeleteUser(user) {
+    return this.userRepository.Delete(user);
+  }
 }
 
 const userService = new UserService(userRepository, deviceTokenRepository);

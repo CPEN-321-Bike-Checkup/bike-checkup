@@ -12,6 +12,10 @@ class BikeService {
   GetBikesForUser(userId) {
     return this.bikeRepository.GetBikesForUser(userId);
   }
+
+  GetAllBikes() {
+    return this.bikeRepository.GetAll();
+  }
 }
 
 const bikeService = new BikeService(bikeRepository);

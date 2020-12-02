@@ -17,8 +17,9 @@ class ComponentRepository extends Repository {
   }
 
   GetComponentsForBike(bikeId) {
-    var promise = this.documentModel.find({bike_id: bikeId}).exec();
-    return promise;
+    //var promise = this.documentModel.find({bike_id: bikeId}).exec();
+    //return promise;
+    return this.documentModel.find({bike_id: bikeId}).exec();
   }
 
   GetBike(componentId) {

@@ -19,9 +19,20 @@ const initUserRouting = (app) => {
       });
   });
 
+  userRouter.get('/', (req, res, next) => {
+    UserService.GetAllUsers()
+      .then((user) => {
+        res.send(JSON.stringify(user));
+      })
+      .catch((err) => {
+        console.error('error getting user data', err);
+        res.status(500).send('error getting user data');
+      });
+  });
+
   userRouter.get('/:userId', (req, res, next) => {
     var userId = parseInt(req.params.userId, 10);
-    UserService.GetUserById(userId)
+    UserService.GetUserById([userId])
       .then((user) => {
         res.send(JSON.stringify(user));
       })
@@ -54,5 +65,18 @@ const initUserRouting = (app) => {
         res.sendStatus(500);
       });
   });
+
+  //needed for testing
+  userRouter.delete('/', (req, res, next) => {
+    UserService.DeleteUser(req.body)
+      .then((result) => {
+        res.sendStatus(200);
+      })
+      .catch((err) => {
+        console.error('error deleting user', err);
+        res.sendStatus(500);
+      });
+  });
 };
+
 module.exports = initUserRouting;
