@@ -55,7 +55,7 @@ export default class SettingsScreen extends React.Component {
       });
     }, 10000);
   }
- 
+
   onStravaSyncPopupClose = () => {
     // Clear popup
     this.setState({
