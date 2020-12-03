@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {View, Text, Button, StyleSheet} from 'react-native';
 import {Colors} from './../../constants/Colors';
 import {timeout} from '../ScreenUtils';
-import Popup from '../SubComponents/Popup'
+import Popup from '../SubComponents/Popup';
 
 removeValue = async (key) => {
   try {
@@ -24,25 +24,25 @@ export default class SettingsScreen extends React.Component {
     };
 
     this.navigation = props.navigation;
-  };
+  }
 
   componentDidMount() {
     this.getUserName();
-  };
+  }
 
   logout() {
     removeValue('userId');
     this.navigation.replace('Welcome');
-  };
+  }
 
   syncStravaData() {
     global.SyncStrava(global.userId).then((result) => {
       //when sync is done
       this.setState({
         syncCompletePopupVisible: true,
-      })
+      });
     });
-  };
+  }
 
   triggerPushNotification() {
     this.setState({
@@ -50,12 +50,16 @@ export default class SettingsScreen extends React.Component {
     });
 
     setTimeout(() => {
-        timeout(3000, fetch(`http://${global.serverIp}:5000/runReminderJob`, { method: 'POST'}))
-        .catch((error) => {
-          console.error(error);
-        });
-      }, 10000);
-  };
+      timeout(
+        3000,
+        fetch(`http://${global.serverIp}:5000/runReminderJob`, {
+          method: 'POST',
+        }),
+      ).catch((error) => {
+        console.error(error);
+      });
+    }, 10000);
+  }
 
   onStravaSyncPopupClose = () => {
     // Clear popup
@@ -69,12 +73,14 @@ export default class SettingsScreen extends React.Component {
     this.setState({
       weeklySummaryPopupVisible: false,
     });
-  }
+  };
 
   getUserName() {
     timeout(
       3000,
-      fetch(`http://${global.serverIp}:5000/user/${global.userId}`, { method: 'GET'})
+      fetch(`http://${global.serverIp}:5000/user/${global.userId}`, {
+        method: 'GET',
+      })
         .then((response) => {
           response.json();
         })
@@ -95,7 +101,7 @@ export default class SettingsScreen extends React.Component {
 
       console.error(error);
     });
-  };
+  }
 
   render() {
     return (
@@ -122,17 +128,17 @@ export default class SettingsScreen extends React.Component {
           'Strava Sync Successful',
           this.onStravaSyncPopupClose,
           this.state.syncCompletePopupVisible,
-          false
+          false,
         )}
         {Popup(
           'Your notification will appear in 10 seconds. Please close the app to see the notification.',
           this.onWeeklySummaryPopupClose,
           this.state.weeklySummaryPopupVisible,
-          false
+          false,
         )}
       </View>
     );
-  };
+  }
 }
 
 const styles = StyleSheet.create({
