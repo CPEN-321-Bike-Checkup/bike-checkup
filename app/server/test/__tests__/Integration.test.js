@@ -8,40 +8,24 @@ const initUserRoutes = require('../../routes/UserRoutes');
 const initMaintenanceTaskRoutes = require('../../routes/MaintenanceTaskRoutes');
 const initBikeRoutes = require('../../routes/BikeRoutes');
 const initComponentRoutes = require('../../routes/ComponentRoutes');
+const initMaintenanceRecordRouting = require('../../routes/MaintenanceRecordRoutes');
+const initActivityRouting = require('../../routes/ActivityRoutes');
+const initStravaRouting = require('../../routes/StravaRoutes');
 
-const ip = '192.168.1.83';
+const ip = '3.97.53.16';
 const port = 5000;
 
 var url = 'http://' + ip + ':' + port;
 beforeAll(() => {
-  // server = app.listen(port, () => {
-  initUserRoutes(app);
-  initMaintenanceTaskRoutes(app);
-  initBikeRoutes(app);
-  initComponentRoutes(app);
-
-  //setup database data
-  // axios.post(url + '/user', user).catch(
-  //   // (response) => console.log(response),
-  //   (err) => console.log(err),
-  // );
-  // axios.post(url + '/bike', bike).catch(
-  //   // (response) => console.log(response),
-  //   (err) => console.log(err),
-  // );
-  // axios.post(url + '/component', component).catch(
-  //   // (response) => console.log(response),
-  //   (err) => console.log(err),
-  // );
-  // axios.post(url + '/maintenanceTask', taskTime).catch(
-  //   // (response) => console.log(response),
-  //   (err) => console.log(err),
-  // );
-  // axios.post(url + '/maintenanceTask', taskDistance).catch(
-  //   // (response) => console.log(response),
-  //   (err) => console.log(err),
-  // );
-  // });
+  server = app.listen(port, () => {
+    initUserRoutes(app);
+    initBikeRoutes(app);
+    initComponentRoutes(app);
+    initMaintenanceTaskRoutes(app);
+    initMaintenanceRecordRouting(app);
+    initActivityRouting(app);
+    initStravaRouting(app);
+  });
 });
 
 afterAll(() => {
@@ -334,23 +318,45 @@ describe('MaintenanceRecordRoutes Tests', () => {
   });
 });
 
+describe('ActivityRoute Tests', () => {
+  test('1. Get /strava -> Get unauthenticated user', async () => {
+    expect.assertions(1);
+    let response = await axios.get(
+      url + `/activity/${userId}/?afterDate=${new Date()}&numDays=${100}`,
+    );
+    expect(response.status).toBe(200);
+  });
+});
+
+describe('StravaRoutes Tests', () => {
+  test('1. Post /strava -> Post unauthenticated user', async () => {
+    expect.assertions(1);
+
+    try {
+      await axios.post(url + '/strava/' + userId + '/connectedStrava', user);
+    } catch (err) {
+      expect(err.response.status).not.toBe(200);
+    }
+  });
+});
+
 describe('Testing Resource Deletion', () => {
   test('1. Delete / -> Deleting User', async () => {
     let response = await axios.delete(url + '/user' + '/', user);
     expect(response.status).toBe(200);
   });
 
-  test('1. Delete / -> Deleting component', async () => {
+  test('2. Delete / -> Deleting component', async () => {
     let response = await axios.delete(url + '/component' + '/', component);
     expect(response.status).toBe(200);
   });
 
-  test('1. Delete / -> Deleting component', async () => {
+  test('3. Delete / -> Deleting task', async () => {
     let response = await axios.delete(url + '/maintenanceTask' + '/', taskTime);
     expect(response.status).toBe(200);
   });
 
-  test('1. Delete / -> Deleting component', async () => {
+  test('4. Delete / -> Deleting task', async () => {
     let response = await axios.delete(
       url + '/maintenanceTask' + '/',
       taskDistance,
