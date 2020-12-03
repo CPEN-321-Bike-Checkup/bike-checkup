@@ -33,9 +33,9 @@ export default class HistoryScreen extends React.Component {
     // Re-fetch data every time screen comes into focus
     this._unsubscribe = this.props.navigation.addListener('focus', () => {
       this.setState((stateOld) => {
-        console.log('Days filer: ', stateOld.numDays - 30);
-        return {numDays: stateOld.numDays - 30};
-      }, this.getHistory());
+        console.log('Days filer: ', stateOld.numDays);
+        return {numDays: stateOld.numDays};
+      });
     });
   }
 
@@ -59,7 +59,7 @@ export default class HistoryScreen extends React.Component {
           console.log('Got history: ', history);
           this.setState((stateOld) => {
             return {
-              moreData: history.length != this.state.maintenanceRecords.length,
+              moreData: history.length != stateOld.maintenanceRecords.length,
               maintenanceRecords: history,
               numDays: stateOld.numDays + 30,
               fetchState: FETCH_SUCCEEDED,
@@ -119,7 +119,10 @@ export default class HistoryScreen extends React.Component {
     } else if (this.state.fetchState != FETCH_IN_PROGRESS) {
       mainView = (
         <View style={CommonStyles.fetchFailedView}>
-          <Text style={CommonStyles.emptyStateText}>No maintenance history.{'\n'}Complete some tasks from your schedule to see entries.</Text>
+          <Text style={CommonStyles.emptyStateText}>
+            No maintenance history.{'\n'}Complete some tasks from your schedule
+            to see entries.
+          </Text>
         </View>
       );
     }

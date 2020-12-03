@@ -33,9 +33,9 @@ export default class ActivitiesScreen extends React.Component {
     // Re-fetch data every time screen comes into focus
     this._unsubscribe = this.props.navigation.addListener('focus', () => {
       this.setState((stateOld) => {
-        console.log('Days filer: ', stateOld.numDays - 30);
-        return {numDays: stateOld.numDays - 30};
-      }, this.getActivities());
+        console.log('Days filer: ', stateOld.numDays);
+        return {numDays: stateOld.numDays};
+      });
     });
   }
 
@@ -57,9 +57,9 @@ export default class ActivitiesScreen extends React.Component {
         .then((response) => response.json())
         .then((activities) => {
           this.setState((prevState) => {
-            console.log(activities.length > 0)
+            console.log(activities.length > 0);
             return {
-              moreData: activities.length != this.state.activities.length,
+              moreData: activities.length != prevState.activities.length,
               activities: activities.sort(function (x, y) {
                 return new Date(y.date) - new Date(x.date);
               }),

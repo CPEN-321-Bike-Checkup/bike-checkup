@@ -15,7 +15,7 @@ export default class BikesStack extends React.Component {
       <Stack.Navigator
         initialRouteName="Bikes"
         screenOptions={{
-          headerTintColor: 'white',
+          headerTintColor: 'black',
           headerStyle: {backgroundColor: Colors.primaryOrange},
         }}>
         <Stack.Screen name="Bikes" component={BikesScreen} />

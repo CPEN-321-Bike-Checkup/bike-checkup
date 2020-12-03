@@ -224,7 +224,7 @@ export default class AddTaskScreen extends React.Component {
         }}
         placeholder="Select..."
         placeholderStyle={{color: Colors.grey, fontSize: 16}}
-        selectedLabelStyle={{color: Colors.black, fontSize: 16}}
+        selectedLabelStyle={{color: 'black', fontSize: 16}}
         containerStyle={{height: 50}}
         onChangeItem={(item) => onChangeCallback(item)}
       />
@@ -238,7 +238,7 @@ export default class AddTaskScreen extends React.Component {
         defaultValue={defaultValue} // Won't display if undefined or null
         placeholder="Enter..."
         placeholderTextColor={Colors.grey}
-        underlineColorAndroid={Colors.black}
+        underlineColorAndroid={'black'}
         keyboardType={keyboard}
         onChangeText={onTextCallback}
         testID={testID}
@@ -331,7 +331,7 @@ export default class AddTaskScreen extends React.Component {
   save = () => {
     this.setState({isSaving: true});
 
-    let {bikeId, componentId, taskType, threshold} = this.state;
+    let {bikeId, componentId, taskType, threshold, description} = this.state;
 
     // Check for form errors
     let errorText = null;
@@ -345,6 +345,8 @@ export default class AddTaskScreen extends React.Component {
       errorText = 'Please enter a threshold.';
     } else if (threshold < 0) {
       errorText = 'Threshold cannot be negative.';
+    } else if (description == null) {
+      errorText = 'Please enter a task title.';
     }
 
     if (errorText) {

@@ -42,11 +42,11 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: Colors.white,
+    backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
     alignItems: 'center',
-    shadowColor: Colors.black,
+    shadowColor: 'black',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   textStyle: {
-    color: 'white',
+    color: 'black',
     fontWeight: 'bold',
     textAlign: 'center',
     fontSize: 16,

@@ -20,8 +20,8 @@ export default class MainTabNavigator extends Component {
     return (
       <Tab.Navigator
         initialRouteName="Schedule"
-        activeColor={Colors.activeTabLightWhite}
-        inactiveColor={Colors.inactiveTabLightBlack}
+        activeColor={Colors.activeTabWhite}
+        inactiveColor={Colors.inactiveTabBlack}
         labelStyle={{fontSize: 12}}
         barStyle={{backgroundColor: Colors.primaryOrange, marginTop: -22}}
         labeled={true}

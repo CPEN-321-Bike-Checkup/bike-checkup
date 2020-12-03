@@ -1,9 +1,9 @@
 import React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {View, Text, Button, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {Colors} from './../../constants/Colors';
 import {timeout} from '../ScreenUtils';
-import Popup from '../SubComponents/Popup'
+import Popup from '../SubComponents/Popup';
 
 removeValue = async (key) => {
   try {
@@ -18,31 +18,26 @@ export default class SettingsScreen extends React.Component {
     super(props);
 
     this.state = {
-      settingsTitle: null,
       syncCompletePopupVisible: false,
       weeklySummaryPopupVisible: false,
     };
 
     this.navigation = props.navigation;
-  };
-
-  componentDidMount() {
-    this.getUserName();
-  };
+  }
 
   logout() {
     removeValue('userId');
     this.navigation.replace('Welcome');
-  };
+  }
 
   syncStravaData() {
     global.SyncStrava(global.userId).then((result) => {
       //when sync is done
       this.setState({
         syncCompletePopupVisible: true,
-      })
+      });
     });
-  };
+  }
 
   triggerPushNotification() {
     this.setState({
@@ -50,12 +45,16 @@ export default class SettingsScreen extends React.Component {
     });
 
     setTimeout(() => {
-        timeout(3000, fetch(`http://${global.serverIp}:5000/runReminderJob`, { method: 'POST'}))
-        .catch((error) => {
-          console.error(error);
-        });
-      }, 10000);
-  };
+      timeout(
+        3000,
+        fetch(`http://${global.serverIp}:5000/runReminderJob`, {
+          method: 'POST',
+        }),
+      ).catch((error) => {
+        console.error(error);
+      });
+    }, 10000);
+  }
 
   onStravaSyncPopupClose = () => {
     // Clear popup
@@ -69,87 +68,57 @@ export default class SettingsScreen extends React.Component {
     this.setState({
       weeklySummaryPopupVisible: false,
     });
-  }
-
-  getUserName() {
-    timeout(
-      3000,
-      fetch(`http://${global.serverIp}:5000/user/${global.userId}`, { method: 'GET'})
-        .then((response) => {
-          response.json();
-        })
-        .then((data) => {
-          this.setState(() => {
-            return {
-              settingsTitle: data ? data + 's Settings' : 'Settings', // TODO: Figure out why data is undefined
-            };
-          });
-        }),
-    ).catch((error) => {
-      // Gracefully handle error by displaying generic settings title
-      this.setState(() => {
-        return {
-          settingsTitle: 'Settings',
-        };
-      });
-
-      console.error(error);
-    });
   };
 
   render() {
     return (
       <View style={styles.view}>
-        <Text style={styles.title}>{this.state.settingsTitle}</Text>
-        <Button
-          title="Sync Strava Data"
-          color={Colors.primaryOrange}
-          onPress={() => this.syncStravaData()}
-        />
+        <View style={styles.largeLineBreak}></View>
+        <TouchableOpacity onPress={() => this.syncStravaData()}>
+          <Text style={styles.button}>SYNC STRAVA DATA</Text>
+        </TouchableOpacity>
         <View style={styles.lineBreak}></View>
-        <Button
-          title="Logout"
-          color={Colors.primaryOrange}
-          onPress={() => this.logout()}
-        />
+        <TouchableOpacity onPress={() => this.logout()}>
+          <Text style={styles.button}>LOGOUT</Text>
+        </TouchableOpacity>
         <View style={styles.lineBreak}></View>
-        <Button
-          title="Get Weekly Summary Push Notification"
-          color={Colors.primaryOrange}
-          onPress={() => this.triggerPushNotification()}
-        />
+        <TouchableOpacity onPress={() => this.triggerPushNotification()}>
+          <Text style={styles.button}>GET WEEKLY SUMMARY PUSH NOTIFICATION</Text>
+        </TouchableOpacity>
         {Popup(
           'Strava Sync Successful',
           this.onStravaSyncPopupClose,
           this.state.syncCompletePopupVisible,
-          false
+          false,
         )}
         {Popup(
           'Your notification will appear in 10 seconds. Please close the app to see the notification.',
           this.onWeeklySummaryPopupClose,
           this.state.weeklySummaryPopupVisible,
-          false
+          false,
         )}
       </View>
     );
-  };
+  }
 }
 
 const styles = StyleSheet.create({
   view: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'center',
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    paddingTop: 70,
-    paddingBottom: 150,
-    fontFamily: 'notoserif',
   },
   lineBreak: {
     padding: 20,
+  },
+  largeLineBreak: {
+    padding: 100,
+  },
+  button: {
+    backgroundColor: Colors.accentBlue,
+    padding: 10,
+    fontFamily: 'notoserif',
+    fontWeight: 'bold',
   },
 });
