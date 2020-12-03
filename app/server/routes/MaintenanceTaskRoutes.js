@@ -7,30 +7,6 @@ const initMaintenanceTaskRouting = (app) => {
 
   app.use('/maintenanceTask', maintenanceTaskRouter);
 
-  maintenanceTaskRouter.get('/prediction', (req, res) => {
-    if (req.query.userId !== undefined && req.query.userId) {
-      maintenanceTaskService
-        .MaintenancePredictForUser(req.query.userId)
-        .then((predictions) => {
-          res.status(200).send(JSON.stringify(predictions));
-        })
-        .catch((err) => {
-          console.error('error creating predictions', err);
-          res.status(500).send('Error creating prediction', err);
-        });
-    } else if (req.query.componentId !== undefined && req.query.componentId) {
-      maintenanceTaskService
-        .MaintenancePredictForComponent(req.query.componentId)
-        .then((predictions) => {
-          res.status(200).send(JSON.stringify(prediction));
-        })
-        .catch((err) => {
-          console.error('error creating predictions', err);
-          res.status(500).send('Error creating prediction', err);
-        });
-    }
-  });
-
   maintenanceTaskRouter.get('/', (req, res) => {
     var userId = parseInt(req.query.userId, 10);
     var componentId = req.query.componentId;

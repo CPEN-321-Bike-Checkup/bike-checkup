@@ -122,61 +122,12 @@ describe('UserRoutes Tests', () => {
     expect(response.status).toBe(200);
   });
 
-  test('3. Delete / -> Deleting User', async () => {
-    expect.assertions(1);
-    let response = await axios.delete(url + '/user' + '/', user);
-    expect(response.status).toBe(200);
-  });
-});
-
-describe('BikeRoute Tests', () => {
-  test('1. Post / -> Creating Bike', async () => {
-    expect.assertions(1);
-    let response = await axios.post(url + '/bike' + '/', bike);
-    expect(response.status).toBe(201);
-  });
-
-  test('2. Get /bike -> Get bikes', async () => {
-    expect.assertions(5);
-    let response = await axios.get(url + '/bike/');
-    const bike = response.data.filter((bike) => {
-      return bike._id == bikeId;
-    })[0];
-    console.log(bike);
-    expect(response.status).toBe(200);
-    expect(bike._id).toBe(bikeId.toHexString());
-    expect(bike.owner_id).toBe(userId);
-    expect(bike.label).toBe(bike.label);
-    expect(bike.distance).toBe(bike.distance);
-  });
-
-  test('2. Get /bike -> Get bikes by userId', async () => {
-    expect.assertions(5);
-    let response = await axios.get(url + '/bike/' + userId);
-    const bike = response.data.filter((bike) => {
-      return bike._id == bikeId;
-    })[0];
-    console.log(bike);
-    expect(response.status).toBe(200);
-    expect(bike._id).toBe(bikeId.toHexString());
-    expect(bike.owner_id).toBe(userId);
-    expect(bike.label).toBe(bike.label);
-    expect(bike.distance).toBe(bike.distance);
-  });
-
-  test('2. Get /bike -> Get bikes by userId invalid ID', async () => {
-    axios
-      .get(url + '/bike/' + null)
-      .catch((err) => expect(err.response.status).toBe(400));
-  });
-
   const deviceToken1 = {
     token: 'a1b2c3d4e5',
     userId: userId,
   };
 
   test('3. Post /registerDevice -> Register new token device', async () => {
-    expect.assertions(1);
     let response = await axios.post(
       url + '/user' + '/registerDevice/',
       deviceToken1,
@@ -194,85 +145,216 @@ describe('BikeRoute Tests', () => {
   });
 });
 
-// describe('User requests their bikes Tests', () => {
-//   test('1. Get bikes 200 Ok', async () => {
-//     expect.assertions(2);
-//     let response = await axios.get(url + '/bike' + '/3');
-//     expect(response).toBe(); //DEBUG check return val
-//     expect(response.status).toBe(200);
-//   });
-// });
+describe('BikeRoute Tests', () => {
+  test('1. Post / -> Creating Bike', async () => {
+    expect.assertions(1);
+    let response = await axios.post(url + '/bike' + '/', bike);
+    expect(response.status).toBe(201);
+  });
 
-// describe('User requests a bikes components Tests', () => {
-//   test('1. Get bikes components 200 Ok', async () => {
-//     expect.assertions(2);
-//     let response = await axios.get(url + '/component' + '/201');
-//     expect(response).toBe(); //DEBUG check return val
-//     expect(response.status).toBe(200);
-//   });
-// });
+  test('2. Get /bike -> Get bikes', async () => {
+    expect.assertions(5);
+    let response = await axios.get(url + '/bike/');
+    const receivedBike = response.data.filter((bike) => {
+      return bike._id == bikeId;
+    })[0];
+    // console.log(receivedBike);
+    expect(response.status).toBe(200);
+    expect(receivedBike._id).toBe(bikeId.toHexString());
+    expect(receivedBike.owner_id).toBe(userId);
+    expect(receivedBike.label).toBe(bike.label);
+    expect(receivedBike.distance).toBe(bike.distance);
+  });
 
-// //user without an id
-// var userModifiedNoId = JSON.parse(JSON.stringify(user));
-// delete userModifiedNoId._id;
-// //user id of 0
-// var userModifiedId0 = JSON.parse(JSON.stringify(user));
-// userModifiedId0._id = 0;
+  test('3. Get /bike -> Get bikes by userId', async () => {
+    expect.assertions(5);
+    let response = await axios.get(url + '/bike/' + userId);
+    const receivedBike = response.data.filter((bike) => {
+      return bike._id == bikeId;
+    })[0];
+    // console.log(receivedBike);
+    expect(response.status).toBe(200);
+    expect(receivedBike._id).toBe(bikeId.toHexString());
+    expect(receivedBike.owner_id).toBe(userId);
+    expect(receivedBike.label).toBe(bike.label);
+    expect(receivedBike.distance).toBe(bike.distance);
+  });
 
-// var device = {
-//   token: 'asonhcfoisjuheoqihbnfcxsaoid',
-//   ownerId: '3',
-// };
-// //device without an token
-// var deviceModifiedNoId = JSON.parse(JSON.stringify(device));
-// delete deviceModifiedNoId.token;
-// //token of 0
-// var deviceModifiedId0 = JSON.parse(JSON.stringify(device));
-// deviceModifiedId0.token = 0;
-// //owner of 0
-// var deviceModifiedOwnerId0 = JSON.parse(JSON.stringify(device));
-// deviceModifiedOwnerId0.ownerId = 0;
+  test('4. Get /bike -> Get bikes by userId invalid ID', async () => {
+    expect.assertions(1);
+    try {
+      await axios.get(url + '/bike/' + null);
+    } catch (err) {
+      expect(err.response.status).toBe(400);
+    }
+  });
+});
 
-// describe('User requests their schedule Tests', () => {
-//   test('1. Get schedule tasks 200 Ok', async () => {
-//     expect.assertions(2);
-//     let response = await axios.get(url + '/maintenanceTask' + '/?userId=1');
-//     expect(response).toBe(); //DEBUG check return val
-//     expect(response.status).toBe(200);
-//   });
-// });
+describe('ComponentRoute Tests', () => {
+  test('1. Post / -> Creating Component', async () => {
+    expect.assertions(1);
+    let response = await axios.post(url + '/component' + '/', component);
+    expect(response.status).toBe(201);
+  });
 
-// describe('User requests their bikes Tests', () => {
-//   test('1. Get bikes 200 Ok', async () => {
-//     expect.assertions(2);
-//     let response = await axios.get(url + '/bike' + '/3');
-//     expect(response).toBe(); //DEBUG check return val
-//     expect(response.status).toBe(200);
-//   });
-// });
+  test('2. Get /component -> Get components by bikeId', async () => {
+    expect.assertions(4);
+    let response = await axios.get(url + '/component/' + bikeId);
+    const receivedComponent = response.data.filter((component) => {
+      return component._id == componentId;
+    })[0];
+    // console.log(receivedComponent);
+    expect(response.status).toBe(200);
+    expect(receivedComponent._id).toBe(componentId.toHexString());
+    expect(receivedComponent.bike_id).toBe(bikeId.toHexString());
+    expect(receivedComponent.label).toBe(component.label);
+  });
 
-// describe('User requests a bikes components Tests', () => {
-//   test('1. Get bikes components 200 Ok', async () => {
-//     expect.assertions(2);
-//     let response = await axios.get(url + '/component' + '/201');
-//     expect(response).toBe(); //DEBUG check return val
-//     expect(response.status).toBe(200);
-//   });
-// });
+  // Note: Get route handles all bad input
 
-/*describe('User requests scheduled maintenance tasks for a component Tests', () => {
-  test('1. Get scheduled maint tasks 200 Ok', async () => {
-    expect.assertions(2);
-    let response = await axios.get(
-      url + '/maintenanceTask' + '?componentId=301&userId=3',
-    );
-    expect(response).toBe(); //DEBUG check return val
+  test('3. Put / -> Updating Component', async () => {
+    expect.assertions(1);
+    let response = await axios.put(url + '/component' + '/', component);
     expect(response.status).toBe(200);
   });
 
-  test('3. Delete / -> Deleting User', async () => {
+  test('4. Put / -> Updating Component invalid request', async () => {
     expect.assertions(1);
+    try {
+      await axios.put(url + '/component/' + null);
+    } catch (err) {
+      expect(err.response.status).toBe(404);
+    }
+  });
+});
+
+describe('MaintenanceTaskRoute Tests', () => {
+  test('1. Post / -> Creating Distance Task', async () => {
+    expect.assertions(1);
+    let response = await axios.post(
+      url + '/maintenanceTask' + '/',
+      taskDistance,
+    );
+    expect(response.status).toBe(201);
+  });
+
+  test('2. Post /maintenanceTask -> Creating Time Task', async () => {
+    expect.assertions(1);
+    let response = await axios.post(url + '/maintenanceTask' + '/', taskTime);
+    expect(response.status).toBe(201);
+  });
+
+  test('3. Get /maintenanceTask -> Get tasks by userId', async () => {
+    expect.assertions(5);
+    let response = await axios.get(url + '/maintenanceTask?userId=' + userId);
+    // console.log(response.data);
+    let receivedTask = null;
+    for (let taskCategory of response.data) {
+      for (let task of taskCategory.data) {
+        if (task.taskId == taskDistanceId) receivedTask = task;
+      }
+    }
+    // console.log(receivedTask);
+    expect(response.status).toBe(200);
+    expect(receivedTask.taskId).toBe(taskDistanceId.toHexString());
+    expect(receivedTask.task).toBe(taskDistance.description);
+    expect(receivedTask.threshold_val).toBe(taskDistance.threshold_val);
+    expect(receivedTask.repeats).toBe(taskDistance.repeats);
+  });
+
+  test('4. Get /maintenanceTask -> Get tasks by componentId', async () => {
+    expect.assertions(4);
+    let response = await axios.get(
+      url + '/maintenanceTask?componentId=' + componentId,
+    );
+    // console.log(response.data);
+    let receivedTask = response.data.filter((task) => {
+      return task.taskId == taskDistanceId;
+    })[0];
+    // console.log(receivedTask);
+    expect(response.status).toBe(200);
+    expect(receivedTask.taskId).toBe(taskDistanceId.toHexString());
+    expect(receivedTask.description).toBe(taskDistance.description);
+    expect(receivedTask.repeats).toBe(taskDistance.repeats);
+  });
+
+  test('5. Put /maintenanceTask -> Updating Component', async () => {
+    expect.assertions(1);
+    let response = await axios.put(url + '/maintenanceTask' + '/', taskTime);
+    expect(response.status).toBe(200);
+  });
+
+  test('6. Put /maintenanceTask -> Updating Component invalid request', async () => {
+    expect.assertions(1);
+    try {
+      await axios.put(url + '/maintenanceTask/' + null);
+    } catch (err) {
+      expect(err.response.status).toBe(404);
+    }
+  });
+
+  // TODO: shouldn't I just POST with the ID
+  test('7. Post /maintenanceTask/complete -> Completing task', async () => {
+    expect.assertions(1);
+    let response = await axios.post(url + '/maintenanceTask/complete', [
+      taskTime,
+    ]);
+    expect(response.status).toBe(201);
+  });
+
+  // test('6. Post /maintenanceTask -> Completing task invalid request', async () => {
+  //   expect.assertions(1);
+  //   try {
+  //     await axios.post(url + '/maintenanceTask/complete', null);
+  //   } catch (err) {
+  //     expect(err.response.status).toBe(500);
+  //   }
+  // });
+});
+
+describe('MaintenanceRecordRoutes Tests', () => {
+  test('1. Get /maintenanceRecord -> Get maintenance record by userId', async () => {
+    expect.assertions(1);
+    let response = await axios.get(
+      url +
+        '/maintenanceRecord/' +
+        userId +
+        '/?beforeDate=' +
+        new Date() +
+        '&numDays=' +
+        100,
+    );
+    console.log(response.data);
+    const receivedRecord = response.data.filter((record) => {
+      return record._id == taskTimeId;
+    })[0];
+    // console.log(receivedComponent);
+    expect(response.status).toBe(200);
+    // expect(receivedRecord._id).toBe(componentId.toHexString());
+  });
+});
+
+describe('Testing Resource Deletion', () => {
+  test('1. Delete / -> Deleting User', async () => {
     let response = await axios.delete(url + '/user' + '/', user);
     expect(response.status).toBe(200);
   });
-});*/
+
+  test('1. Delete / -> Deleting component', async () => {
+    let response = await axios.delete(url + '/component' + '/', component);
+    expect(response.status).toBe(200);
+  });
+
+  test('1. Delete / -> Deleting component', async () => {
+    let response = await axios.delete(url + '/maintenanceTask' + '/', taskTime);
+    expect(response.status).toBe(200);
+  });
+
+  test('1. Delete / -> Deleting component', async () => {
+    let response = await axios.delete(
+      url + '/maintenanceTask' + '/',
+      taskDistance,
+    );
+    expect(response.status).toBe(200);
+  });
+});
