@@ -1,3 +1,4 @@
+const {isArray} = require('lodash');
 const _ = require('lodash');
 
 class Repository {
@@ -43,6 +44,9 @@ class Repository {
       } else if (this.count['update'] === 0) {
         throw new Error('InternalError');
       } else {
+        if (Array.isArray(doc)) {
+          resolve({n: 'array error'});
+        }
         let existingDoc = this.data.find((datadoc) => datadoc._id === doc._id);
         if (_.isEqual(existingDoc, doc)) {
           resolve({n: 1, nModified: 0});

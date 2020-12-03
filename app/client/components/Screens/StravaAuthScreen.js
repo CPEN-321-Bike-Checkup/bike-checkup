@@ -11,9 +11,6 @@ const AUTH_URI =
 const CODE_LABEL_LENGTH = 5;
 const PARAM_SEPARATOR_LENGTH = 1;
 
-// Push notification constants
-const senderID = 517168871348;
-
 const storeData = async (key, value) => {
   try {
     await AsyncStorage.setItem(key, JSON.stringify(value));
@@ -120,7 +117,7 @@ export default class StravaAuthScreen extends React.Component {
                   onNotification: (notification) => {
                     console.log('Remote notification received: ', notification);
                   },
-                  senderID: senderID,
+                  senderID: global.senderID,
                   popInitialNotification: false,
                   requestPermissions: true,
                 });

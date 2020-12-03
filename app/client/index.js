@@ -15,5 +15,6 @@ const serverIp = '3.97.53.16'; // Server IP
 // Set global variables
 global.serverIp = serverIp;
 global.SyncStrava = SyncStrava;
+global.senderID = 517168871348;
 
 AppRegistry.registerComponent(appName, () => LoginStack);
