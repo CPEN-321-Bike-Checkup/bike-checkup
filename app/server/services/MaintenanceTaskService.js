@@ -30,15 +30,19 @@ class MaintenanceTaskService {
   }
 
   async Create(maintenanceTasks) {
-    if (maintenanceTasks.schedule_type === 'date') {
-      var predictedDate = new Date();
-      predictedDate.setDate(
-        predictedDate.getDate() + maintenanceTasks.threshold_val,
-      );
-      maintenanceTasks.predicted_due_date = predictedDate;
-    }
-    maintenanceTasks.last_maintenance_val = new Date();
-    return this.maintenanceTaskRepository.Create(maintenanceTasks);
+    return new Promise(async (resolve, reject) => {
+      if (maintenanceTasks.schedule_type === 'date') {
+        var predictedDate = new Date();
+        predictedDate.setDate(
+          predictedDate.getDate() + maintenanceTasks.threshold_val,
+        );
+        maintenanceTasks.predicted_due_date = predictedDate;
+      }
+      maintenanceTasks.last_maintenance_val = new Date();
+      var task = await this.maintenanceTaskRepository.Create(maintenanceTasks);
+      var date = await this.MaintenancePredict([task]);
+      resolve(task);
+    });
   }
 
   async MarkCompleted(maintenanceTasks) {
@@ -423,7 +427,7 @@ class MaintenanceTaskService {
           '\n';
       }
 
-      //this.maintenanceTaskRepository.Update(maintenanceList);
+      this.maintenanceTaskRepository.Update(maintenanceList);
       resolve(predict_dates);
     });
   }
