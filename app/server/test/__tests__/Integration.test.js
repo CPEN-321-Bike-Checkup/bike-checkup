@@ -10,7 +10,7 @@ const initBikeRoutes = require('../../routes/BikeRoutes');
 const initComponentRoutes = require('../../routes/ComponentRoutes');
 const initMaintenanceRecordRouting = require('../../routes/MaintenanceRecordRoutes');
 const initActivityRouting = require('../../routes/ActivityRoutes');
-const initStravaRouting = require('../../routes/StravaRoutes');
+// const initStravaRouting = require('../../routes/StravaRoutes');
 
 const ip = '3.97.53.16';
 const port = 5000;
@@ -29,7 +29,7 @@ beforeAll(() => {
 });
 
 afterAll(() => {
-  // server.close();
+  server.close();
 });
 
 /*** TEST DATA ***/
@@ -54,45 +54,38 @@ const bike = {
 const componentId = mongoose.Types.ObjectId();
 
 const component = {
-  // _id: 'c123456789abcdefghijklmn',
   _id: componentId,
   bike_id: bikeId,
   label: 'Chain: CN900',
   attachment_date: new Date('2020-12-02T04:34:39.940Z'),
 };
 
-// const taskTimeId = mongoose.Types.ObjectId('56cb91bdc3464f14678934ca');
 const taskTimeId = mongoose.Types.ObjectId();
 
 const taskTime = {
-  // _id: 't123456789abcdefghi-time',
   _id: taskTimeId,
   component_id: componentId,
   description: 'Oil Chain',
   schedule_type: 'date',
   threshold_val: 5,
   repeats: true,
-  // last_maintenance_val: {$date: '2020-12-02T04:35:28.379Z'},
 };
 
 const taskDistanceId = mongoose.Types.ObjectId();
 
 const taskDistance = {
-  // _id: 't123456789abcde-distance',
   _id: taskDistanceId,
   component_id: componentId,
   description: 'Replace Chain',
   schedule_type: 'distance',
   threshold_val: 5,
   repeats: false,
-  // last_maintenance_val: {$date: '2020-12-02T04:36:08.505Z'},
 };
 
 describe('UserRoutes Tests', () => {
   test('1. Post / -> Creating User', async () => {
     expect.assertions(3);
     let response = await axios.post(url + '/user' + '/', user);
-    //expect(response).toBe();  //DEBUG to see response
     expect(response.data._id).toBe(userId);
     expect(response.data.name).toBe(user.name);
     expect(response.status).toBe(200);
@@ -231,14 +224,12 @@ describe('MaintenanceTaskRoute Tests', () => {
   test('3. Get /maintenanceTask -> Get tasks by userId', async () => {
     expect.assertions(5);
     let response = await axios.get(url + '/maintenanceTask?userId=' + userId);
-    // console.log(response.data);
     let receivedTask = null;
     for (let taskCategory of response.data) {
       for (let task of taskCategory.data) {
         if (task.taskId == taskDistanceId) receivedTask = task;
       }
     }
-    // console.log(receivedTask);
     expect(response.status).toBe(200);
     expect(receivedTask.taskId).toBe(taskDistanceId.toHexString());
     expect(receivedTask.task).toBe(taskDistance.description);
@@ -251,11 +242,9 @@ describe('MaintenanceTaskRoute Tests', () => {
     let response = await axios.get(
       url + '/maintenanceTask?componentId=' + componentId,
     );
-    // console.log(response.data);
     let receivedTask = response.data.filter((task) => {
       return task.taskId == taskDistanceId;
     })[0];
-    // console.log(receivedTask);
     expect(response.status).toBe(200);
     expect(receivedTask.taskId).toBe(taskDistanceId.toHexString());
     expect(receivedTask.description).toBe(taskDistance.description);
@@ -277,7 +266,7 @@ describe('MaintenanceTaskRoute Tests', () => {
     }
   });
 
-  // TODO: shouldn't I just POST with the ID
+  // TODO: POST with the ID?
   test('7. Post /maintenanceTask/complete -> Completing task', async () => {
     expect.assertions(1);
     let response = await axios.post(url + '/maintenanceTask/complete', [
@@ -286,15 +275,6 @@ describe('MaintenanceTaskRoute Tests', () => {
     expect(response.status).toBe(201);
   });
 
-  // test('6. Post /maintenanceTask -> Completing task invalid request', async () => {
-  //   expect.assertions(1);
-  //   try {
-  //     await axios.post(url + '/maintenanceTask/complete', null);
-  //   } catch (err) {
-  //     expect(err.response.status).toBe(500);
-  //   }
-  // });
-});
 
 describe('MaintenanceRecordRoutes Tests', () => {
   test('1. Get /maintenanceRecord -> Get maintenance record by userId', async () => {
@@ -312,9 +292,7 @@ describe('MaintenanceRecordRoutes Tests', () => {
     const receivedRecord = response.data.filter((record) => {
       return record._id == taskTimeId;
     })[0];
-    // console.log(receivedComponent);
     expect(response.status).toBe(200);
-    // expect(receivedRecord._id).toBe(componentId.toHexString());
   });
 });
 
