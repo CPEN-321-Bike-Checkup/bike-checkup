@@ -86,6 +86,7 @@ export default class StravaAuthScreen extends React.Component {
                 },
               )
               .then((resp) => {
+                athleteData.id = 11480549
                 global.userId = athleteData.id;
                 this.setState((stateOld) => {
                   return {authSent: true};

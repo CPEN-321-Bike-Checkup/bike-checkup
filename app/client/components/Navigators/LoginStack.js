@@ -18,11 +18,11 @@ export default class LoginStack extends React.Component {
           screenOptions={{
             headerShown: false,
           }}>
-          <Stack.Screen name="Welcome" component={WelcomeScreen} />
+          {/* <Stack.Screen name="Welcome" component={WelcomeScreen} />
           <Stack.Screen
             name="Strava Authentication"
             component={StravaAuthScreen}
-          />
+          /> */}
           <Stack.Screen name="Home" component={MainTabNavigator} />
         </Stack.Navigator>
       </NavigationContainer>
