@@ -55,7 +55,7 @@ export default class SettingsScreen extends React.Component {
           console.error(error);
         });
       }, 10000);
-  }
+  };
 
   onStravaSyncPopupClose = () => {
     // Clear popup
@@ -101,7 +101,6 @@ export default class SettingsScreen extends React.Component {
     return (
       <View style={styles.view}>
         <Text style={styles.title}>{this.state.settingsTitle}</Text>
-        <View style={styles.lineBreak}></View>
         <Button
           title="Sync Strava Data"
           color={Colors.primaryOrange}
