@@ -20,6 +20,7 @@ export default class SettingsScreen extends React.Component {
     this.state = {
       settingsTitle: null,
       syncCompletePopupVisible: false,
+      weeklySummaryPopupVisible: false,
     };
 
     this.navigation = props.navigation;
@@ -43,12 +44,32 @@ export default class SettingsScreen extends React.Component {
     });
   };
 
-  onPopupClose = () => {
-    // Clear error state
+  triggerPushNotification() {
+    this.setState({
+      weeklySummaryPopupVisible: true,
+    });
+
+    setTimeout(() => {
+        timeout(3000, fetch(`http://${global.serverIp}:5000/runReminderJob`, { method: 'POST'}))
+        .catch((error) => {
+          console.error(error);
+        });
+      }, 10000);
+  }
+
+  onStravaSyncPopupClose = () => {
+    // Clear popup
     this.setState({
       syncCompletePopupVisible: false,
     });
   };
+
+  onWeeklySummaryPopupClose = () => {
+    // Clear popup
+    this.setState({
+      weeklySummaryPopupVisible: false,
+    });
+  }
 
   getUserName() {
     timeout(
@@ -92,10 +113,22 @@ export default class SettingsScreen extends React.Component {
           color={Colors.primaryOrange}
           onPress={() => this.logout()}
         />
+        <View style={styles.lineBreak}></View>
+        <Button
+          title="Get Weekly Summary Push Notification"
+          color={Colors.primaryOrange}
+          onPress={() => this.triggerPushNotification()}
+        />
         {Popup(
           'Strava Sync Successful',
-          this.onPopupClose,
+          this.onStravaSyncPopupClose,
           this.state.syncCompletePopupVisible,
+          false
+        )}
+        {Popup(
+          'Your notification will appear in 10 seconds. Please close the app to see the notification.',
+          this.onWeeklySummaryPopupClose,
+          this.state.weeklySummaryPopupVisible,
           false
         )}
       </View>
