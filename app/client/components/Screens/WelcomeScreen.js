@@ -35,7 +35,7 @@ export default class WelcomeScreen extends React.Component {
     }
   };
 
-  skipLogin = true;
+  skipLogin = false; // Make sure this is false when committing!
   userIdTest = 71747974;
   componentDidMount() {
     if (this.skipLogin) {
