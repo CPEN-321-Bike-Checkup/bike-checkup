@@ -45,7 +45,7 @@ class Repository {
         throw new Error('InternalError');
       } else {
         if (Array.isArray(doc)) {
-          resolve({n: 'array error'});
+          resolve({n: 1, nModified: 1});
         }
         let existingDoc = this.data.find((datadoc) => datadoc._id === doc._id);
         if (_.isEqual(existingDoc, doc)) {

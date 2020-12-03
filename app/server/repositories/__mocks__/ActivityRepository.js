@@ -5,7 +5,6 @@ class ActivityRepository extends Repository {
   constructor(data) {
     super(data);
     this.count['afterDateForUser'] = 0;
-    this.count['afterDateForBike'] = 0;
   }
 
   GetActivitiesForBikeAfterDate(bikeId, date) {
@@ -20,6 +19,9 @@ class ActivityRepository extends Repository {
             break;
           case 2:
             resolve([activity4, activity5]);
+            break;
+          case 6:
+            resolve([activity6, activity7]);
             break;
           default:
             resolve([]);
@@ -96,7 +98,7 @@ const activity3 = {
 const activity4 = {
   _id: 4,
   bike_id: 2,
-  athelete_id: 1,
+  athlete_id: 1,
   description: 'test4',
   distance: 30,
   time_s: 400,
@@ -106,11 +108,37 @@ const activity4 = {
 const activity5 = {
   _id: 5,
   bike_id: 2,
-  athelete_id: 1,
+  athlete_id: 1,
   description: 'test5',
   distance: 35,
   time_s: 350,
   date: new Date('2020-11-26'),
+};
+
+//activities to overshoot predictions
+const MILLISECONDS_IN_DAY = 86400000;
+let today = new Date();
+let day1 = new Date(today - 29 * MILLISECONDS_IN_DAY);
+let day2 = new Date(today - 25 * MILLISECONDS_IN_DAY);
+
+const activity6 = {
+  _id: 6,
+  bike_id: 6,
+  athlete_id: 3,
+  description: 'test6',
+  distance: 250,
+  time_s: 12000,
+  date: day1, //new Date('2020-11-03'),
+};
+
+const activity7 = {
+  _id: 7,
+  bike_id: 6,
+  athlete_id: 3,
+  description: 'test7',
+  distance: 30,
+  time_s: 12000,
+  date: day2, //new Date('2020-11-05'),
 };
 
 var data = [activity1, activity2, activity3, activity4, activity5];

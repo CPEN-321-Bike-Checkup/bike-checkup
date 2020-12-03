@@ -7,12 +7,13 @@ jest.mock('../../repositories/ComponentActivityRepository');
 
 const express = require('express');
 const maintenanceTaskService = require('../../services/MaintenanceTaskService');
+const mongoose = require('mongoose');
 const app = express();
 app.use(express.json());
 
 var maintSchedule1 = {
   _id: 1,
-  component_id: 1,
+  component_id: new mongoose.Types.ObjectId('56cb91bdc3464f14678934ca'),
   schedule_type: 'date',
   threshold_val: 30,
   description: 'oil chain',
@@ -23,7 +24,7 @@ var maintSchedule1 = {
 
 var maintSchedule2 = {
   _id: 2,
-  component_id: 3,
+  component_id: new mongoose.Types.ObjectId('56cb91bdc3464f14678934cb'),
   schedule_type: 'distance',
   threshold_val: 180,
   description: 'tire check',
@@ -34,7 +35,7 @@ var maintSchedule2 = {
 
 var maintSchedule3 = {
   _id: 3,
-  component_id: 1,
+  component_id: new mongoose.Types.ObjectId('56cb91bdc3464f14678934ca'),
   schedule_type: 'distance',
   threshold_val: 200,
   description: 'brake check',
@@ -47,7 +48,7 @@ var schedule_data = [maintSchedule1, maintSchedule2, maintSchedule3];
 
 const maintSchedule3Update = {
   _id: 3,
-  component_id: 3,
+  component_id: new mongoose.Types.ObjectId('56cb91bdc3464f14678934cb'),
   schedule_type: 'distance',
   threshold_val: 180,
   description: 'brake check',
@@ -58,7 +59,7 @@ const maintSchedule3Update = {
 
 const maintSchedule4 = {
   _id: 6,
-  component_id: 1,
+  component_id: new mongoose.Types.ObjectId('56cb91bdc3464f14678934ca'),
   schedule_type: 'date',
   threshold_val: 30,
   description: 'brake check',
@@ -69,13 +70,25 @@ const maintSchedule4 = {
 
 const maintSchedule5 = {
   _id: 5,
-  component_id: 4,
+  component_id: new mongoose.Types.ObjectId('56cb91bdc3464f14678934cc'),
   schedule_type: 'distance',
   threshold_val: 120,
   description: 'brake check',
   last_maintenance_val: new Date('2020-10-08'),
   repeats: true,
-  predicted_due_date: new Date('2020-11-15'),
+  predicted_due_date: undefined,
+};
+
+//schedule for userId = 2
+const maintSchedule6 = {
+  _id: 60,
+  component_id: new mongoose.Types.ObjectId('56cb91bdc3464f14678934ce'),
+  schedule_type: 'distance',
+  threshold_val: 80,
+  description: 'pump tire',
+  last_maintenance_val: new Date('2020-11-08'),
+  repeats: true,
+  predicted_due_date: undefined,
 };
 
 describe('GetById(id) Test Cases', () => {
@@ -91,17 +104,15 @@ describe('GetById(id) Test Cases', () => {
 
 describe('Create(maintenanceTask) Test Cases', () => {
   test('1. Valid new maintenanceTask with date schedule type', async () => {
-    expect.assertions(3);
+    expect.assertions(2);
     let response = await maintenanceTaskService.Create(maintSchedule4);
-    expect(response.length).toBe(1);
     expect(response._id).toBe(6);
     expect(response.description).toBe('brake check');
   });
 
   test('2. Valid new maintenanceTask with distance schedule type', async () => {
-    expect.assertions(3);
+    expect.assertions(2);
     let response = await maintenanceTaskService.Create(maintSchedule3Update);
-    expect(response.length).toBe(1);
     expect(response._id).toBe(3);
     expect(response.description).toBe('brake check');
   });
@@ -140,13 +151,12 @@ describe('Delete(maintenanceTask) Test Cases', () => {
 
 describe('MaintenanceRecordFromTask(maintenanceTask) Test Cases', () => {
   test('1. Make record from existing maintainenceTask', async () => {
-    expect.assertions(3);
+    expect.assertions(2);
     let record = await maintenanceTaskService.MaintenanceRecordFromTask(
       maintSchedule4,
     );
 
     expect(record.description).toBe('brake check');
-    expect(record.component_id).toBe(1);
     expect(record.maintenance_date.getTime()).toBeGreaterThan(
       maintSchedule4.last_maintenance_val.getTime(),
     );
@@ -164,9 +174,24 @@ describe('GetTaskScheduleForUser(userId) Test Cases', () => {
     expect(schedule[1].title).toBe('Today');
     expect(schedule[1].data[0].task).toBe('brake check'); //maintSchedule4
     expect(schedule[2].title).toBe('Next 7 Days');
-    expect(schedule[2].data[0].task).toBe('tire check'); //maintSchedule2
+    expect(schedule[2].data[0].task).toBe('brake check'); //maintSchedule3
     expect(schedule[3].title).toBe('Upcoming');
-    expect(schedule[3].data[0].task).toBe('brake check'); //maintSchedule3
+    expect(schedule[3].data[0].task).toBe('tire check'); //maintSchedule2
+  });
+
+  test('1. Get tasks for user with undefined predicted date', async () => {
+    expect.assertions(9);
+    let schedule = await maintenanceTaskService.GetTaskScheduleForUser(2);
+    //expect(schedule).toBe(); //DEBUG
+    expect(schedule.length).toBe(4);
+    expect(schedule[0].title).toBe('Overdue');
+    expect(schedule[0].data).toStrictEqual([]);
+    expect(schedule[1].title).toBe('Today');
+    expect(schedule[1].data).toStrictEqual([]);
+    expect(schedule[2].title).toBe('Next 7 Days');
+    expect(schedule[2].data).toStrictEqual([]);
+    expect(schedule[3].title).toBe('Upcoming');
+    expect(schedule[3].data[0].task).toBe('pump tire'); //maintSchedule5
   });
 });
 
@@ -177,12 +202,12 @@ describe('GetScheduledTasksSorted(userId, numDays) Test Cases', () => {
     expect(sortedList.length).toBe(4);
     expect(sortedList[0].description).toBe('oil chain'); //maintSchedule1
     expect(sortedList[1].description).toBe('brake check'); //maintSchedule4
-    expect(sortedList[2].description).toBe('tire check'); //maintSchedule2
-    expect(sortedList[3].description).toBe('brake check'); //maintSchedule3
+    expect(sortedList[2].description).toBe('brake check'); //maintSchedule3
+    expect(sortedList[3].description).toBe('tire check'); //maintSchedule2
   });
 
   test('1. Get and sort tasks in date range, numDays = 30', async () => {
-    expect.assertions(3);
+    expect.assertions(4);
     let sortedList = await maintenanceTaskService.GetScheduledTasksSorted(
       1,
       30,
@@ -190,6 +215,7 @@ describe('GetScheduledTasksSorted(userId, numDays) Test Cases', () => {
     expect(sortedList.length).toBe(3);
     expect(sortedList[0].description).toBe('oil chain'); //maintSchedule1
     expect(sortedList[1].description).toBe('brake check'); //maintSchedule4
+    expect(sortedList[2].description).toBe('brake check'); //maintSchedule3
   });
 });
 
@@ -216,15 +242,23 @@ describe('addDays(currentDate, daysToAdd) Test Cases', () => {
 describe('GetTasksForComponent(componentId) Test Cases', () => {
   test('1. Get task with valid componentId', async () => {
     expect.assertions(2);
-    let tasks = await maintenanceTaskService.GetTasksForComponent([3]);
+    let tasks = await maintenanceTaskService.GetTasksForComponent([
+      new mongoose.Types.ObjectId('56cb91bdc3464f14678934cb'),
+    ]);
     expect(tasks.length).toBe(1);
     expect(tasks[0].description).toBe('tire check');
   });
 
-  test('2. Get task with valid componentId', async () => {
-    expect.assertions(1);
-    let tasks = await maintenanceTaskService.GetTasksForComponent([1, 3]);
+  test('2. Get task with multiple valid componentId', async () => {
+    expect.assertions(4);
+    let tasks = await maintenanceTaskService.GetTasksForComponent([
+      new mongoose.Types.ObjectId('56cb91bdc3464f14678934ca'),
+      new mongoose.Types.ObjectId('56cb91bdc3464f14678934cb'),
+    ]);
     expect(tasks.length).toBe(3);
+    expect(tasks[0].description).toBe('oil chain');
+    expect(tasks[1].description).toBe('brake check');
+    expect(tasks[2].description).toBe('tire check');
   });
 });
 
@@ -232,7 +266,7 @@ describe('MaintenancePredictForComponent(componentId) Test Cases', () => {
   test('1. Maintenance Predict with one valid componentId', async () => {
     expect.assertions(2);
     let predictions = await maintenanceTaskService.MaintenancePredictForComponent(
-      [3],
+      [new mongoose.Types.ObjectId('56cb91bdc3464f14678934cb')],
     );
     expect(predictions.length).toBe(1);
     expect(new Date(predictions).getTime()).toBeGreaterThan(
@@ -243,7 +277,10 @@ describe('MaintenancePredictForComponent(componentId) Test Cases', () => {
   test('2. Maintenance Predict with multiple valid componentId', async () => {
     expect.assertions(3);
     let predictions = await maintenanceTaskService.MaintenancePredictForComponent(
-      [1, 3],
+      [
+        new mongoose.Types.ObjectId('56cb91bdc3464f14678934ca'),
+        new mongoose.Types.ObjectId('56cb91bdc3464f14678934cb'),
+      ],
     );
     expect(predictions.length).toBe(2);
     expect(new Date(predictions[0]).getTime()).toBeGreaterThan(
@@ -290,6 +327,17 @@ describe('MaintenancePredict(maintenanceList) Test Cases', () => {
       maintSchedule5,
     ]);
     expect(predictions).toStrictEqual([]);
+  });
+
+  test('3. Predict with skewed data (large intercept, positive slope)', async () => {
+    expect.assertions(1);
+    let predictions = await maintenanceTaskService.MaintenancePredict([
+      maintSchedule6,
+    ]);
+    //expect(predictions).toBe();
+    expect(new Date(predictions[0]).getTime()).toBeGreaterThan(
+      maintSchedule6.last_maintenance_val.getTime(),
+    );
   });
 });
 

@@ -427,6 +427,7 @@ class MaintenanceTaskService {
           '\n';
       }
 
+      //resolve([maintenanceList, intercept, slope]);
       this.maintenanceTaskRepository.Update(maintenanceList);
       resolve(predict_dates);
     });

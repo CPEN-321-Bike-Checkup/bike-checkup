@@ -15,10 +15,19 @@ class BikeRepository extends Repository {
       } else if (this.count['bikesForUser'] === 0) {
         throw new Error('internal server error');
       } else {
-        if (userId === 1) {
-          resolve(data);
-        } else {
-          resolve([]);
+        switch (userId) {
+          case 1:
+            resolve([bike1, bike2, bike3]);
+            break;
+          case 2:
+            resolve([bike5]);
+            break;
+          case 3:
+            resolve([bike6]);
+            break;
+          default:
+            resolve([]);
+            break;
         }
       }
     });
@@ -46,7 +55,29 @@ const bike3 = {
   distance: 350,
 };
 
-var data = [bike1, bike2, bike3];
+const bike4 = {
+  _id: 4,
+  owner_id: 2,
+  label: 'my road bike',
+  distance: 500,
+};
+
+const bike5 = {
+  _id: 5,
+  owner_id: 2,
+  label: 'Tom road bike',
+  distance: 890,
+};
+
+//bike to overshoot predictions
+const bike6 = {
+  _id: 6,
+  owner_id: 3,
+  label: 'David road bike',
+  distance: 1500,
+};
+
+var data = [bike1, bike2, bike3, bike4, bike5, bike6];
 
 var bikeRepo = new BikeRepository(data);
 

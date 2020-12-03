@@ -274,48 +274,47 @@ describe('MaintenanceTaskRoute Tests', () => {
     expect(response.status).toBe(201);
   });
 
-
-describe('MaintenanceRecordRoutes Tests', () => {
-  test('1. Get /maintenanceRecord -> Get maintenance record by userId', async () => {
-    expect.assertions(1);
-    let response = await axios.get(
-      url +
-        '/maintenanceRecord/' +
-        userId +
-        '/?beforeDate=' +
-        new Date() +
-        '&numDays=' +
-        100,
-    );
-    console.log(response.data);
-    const receivedRecord = response.data.filter((record) => {
-      return record._id == taskTimeId;
-    })[0];
-    expect(response.status).toBe(200);
+  describe('MaintenanceRecordRoutes Tests', () => {
+    test('1. Get /maintenanceRecord -> Get maintenance record by userId', async () => {
+      expect.assertions(1);
+      let response = await axios.get(
+        url +
+          '/maintenanceRecord/' +
+          userId +
+          '/?beforeDate=' +
+          new Date() +
+          '&numDays=' +
+          100,
+      );
+      console.log(response.data);
+      const receivedRecord = response.data.filter((record) => {
+        return record._id == taskTimeId;
+      })[0];
+      expect(response.status).toBe(200);
+    });
   });
-});
 
-describe('ActivityRoute Tests', () => {
-  test('1. Get /strava -> Get unauthenticated user', async () => {
-    expect.assertions(1);
-    let response = await axios.get(
-      url + `/activity/${userId}/?afterDate=${new Date()}&numDays=${100}`,
-    );
-    expect(response.status).toBe(200);
+  describe('ActivityRoute Tests', () => {
+    test('1. Get /strava -> Get unauthenticated user', async () => {
+      expect.assertions(1);
+      let response = await axios.get(
+        url + `/activity/${userId}/?afterDate=${new Date()}&numDays=${100}`,
+      );
+      expect(response.status).toBe(200);
+    });
   });
-});
 
-// CAN'T TEST DUE TO HIDDEN KEYS
-// describe('StravaRoutes Tests', () => {
-//   test('1. Post /strava -> Post unauthenticated user', async () => {
-//     expect.assertions(1);
+  // CAN'T TEST DUE TO HIDDEN KEYS
+  // describe('StravaRoutes Tests', () => {
+  //   test('1. Post /strava -> Post unauthenticated user', async () => {
+  //     expect.assertions(1);
 
-//     try {
-//       await axios.post(url + '/strava/' + userId + '/connectedStrava', user);
-//     } catch (err) {
-//       expect(err.response.status).not.toBe(200);
-//     }
-//   });
+  //     try {
+  //       await axios.post(url + '/strava/' + userId + '/connectedStrava', user);
+  //     } catch (err) {
+  //       expect(err.response.status).not.toBe(200);
+  //     }
+  //   });
 });
 
 describe('Testing Resource Deletion', () => {

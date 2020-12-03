@@ -15,10 +15,16 @@ class ComponentRepository extends Repository {
       } else if (this.count['componentsForUser'] === 0) {
         throw new Error('internal server error');
       } else {
-        if (userId === 1) {
-          resolve(data);
-        } else {
-          resolve([]);
+        switch (userId) {
+          case 1:
+            resolve(data);
+            break;
+          case 2:
+            resolve([component4]);
+            break;
+          default:
+            resolve([]);
+            break;
         }
       }
     });
@@ -33,23 +39,29 @@ class ComponentRepository extends Repository {
         throw new Error('internal server error');
       } else {
         if (
-          componentId.equals(
-            new mongoose.Types.ObjectId('56cb91bdc3464f14678934ca'),
+          new mongoose.Types.ObjectId('56cb91bdc3464f14678934ca').equals(
+            componentId,
           )
         ) {
           resolve(component1);
         } else if (
-          componentId.equals(
-            new mongoose.Types.ObjectId('56cb91bdc3464f14678934cb'),
+          new mongoose.Types.ObjectId('56cb91bdc3464f14678934cb').equals(
+            componentId,
           )
         ) {
           resolve(component2);
         } else if (
-          componentId.equals(
-            new mongoose.Types.ObjectId('56cb91bdc3464f14678934cc'),
+          new mongoose.Types.ObjectId('56cb91bdc3464f14678934cc').equals(
+            componentId,
           )
         ) {
           resolve(component3);
+        } else if (
+          new mongoose.Types.ObjectId('56cb91bdc3464f14678934ce').equals(
+            componentId,
+          )
+        ) {
+          resolve(component5);
         }
       }
     });
@@ -74,9 +86,27 @@ const component2 = {
 
 const component3 = {
   _id: new mongoose.Types.ObjectId('56cb91bdc3464f14678934cc'),
-  bike_id: 3,
+  bike_id: 4,
   label: 'brakes',
   attachment_date: new Date('09/04/2020'),
+  removal_date: new Date(),
+};
+
+//component for undefined prediction date test
+const component4 = {
+  _id: new mongoose.Types.ObjectId('56cb91bdc3464f14678934cd'),
+  bike_id: 5,
+  label: 'tires',
+  attachment_date: new Date('10/04/2020'),
+  removal_date: new Date(),
+};
+
+//component to overshoot predictions
+const component5 = {
+  _id: new mongoose.Types.ObjectId('56cb91bdc3464f14678934ce'),
+  bike_id: 6,
+  label: 'chains',
+  attachment_date: new Date('10/04/2020'),
   removal_date: new Date(),
 };
 
