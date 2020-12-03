@@ -7,7 +7,7 @@ class DeviceTokenRepository extends Repository {
   }
 
   GetDocumentKey(document) {
-    var docmentKey = {token: document.token};
+    var documentKey = {token: document.token};
     return documentKey;
   }
 }

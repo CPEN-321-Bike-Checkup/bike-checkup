@@ -38,8 +38,7 @@ class MaintenanceTaskService {
       maintenanceTasks.predicted_due_date = predictedDate;
     }
     maintenanceTasks.last_maintenance_val = new Date();
-    var task = await this.maintenanceTaskRepository.Create(maintenanceTasks);
-    return this.MaintenancePredict([task]);
+    return this.maintenanceTaskRepository.Create(maintenanceTasks);
   }
 
   async MarkCompleted(maintenanceTasks) {
@@ -265,9 +264,7 @@ class MaintenanceTaskService {
       maintenanceList = maintenanceList.filter(function (value, index, arr) {
         return arr[index].schedule_type === 'distance';
       });
-
-      const MILLISECONDS_PER_SECOND = 1000;
-      const SECONDS_PER_DAY = 86400;
+      MaintenancePredictForComponent;
 
       function mean(vals) {
         var sum_vals = vals.reduce(function (accumulator, currVal) {

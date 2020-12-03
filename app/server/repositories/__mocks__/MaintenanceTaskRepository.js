@@ -1,4 +1,4 @@
-const {Mongoose} = require('mongoose');
+const mongoose = require('mongoose');
 const Repository = require('./Repository');
 
 class MaintenanceTaskRepository extends Repository {
@@ -11,7 +11,7 @@ class MaintenanceTaskRepository extends Repository {
     this.count['getForUser']++;
     return new Promise((resolve, reject) => {
       if (userId === 0) {
-        throw new Mongoose.Error.ValidationError('Validation error');
+        throw new mongoose.Error.ValidationError('Validation error');
       } else if (this.count['getForUser'] === 0) {
         throw new Error('internal server error');
       } else {
@@ -24,29 +24,30 @@ class MaintenanceTaskRepository extends Repository {
     this.count['getForUser']++;
     return new Promise((resolve, reject) => {
       if (componentIds === 0) {
-        throw new Mongoose.Error.ValidationError('Validation error');
+        throw new mongoose.Error.ValidationError('Validation error');
       } else if (this.count['getForUser'] === 0) {
         throw new Error('internal server error');
       } else {
         let returnData = [];
         for (let index = 0; index < componentIds.length; index++) {
-          switch (componentIds[index]) {
-            case 1:
-              //check to avoid duplicate
-              if (returnData.length <= 1) {
-                returnData.push(maintSchedule1);
-                returnData.push(maintSchedule3);
-              }
-              break;
-            case 3:
-              //check to avoid duplicate
-              if (returnData.length !== 1) {
-                returnData.push(maintSchedule2);
-              }
-              break;
-            default:
-              //do nothing
-              break;
+          if (
+            componentIds[index].equals(
+              new mongoose.Types.ObjectId('56cb91bdc3464f14678934ca'),
+            )
+          ) {
+            //check to avoid duplicate
+            if (returnData.length <= 1) {
+              returnData.push(maintSchedule1);
+              returnData.push(maintSchedule3);
+            }
+          } else if (
+            componentIds[index].equals(
+              new mongoose.Types.ObjectId('56cb91bdc3464f14678934cb'),
+            )
+          ) {
+            if (returnData.length !== 1) {
+              returnData.push(maintSchedule2);
+            }
           }
         }
         resolve(returnData);
@@ -57,7 +58,7 @@ class MaintenanceTaskRepository extends Repository {
 
 const maintSchedule1 = {
   _id: 1,
-  component_id: 1,
+  component_id: new mongoose.Types.ObjectId('56cb91bdc3464f14678934ca'),
   schedule_type: 'date',
   threshold_val: 30,
   description: 'oil chain',
@@ -68,7 +69,7 @@ const maintSchedule1 = {
 
 const maintSchedule2 = {
   _id: 2,
-  component_id: 3,
+  component_id: new mongoose.Types.ObjectId('56cb91bdc3464f14678934cb'),
   schedule_type: 'distance',
   threshold_val: 180,
   description: 'tire check',
@@ -79,7 +80,7 @@ const maintSchedule2 = {
 
 const maintSchedule3 = {
   _id: 3,
-  component_id: 1,
+  component_id: new mongoose.Types.ObjectId('56cb91bdc3464f14678934ca'),
   schedule_type: 'distance',
   threshold_val: 200,
   description: 'brake check',
@@ -92,7 +93,7 @@ let todayWithTime = new Date();
 
 const maintSchedule4 = {
   _id: 4,
-  component_id: 1,
+  component_id: new mongoose.Types.ObjectId('56cb91bdc3464f14678934ca'),
   schedule_type: 'date',
   threshold_val: 500,
   description: 'brake check',
