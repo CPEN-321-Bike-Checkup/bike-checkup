@@ -317,7 +317,7 @@ describe('ActivityRoute Tests', () => {
 //       expect(err.response.status).not.toBe(200);
 //     }
 //   });
-// });
+});
 
 describe('Testing Resource Deletion', () => {
   test('1. Delete / -> Deleting User', async () => {
