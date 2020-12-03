@@ -8,30 +8,6 @@ class MaintenanceTaskRepository extends Repository {
     this.count['getForUser'] = 0;
   }
 
-  /*Update(maintenanceTaskList) {
-    this.count['getForUser']++;
-    return new Promise((resolve, reject) => {
-      if (!Array.isArray(maintenanceTaskList)) {
-        maintenanceTaskList = [maintenanceTaskList];
-      }
-      if (this.count['getForUser'] === 0) {
-        throw new Error('internal server error');
-      } else {
-        resolve({n: 1, nModified: 1});
-        for (let index = 0; index < maintenanceTaskList.length; index++) {
-          let existingDoc = this.data.find(
-            (datadoc) => datadoc._id === maintenanceTaskList[index]._id,
-          );
-          if (_.isEqual(existingDoc, maintenanceTaskList[index])) {
-            resolve({n: 1, nModified: 0});
-          } else {
-            resolve({n: 1, nModified: 1});
-          }
-        }
-      }
-    });
-  }*/
-
   GetMaintenanceTasksForUser(userId) {
     this.count['getForUser']++;
     return new Promise((resolve, reject) => {
@@ -88,13 +64,13 @@ class MaintenanceTaskRepository extends Repository {
             }
           }
         }
-        //resolve(componentIds);
         resolve(returnData);
       }
     });
   }
 }
 
+//MOCK DATA USED FOR TESTING
 const MILLISECONDS_IN_DAY = 86400000;
 let today = new Date();
 let dayOverdue = new Date(today.getTime() - 20 * MILLISECONDS_IN_DAY);

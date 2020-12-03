@@ -5,7 +5,7 @@ class Repository {
   constructor(data) {
     this.data = data;
     this.count = {create: 0, update: 0, delete: 0, getById: 0};
-    console.warn('WARNING: USING MOCKED REPOSITORY BASE CLASS');
+    //console.warn('WARNING: USING MOCKED REPOSITORY BASE CLASS');
   }
 
   GetById(id) {
