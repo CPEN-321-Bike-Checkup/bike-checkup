@@ -5,6 +5,27 @@ class ActivityRepository extends Repository {
   constructor(data) {
     super(data);
     this.count['afterDateForUser'] = 0;
+    this.count['afterDateForBike'] = 0;
+  }
+
+  GetActivitiesForBikeAfterDate(bikeId, date) {
+    this.count['afterDateForUser']++;
+    return new Promise((resolve, reject) => {
+      if (this.count['afterDateForUser'] === 0) {
+        throw new Error('internal server error');
+      } else {
+        switch (bikeId) {
+          case 1:
+            resolve([activity1, activity2, activity3]);
+            break;
+          case 2:
+            resolve([activity4, activity5]);
+            break;
+          default:
+            resolve([]);
+        }
+      }
+    });
   }
 
   GetActivitiesAfterDateForUser(userId, date, numberOfDays) {
@@ -44,6 +65,7 @@ class ActivityRepository extends Repository {
 
 const activity1 = {
   _id: 1,
+  bike_id: 1,
   athelete_id: 1,
   description: 'test',
   distance: 30,
@@ -53,6 +75,7 @@ const activity1 = {
 
 const activity2 = {
   _id: 2,
+  bike_id: 1,
   athelete_id: 1,
   description: 'test2',
   distance: 30,
@@ -62,6 +85,7 @@ const activity2 = {
 
 const activity3 = {
   _id: 3,
+  bike_id: 1,
   athelete_id: 1,
   description: 'test3',
   distance: 30,
@@ -71,6 +95,7 @@ const activity3 = {
 
 const activity4 = {
   _id: 4,
+  bike_id: 2,
   athelete_id: 1,
   description: 'test4',
   distance: 30,
@@ -80,6 +105,7 @@ const activity4 = {
 
 const activity5 = {
   _id: 5,
+  bike_id: 2,
   athelete_id: 1,
   description: 'test5',
   distance: 35,

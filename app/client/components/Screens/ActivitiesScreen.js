@@ -23,19 +23,17 @@ export default class ActivitiesScreen extends React.Component {
       fetchState: FETCH_IN_PROGRESS,
       errorText: null,
       numDays: 30,
-      moreData: false,
+      addedDays: false,
+      moreData: true,
     };
   }
 
   componentDidMount() {
-    this.getActivities();
+    this.getActivities(false);
 
     // Re-fetch data every time screen comes into focus
     this._unsubscribe = this.props.navigation.addListener('focus', () => {
-      this.setState((stateOld) => {
-        console.log('Days filer: ', stateOld.numDays);
-        return {numDays: stateOld.numDays};
-      });
+      this.getActivities(false);
     });
   }
 
@@ -43,13 +41,19 @@ export default class ActivitiesScreen extends React.Component {
     this._unsubscribe();
   }
 
-  getActivities = () => {
+  getActivities = (addDays) => {
     var tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
+    var daysToAdd = 30;
+    if (!addDays) {
+      daysToAdd = 0;
+    }
     timeout(
       3000,
       fetch(
-        `http://${global.serverIp}:5000/activity/${global.userId}/?afterDate=${tomorrow}&numDays=${this.state.numDays}`,
+        `http://${global.serverIp}:5000/activity/${
+          global.userId
+        }/?afterDate=${tomorrow}&numDays=${this.state.numDays + daysToAdd}`,
         {
           method: 'GET',
         },
@@ -59,12 +63,14 @@ export default class ActivitiesScreen extends React.Component {
           this.setState((prevState) => {
             console.log(activities.length > 0);
             return {
-              moreData: activities.length != prevState.activities.length,
+              moreData:
+                activities.length != prevState.activities.length || !addDays,
               activities: activities.sort(function (x, y) {
                 return new Date(y.date) - new Date(x.date);
               }),
-              numDays: prevState.numDays + 30,
+              numDays: prevState.numDays + daysToAdd,
               fetchState: FETCH_SUCCEEDED,
+              addedDays: addDays,
             };
           });
         }),
@@ -117,7 +123,7 @@ export default class ActivitiesScreen extends React.Component {
         this.state.activities,
         this.renderItem,
         'ActivitiesList',
-        this.state.moreData ? LoadButton(() => this.getActivities()) : null,
+        this.state.moreData ? LoadButton(() => this.getActivities(true)) : null,
       );
     } else if (this.state.fetchState != FETCH_IN_PROGRESS) {
       mainView = (

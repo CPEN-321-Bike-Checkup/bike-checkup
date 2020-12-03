@@ -23,19 +23,17 @@ export default class HistoryScreen extends React.Component {
       fetchState: FETCH_IN_PROGRESS,
       errorText: null,
       numDays: 30,
-      moreDate: false,
+      moreDate: true,
+      addedDays: false,
     };
   }
 
   componentDidMount() {
-    this.getHistory();
+    this.getHistory(false);
 
     // Re-fetch data every time screen comes into focus
     this._unsubscribe = this.props.navigation.addListener('focus', () => {
-      this.setState((stateOld) => {
-        console.log('Days filer: ', stateOld.numDays);
-        return {numDays: stateOld.numDays};
-      });
+      this.getHistory(false);
     });
   }
 
@@ -43,13 +41,19 @@ export default class HistoryScreen extends React.Component {
     this._unsubscribe();
   }
 
-  getHistory = () => {
+  getHistory = (addDays) => {
     var tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
+    var daysToAdd = 30;
+    if (!addDays) {
+      daysToAdd = 0;
+    }
     timeout(
       3000,
       fetch(
-        `http://${global.serverIp}:5000/maintenanceRecord/${global.userId}/?beforeDate=${tomorrow}&numDays=${this.state.numDays}`,
+        `http://${global.serverIp}:5000/maintenanceRecord/${
+          global.userId
+        }/?beforeDate=${tomorrow}&numDays=${this.state.numDays + daysToAdd}`,
         {
           method: 'GET',
         },
@@ -59,10 +63,13 @@ export default class HistoryScreen extends React.Component {
           console.log('Got history: ', history);
           this.setState((stateOld) => {
             return {
-              moreData: history.length != stateOld.maintenanceRecords.length,
+              moreData:
+                history.length != stateOld.maintenanceRecords.length ||
+                !addDays,
               maintenanceRecords: history,
-              numDays: stateOld.numDays + 30,
+              numDays: stateOld.numDays + daysToAdd,
               fetchState: FETCH_SUCCEEDED,
+              addedDays: addDays,
             };
           });
         }),
@@ -114,7 +121,7 @@ export default class HistoryScreen extends React.Component {
         this.state.maintenanceRecords,
         this.renderItem,
         'HistoryList',
-        this.state.moreData ? LoadButton(() => this.getHistory()) : null,
+        this.state.moreData ? LoadButton(() => this.getHistory(true)) : null,
       );
     } else if (this.state.fetchState != FETCH_IN_PROGRESS) {
       mainView = (

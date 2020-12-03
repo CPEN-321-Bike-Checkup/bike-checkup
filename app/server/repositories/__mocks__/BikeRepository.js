@@ -39,7 +39,14 @@ const bike2 = {
   distance: 650,
 };
 
-var data = [bike1, bike2];
+const bike3 = {
+  _id: 3,
+  owner_id: 1,
+  label: 'road bike',
+  distance: 350,
+};
+
+var data = [bike1, bike2, bike3];
 
 var bikeRepo = new BikeRepository(data);
 

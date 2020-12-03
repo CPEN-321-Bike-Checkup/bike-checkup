@@ -30,16 +30,19 @@ class MaintenanceTaskService {
   }
 
   async Create(maintenanceTasks) {
-    if (maintenanceTasks.schedule_type === 'date') {
-      var predictedDate = new Date();
-      predictedDate.setDate(
-        predictedDate.getDate() + maintenanceTasks.threshold_val,
-      );
-      maintenanceTasks.predicted_due_date = predictedDate;
-    }
-    maintenanceTasks.last_maintenance_val = new Date();
-    var task = await this.maintenanceTaskRepository.Create(maintenanceTasks);
-    return this.MaintenancePredict([task]);
+    return new Promise(async (resolve, reject) => {
+      if (maintenanceTasks.schedule_type === 'date') {
+        var predictedDate = new Date();
+        predictedDate.setDate(
+          predictedDate.getDate() + maintenanceTasks.threshold_val,
+        );
+        maintenanceTasks.predicted_due_date = predictedDate;
+      }
+      maintenanceTasks.last_maintenance_val = new Date();
+      var task = await this.maintenanceTaskRepository.Create(maintenanceTasks);
+      var date = await this.MaintenancePredict([task]);
+      resolve(task);
+    });
   }
 
   async MarkCompleted(maintenanceTasks) {
@@ -318,13 +321,18 @@ class MaintenanceTaskService {
 
         //look at last 14 days
         var startDate = new Date();
-        startDate.setDate(startDate.getDate() - 14);
+        startDate.setDate(startDate.getDate() - 30);
 
         //var componentActivityListId = await this.componentActivityRepository.GetActivityIdsForComponent(
         //  component_id,
         //);
 
         var date = new Date(last_maint_date);
+
+        if (last_maint_date > startDate.getTime()) {
+          date = startDate;
+        }
+
         //var activityList = await this.activityRepository.GetActivitiesByIdsAfterDate(
         //  componentActivityListId.map((ac) => ac.activity_id),
         //  new Date(startDate), //date,
@@ -363,8 +371,7 @@ class MaintenanceTaskService {
           activity_index++
         ) {
           activity_date_dataset.push(
-            (activityList[activity_index].date.getTime() -
-              /*last_maint_date*/ startDate) /
+            (activityList[activity_index].date.getTime() - date) /
               (MILLISECONDS_PER_SECOND * SECONDS_PER_DAY),
           );
           distance_sum += activityList[activity_index].distance;
@@ -392,8 +399,13 @@ class MaintenanceTaskService {
         }
         var slope = predictSlope(covar_sum, x_variance);
         var intercept = predictIntercept(x_mean, y_mean, slope);
+        intercept =
+          intercept < maintenanceList[maint_index].threshold_val
+            ? intercept
+            : 0;
         var predict_date =
-          (maintenanceList[maint_index].threshold_val - intercept) / slope;
+          (maintenanceList[maint_index].threshold_val * 1000 - intercept) /
+          slope;
 
         var final_date = this.addDays(
           maintenanceList[maint_index].last_maintenance_val,
