@@ -234,7 +234,7 @@ export default class AddComponentScreen extends React.Component {
             defaultValue={this.state.componentName}
             placeholder="Enter..."
             placeholderTextColor={Colors.grey}
-            underlineColorAndroid={Colors.black}
+            underlineColorAndroid={'black'}
             onChangeText={(text) => this.setState({componentName: text})}
             testID="ComponentNameTextInput"
           />

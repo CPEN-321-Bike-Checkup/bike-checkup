@@ -11,7 +11,7 @@ export default class HistoryStack extends React.Component {
       <Stack.Navigator
         initialRouteName='Maintenance History'
         screenOptions={{
-          headerTintColor: 'white',
+          headerTintColor: 'black',
           headerStyle: {backgroundColor: Colors.primaryOrange},
         }}>
         <Stack.Screen name='Maintenance History' component={HistoryScreen} />

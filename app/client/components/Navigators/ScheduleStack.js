@@ -12,7 +12,7 @@ export default class ScheduleStack extends React.Component {
       <Stack.Navigator
         initialRouteName="Maintenance Schedule"
         screenOptions={{
-          headerTintColor: 'white',
+          headerTintColor: 'black',
           headerStyle: {backgroundColor: Colors.primaryOrange},
         }}>
         <Stack.Screen name="Maintenance Schedule" component={ScheduleScreen} />

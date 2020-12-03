@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import MainTabNavigator from './MainTabNavigator';
 import SettingsScreen from '../Screens/SettingsScreen';
+import {Colors} from './../../constants/Colors'
 
 const Stack = createStackNavigator();
 export default class SettingsStack extends React.Component {
@@ -14,9 +15,10 @@ export default class SettingsStack extends React.Component {
       <Stack.Navigator
         initialRouteName="Settings"
         screenOptions={{
-          headerShown: false,
+          headerTintColor: 'black',
+          headerStyle: {backgroundColor: Colors.primaryOrange},
         }}>
-        <Stack.Screen name="Setting" component={SettingsScreen} />
+        <Stack.Screen name="Settings" component={SettingsScreen} />
       </Stack.Navigator>
     );
   }

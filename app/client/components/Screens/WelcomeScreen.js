@@ -1,6 +1,6 @@
 import React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Text, Button, View, Image, StyleSheet} from 'react-native';
+import {Text, Button, View, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import {Colors} from './../../constants/Colors';
 import axios from 'axios';
 
@@ -86,11 +86,9 @@ export default class WelcomeScreen extends React.Component {
             upcoming tasks for the week. {'\n'} {'\n'}
             To get started, you will first need to connect your Strava account.
           </Text>
-          <Button
-            title="Continue to Strava connection"
-            color={Colors.primaryOrange}
-            onPress={() => this.navigation.replace('Strava Authentication')}
-          />
+          <TouchableOpacity onPress={() => this.navigation.replace('Strava Authentication')}>
+            <Text style={styles.button}>CONTINUE TO STRAVA CONNECTION</Text>
+          </TouchableOpacity>
         </View>
       );
     }
@@ -117,10 +115,16 @@ const styles = StyleSheet.create({
   },
   description: {
     paddingTop: 35,
-    paddingBottom: 20,
+    paddingBottom: 30,
     paddingHorizontal: 15,
     fontSize: 16,
     textAlign: 'justify',
     fontFamily: 'notoserif',
+  },
+  button: {
+    backgroundColor: Colors.primaryOrange,
+    padding: 10,
+    fontFamily: 'notoserif',
+    fontWeight: 'bold',
   },
 });
