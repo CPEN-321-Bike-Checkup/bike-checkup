@@ -24,7 +24,6 @@ beforeAll(() => {
     initMaintenanceTaskRoutes(app);
     initMaintenanceRecordRouting(app);
     initActivityRouting(app);
-    initStravaRouting(app);
   });
 });
 
