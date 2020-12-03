@@ -198,8 +198,6 @@ export default class ComponentsScreen extends React.Component {
         />
       );
     }
-
-
   };
 
   render() {
@@ -220,13 +218,16 @@ export default class ComponentsScreen extends React.Component {
     } else if (this.state.fetchState != FETCH_IN_PROGRESS) {
       mainView = (
         <View style={CommonStyles.fetchFailedView}>
-          <Text style={CommonStyles.emptyStateText}>{this.bike.title} has no components.{"\n"}Click on the add button to add a new component.</Text>
+          <Text style={CommonStyles.emptyStateText}>
+            {this.bike.title} has no components.{'\n'}Click on the add button to
+            add a new component.
+          </Text>
         </View>
       );
     }
 
     return (
-      <View style={{flex: 1}}>
+      <View style={{flex: 1}} testID="ComponentsView">
         {mainView}
 
         {AddButton(() => {
@@ -236,11 +237,7 @@ export default class ComponentsScreen extends React.Component {
           });
         }, 'AddComponentBtn')}
 
-        {Popup(
-          this.state.errorText,
-          this.onErrorAccepted,
-          this.state.isError,
-        )}
+        {Popup(this.state.errorText, this.onErrorAccepted, this.state.isError)}
       </View>
     );
   }

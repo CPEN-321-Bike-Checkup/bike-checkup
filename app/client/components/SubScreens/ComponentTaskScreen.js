@@ -1,6 +1,9 @@
 import React from 'react';
 import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
-import {RemovableListItem, RemovablePressableListItem} from '../SubComponents/ListItems';
+import {
+  RemovableListItem,
+  RemovablePressableListItem,
+} from '../SubComponents/ListItems';
 import {flatListWrapper} from '../SubComponents/FlatListWrapper';
 import CommonStyles from '../CommonStyles';
 import AddButton from '../SubComponents/AddButton';
@@ -240,20 +243,19 @@ export default class ComponentTaskScreen extends React.Component {
     } else if (this.state.fetchState != FETCH_IN_PROGRESS) {
       mainView = (
         <View style={CommonStyles.fetchFailedView}>
-          <Text style={CommonStyles.emptyStateText}>{this.component.title} has no tasks.{"\n"}Click on the add button to add a new task.</Text>
+          <Text style={CommonStyles.emptyStateText}>
+            {this.component.title} has no tasks.{'\n'}Click on the add button to
+            add a new task.
+          </Text>
         </View>
       );
     }
 
     return (
-      <View style={styles.container}>
+      <View style={styles.container} testID="TasksView">
         {mainView}
         {AddButton(this.addTask, 'AddTaskBtn')}
-        {Popup(
-          this.state.errorText,
-          this.onErrorAccepted,
-          this.state.isError,
-        )}
+        {Popup(this.state.errorText, this.onErrorAccepted, this.state.isError)}
       </View>
     );
   }
