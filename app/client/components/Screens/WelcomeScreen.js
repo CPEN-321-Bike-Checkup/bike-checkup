@@ -35,7 +35,15 @@ export default class WelcomeScreen extends React.Component {
     }
   };
 
+  skipLogin = true;
+  userIdTest = 71747974;
   componentDidMount() {
+    if (this.skipLogin) {
+      global.userId = this.userIdTest;
+      this.navigation.replace('Home');
+      return;
+    }
+
     this.getData('userId')
       .then((data) => {
         if (data !== undefined) {
@@ -61,8 +69,7 @@ export default class WelcomeScreen extends React.Component {
   render() {
     if (!this.state.showPage) {
       return null;
-    }
-    else {
+    } else {
       return (
         <View style={styles.view}>
           <Text style={styles.title}>Welcome to Bike Checkup!</Text>

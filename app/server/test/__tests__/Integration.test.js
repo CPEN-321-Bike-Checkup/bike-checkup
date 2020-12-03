@@ -1,5 +1,6 @@
 const axios = require('axios');
 const express = require('express');
+const mongoose = require('mongoose');
 const app = express();
 app.use(express.json());
 let server;
@@ -8,116 +9,99 @@ const initMaintenanceTaskRoutes = require('../../routes/MaintenanceTaskRoutes');
 const initBikeRoutes = require('../../routes/BikeRoutes');
 const initComponentRoutes = require('../../routes/ComponentRoutes');
 
+const ip = '192.168.1.83';
+const port = 5000;
+
 var url = 'http://' + ip + ':' + port;
 beforeAll(() => {
+  // server = app.listen(port, () => {
   initUserRoutes(app);
   initMaintenanceTaskRoutes(app);
   initBikeRoutes(app);
   initComponentRoutes(app);
+
+  //setup database data
+  // axios.post(url + '/user', user).catch(
+  //   // (response) => console.log(response),
+  //   (err) => console.log(err),
+  // );
+  // axios.post(url + '/bike', bike).catch(
+  //   // (response) => console.log(response),
+  //   (err) => console.log(err),
+  // );
+  // axios.post(url + '/component', component).catch(
+  //   // (response) => console.log(response),
+  //   (err) => console.log(err),
+  // );
+  // axios.post(url + '/maintenanceTask', taskTime).catch(
+  //   // (response) => console.log(response),
+  //   (err) => console.log(err),
+  // );
+  // axios.post(url + '/maintenanceTask', taskDistance).catch(
+  //   // (response) => console.log(response),
+  //   (err) => console.log(err),
+  // );
+  // });
 });
 
-var maintSchedule1 = {
-  //_id: 400,
-  component_id: '5fc729e954b31d9fc41dd6e0',
-  schedule_type: 'date',
-  threshold_val: 30,
-  description: 'oil chain',
-  last_maintenance_val: new Date('2020-10-11'),
-  repeats: true,
-  predicted_due_date: new Date('2020-11-11'),
-};
+afterAll(() => {
+  // server.close();
+});
 
-var maintSchedule1_update = {
-  //_id: 400,
-  component_id: 301,
-  schedule_type: 'date',
-  threshold_val: 600,
-  description: 'get chains oiled updated',
-  last_maintenance_val: new Date('2020-10-15'),
-  repeats: false,
-  predicted_due_date: new Date('2020-11-25'),
-};
-
-var maintSchedule2 = {
-  //_id: 401,
-  component_id: '5fc729e954b31d9fc41dd6e0',
-  schedule_type: 'distance',
-  threshold_val: 450,
-  description: 'bleed brakes',
-  last_maintenance_val: new Date('2020-10-08'),
-  repeats: false,
-  predicted_due_date: new Date('2020-11-29'),
-};
-
-var maintSchedule3 = {
-  //_id: 402,
-  component_id: 302,
-  schedule_type: 'distance',
-  threshold_val: 1500,
-  description: 'check brakes',
-  last_maintenance_val: new Date('2020-09-23'),
-  repeats: false,
-  predicted_due_date: new Date('2020-12-03'),
-};
-
-var maintSchedule_error1 = {
-  //_id: 401,
-  component_id: 302,
-  schedule_type: 'distance',
-  threshold_val: -2,
-  description: 'bleed brakes',
-  last_maintenance_val: new Date('2020-10-08'),
-  repeats: false,
-  predicted_due_date: new Date('2020-11-29'),
-};
-
-var maintRecord1 = {
-  //_id: 601,
-  description: 'bled brakes',
-  component_id: 301,
-  maintenance_date: new Date('2020-11-01'),
-  replacement_comp_id: 311,
-};
-
-var user = {
-  _id: 4,
+/*** TEST DATA ***/
+const userId = Math.floor(Math.random() * 100000000);
+const user = {
+  _id: userId,
   name: 'Tim Sampleton',
-  strava_token: 'asdfoiuasfnloa',
-  expires_in: '4938570',
-  refresh_token: 'fesojdkvhnfmcasod',
+  strava_token: 'b903fbbecdb0fe228feb7695e06dbef457ebdc6c',
+  refresh_token: '2868f45d72e20be5fa737eb69ba1dc618dcbb495',
+  expires_in: 13241,
 };
 
-var bike1 = {
-  //_id: 201,
-  owner: 3,
-  label: 'mountain bike',
-  //components: [301, 302],
-  distance: 500,
+const bikeId = mongoose.Types.ObjectId();
+
+const bike = {
+  _id: bikeId,
+  owner_id: userId,
+  label: "Tim Sampleton's Bike",
+  distance: 438846,
 };
 
-var component1 = {
-  //_id: 5fc729e954b31d9fc41dd6e0
-  bike_id: 201,
-  label: 'brakes',
-  attachment_date: new Date('2020-10-11'),
-  removal_date: undefined,
+const componentId = mongoose.Types.ObjectId();
+
+const component = {
+  // _id: 'c123456789abcdefghijklmn',
+  _id: componentId,
+  bike_id: bikeId,
+  label: 'Chain: CN900',
+  attachment_date: new Date('2020-12-02T04:34:39.940Z'),
 };
 
-var component2 = {
-  //_id: 5fc729e954b31d9fc41dd6e1,
-  bike: 201,
-  label: 'chains',
-  attachment_date: new Date('2020-09-01'),
-  removal_date: undefined,
+// const taskTimeId = mongoose.Types.ObjectId('56cb91bdc3464f14678934ca');
+const taskTimeId = mongoose.Types.ObjectId();
+
+const taskTime = {
+  // _id: 't123456789abcdefghi-time',
+  _id: taskTimeId,
+  component_id: componentId,
+  description: 'Oil Chain',
+  schedule_type: 'date',
+  threshold_val: 5,
+  repeats: true,
+  // last_maintenance_val: {$date: '2020-12-02T04:35:28.379Z'},
 };
 
-const activity1 = {
-  //_id: 1,
-  description: 'test',
-  distance: 50,
-  time_s: 360,
-  date: new Date('2020-10-21'),
-  components: [1],
+const taskDistanceId = mongoose.Types.ObjectId();
+
+const taskDistance = {
+  // _id: 't123456789abcde-distance',
+  _id: taskDistanceId,
+  component_id: componentId,
+  description: 'Replace Chain',
+  schedule_type: 'distance',
+  threshold_val: 5,
+  repeats: false,
+  // last_maintenance_val: {$date: '2020-12-02T04:36:08.505Z'},
 };
 
 describe('UserRoutes Tests', () => {
@@ -125,16 +109,16 @@ describe('UserRoutes Tests', () => {
     expect.assertions(3);
     let response = await axios.post(url + '/user' + '/', user);
     //expect(response).toBe();  //DEBUG to see response
-    expect(response.data._id).toBe(4);
-    expect(response.data.name).toBe('Tim Sampleton');
+    expect(response.data._id).toBe(userId);
+    expect(response.data.name).toBe(user.name);
     expect(response.status).toBe(200);
   });
 
   test('2. Get /:userId -> Get by userId', async () => {
     expect.assertions(3);
-    let response = await axios.get(url + '/user/4');
-    expect(response.data[0]._id).toBe(4);
-    expect(response.data[0].name).toBe('Tim Sampleton');
+    let response = await axios.get(url + '/user/' + userId);
+    expect(response.data[0]._id).toBe(userId);
+    expect(response.data[0].name).toBe(user.name);
     expect(response.status).toBe(200);
   });
 
@@ -144,3 +128,151 @@ describe('UserRoutes Tests', () => {
     expect(response.status).toBe(200);
   });
 });
+
+describe('BikeRoute Tests', () => {
+  test('1. Post / -> Creating Bike', async () => {
+    expect.assertions(1);
+    let response = await axios.post(url + '/bike' + '/', bike);
+    expect(response.status).toBe(201);
+  });
+
+  test('2. Get /bike -> Get bikes', async () => {
+    expect.assertions(5);
+    let response = await axios.get(url + '/bike/');
+    const bike = response.data.filter((bike) => {
+      return bike._id == bikeId;
+    })[0];
+    console.log(bike);
+    expect(response.status).toBe(200);
+    expect(bike._id).toBe(bikeId.toHexString());
+    expect(bike.owner_id).toBe(userId);
+    expect(bike.label).toBe(bike.label);
+    expect(bike.distance).toBe(bike.distance);
+  });
+
+  test('2. Get /bike -> Get bikes by userId', async () => {
+    expect.assertions(5);
+    let response = await axios.get(url + '/bike/' + userId);
+    const bike = response.data.filter((bike) => {
+      return bike._id == bikeId;
+    })[0];
+    console.log(bike);
+    expect(response.status).toBe(200);
+    expect(bike._id).toBe(bikeId.toHexString());
+    expect(bike.owner_id).toBe(userId);
+    expect(bike.label).toBe(bike.label);
+    expect(bike.distance).toBe(bike.distance);
+  });
+
+  test('2. Get /bike -> Get bikes by userId invalid ID', async () => {
+    axios
+      .get(url + '/bike/' + null)
+      .catch((err) => expect(err.response.status).toBe(400));
+  });
+
+  const deviceToken1 = {
+    token: 'a1b2c3d4e5',
+    userId: userId,
+  };
+
+  test('3. Post /registerDevice -> Register new token device', async () => {
+    expect.assertions(1);
+    let response = await axios.post(
+      url + '/user' + '/registerDevice/',
+      deviceToken1,
+    );
+    expect(response.status).toBe(200);
+  });
+
+  test('4. Delete /registerDevice -> Delete token device', async () => {
+    expect.assertions(1);
+    let response = await axios.delete(
+      url + '/user' + '/registerDevice/',
+      deviceToken1,
+    );
+    expect(response.status).toBe(200);
+  });
+});
+
+// describe('User requests their bikes Tests', () => {
+//   test('1. Get bikes 200 Ok', async () => {
+//     expect.assertions(2);
+//     let response = await axios.get(url + '/bike' + '/3');
+//     expect(response).toBe(); //DEBUG check return val
+//     expect(response.status).toBe(200);
+//   });
+// });
+
+// describe('User requests a bikes components Tests', () => {
+//   test('1. Get bikes components 200 Ok', async () => {
+//     expect.assertions(2);
+//     let response = await axios.get(url + '/component' + '/201');
+//     expect(response).toBe(); //DEBUG check return val
+//     expect(response.status).toBe(200);
+//   });
+// });
+
+// //user without an id
+// var userModifiedNoId = JSON.parse(JSON.stringify(user));
+// delete userModifiedNoId._id;
+// //user id of 0
+// var userModifiedId0 = JSON.parse(JSON.stringify(user));
+// userModifiedId0._id = 0;
+
+// var device = {
+//   token: 'asonhcfoisjuheoqihbnfcxsaoid',
+//   ownerId: '3',
+// };
+// //device without an token
+// var deviceModifiedNoId = JSON.parse(JSON.stringify(device));
+// delete deviceModifiedNoId.token;
+// //token of 0
+// var deviceModifiedId0 = JSON.parse(JSON.stringify(device));
+// deviceModifiedId0.token = 0;
+// //owner of 0
+// var deviceModifiedOwnerId0 = JSON.parse(JSON.stringify(device));
+// deviceModifiedOwnerId0.ownerId = 0;
+
+// describe('User requests their schedule Tests', () => {
+//   test('1. Get schedule tasks 200 Ok', async () => {
+//     expect.assertions(2);
+//     let response = await axios.get(url + '/maintenanceTask' + '/?userId=1');
+//     expect(response).toBe(); //DEBUG check return val
+//     expect(response.status).toBe(200);
+//   });
+// });
+
+// describe('User requests their bikes Tests', () => {
+//   test('1. Get bikes 200 Ok', async () => {
+//     expect.assertions(2);
+//     let response = await axios.get(url + '/bike' + '/3');
+//     expect(response).toBe(); //DEBUG check return val
+//     expect(response.status).toBe(200);
+//   });
+// });
+
+// describe('User requests a bikes components Tests', () => {
+//   test('1. Get bikes components 200 Ok', async () => {
+//     expect.assertions(2);
+//     let response = await axios.get(url + '/component' + '/201');
+//     expect(response).toBe(); //DEBUG check return val
+//     expect(response.status).toBe(200);
+//   });
+// });
+
+/*describe('User requests scheduled maintenance tasks for a component Tests', () => {
+  test('1. Get scheduled maint tasks 200 Ok', async () => {
+    expect.assertions(2);
+    let response = await axios.get(
+      url + '/maintenanceTask' + '?componentId=301&userId=3',
+    );
+    expect(response).toBe(); //DEBUG check return val
+    expect(response.status).toBe(200);
+  });
+
+  test('3. Delete / -> Deleting User', async () => {
+    expect.assertions(1);
+    let response = await axios.delete(url + '/user' + '/', user);
+    expect(response.status).toBe(200);
+  });
+});*/

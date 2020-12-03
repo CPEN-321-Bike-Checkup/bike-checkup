@@ -38,7 +38,7 @@ describe('Bike Stack', () => {
     await bike.tap();
 
     // Verify components screen
-    await expect(element(by.id('ComponentsList'))).toBeVisible();
+    await expect(element(by.id('ComponentsView'))).toBeVisible();
   };
 
   const goToComponentAtIndex = async (index) => {
@@ -47,7 +47,7 @@ describe('Bike Stack', () => {
     await component.tap();
 
     // Verify tasks screen
-    await expect(element(by.id('TasksList'))).toBeVisible();
+    await expect(element(by.id('TasksView'))).toBeVisible();
   };
 
   const removeListItemAtIndex = async (index) => {
@@ -89,7 +89,6 @@ describe('Bike Stack', () => {
    */
   // NOTE: make sure AddTaskScreen TaskType dropdown defaults to a value
   it('Component should be added and then removed', async () => {
-    await sleep(1000);
     await veryifyBottomNavigator();
     await goToBikesTab();
     await goToBikeAtIndex(0);
@@ -97,14 +96,10 @@ describe('Bike Stack', () => {
     // Add component
     const componentType = 'Chain';
     const componentName = 'CH9000';
-    // await sleep(10000); // FAIL HERE
-    // Note: Can remove the following 4 lines to pass the test for M9
     await element(by.id('AddComponentBtn')).tap();
     await element(by.id('ComponentTypeAutoComplete')).typeText(componentType);
     await element(by.id('ComponentNameTextInput')).typeText(componentName);
-    await sleep(1000);
     await element(by.id('SaveComponentBtn')).tap();
-    await sleep(5000);
 
     // Verify new component exists in the list
     await expect(
@@ -114,6 +109,8 @@ describe('Bike Stack', () => {
           .withAncestor(by.id('ComponentsList')),
       ),
     ).toExist();
+
+    await sleep(4000);
 
     // Remove the component (the component will be the only item in the list)
     await element(by.id('EditBtn')).tap();
@@ -127,6 +124,8 @@ describe('Bike Stack', () => {
           .withAncestor(by.id('ComponentsList')),
       ),
     ).not.toExist();
+
+    await sleep(8000);
   });
 
   /*
@@ -159,6 +158,7 @@ describe('Bike Stack', () => {
 
     // Verify error message
     await expect(element(by.text('Please enter a threshold.'))).toExist();
+    await sleep(5000);
     await element(by.id('PopupOkBtn')).tap();
 
     clearFormText();
@@ -171,6 +171,7 @@ describe('Bike Stack', () => {
     await expect(
       element(by.text(title).withAncestor(by.id('TasksList'))),
     ).toExist();
+    await sleep(8000);
   });
 
   /*
@@ -192,6 +193,7 @@ describe('Bike Stack', () => {
     await expect(
       element(by.text(taskTitle).withAncestor(by.id('ScheduleList'))),
     ).not.toExist();
+    await sleep(5000);
 
     // Navigate to maintenance history
     await goToHistoryTab();
@@ -200,5 +202,6 @@ describe('Bike Stack', () => {
     await expect(
       element(by.text(taskTitle).withAncestor(by.id('HistoryList'))),
     ).toExist();
+    await sleep(5000);
   });
 });

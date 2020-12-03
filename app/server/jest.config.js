@@ -25,6 +25,8 @@ module.exports = {
   collectCoverageFrom: [
     'services/MaintenanceTaskService.js',
     'services/UserService.js',
+    'services/BikeService.js',
+    'routes/*.js'
   ],
 
   // The directory where Jest should output its coverage files

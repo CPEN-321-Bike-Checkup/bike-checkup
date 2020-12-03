@@ -48,7 +48,7 @@ const initBikeRouting = (app) => {
         });
     } else {
       console.error('error getting bikes for user, invalid user paramerter');
-      status(400).send('Improper user parameter');
+      res.status(400).send('Improper user parameter');
     }
   });
 };
