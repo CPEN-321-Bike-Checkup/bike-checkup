@@ -91,18 +91,19 @@ describe('GetById(id) Test Cases', () => {
 
 describe('Create(maintenanceTask) Test Cases', () => {
   test('1. Valid new maintenanceTask with date schedule type', async () => {
-    expect.assertions(1);
+    expect.assertions(3);
     let response = await maintenanceTaskService.Create(maintSchedule4);
-    expect(response).toStrictEqual([]);
+    expect(response.length).toBe(1);
+    expect(response._id).toBe(6);
+    expect(response.description).toBe('brake check');
   });
 
   test('2. Valid new maintenanceTask with distance schedule type', async () => {
-    expect.assertions(1);
+    expect.assertions(3);
     let response = await maintenanceTaskService.Create(maintSchedule3Update);
-    expect(response).toBe(maintSchedule3Update.last_maintenance_val);
-    expect(new Date(response[0]).getTime()).toBeGreaterThan(
-      maintSchedule3Update.last_maintenance_val.getTime(),
-    );
+    expect(response.length).toBe(1);
+    expect(response._id).toBe(3);
+    expect(response.description).toBe('brake check');
   });
 });
 

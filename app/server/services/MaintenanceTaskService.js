@@ -264,7 +264,9 @@ class MaintenanceTaskService {
       maintenanceList = maintenanceList.filter(function (value, index, arr) {
         return arr[index].schedule_type === 'distance';
       });
-      MaintenancePredictForComponent;
+
+      const MILLISECONDS_PER_SECOND = 1000;
+      const SECONDS_PER_DAY = 86400;
 
       function mean(vals) {
         var sum_vals = vals.reduce(function (accumulator, currVal) {
@@ -315,13 +317,18 @@ class MaintenanceTaskService {
 
         //look at last 14 days
         var startDate = new Date();
-        startDate.setDate(startDate.getDate() - 7);
+        startDate.setDate(startDate.getDate() - 30);
 
         //var componentActivityListId = await this.componentActivityRepository.GetActivityIdsForComponent(
         //  component_id,
         //);
 
         var date = new Date(last_maint_date);
+
+        if (last_maint_date > startDate.getTime()) {
+          date = startDate;
+        }
+
         //var activityList = await this.activityRepository.GetActivitiesByIdsAfterDate(
         //  componentActivityListId.map((ac) => ac.activity_id),
         //  new Date(startDate), //date,
@@ -360,7 +367,7 @@ class MaintenanceTaskService {
           activity_index++
         ) {
           activity_date_dataset.push(
-            (activityList[activity_index].date.getTime() - last_maint_date) /
+            (activityList[activity_index].date.getTime() - date) /
               (MILLISECONDS_PER_SECOND * SECONDS_PER_DAY),
           );
           distance_sum += activityList[activity_index].distance;
@@ -388,6 +395,10 @@ class MaintenanceTaskService {
         }
         var slope = predictSlope(covar_sum, x_variance);
         var intercept = predictIntercept(x_mean, y_mean, slope);
+        intercept =
+          intercept < maintenanceList[maint_index].threshold_val
+            ? intercept
+            : 0;
         var predict_date =
           (maintenanceList[maint_index].threshold_val * 1000 - intercept) /
           slope;
@@ -412,7 +423,7 @@ class MaintenanceTaskService {
           '\n';
       }
 
-      this.maintenanceTaskRepository.Update(maintenanceList);
+      //this.maintenanceTaskRepository.Update(maintenanceList);
       resolve(predict_dates);
     });
   }
